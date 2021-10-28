@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>FSH.BlazorWebAssembly.Server</RootNamespace>
-    <AssemblyName>FSH.BlazorWebAssembly.Server</AssemblyName>
+    <RootNamespace>FSH.BlazorWebAssembly.Host</RootNamespace>
+    <AssemblyName>FSH.BlazorWebAssembly.Host</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
