@@ -4,16 +4,15 @@ namespace FSH.BlazorWebAssembly.Client.Theme
 {
     public class LightTheme : MudTheme
     {
-
         public LightTheme()
         {
             Palette = new Palette()
             {
-                Primary = CustomColors.FSH.Primary,
+                Primary = CustomColors.Light.Primary,
                 Secondary = Colors.DeepPurple.Accent2,
-                Background = CustomColors.FSH.White,
-                AppbarBackground =CustomColors.FSH.Primary,
-                DrawerBackground = CustomColors.FSH.White,
+                Background = CustomColors.Light.Background,
+                AppbarBackground =CustomColors.Light.Primary,
+                DrawerBackground = CustomColors.Light.Background,
                 DrawerText = "rgba(0,0,0, 0.7)",
                 Success = "#06d79c"
             };

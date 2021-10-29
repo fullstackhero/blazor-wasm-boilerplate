@@ -21,14 +21,13 @@
             <MudText Typo="Typo.subtitle2">Blazor WebAssembly Boilerplate</MudText>
         </MudHidden>
         <MudSpacer />
+         <MudTooltip Text="Toggle Dark Mode">
+            <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@((e) => ToggleDarkMode())" />
+        </MudTooltip>
         <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
             <MudMenuItem>English</MudMenuItem>
             <MudMenuItem>Swedish</MudMenuItem>
             <MudMenuItem>Old Norse</MudMenuItem>
-        </MudMenu>
-        <MudMenu Icon="@Icons.Material.Outlined.Widgets" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
-            <MudMenuItem Link="https://fullstackhero.net/">Full Stack Hero</MudMenuItem>
-            <MudMenuItem Link="https://github.com/fullstackhero/blazor-wasm-boilerplate">Source Code</MudMenuItem>
         </MudMenu>
         <MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
             <ActivatorContent>
@@ -51,8 +50,7 @@
                 <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" Class="ml-3" />
                 <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
                 <MudSpacer />
-                <MudButton Variant="Variant.Text"  Link="https://fullstackhero.net/" Style="color:#3eaf7c;">Full Stack Hero</MudButton>
-                <MudButton Variant="Variant.Text" Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Style="color:#424242;" Class="mr-3">Source Code</MudButton>
+                <MudButton Variant="Variant.Filled" Link="https://opencollective.com/fullstackhero" Target="_blank" Style="color:#3eaf7c;" Class="mr-3">Sponsor</MudButton>
             </MudToolBar>
         </MudHidden>
         <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
@@ -60,25 +58,3 @@
         </MudContainer>
     </MudMainContent>
 </MudLayout>
-
-
-@code {
-    private LightTheme _theme = new();
-
-    public bool _drawerOpen = true;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    protected override void OnInitialized()
-    {
-        StateHasChanged();
-    }
-
-    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
-    {
-        new BreadcrumbItem("Dashboard", href: "/"),
-    };
-}
