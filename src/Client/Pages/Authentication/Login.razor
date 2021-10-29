@@ -1,5 +1,4 @@
-﻿@page "/"
-@page "/pages/authentication/login"
+﻿@page "/login"
 @layout LoginLayout
 
 
@@ -14,16 +13,17 @@
 
 <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
 
+<MudTextField T="string" Value="@("root")" Label="Tenant" Variant="Variant.Outlined" Class="my-6"></MudTextField> 
 <div Class="d-flex justify-space-between align-center">
     <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
     <MudLink Href="/pages/authentication/forgot-password">Forgot pwd?</MudLink>
 </div>
 
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Size="Size.Medium" FullWidth="true">Sign In</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/" Size="Size.Large" FullWidth="true">Sign In</MudButton>
 
 @code {
-    string Password { get; set; } = "BMWvBPJXZu";
+    string Password { get; set; } = "123Pa$$word!";
 
     bool PasswordVisibility;
     InputType PasswordInput = InputType.Password;
