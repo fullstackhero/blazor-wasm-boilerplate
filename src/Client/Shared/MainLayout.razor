@@ -1,49 +1,54 @@
-﻿    <MudAppBar Elevation="25">
-        <MudHidden Breakpoint="Breakpoint.SmAndDown">
-           <img src="full-stack-hero-logo.png"  Style="height:30px;"  />
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.MdAndUp">
-            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudText Typo="Typo.subtitle1" Class="ml-4">Blazor WebAssembly Boilerplate</MudText>
-        </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-            <MudText Typo="Typo.subtitle2">Blazor WebAssembly Boilerplate</MudText>
-        </MudHidden>
-        <MudSpacer />
-         <MudTooltip Text="Toggle Dark Mode">
-            <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@((e) => ToggleDarkMode())" />
-        </MudTooltip>
-        <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
-            <MudMenuItem>English</MudMenuItem>
-            <MudMenuItem>Swedish</MudMenuItem>
-            <MudMenuItem>Old Norse</MudMenuItem>
-        </MudMenu>
-        <MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
-            <ActivatorContent>
-                <MudAvatar Image="https://avatars.githubusercontent.com/u/31455818?v=4" />
-            </ActivatorContent>
-            <ChildContent>
-                <PersonCard Class="mt-n2" />
-                <MudDivider Class="mb-2" />
-                <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/personal/account" />
-                <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/login" />
-            </ChildContent>
-        </MudMenu>
-    </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Always">
-        <NavMenu />
-    </MudDrawer>
-    <MudMainContent>
-        <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudToolBar DisableGutters="true">
-                <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" Class="ml-3" />
-                <MudSpacer />
-                <MudButton Variant="Variant.Filled" Link="https://opencollective.com/fullstackhero" Target="_blank" Style="color:#3eaf7c;" Class="mr-3">Sponsor</MudButton>
-            </MudToolBar>
-        </MudHidden>
-        <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
-            @ChildContent
-        </MudContainer>
-    </MudMainContent>
+﻿<MudAppBar Elevation="25">
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <img src="full-stack-hero-logo.png" Style="height:30px;" />
+    </MudHidden>
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start"
+            OnClick="@((e) => DrawerToggle())" />
+    </MudHidden>
+    <MudHidden Breakpoint="Breakpoint.Xs">
+        <MudText Typo="Typo.subtitle1" Class="ml-4">Blazor WebAssembly Boilerplate</MudText>
+    </MudHidden>
+    <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+        <MudText Typo="Typo.subtitle2">Blazor WebAssembly Boilerplate</MudText>
+    </MudHidden>
+    <MudSpacer />
+    <MudTooltip Text="Toggle Dark Mode">
+        <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
+            OnClick="@((e) => ToggleDarkMode())" />
+    </MudTooltip>
+    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true"
+        Dense="true">
+        <MudMenuItem>English</MudMenuItem>
+        <MudMenuItem>Swedish</MudMenuItem>
+        <MudMenuItem>Old Norse</MudMenuItem>
+    </MudMenu>
+    <MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
+        <ActivatorContent>
+            <MudAvatar Image="https://avatars.githubusercontent.com/u/31455818?v=4" />
+        </ActivatorContent>
+        <ChildContent>
+            <PersonCard Class="mt-n2" />
+            <MudDivider Class="mb-2" />
+            <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/personal/account" />
+            <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/login" />
+        </ChildContent>
+    </MudMenu>
+</MudAppBar>
+<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Always">
+    <NavMenu />
+</MudDrawer>
+<MudMainContent>
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <MudToolBar DisableGutters="true">
+            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())"
+                Class="ml-3" />
+            <MudSpacer />
+            <MudButton Variant="Variant.Filled" Link="https://opencollective.com/fullstackhero" Target="_blank"
+                Style="color:#3eaf7c;" Class="mr-3">Sponsor</MudButton>
+        </MudToolBar>
+    </MudHidden>
+    <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
+        @ChildContent
+    </MudContainer>
+</MudMainContent>

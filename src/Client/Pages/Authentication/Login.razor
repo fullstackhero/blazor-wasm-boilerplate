@@ -2,19 +2,24 @@
 @layout BaseLayout
 @attribute [AllowAnonymous]
 
-            <div class="d-flex justify-center">
-           <img src="full-stack-hero-logo.png"  Style="height:150px"  />
-           </div>
-           <div class="fsh-center-text">
-<MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
-<MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink></MudText>
+<div class="d-flex justify-center">
+    <img src="full-stack-hero-logo.png" Style="height:100px" />
 </div>
-<MudTextField T="string" Value="@("admin@root.com")" Label="E-mail" Variant="Variant.Outlined" Class="my-6"></MudTextField>
-<MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
-<MudTextField T="string" Value="@("root")" Label="Tenant" Variant="Variant.Outlined" Class="my-6"></MudTextField> 
+<div class="fsh-center-text">
+    <MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
+    <MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink>
+    </MudText>
+</div>
+<MudTextField T="string" Value="@("admin@root.com")" Label="E-mail" Variant="Variant.Outlined" Class="my-6">
+</MudTextField>
+<MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput"
+    Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+<MudTextField T="string" Value="@("root")" Label="Tenant" Variant="Variant.Outlined" Class="my-6"></MudTextField>
 <div Class="d-flex justify-space-between align-center">
     <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
     <MudLink Href="/pages/authentication/forgot-password">Forgot pwd?</MudLink>
 </div>
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/" Size="Size.Large" FullWidth="true">Sign In</MudButton>
-        <MudAlert Severity="Severity.Info" Class="mt-8 mud-width-full" Style="max-width:500px;" >No authentication is required, click sign in.</MudAlert>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/" Size="Size.Large" FullWidth="true">Sign In
+</MudButton>
+<MudAlert Severity="Severity.Info" Class="mt-8 mud-width-full" Style="max-width:500px;">No authentication is required,
+    click sign in.</MudAlert>
