@@ -9,6 +9,6 @@
             "type": "blazorwasm",
             "request": "launch",
             "cwd": "${workspaceFolder}/Host"
-        }
+        },
     ]
 }

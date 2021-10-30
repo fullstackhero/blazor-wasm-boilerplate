@@ -11,7 +11,7 @@ namespace FSH.BlazorWebAssembly.Client.Theme
                 Primary = CustomColors.Light.Primary,
                 Secondary = Colors.DeepPurple.Accent2,
                 Background = CustomColors.Light.Background,
-                AppbarBackground =CustomColors.Light.Primary,
+                AppbarBackground = CustomColors.Light.Primary,
                 DrawerBackground = CustomColors.Light.Background,
                 DrawerText = "rgba(0,0,0, 0.7)",
                 Success = "#06d79c"

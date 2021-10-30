@@ -1,35 +1,59 @@
-﻿using FSH.BlazorWebAssembly.Client.Theme;
-using Microsoft.AspNetCore.Components;
-using MudBlazor;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {
     public partial class MainLayout
     {
-        private MudTheme _theme = new LightTheme();
+        [Parameter]
+        public RenderFragment ChildContent { get; set; }
 
         [Parameter]
         public EventCallback OnDarkModeToggle { get; set; }
 
-        public bool _drawerOpen = true;
+        [Parameter]
+        public EventCallback<bool> OnRightToLeftToggle { get; set; }
 
-        void DrawerToggle()
+        private bool _drawerOpen = true;
+        private bool _rightToLeft = false;
+
+        private async Task RightToLeftToggle()
+        {
+            var isRtl = await _clientPreferenceManager.ToggleLayoutDirection();
+            _rightToLeft = isRtl;
+
+            await OnRightToLeftToggle.InvokeAsync(isRtl);
+        }
+
+        public async Task ToggleDarkMode()
+        {
+            await OnDarkModeToggle.InvokeAsync();
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            _rightToLeft = await _clientPreferenceManager.IsRTL();
+        }
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await LoadDataAsync();
+            }
+        }
+        private void DrawerToggle()
         {
             _drawerOpen = !_drawerOpen;
         }
 
-        protected override void OnInitialized()
+        private async Task LoadDataAsync()
         {
-            StateHasChanged();
-        }
+            var state = await _stateProvider.GetAuthenticationStateAsync();
+            var user = state.User;
+            if (user == null) return;
+            if (user.Identity?.IsAuthenticated == true)
+            {
 
-        private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem("Dashboard", href: "/"),
-        };
-        public async Task ToggleDarkMode()
-        {
-            _theme = new DarkTheme();
+            }
         }
     }
 }
