@@ -54,7 +54,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
             }
             else
             {
-                return await Result.FailAsync(result.Messages);
+                return await Result.FailAsync(result.Exception);
             }
         }
 
