@@ -1,6 +1,7 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
 @using FSH.BlazorWebAssembly.Client.Managers.Preferences
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
@@ -26,3 +27,4 @@
 @inject ApplicationAuthenticationStateProvider _stateProvider
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackBar
+@inject IAuthenticationService _authService;

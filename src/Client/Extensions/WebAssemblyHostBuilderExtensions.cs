@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication;
+using FSH.BlazorWebAssembly.Client.Infrastructure;
 using FSH.BlazorWebAssembly.Client.Managers;
 using FSH.BlazorWebAssembly.Client.Managers.Preferences;
 using FSH.BlazorWebAssembly.Shared.Constants;
@@ -39,6 +40,8 @@ namespace FSH.BlazorWebAssembly.Client.Extensions
                 .AddScoped<AuthenticationStateProvider, ApplicationAuthenticationStateProvider>()
                 .AddTransient<AuthenticationHeaderHandler>()
                 .AddManagers()
+
+                .AddServices()
                 .AddScoped(sp => sp
                     .GetRequiredService<IHttpClientFactory>()
                     .CreateClient(ClientName).EnableIntercept(sp))
@@ -46,7 +49,7 @@ namespace FSH.BlazorWebAssembly.Client.Extensions
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-                    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+                    client.BaseAddress = new Uri("https://localhost:5001/");
                 })
                 .AddHttpMessageHandler<AuthenticationHeaderHandler>();
             builder.Services.AddHttpClientInterceptor();
@@ -70,6 +73,32 @@ namespace FSH.BlazorWebAssembly.Client.Extensions
             foreach (var type in types)
             {
                 if (managers.IsAssignableFrom(type.Service))
+                {
+                    services.AddTransient(type.Service, type.Implementation);
+                }
+            }
+
+            return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            var apiServices = typeof(IApiService);
+
+            var types = apiServices
+                .Assembly
+                .GetExportedTypes()
+                .Where(t => t.IsClass && !t.IsAbstract)
+                .Select(t => new
+                {
+                    Service = t.GetInterface($"I{t.Name}"),
+                    Implementation = t
+                })
+                .Where(t => t.Service != null);
+
+            foreach (var type in types)
+            {
+                if (apiServices.IsAssignableFrom(type.Service))
                 {
                     services.AddTransient(type.Service, type.Implementation);
                 }

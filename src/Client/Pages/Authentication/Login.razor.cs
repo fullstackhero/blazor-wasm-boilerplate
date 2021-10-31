@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using System.Security.Claims;
 
@@ -6,26 +7,32 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
 {
     public partial class Login
     {
-        string Password { get; set; } = "123Pa$$word!";
 
-        bool PasswordVisibility;
-        InputType PasswordInput = InputType.Password;
-        string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+        private bool _passwordVisibility;
+        private InputType _passwordInput = InputType.Password;
+        private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
 
         void TogglePasswordVisibility()
         {
-            if (PasswordVisibility)
+            if (_passwordVisibility)
             {
-                PasswordVisibility = false;
-                PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-                PasswordInput = InputType.Password;
+                _passwordVisibility = false;
+                _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+                _passwordInput = InputType.Password;
             }
             else
             {
-                PasswordVisibility = true;
-                PasswordInputIcon = Icons.Material.Filled.Visibility;
-                PasswordInput = InputType.Text;
+                _passwordVisibility = true;
+                _passwordInputIcon = Icons.Material.Filled.Visibility;
+                _passwordInput = InputType.Text;
             }
+        }
+
+        private void FillAdministratorCredentials()
+        {
+            tokenRequest.Email = "admin@root.com";
+            tokenRequest.Password = "123Pa$$word!";
+            tokenRequest.Tenant = "root";
         }
         protected override async Task OnInitializedAsync()
         {
@@ -33,6 +40,19 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
             if (state != new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())))
             {
                 _navigationManager.NavigateTo("/");
+            }
+        }
+        private TokenRequest tokenRequest = new();
+
+        private async Task SubmitAsync()
+        {
+            var result = await _authService.Login(tokenRequest);
+            if (!result.Succeeded)
+            {
+                foreach (var message in result.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
             }
         }
     }
