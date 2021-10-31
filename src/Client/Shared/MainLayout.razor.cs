@@ -55,5 +55,11 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
             }
         }
+
+        private void Logout()
+        {
+            _authService.Logout();
+            _navigationManager.NavigateTo("/login");
+        }
     }
 }

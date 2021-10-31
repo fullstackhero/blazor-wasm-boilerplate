@@ -35,6 +35,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
 
         public async Task<IResult> Login(TokenRequest model)
         {
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("tenantKey", model.Tenant);
             var response = await _httpClient.PostAsJsonAsync(TokenEndpoints.AuthenticationEndpoint, model);
             var result = await response.ToResult<TokenResponse>();
@@ -57,9 +58,14 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
             }
         }
 
-        public Task<IResult> Logout()
+        public async Task<IResult> Logout()
         {
-            throw new NotImplementedException();
+            await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
+            await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
+            await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageURL);
+            ((ApplicationAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+            return await Result.SuccessAsync();
         }
 
         public Task<string> RefreshToken()
