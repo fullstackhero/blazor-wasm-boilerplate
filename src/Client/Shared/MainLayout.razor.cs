@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {
@@ -12,7 +13,6 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
         [Parameter]
         public EventCallback<bool> OnRightToLeftToggle { get; set; }
-
         private bool _drawerOpen = true;
         private bool _rightToLeft = false;
 
@@ -58,8 +58,16 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
         private void Logout()
         {
-            _authService.Logout();
-            _navigationManager.NavigateTo("/login");
+            var parameters = new DialogParameters
+            {
+                {nameof(Dialogs.Logout.ContentText), $"{_localizer["Logout Confirmation"]}"},
+                {nameof(Dialogs.Logout.ButtonText), $"{_localizer["Logout"]}"},
+                {nameof(Dialogs.Logout.Color), Color.Error}
+            };
+
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+
+            _dialogService.Show<Dialogs.Logout>(_localizer["Logout"], parameters, options);
         }
     }
 }

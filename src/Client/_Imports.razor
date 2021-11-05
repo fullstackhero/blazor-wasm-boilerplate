@@ -12,6 +12,7 @@
 @using FSH.BlazorWebAssembly.Client
 @using FSH.BlazorWebAssembly.Client.Shared
 @using MudBlazor
+@using Microsoft.Extensions.DependencyInjection
 
 
 @using Microsoft.AspNetCore.Authorization
@@ -28,3 +29,4 @@
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackBar
 @inject IAuthenticationService _authService;
+@inject IDialogService _dialogService

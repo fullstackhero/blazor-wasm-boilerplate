@@ -13,7 +13,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0-rc.2.21480.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0-rc.2.21480.10" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.0-rc.2.21480.10" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.0-rc.2.21480.10" />    
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.0-rc.2.21480.10" />
     <PackageReference Include="MudBlazor" Version="5.1.5" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.0-rc.2.21480.10" />

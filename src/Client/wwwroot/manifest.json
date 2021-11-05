@@ -1,6 +1,6 @@
 {
-  "name": "FSH.BlazorWebAssembly",
-  "short_name": "FSH.BlazorWebAssembly",
+  "name": "Blazor WebAssembly Boilerplate",
+  "short_name": "Blazor WebAssembly Boilerplate",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

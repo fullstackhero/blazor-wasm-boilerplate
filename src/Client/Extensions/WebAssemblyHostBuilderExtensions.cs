@@ -22,6 +22,10 @@ namespace FSH.BlazorWebAssembly.Client.Extensions
         {
             builder
                 .Services
+                .AddLocalization(options =>
+                {
+                    options.ResourcesPath = "Resources";
+                })
                 .AddAuthorizationCore(options =>
                 {
                     RegisterPermissionClaims(options);
