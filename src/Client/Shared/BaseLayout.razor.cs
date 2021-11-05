@@ -18,6 +18,23 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             _currentTheme = new LightTheme();
             _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
             _rightToLeft = await _clientPreferenceManager.IsRTL();
+
+            await Task.Delay(TimeSpan.FromSeconds(3)).ContinueWith((_) =>
+            {
+                _snackBar.Add("Like this boilerplate? ", Severity.Normal, config =>
+                {
+                    config.ShowCloseIcon = true;
+                    config.RequireInteraction = true;
+                    config.Icon = Icons.Custom.Brands.GitHub;
+                    config.Action = "Star us on Github!";
+                    config.ActionColor = Color.Primary;
+                    config.Onclick = snackbar =>
+                    {
+                        _navigationManager.NavigateTo("https://github.com/fullstackhero/blazor-wasm-boilerplate");
+                        return Task.CompletedTask;
+                    };
+                });
+            });
         }
 
         private async Task DarkMode()
