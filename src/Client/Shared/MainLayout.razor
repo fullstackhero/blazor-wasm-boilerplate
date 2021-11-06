@@ -1,7 +1,10 @@
 ﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
 <MudAppBar Elevation="25">
-    <MudHidden>
-        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+    
+    <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start"
+            OnClick="@((e) => DrawerToggle())" />
+             <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <img src="full-stack-hero-logo.png" Style="height:30px;" />
     </MudHidden>
     <MudHidden Breakpoint="Breakpoint.Xs">
         <MudText Typo="Typo.subtitle1" Class="ml-4">Blazor WebAssembly Boilerplate</MudText>
@@ -30,7 +33,7 @@
         </ChildContent>
     </MudMenu>
 </MudAppBar>
-<MudDrawer @bind-Open="_drawerOpen" Elevation="25" Style="z-index:2000;">
+<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never" Style="z-index:2000;">
     <NavMenu />
 </MudDrawer>
 <MudMainContent>
