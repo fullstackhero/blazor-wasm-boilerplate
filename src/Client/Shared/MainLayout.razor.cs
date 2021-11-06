@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using FSH.BlazorWebAssembly.Client.Preference;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
@@ -31,7 +32,12 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
         protected override async Task OnInitializedAsync()
         {
-            _rightToLeft = await _clientPreferenceManager.IsRTL();
+            var preference = await _clientPreferenceManager.GetPreference() as ClientPreference;
+            if (preference != null)
+            {
+                _rightToLeft = preference.IsRTL;
+                _drawerOpen = preference.IsDrawerOpen;
+            }
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -40,9 +46,9 @@ namespace FSH.BlazorWebAssembly.Client.Shared
                 await LoadDataAsync();
             }
         }
-        private void DrawerToggle()
+        private async Task DrawerToggle()
         {
-            _drawerOpen = !_drawerOpen;
+            _drawerOpen = await _clientPreferenceManager.ToggleDrawerAsync();
         }
 
         private async Task LoadDataAsync()

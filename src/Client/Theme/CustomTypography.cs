@@ -66,7 +66,7 @@ namespace FSH.BlazorWebAssembly.Client.Theme
             {
                 FontFamily = new[] { "Montserrat", "Helvetica", "Arial", "sans-serif" },
                 FontSize = ".875rem",
-                FontWeight = 200,
+                FontWeight = 400,
                 LineHeight = 1.75,
                 LetterSpacing = ".02857em"
             },
@@ -98,7 +98,7 @@ namespace FSH.BlazorWebAssembly.Client.Theme
             {
                 FontFamily = new[] { "Montserrat", "Helvetica", "Arial", "sans-serif" },
                 FontSize = "1rem",
-                FontWeight = 100,
+                FontWeight = 400,
                 LineHeight = 1.57,
                 LetterSpacing = ".00714em"
             },
@@ -106,7 +106,7 @@ namespace FSH.BlazorWebAssembly.Client.Theme
             {
                 FontFamily = new[] { "Montserrat", "Helvetica", "Arial", "sans-serif" },
                 FontSize = ".875rem",
-                FontWeight = 300,
+                FontWeight = 400,
                 LineHeight = 1.57,
                 LetterSpacing = ".00714em"
             }

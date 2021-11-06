@@ -29,6 +29,19 @@ namespace FSH.BlazorWebAssembly.Client.Managers.Preferences
 
             return false;
         }
+
+        public async Task<bool> ToggleDrawerAsync()
+        {
+            var preference = await GetPreference() as ClientPreference;
+            if (preference != null)
+            {
+                preference.IsDrawerOpen = !preference.IsDrawerOpen;
+                await SetPreference(preference);
+                return preference.IsDrawerOpen;
+            }
+
+            return false;
+        }
         public async Task<bool> ToggleLayoutDirection()
         {
             var preference = await GetPreference() as ClientPreference;
@@ -76,9 +89,19 @@ namespace FSH.BlazorWebAssembly.Client.Managers.Preferences
             var preference = await GetPreference() as ClientPreference;
             if (preference != null)
             {
-                if (preference.IsDarkMode == true) return false;
+                return preference.IsRTL;
             }
-            return preference.IsRTL;
+            return false;
+        }
+
+        public async Task<bool> IsDrawerOpen()
+        {
+            var preference = await GetPreference() as ClientPreference;
+            if (preference != null)
+            {
+                return preference.IsDrawerOpen;
+            }
+            return false;
         }
 
         public static string Preference = "clientPreference";
