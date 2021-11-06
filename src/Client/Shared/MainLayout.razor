@@ -1,11 +1,7 @@
 ﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
 <MudAppBar Elevation="25">
-    <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <img src="full-stack-hero-logo.png" Style="height:30px;" />
-    </MudHidden>
-    <MudHidden Breakpoint="Breakpoint.MdAndUp">
-        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start"
-            OnClick="@((e) => DrawerToggle())" />
+    <MudHidden>
+        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
     </MudHidden>
     <MudHidden Breakpoint="Breakpoint.Xs">
         <MudText Typo="Typo.subtitle1" Class="ml-4">Blazor WebAssembly Boilerplate</MudText>
@@ -15,16 +11,14 @@
     </MudHidden>
     <MudSpacer />
     <MudTooltip Text="Toggle Dark Mode">
-        <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
-            OnClick="@((e) => ToggleDarkMode())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@((e) => ToggleDarkMode())" />
     </MudTooltip>
-    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true"
-        Dense="false">
+    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="false">
         <MudMenuItem>English</MudMenuItem>
         <MudMenuItem>Swedish</MudMenuItem>
         <MudMenuItem>Old Norse</MudMenuItem>
     </MudMenu>
-    <MudMenu Direction="Direction.Left" OffsetX="true" Dense="false" Class="mud-elevation-25">
+    <MudMenu Direction="Direction.Left" OffsetX="true" Dense="false">
         <ActivatorContent>
             <MudAvatar Image="https://avatars.githubusercontent.com/u/31455818?v=4" />
         </ActivatorContent>
@@ -36,19 +30,14 @@
         </ChildContent>
     </MudMenu>
 </MudAppBar>
-<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Always">
+<MudDrawer @bind-Open="_drawerOpen" Elevation="25" Style="z-index:2000;">
     <NavMenu />
 </MudDrawer>
 <MudMainContent>
-    <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudToolBar DisableGutters="true">
-            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())"
-                Class="ml-3" />
-            <MudSpacer />
-            <MudButton Variant="Variant.Filled" Link="https://opencollective.com/fullstackhero" Target="_blank" Class="mr-3">Sponsor</MudButton>
-        </MudToolBar>
-    </MudHidden>
     <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
         @ChildContent
+        <MudScrollToTop TopOffset="400" Style="z-index:2000;">
+            <MudFab Icon="@Icons.Material.Filled.KeyboardArrowUp" Color="Color.Primary" />
+        </MudScrollToTop>
     </MudContainer>
 </MudMainContent>
