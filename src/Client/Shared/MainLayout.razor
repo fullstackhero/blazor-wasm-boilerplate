@@ -1,9 +1,8 @@
 ﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
 <MudAppBar Elevation="25">
-    
     <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start"
-            OnClick="@((e) => DrawerToggle())" />
-             <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        OnClick="@((e) => DrawerToggle())" />
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
         <img src="full-stack-hero-logo.png" Style="height:30px;" />
     </MudHidden>
     <MudHidden Breakpoint="Breakpoint.Xs">
@@ -13,14 +12,63 @@
         <MudText Typo="Typo.subtitle2">Blazor WebAssembly Boilerplate</MudText>
     </MudHidden>
     <MudSpacer />
-    <MudTooltip Text="Toggle Dark Mode">
-        <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@((e) => ToggleDarkMode())" />
-    </MudTooltip>
-    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="false">
-        <MudMenuItem>English</MudMenuItem>
-        <MudMenuItem>Swedish</MudMenuItem>
-        <MudMenuItem>Old Norse</MudMenuItem>
-    </MudMenu>
+    <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
+        <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary"
+            Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank"
+            StartIcon="@Icons.Material.Filled.Favorite">@_localizer["Sponsor"]</MudButton>
+        <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
+        <MudTooltip Text="Toggle Dark Mode">
+            <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
+                OnClick="@((e) => ToggleDarkMode())" />
+        </MudTooltip>
+        <MudMenu Icon="@Icons.Filled.SupportAgent" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
+            OffsetY="true">
+            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
+            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook Page"]
+            </MudMenuItem>
+            <MudMenuItem Link="https://www.linkedin.com/in/iammukeshm/" Target="_blank">LinkedIn</MudMenuItem>
+            <MudMenuItem Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank">Buy Me a Coffee!</MudMenuItem>
+            <MudMenuItem Link="https://opencollective.com/fullstackhero" Target="_blank">Open Collective
+            </MudMenuItem>
+            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
+            <MudMenuItem Link="https://fullstackhero.net/" Target="_blank">@_localizer["Documentation"]</MudMenuItem>
+        </MudMenu>
+        <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom"
+            OffsetY="true" Dense="false">
+            <MudMenuItem>English</MudMenuItem>
+            <MudMenuItem>Swedish</MudMenuItem>
+            <MudMenuItem>Old Norse</MudMenuItem>
+        </MudMenu>
+        <MudTooltip Text="Fork Repository">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
+        </MudTooltip>
+        <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
+    </MudHidden>
+    <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
+         <MudTooltip Text="Sponsor Us!">
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Inherit" Link="https://opencollective.com/fullstackhero" Target="_blank" />
+        </MudTooltip>
+        <MudMenu Icon="@Icons.Filled.Settings" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
+            OffsetY="true">
+            <div class="px-2">
+                <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
+                    OnClick="@((e) => ToggleDarkMode())" />
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
+                    Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
+                     <MudIconButton Icon="@Icons.Material.Filled.Coffee" Color="Color.Inherit"
+                    Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank" />
+            </div>
+            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
+            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook Page"]
+            </MudMenuItem>
+            <MudMenuItem Link="https://www.linkedin.com/in/iammukeshm/" Target="_blank">LinkedIn</MudMenuItem>
+            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
+            <MudMenuItem Link="https://mudblazor.com/getting-started/installation" Target="_blank">
+                @_localizer["MudBlazor Documentation"]</MudMenuItem>
+            <MudMenuItem Link="https://codewithmukesh.com/blog/blazor-hero-quick-start-guide/" Target="_blank">
+                @_localizer["Quick-Start Guide"]</MudMenuItem>
+        </MudMenu>
+    </MudHidden>
     <MudMenu Direction="Direction.Left" OffsetX="true" Dense="false">
         <ActivatorContent>
             <MudAvatar Image="https://avatars.githubusercontent.com/u/31455818?v=4" />

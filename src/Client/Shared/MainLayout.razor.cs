@@ -1,7 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Preference;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {

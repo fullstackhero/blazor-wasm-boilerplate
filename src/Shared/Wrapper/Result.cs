@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace FSH.BlazorWebAssembly.Shared.Wrapper
+﻿namespace FSH.BlazorWebAssembly.Shared.Wrapper
 {
     public class Result : IResult
     {

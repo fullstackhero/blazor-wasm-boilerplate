@@ -46,7 +46,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
                 await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
                 await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
 
-                await((ApplicationAuthenticationStateProvider)this._authenticationStateProvider).StateChangedAsync();
+                await ((ApplicationAuthenticationStateProvider)this._authenticationStateProvider).StateChangedAsync();
 
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
