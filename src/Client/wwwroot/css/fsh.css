@@ -9,3 +9,13 @@
 .mud-dialog {
     box-shadow: 0 3px 1px -2px rgb(0 0 0 / 10%), 0 2px 2px 0 rgb(0 0 0 / 0), 0 10px 10px 0 rgb(0 0 0 / 5%) !important;
 }
+
+.mud-nav-link {
+    white-space: normal !important;
+    padding: 12px 16px 12px 38px;
+}
+
+.mud-nav-link.active:not(.mud-nav-link-disabled) {
+    border-right: 3px solid var(--mud-palette-primary);
+    background-color: rgba(var(--mud-palette-primary-rgb), 0.1);
+}

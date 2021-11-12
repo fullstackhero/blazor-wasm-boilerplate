@@ -17,10 +17,9 @@ namespace FSH.BlazorWebAssembly.Client.Theme
                 DrawerText = "rgba(0,0,0, 0.7)",
                 Success = "#06d79c"
             };
-
             LayoutProperties = new LayoutProperties()
             {
-                DefaultBorderRadius = "2px",
+                DefaultBorderRadius = "5px",
             };
 
             Typography = CustomTypography.FSHTypography;

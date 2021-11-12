@@ -28,7 +28,7 @@ namespace FSH.BlazorWebAssembly.Client.Theme
 
             LayoutProperties = new LayoutProperties()
             {
-                DefaultBorderRadius = "2px",
+                DefaultBorderRadius = "5px",
             };
 
             Typography = CustomTypography.FSHTypography;

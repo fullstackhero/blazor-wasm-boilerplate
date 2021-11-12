@@ -21,6 +21,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
             _snackBar.Add("Like this boilerplate? ", Severity.Normal, config =>
             {
+                config.BackgroundBlurred = true;
                 config.ShowCloseIcon = true;
                 config.RequireInteraction = true;
                 config.Icon = Icons.Custom.Brands.GitHub;
