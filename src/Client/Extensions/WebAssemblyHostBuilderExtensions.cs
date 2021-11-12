@@ -43,9 +43,8 @@ namespace FSH.BlazorWebAssembly.Client.Extensions
                 .AddScoped<ApplicationAuthenticationStateProvider>()
                 .AddScoped<AuthenticationStateProvider, ApplicationAuthenticationStateProvider>()
                 .AddTransient<AuthenticationHeaderHandler>()
-                .AddManagers()
-
-                .AddServices()
+                .AutoRegisterInterfaces<IManager>()
+                .AutoRegisterInterfaces<IApiService>()
                 .AddScoped(sp => sp
                     .GetRequiredService<IHttpClientFactory>()
                     .CreateClient(ClientName).EnableIntercept(sp))
@@ -53,17 +52,19 @@ namespace FSH.BlazorWebAssembly.Client.Extensions
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
+
+                    //TODO : Make the API URI Configurable via appsettings
                     client.BaseAddress = new Uri("https://localhost:5001/");
                 })
                 .AddHttpMessageHandler<AuthenticationHeaderHandler>();
             builder.Services.AddHttpClientInterceptor();
             return builder;
         }
-        public static IServiceCollection AddManagers(this IServiceCollection services)
+        public static IServiceCollection AutoRegisterInterfaces<T>(this IServiceCollection services)
         {
-            var managers = typeof(IManager);
+            var @interface = typeof(T);
 
-            var types = managers
+            var types = @interface
                 .Assembly
                 .GetExportedTypes()
                 .Where(t => t.IsClass && !t.IsAbstract)
@@ -76,33 +77,7 @@ namespace FSH.BlazorWebAssembly.Client.Extensions
 
             foreach (var type in types)
             {
-                if (managers.IsAssignableFrom(type.Service))
-                {
-                    services.AddTransient(type.Service, type.Implementation);
-                }
-            }
-
-            return services;
-        }
-
-        public static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            var apiServices = typeof(IApiService);
-
-            var types = apiServices
-                .Assembly
-                .GetExportedTypes()
-                .Where(t => t.IsClass && !t.IsAbstract)
-                .Select(t => new
-                {
-                    Service = t.GetInterface($"I{t.Name}"),
-                    Implementation = t
-                })
-                .Where(t => t.Service != null);
-
-            foreach (var type in types)
-            {
-                if (apiServices.IsAssignableFrom(type.Service))
+                if (@interface.IsAssignableFrom(type.Service))
                 {
                     services.AddTransient(type.Service, type.Implementation);
                 }
