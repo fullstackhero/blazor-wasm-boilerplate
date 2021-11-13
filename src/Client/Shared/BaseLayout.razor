@@ -18,7 +18,9 @@
             </MudContainer>
         </NotAuthorized>
         <Authorized>
-            <MudLayout>
+            <MudLayout>                
+    <ThemeDrawer @bind-ThemeDrawerOpen="_themeDrawerOpen" OnDarkModeToggle="@DarkMode" />
+    <ThemeButton OnClick="@(() => _themeDrawerOpen = true)" />
                 <MainLayout OnDarkModeToggle="@DarkMode" OnRightToLeftToggle="@RightToLeftToggle">
                     @Body
                 </MainLayout>

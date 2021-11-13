@@ -17,14 +17,6 @@
             Link="https://opencollective.com/fullstackhero" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">
             @_localizer["Sponsor"]</MudButton>
         <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
-        <MudTooltip Text="Toggle Dark Mode">
-            <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
-                OnClick="@((e) => ToggleDarkMode())" />
-        </MudTooltip>
-        <MudTooltip Text="Theme Manager" Color="Color.Primary" Arrow="true">
-            <MudIconButton Icon="@Icons.Material.Filled.Brush" Color="Color.Inherit"
-                OnClick="@((e) => ToggleDarkMode())" />
-        </MudTooltip>
         <MudMenu Icon="@Icons.Filled.SupportAgent" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
             OffsetY="true">
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
@@ -59,8 +51,6 @@
         <MudMenu Icon="@Icons.Filled.Settings" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
             OffsetY="true">
             <div class="px-2">
-                <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
-                    OnClick="@((e) => ToggleDarkMode())" />
                 <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
                     Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
                 <MudIconButton Icon="@Icons.Material.Filled.Coffee" Color="Color.Inherit"
@@ -108,7 +98,7 @@
         </ChildContent>
     </MudMenu>
 </MudAppBar>
-<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never" Style="z-index:1302;">
+<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never">
     <NavMenu />
 </MudDrawer>
 <MudMainContent>

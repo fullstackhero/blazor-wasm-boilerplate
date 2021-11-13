@@ -16,11 +16,11 @@
     </DialogActions>
 </MudDialog>
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
-    [Parameter] public string ContentText { get; set; }
+    [Parameter] public string? ContentText { get; set; }
 
-    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public string? ButtonText { get; set; }
 
     [Parameter] public Color Color { get; set; }
 

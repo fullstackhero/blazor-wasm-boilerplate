@@ -6,6 +6,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
     public partial class BaseLayout
     {
         private MudTheme _currentTheme = new LightTheme();
+        private bool _themeDrawerOpen;
         private bool _rightToLeft = false;
         private async Task RightToLeftToggle(bool value)
         {
@@ -17,6 +18,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
         {
             _currentTheme = new LightTheme();
             _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
+            _currentTheme.Palette.Primary = await _clientPreferenceManager.GetPrimaryColorAsync();
             _rightToLeft = await _clientPreferenceManager.IsRTL();
 
             _snackBar.Add("Like this boilerplate? ", Severity.Normal, config =>
