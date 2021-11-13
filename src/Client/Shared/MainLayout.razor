@@ -14,14 +14,14 @@
     <MudSpacer />
     <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
         <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary"
-            Link="https://opencollective.com/fullstackhero" Target="_blank"
-            StartIcon="@Icons.Material.Filled.Favorite">@_localizer["Sponsor"]</MudButton>
+            Link="https://opencollective.com/fullstackhero" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">
+            @_localizer["Sponsor"]</MudButton>
         <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
         <MudTooltip Text="Toggle Dark Mode">
             <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
                 OnClick="@((e) => ToggleDarkMode())" />
         </MudTooltip>
-         <MudTooltip Text="Theme Manager" Color="Color.Primary" Arrow="true" >
+        <MudTooltip Text="Theme Manager" Color="Color.Primary" Arrow="true">
             <MudIconButton Icon="@Icons.Material.Filled.Brush" Color="Color.Inherit"
                 OnClick="@((e) => ToggleDarkMode())" />
         </MudTooltip>
@@ -29,9 +29,11 @@
             OffsetY="true">
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
             <MudMenuItem Link="https://discord.gg/yQWpShsKrf" Target="_blank">@_localizer["Discord"]</MudMenuItem>
-            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook"]</MudMenuItem>
+            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook"]
+            </MudMenuItem>
             <MudMenuItem Link="https://www.linkedin.com/in/iammukeshm/" Target="_blank">LinkedIn</MudMenuItem>
-            <MudMenuItem Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank">Buy Me a Coffee!</MudMenuItem>
+            <MudMenuItem Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank">Buy Me a Coffee!
+            </MudMenuItem>
             <MudMenuItem Link="https://opencollective.com/fullstackhero" Target="_blank">Open Collective
             </MudMenuItem>
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
@@ -44,13 +46,15 @@
             <MudMenuItem>Old Norse</MudMenuItem>
         </MudMenu>
         <MudTooltip Text="Fork Repository">
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
+                Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
         </MudTooltip>
         <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
     </MudHidden>
     <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
-         <MudTooltip Text="Sponsor Us!">
-            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Inherit" Link="https://opencollective.com/fullstackhero" Target="_blank" />
+        <MudTooltip Text="Sponsor Us!">
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Inherit"
+                Link="https://opencollective.com/fullstackhero" Target="_blank" />
         </MudTooltip>
         <MudMenu Icon="@Icons.Filled.Settings" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
             OffsetY="true">
@@ -59,12 +63,13 @@
                     OnClick="@((e) => ToggleDarkMode())" />
                 <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
                     Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
-                     <MudIconButton Icon="@Icons.Material.Filled.Coffee" Color="Color.Inherit"
+                <MudIconButton Icon="@Icons.Material.Filled.Coffee" Color="Color.Inherit"
                     Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank" />
             </div>
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
             <MudMenuItem Link="https://discord.gg/yQWpShsKrf" Target="_blank">@_localizer["Discord"]</MudMenuItem>
-            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook"]</MudMenuItem>
+            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook"]
+            </MudMenuItem>
             <MudMenuItem Link="https://www.linkedin.com/in/iammukeshm/" Target="_blank">LinkedIn</MudMenuItem>
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
             <MudMenuItem Link="https://mudblazor.com/getting-started/installation" Target="_blank">
@@ -78,37 +83,32 @@
             <MudAvatar Image="https://avatars.githubusercontent.com/u/31455818?v=4" />
         </ActivatorContent>
         <ChildContent>
-             <div class="py-2" style="min-width: 220px">
-             <PersonCard Class="mt-n2" />
-            <MudMenuItem >
-                <div class="d-flex">
-                    <MudIcon Class="mx-2"
-                             Icon="@Icons.Material.Filled.Person" />
-                    <MudText>Profile</MudText>
+            <div class="py-2" style="min-width: 220px">
+                <PersonCard Class="mt-n2" />
+                <MudMenuItem>
+                    <div class="d-flex">
+                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Person" />
+                        <MudText>Profile</MudText>
+                    </div>
+                </MudMenuItem>
+                <MudMenuItem>
+                    <div class="d-flex">
+                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Settings" />
+                        <MudText>Settings</MudText>
+                    </div>
+                </MudMenuItem>
+                <div class="mt-4 mx-4">
+                    <MudButton Color="Color.Error" FullWidth="true" StartIcon="@Icons.Material.Filled.Logout"
+                        Variant="Variant.Filled" OnClick="Logout">
+                        Logout
+                    </MudButton>
                 </div>
-            </MudMenuItem>
-            <MudMenuItem>
-                <div class="d-flex">
-                    <MudIcon Class="mx-2"
-                             Icon="@Icons.Material.Filled.Settings" />
-                    <MudText>Settings</MudText>
-                </div>
-            </MudMenuItem>
-            <div class="mt-4 mx-4">
-                <MudButton Color="Color.Error"
-                           FullWidth="true"
-                           StartIcon="@Icons.Material.Filled.Logout"
-                           Variant="Variant.Filled"
-                OnClick="Logout">
-                    Logout
-                </MudButton>
             </div>
-             </div>
-            
+
         </ChildContent>
     </MudMenu>
 </MudAppBar>
-<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never" Style="z-index:1300;">
+<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never" Style="z-index:1302;">
     <NavMenu />
 </MudDrawer>
 <MudMainContent>
