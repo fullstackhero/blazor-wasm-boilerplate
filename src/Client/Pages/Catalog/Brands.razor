@@ -16,14 +16,17 @@
 }
 else
 {
-    <MudCard Elevation="25" Style="padding:10px!important">
-    <MudCardContent>
-        @if (_canSearchBrands)
-            {
-                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Brands"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Style="flex:none!important;margin:0px!important" ></MudTextField>
-            }
-    </MudCardContent>
-</MudCard>
+     @if (_canSearchBrands)
+    {
+        <MudExpansionPanel Style="padding:10px!important; margin-bottom:10px!important" Class="mud-elevation-25" Text="@_localizer["Search"]">
+             <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Brands"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Style="flex:none!important;margin:0px!important" ></MudTextField>
+        <div style="margin-top:10px!important">         
+            <MudCheckBox @bind-Checked="@Label_CheckBox1" Label="All Columns"></MudCheckBox>
+             <MudCheckBox @bind-Checked="@Label_CheckBox1" Label="Column1"></MudCheckBox>
+        <MudCheckBox @bind-Checked="@Label_CheckBox1" Label="Column2"></MudCheckBox>
+        </div>
+         </MudExpansionPanel>
+    }  
     
     <MudTable Hover="true" Elevation="25" Items="_brandList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<BrandDto, bool>(Search)" @bind-brand="_brand">
         <ToolBarContent>

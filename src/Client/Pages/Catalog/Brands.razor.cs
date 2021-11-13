@@ -12,7 +12,7 @@ public partial class Brands
     private bool _dense = false;
     private bool _striped = true;
     private bool _bordered = false;
-
+    public bool Label_CheckBox1 { get; set; } = true;
     private ClaimsPrincipal _currentUser;
     private bool _canCreateBrands;
     private bool _canEditBrands;
