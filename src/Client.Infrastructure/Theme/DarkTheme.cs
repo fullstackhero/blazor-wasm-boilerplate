@@ -10,7 +10,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
             {
                 Primary = CustomColors.Dark.Primary,
                 Secondary = CustomColors.Dark.Secondary,
-                Success = "#007E33",
+                Success = CustomColors.Dark.Primary,
                 Black = "#27272f",
                 Background = CustomColors.Dark.Background,
                 BackgroundGrey = "#27272f",
@@ -25,8 +25,10 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
                 ActionDisabled = "rgba(255,255,255, 0.26)",
                 ActionDisabledBackground = "rgba(255,255,255, 0.12)",
                 DrawerIcon = "rgba(255,255,255, 0.50)",
-                TableLines = "#e0e0e029",
-                Dark = CustomColors.Dark.DrawerBackground
+                TableLines = "#e0e0e036",
+                Dark = CustomColors.Dark.DrawerBackground,
+                Divider = "#e0e0e036",
+                OverlayDark = "hsl(0deg 0% 0% / 75%)"
             };
 
             LayoutProperties = new LayoutProperties()

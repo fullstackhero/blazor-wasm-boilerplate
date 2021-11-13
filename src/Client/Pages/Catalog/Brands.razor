@@ -16,28 +16,29 @@
 }
 else
 {
+    <MudCard Elevation="25" Style="padding:10px!important">
+    <MudCardContent>
+        @if (_canSearchBrands)
+            {
+                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Brands"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Style="flex:none!important;margin:0px!important" ></MudTextField>
+            }
+    </MudCardContent>
+</MudCard>
+    
     <MudTable Hover="true" Elevation="25" Items="_brandList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<BrandDto, bool>(Search)" @bind-brand="_brand">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 @if (_canCreateBrands)
                 {
-                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
-                  
-
+                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>                
                     <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetBrandsAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary" Style="margin-left: 5px;">@_localizer["Reload"]</MudButton>
-                  
                 }
                 else
                 {
                     <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetBrandsAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary" Style="margin-left: 5px;">@_localizer["Reload"]</MudButton>
-                 
                 }
             </div>
             <MudSpacer />
-            @if (_canSearchBrands)
-            {
-                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Brands"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
-            }
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<BrandDto, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>

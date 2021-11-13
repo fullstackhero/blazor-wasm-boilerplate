@@ -15,8 +15,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
                 AppbarText = CustomColors.Light.AppbarText,
                 DrawerBackground = CustomColors.Light.Background,
                 DrawerText = "rgba(0,0,0, 0.7)",
-                Success = "#06d79c",
-                TableLines  = "#e0e0e029"
+                Success = CustomColors.Light.Primary,
+                TableLines  = "#e0e0e029",
+                OverlayDark = "hsl(0deg 0% 0% / 75%)"
             };
             LayoutProperties = new LayoutProperties()
             {
