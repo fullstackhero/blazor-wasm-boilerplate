@@ -18,7 +18,7 @@ public partial class Brands
     private bool _canEditBrands;
     private bool _canDeleteBrands;
     private bool _canSearchBrands;
-    private bool _loaded;
+    private bool _loading = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -29,12 +29,12 @@ public partial class Brands
         _canSearchBrands = true;//(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Search)).Succeeded;
 
         await GetBrandsAsync();
-        _loaded = true;
-
     }
 
     private async Task GetBrandsAsync()
     {
+        _loading = true;
+        await Task.Delay(200);//test
         string[] orderBy = { "id" };
         BrandListFilter filter = new() { PageNumber = 1, PageSize = 10, OrderBy = orderBy };
         var response = await _brandService.SearchBrandAsync(filter);
@@ -49,6 +49,7 @@ public partial class Brands
                 _snackBar.Add(message, Severity.Error);
             }
         }
+        _loading = false;
     }
 
     private async Task Delete(Guid id)
