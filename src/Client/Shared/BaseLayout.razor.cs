@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Theme;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
