@@ -19,10 +19,8 @@ namespace FSH.BlazorWebAssembly.Client.Shared
         protected override async Task OnInitializedAsync()
         {
             _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
-            _currentTheme = new LightTheme();
-            _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
-            _currentTheme.Palette.Primary = await _clientPreferenceManager.GetPrimaryColorAsync();
-            _rightToLeft = await _clientPreferenceManager.IsRTL();
+            _currentTheme = _themePreference.IsDarkMode ? new DarkTheme() : new LightTheme();
+            _currentTheme.Palette.Primary = _themePreference.PrimaryColor;
 
             _snackBar.Add("Like this boilerplate? ", Severity.Normal, config =>
             {

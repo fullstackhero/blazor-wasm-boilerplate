@@ -25,7 +25,7 @@
                         <MudButton Variant="Variant.Filled" Class="mode-button" FullWidth="true" style="padding: 10px!important;"
                             OnClick="@(() => ToggleDarkLightMode(true))">
                             <ChildContent>
-                                <MudIcon Color="Color.Primary" Icon="@Icons.Material.Filled.DarkMode" />
+                                <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.DarkMode" />
                             </ChildContent>
                         </MudButton>
                     </MudItem>
@@ -38,7 +38,7 @@
                         <MudItem xs="4">
                             <MudButton OnClick="@(() => UpdateThemePrimaryColor(color))">
                                 <ChildContent>
-                                    <div style="@($"background: {color};");min-width: 80%;min-height:50px">
+                                    <div style="@($"background: {color};");min-width: 90%;min-height:50px">
                                     </div>
                                 </ChildContent>
                             </MudButton>
