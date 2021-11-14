@@ -14,7 +14,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
         [Parameter]
         public EventCallback<bool> OnRightToLeftToggle { get; set; }
-        private bool _drawerOpen = true;
+        private bool _drawerOpen = false;
         private bool _rightToLeft = false;
 
         private async Task RightToLeftToggle()
@@ -24,7 +24,10 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
             await OnRightToLeftToggle.InvokeAsync(isRtl);
         }
-
+        private void SayHello()
+        {
+            Console.WriteLine("Hello!");
+        }
         public async Task ToggleDarkMode()
         {
             await OnDarkModeToggle.InvokeAsync();

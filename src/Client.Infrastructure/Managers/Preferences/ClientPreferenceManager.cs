@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using System.Text.RegularExpressions;
+using Blazored.LocalStorage;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using FSH.BlazorWebAssembly.Shared.Preference;
@@ -42,6 +43,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 
             return false;
         }
+
         public async Task<bool> ToggleLayoutDirection()
         {
             var preference = await GetPreference() as ClientPreference;
@@ -84,6 +86,25 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
             }
             return new LightTheme();
         }
+
+        public async Task<string> GetPrimaryColorAsync()
+        {
+            var preference = await GetPreference() as ClientPreference;
+            if (preference != null)
+            {
+                var colorCode = preference.PrimaryColor;
+                if (Regex.Match(colorCode, "^#(?:[0-9a-fA-F]{3,4}){1,2}$").Success)
+                    return colorCode;
+                else
+                {
+                    preference.PrimaryColor = CustomColors.Light.Primary;
+                    await SetPreference(preference);
+                    return preference.PrimaryColor;
+                }
+            }
+            return CustomColors.Light.Primary;
+        }
+
         public async Task<bool> IsRTL()
         {
             var preference = await GetPreference() as ClientPreference;

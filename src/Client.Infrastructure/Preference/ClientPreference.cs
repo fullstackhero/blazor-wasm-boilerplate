@@ -2,12 +2,13 @@
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Preference
 {
-    public record ClientPreference : IPreference
+    public class ClientPreference : IPreference
     {
-        public bool IsDarkMode { get; set; }
-        public bool IsRTL { get; set; }
-        public bool IsDrawerOpen { get; set; }
-        public string PrimaryColor { get; set; }
-        //public string LanguageCode { get; set; } = LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US";
+        public bool IsDarkMode { get; set; } = false;
+        public bool IsRTL { get; set; } = false;
+        public bool IsDrawerOpen { get; set; } = false;
+        public string PrimaryColor { get; set; } = "#3eaf7c";
+        public string SecondaryColor { get; set; } = "#2196f3";
+        public double BorderRadius { get; set; } = 5;
     }
 }

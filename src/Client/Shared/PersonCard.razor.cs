@@ -5,8 +5,8 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 {
     public partial class PersonCard
     {
-        [Parameter] public string Class { get; set; }
-        [Parameter] public string Style { get; set; }
+        [Parameter] public string? Class { get; set; }
+        [Parameter] public string? Style { get; set; }
 
         private string? UserId { get; set; }
         private string? Email { get; set; }

@@ -1,0 +1,14 @@
+﻿<div class="px-2">
+    <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@ToggleDarkMode" />
+    <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit"
+        Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
+</div>
+
+@code {
+
+[Parameter] public EventCallback OnDarkModeToggle { get; set; }
+public async Task ToggleDarkMode()
+        {
+            await OnDarkModeToggle.InvokeAsync();
+        }
+}

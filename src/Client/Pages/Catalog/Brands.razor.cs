@@ -1,10 +1,14 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using FSH.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Shared.Catalog;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Brands
 {
+    [CascadingParameter]
+    public Error Error { get; set; }
     private IEnumerable<BrandDto> _pagedData;
     private TableState _state;
     private MudTable<BrandDto> _table;
@@ -44,26 +48,29 @@ public partial class Brands
     private async Task GetBrandsAsync()
     {
         _loading = true;
-        await Task.Delay(200);//test
-        string[] orderings = null;
-        if (!string.IsNullOrEmpty(_state.SortLabel))
+        try
         {
-            orderings = _state.SortDirection != SortDirection.None ? new[] { $"{_state.SortLabel} {_state.SortDirection}" } : new[] { $"{_state.SortLabel}" };
-        }
-        BrandListFilter filter = new() { PageSize = _state.PageSize, PageNumber = _state.Page + 1, Keyword = _searchString, OrderBy = orderings };
-        var response = await _brandService.SearchBrandAsync(filter);
-        if (response.Succeeded)
-        {
-            _totalItems = response.TotalCount;
-            _currentPage = response.CurrentPage;
-            _pagedData = response.Data.ToList();
-        }
-        else
-        {
-            foreach (var message in response.Messages)
+            string[] orderings = null;
+            if (!string.IsNullOrEmpty(_state.SortLabel))
             {
-                _snackBar.Add(message, Severity.Error);
+                orderings = _state.SortDirection != SortDirection.None ? new[] { $"{_state.SortLabel} {_state.SortDirection}" } : new[] { $"{_state.SortLabel}" };
             }
+            BrandListFilter filter = new() { PageSize = _state.PageSize, PageNumber = _state.Page + 1, Keyword = _searchString, OrderBy = orderings };
+            var response = await _brandService.SearchBrandAsync(filter);
+            if (response.Succeeded)
+            {
+                _totalItems = response.TotalCount;
+                _currentPage = response.CurrentPage;
+                _pagedData = response.Data.ToList();
+            }
+            else
+            {
+                Error.ProcessError(response.Messages);
+            }
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
         }
         _loading = false;
     }

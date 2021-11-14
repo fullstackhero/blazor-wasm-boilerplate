@@ -1,13 +1,17 @@
-﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
 {
     public partial class Login
     {
-
+        [CascadingParameter]
+        public Error? Error { get; set; }
+        public bool BusySubmitting { get; set; } = false;
         private bool _passwordVisibility;
         private InputType _passwordInput = InputType.Password;
         private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -42,18 +46,28 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
                 _navigationManager.NavigateTo("/");
             }
         }
-        private TokenRequest tokenRequest = new();
+        private readonly TokenRequest tokenRequest = new();
 
         private async Task SubmitAsync()
         {
-            var result = await _authService.Login(tokenRequest);
-            if (!result.Succeeded)
+            try
             {
-                foreach (var message in result.Messages)
+                BusySubmitting = true;
+                var result = await _authService.Login(tokenRequest);
+                if (!result.Succeeded)
                 {
-                    _snackBar.Add(message, Severity.Error);
+                    Error?.ProcessError(result.Messages);
                 }
             }
+            catch (System.Exception ex)
+            {
+                Error?.ProcessError(ex);
+            }
+            finally
+            {
+                BusySubmitting = false;
+            }
+
         }
     }
 }
