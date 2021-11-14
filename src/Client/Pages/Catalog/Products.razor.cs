@@ -8,6 +8,7 @@ public partial class Products
 
     private IEnumerable<ProductDto> _pagedData;
     private MudTable<ProductDto> _table;
+
     private int _totalItems;
     private int _currentPage;
     private string _searchString = "";

@@ -39,7 +39,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog
         }
         public async Task<IResult<Guid>> UpdateAsync(UpdateProductRequest request, Guid id)
         {
-            var response = await _httpClient.PostAsJsonAsync(Routes.ProductsEndpoints.Save + id, request);
+            var response = await _httpClient.PutAsJsonAsync(Routes.ProductsEndpoints.Save + id, request);
             return await response.ToResult<Guid>();
         }
     }
