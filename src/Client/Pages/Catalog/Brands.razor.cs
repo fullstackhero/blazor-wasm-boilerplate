@@ -43,7 +43,6 @@ public partial class Brands
         try
         {
             var response = await _brandService.SearchBrandAsync(filter);
-            Console.WriteLine(response.Messages[0]);
             if (response.Succeeded)
             {
                 _brandList = response.Data.ToList();
