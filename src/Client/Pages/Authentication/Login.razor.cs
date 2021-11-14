@@ -10,7 +10,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
     public partial class Login
     {
         [CascadingParameter]
-        public Error Error { get; set; }
+        public Error? Error { get; set; }
         public bool BusySubmitting { get; set; } = false;
         private bool _passwordVisibility;
         private InputType _passwordInput = InputType.Password;
@@ -46,7 +46,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
                 _navigationManager.NavigateTo("/");
             }
         }
-        private TokenRequest tokenRequest = new();
+        private readonly TokenRequest tokenRequest = new();
 
         private async Task SubmitAsync()
         {
@@ -56,12 +56,12 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
                 var result = await _authService.Login(tokenRequest);
                 if (!result.Succeeded)
                 {
-                    Error.ProcessError(result.Messages);
+                    Error?.ProcessError(result.Messages);
                 }
             }
             catch (System.Exception ex)
             {
-                Error.ProcessError(ex);
+                Error?.ProcessError(ex);
             }
             finally
             {
