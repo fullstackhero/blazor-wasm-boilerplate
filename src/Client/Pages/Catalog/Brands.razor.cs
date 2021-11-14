@@ -1,28 +1,30 @@
-﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Catalog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Brands
 {
     [CascadingParameter]
     public Error Error { get; set; }
-    private List<BrandDto> _brandList = new();
-    private BrandDto _brand = new();
+    private IEnumerable<BrandDto> _pagedData;
+    private TableState _state;
+    private MudTable<BrandDto> _table;
     private string _searchString = "";
     private bool _dense = false;
     private bool _striped = true;
     private bool _bordered = false;
+    private int _currentPage;
     public bool Label_CheckBox1 { get; set; } = true;
     private ClaimsPrincipal _currentUser;
     private bool _canCreateBrands;
     private bool _canEditBrands;
     private bool _canDeleteBrands;
     private bool _canSearchBrands;
-    private bool _loaded;
-
+    private bool _loading = true;
+    private int _totalItems;
     protected override async Task OnInitializedAsync()
     {
         _currentUser = _stateProvider.AuthenticationStateUser;
@@ -32,20 +34,34 @@ public partial class Brands
         _canSearchBrands = true;//(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Search)).Succeeded;
 
         await GetBrandsAsync();
-        _loaded = true;
-
     }
-
+    private async Task<TableData<BrandDto>> ServerReload(TableState state)
+    {
+        if (!string.IsNullOrWhiteSpace(_searchString))
+        {
+            state.Page = 0;
+        }
+        _state = state;
+        await GetBrandsAsync();
+        return new TableData<BrandDto> { TotalItems = _totalItems, Items = _pagedData };
+    }
     private async Task GetBrandsAsync()
     {
-        string[] orderBy = { "id" };
-        BrandListFilter filter = new() { PageNumber = 1, PageSize = 10, OrderBy = orderBy };
+        _loading = true;
         try
         {
+            string[] orderings = null;
+            if (!string.IsNullOrEmpty(_state.SortLabel))
+            {
+                orderings = _state.SortDirection != SortDirection.None ? new[] { $"{_state.SortLabel} {_state.SortDirection}" } : new[] { $"{_state.SortLabel}" };
+            }
+            BrandListFilter filter = new() { PageSize = _state.PageSize, PageNumber = _state.Page + 1, Keyword = _searchString, OrderBy = orderings };
             var response = await _brandService.SearchBrandAsync(filter);
             if (response.Succeeded)
             {
-                _brandList = response.Data.ToList();
+                _totalItems = response.TotalCount;
+                _currentPage = response.CurrentPage;
+                _pagedData = response.Data.ToList();
             }
             else
             {
@@ -56,6 +72,7 @@ public partial class Brands
         {
             Error.ProcessError(ex);
         }
+        _loading = false;
     }
 
     private async Task Delete(Guid id)
@@ -100,7 +117,7 @@ public partial class Brands
             };
         if (id != new Guid())
         {
-            _brand = _brandList?.FirstOrDefault(c => c.Id == id);
+            var _brand = _pagedData?.FirstOrDefault(c => c.Id == id);
             if (_brand != null)
             {
                 parameters.Add(nameof(AddEditBrandModal.UpdateBrandRequest), new UpdateBrandRequest
@@ -121,8 +138,8 @@ public partial class Brands
     }
     private async Task Reset()
     {
-        _brand = new BrandDto();
         await GetBrandsAsync();
+        OnSearch("");
         StateHasChanged();
     }
 
@@ -134,5 +151,10 @@ public partial class Brands
             return true;
         }
         return brand.Description?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
+    }
+    private void OnSearch(string text)
+    {
+        _searchString = text;
+        _table.ReloadServerData();
     }
 }

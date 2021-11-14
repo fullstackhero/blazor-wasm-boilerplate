@@ -4,7 +4,7 @@ using FSH.BlazorWebAssembly.Shared.Wrapper;
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog;
 public interface IBrandService : IApiService
 {
-    Task<IResult<List<BrandDto>>> SearchBrandAsync(BrandListFilter request);
+    Task<PaginatedResult<BrandDto>> SearchBrandAsync(BrandListFilter request);
     Task<IResult<Guid>> CreateAsync(CreateBrandRequest request);
     Task<IResult<Guid>> UpdateAsync(UpdateBrandRequest request, Guid id);
     Task<IResult<Guid>> DeleteAsync(Guid id);

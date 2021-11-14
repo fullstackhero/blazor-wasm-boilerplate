@@ -1,17 +1,13 @@
-﻿//using FSH.BlazorWebAssembly.Shared.Wrapper;
+﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+using FSH.BlazorWebAssembly.Shared.Wrapper;
 
-//namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog
-//{
-//    public interface IProductService : IApiService
-//    {
-//        Task<PaginatedResult<GetAllPagedProductsResponse>> GetProductsAsync(GetAllPagedProductsRequest request);
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog;
+public interface IProductService : IApiService
+{
+    Task<PaginatedResult<ProductDto>> GetProductsAsync(ProductListFilter request);
+    Task<IResult<string>> GetProductImageAsync(Guid id);
+    Task<IResult<Guid>> CreateAsync(CreateProductRequest request);
+    Task<IResult<Guid>> UpdateAsync(UpdateProductRequest request, Guid id);
+    Task<IResult<Guid>> DeleteAsync(Guid id);
 
-//        Task<IResult<string>> GetProductImageAsync(int id);
-
-//        Task<IResult<int>> SaveAsync(AddEditProductCommand request);
-
-//        Task<IResult<int>> DeleteAsync(int id);
-
-//        Task<IResult<string>> ExportToExcelAsync(string searchString = "");
-//    }
-//}
+}

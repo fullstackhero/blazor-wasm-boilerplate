@@ -23,8 +23,6 @@
 @using FSH.BlazorWebAssembly.Client.Components.ThemeManager
 
 
-
-
 @attribute [Authorize]
 @inject ClientPreferenceManager _clientPreferenceManager
 @inject ApplicationAuthenticationStateProvider _stateProvider
@@ -33,4 +31,4 @@
 @inject IAuthenticationService _authService;
 @inject IDialogService _dialogService
 @inject IBrandService _brandService;
-@*@inject IProductService _ProductService;*@
+@inject IProductService _productService;

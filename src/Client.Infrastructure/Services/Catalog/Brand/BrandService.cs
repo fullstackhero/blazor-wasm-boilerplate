@@ -27,10 +27,10 @@ public class BrandService : IBrandService
         return await response.ToResult<Guid>();
     }
 
-    public async Task<IResult<List<BrandDto>>> SearchBrandAsync(BrandListFilter request)
+    public async Task<PaginatedResult<BrandDto>> SearchBrandAsync(BrandListFilter request)
     {
         var response = await _httpClient.PostAsJsonAsync(Routes.BrandsEndpoints.Search, request);
-        return await response.ToResult<List<BrandDto>>();
+        return await response.ToPaginatedResult<BrandDto>();
     }
     public async Task<IResult<Guid>> CreateAsync(CreateBrandRequest request)
     {
