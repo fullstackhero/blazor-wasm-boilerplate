@@ -72,23 +72,23 @@ public partial class AddEditProductModal
         }
     }
 
-    //private async Task LoadImageAsync()
-    //{
-    //    var data = await _productService.GetProductImageAsync(UpdateProductRequest.Id);
-    //    if (data.Succeeded)
-    //    {
-    //        var imageData = data.Data;
-    //        if (!string.IsNullOrEmpty(imageData))
-    //        {
-    //            UpdateProductRequest.ImageDataURL = imageData;
-    //        }
-    //    }
-    //}
+    private async Task LoadImageAsync()
+    {
+        var data = await _productService.GetProductImageAsync(UpdateProductRequest.BrandId);
+        if (data.Succeeded)
+        {
+            var imageData = data.Data;
+            if (!string.IsNullOrEmpty(imageData))
+            {
+                //UpdateProductRequest.ImageDataURL = imageData;
+            }
+        }
+    }
 
     private void DeleteAsync()
     {
         //UpdateProductRequest.ImageDataURL = null;
-        //UpdateProductRequest.UploadRequest = new UploadRequest();
+        UpdateProductRequest.Image = new FileUploadRequest();
     }
 
     private IBrowserFile _file;
@@ -104,7 +104,7 @@ public partial class AddEditProductModal
             var buffer = new byte[imageFile.Size];
             await imageFile.OpenReadStream().ReadAsync(buffer);
             //UpdateProductRequest.ImageDataURL = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
-            //UpdateProductRequest.UploadRequest = new UploadRequest { Data = buffer, UploadType = Application.Enums.UploadType.Product, Extension = extension };
+            UpdateProductRequest.Image = new FileUploadRequest { Data = Convert.ToString(buffer), Extension = extension };
         }
     }
 
