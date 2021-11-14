@@ -1,8 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Client.Shared;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Catalog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Brands
@@ -12,7 +12,7 @@ public partial class Brands
     private IEnumerable<BrandDto> _pagedData;
     private TableState _state;
     private MudTable<BrandDto> _table;
-    private string _searchString = "";
+    private string searchString = string.Empty;
     private bool _dense = false;
     private bool _striped = true;
     private bool _bordered = false;
@@ -37,7 +37,7 @@ public partial class Brands
     }
     private async Task<TableData<BrandDto>> ServerReload(TableState state)
     {
-        if (!string.IsNullOrWhiteSpace(_searchString))
+        if (!string.IsNullOrWhiteSpace(searchString))
         {
             state.Page = 0;
         }
@@ -50,12 +50,12 @@ public partial class Brands
         _loading = true;
         try
         {
-            string[] orderings = null;
-            if (!string.IsNullOrEmpty(_state.SortLabel))
+            string[] orderings = Array.Empty<string>();
+            if (_state != null && !string.IsNullOrEmpty(_state.SortLabel))
             {
                 orderings = _state.SortDirection != SortDirection.None ? new[] { $"{_state.SortLabel} {_state.SortDirection}" } : new[] { $"{_state.SortLabel}" };
             }
-            BrandListFilter filter = new() { PageSize = _state.PageSize, PageNumber = _state.Page + 1, Keyword = _searchString, OrderBy = orderings };
+            BrandListFilter filter = new() { PageSize = _state == null ? 10 : _state.PageSize, PageNumber = (_state == null ? 0 : _state.Page) + 1, Keyword = searchString, OrderBy = orderings };
             var response = await _brandService.SearchBrandAsync(filter);
             if (response.Succeeded)
             {
@@ -145,16 +145,16 @@ public partial class Brands
 
     private bool Search(BrandDto brand)
     {
-        if (string.IsNullOrWhiteSpace(_searchString)) return true;
-        if (brand.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        if (string.IsNullOrWhiteSpace(searchString)) return true;
+        if (brand.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true)
         {
             return true;
         }
-        return brand.Description?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
+        return brand.Description?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
     }
     private void OnSearch(string text)
     {
-        _searchString = text;
+        searchString = text;
         _table.ReloadServerData();
     }
 }
