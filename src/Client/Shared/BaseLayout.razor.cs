@@ -1,10 +1,12 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {
     public partial class BaseLayout
     {
+        private ClientPreference? _themePreference;
         private MudTheme _currentTheme = new LightTheme();
         private bool _themeDrawerOpen;
         private bool _rightToLeft = false;
@@ -16,6 +18,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
         protected override async Task OnInitializedAsync()
         {
+            _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
             _currentTheme = new LightTheme();
             _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
             _currentTheme.Palette.Primary = await _clientPreferenceManager.GetPrimaryColorAsync();
@@ -37,12 +40,20 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             });
         }
 
-        private async Task DarkMode()
+        // private async Task DarkMode()
+        // {
+        //     bool isDarkMode = await _clientPreferenceManager.ToggleDarkModeAsync();
+        //     _currentTheme = isDarkMode
+        //         ? new LightTheme()
+        //         : new DarkTheme();
+        //     _currentTheme.Palette.Primary = await _clientPreferenceManager.GetPrimaryColorAsync();
+        // }
+        private async Task ThemePreferenceChanged(ClientPreference themePreference)
         {
-            bool isDarkMode = await _clientPreferenceManager.ToggleDarkModeAsync();
-            _currentTheme = isDarkMode
-                ? new LightTheme()
-                : new DarkTheme();
+            _themePreference = themePreference;
+            _currentTheme = _themePreference.IsDarkMode ? new DarkTheme() : new LightTheme();
+            _currentTheme.Palette.Primary = _themePreference.PrimaryColor;
+            await _clientPreferenceManager.SetPreference(themePreference);
         }
 
         public void Dispose()

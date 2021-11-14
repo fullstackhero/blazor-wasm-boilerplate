@@ -1,10 +1,10 @@
-﻿using Blazored.LocalStorage;
+﻿using System.Text.RegularExpressions;
+using Blazored.LocalStorage;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using FSH.BlazorWebAssembly.Shared.Preference;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using MudBlazor;
-using System.Text.RegularExpressions;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 {
@@ -93,14 +93,14 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
             if (preference != null)
             {
                 var colorCode = preference.PrimaryColor;
-                if (Regex.Match(colorCode, "^#(?:[0-9a-fA-F]{3}){1,2}$").Success)
+                if (Regex.Match(colorCode, "^#(?:[0-9a-fA-F]{3,4}){1,2}$").Success)
                     return colorCode;
                 else
                 {
                     preference.PrimaryColor = CustomColors.Light.Primary;
                     await SetPreference(preference);
                     return preference.PrimaryColor;
-                }                    
+                }
             }
             return CustomColors.Light.Primary;
         }

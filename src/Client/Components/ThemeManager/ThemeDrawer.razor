@@ -1,25 +1,68 @@
-<MudDrawer Anchor="Anchor.Right" @bind-Open="ThemeDrawerOpen" Elevation="25" Variant="@DrawerVariant.Temporary" Width="350px">
+<MudDrawer Anchor="Anchor.Right" @bind-Open="ThemeDrawerOpen" Elevation="25" Variant="@DrawerVariant.Temporary"
+    Width="350px">
     <MudDrawerHeader Class="align-center">
         <MudText Typo="Typo.h6">
             Theme Manager
         </MudText>
         <MudSpacer />
-        <MudIconButton Color="Color.Default"
-                       Icon="@Icons.Material.Filled.Close"
-                       OnClick="@(() => ThemeDrawerOpenChanged.InvokeAsync(false))"
-                       Size="Size.Small" />
+        <MudIconButton Color="Color.Default" Icon="@Icons.Material.Filled.Close"
+            OnClick="@(() => ThemeDrawerOpenChanged.InvokeAsync(false))" Size="Size.Small" />
     </MudDrawerHeader>
     <MudDivider Style="margin-bottom:10px!important" />
     <div style="padding:20px!important">
-         <MudButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.DarkMode"
-                        Variant="Variant.Filled" OnClick="OnDarkModeToggle">
-                        Toggle Dark Mode
-                    </MudButton>
+        <MudExpansionPanels DisableBorders="true" Elevation="25">
+            <MudExpansionPanel Text="Mode">
+                <MudGrid Spacing="3">
+                    <MudItem xs="6">
+                        <MudButton Variant="Variant.Filled" Class="mode-button" style="padding: 10px!important;" FullWidth="true"
+                            OnClick="@(() => ToggleDarkLightMode(false))">
+                            <ChildContent>
+                                <MudIcon  Color="Color.Primary" Icon="@Icons.Material.Filled.WbSunny" />
+                            </ChildContent>
+                        </MudButton>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudButton Variant="Variant.Filled" Class="mode-button" FullWidth="true" style="padding: 10px!important;"
+                            OnClick="@(() => ToggleDarkLightMode(true))">
+                            <ChildContent>
+                                <MudIcon Color="Color.Primary" Icon="@Icons.Material.Filled.DarkMode" />
+                            </ChildContent>
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Primary Color">
+                <MudGrid Spacing="3">
+                    @foreach (var color in _primaryColors)
+                    {
+                        <MudItem xs="4">
+                            <MudButton OnClick="@(() => UpdateThemePrimaryColor(color))">
+                                <ChildContent>
+                                    <div style="@($"background: {color};");min-width: 80%;min-height:50px">
+                                    </div>
+                                </ChildContent>
+                            </MudButton>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Secondary Color">
+                <MudGrid Class="my-3" Spacing="3">
+                    @foreach (var color in _primaryColors)
+                    {
+                        <MudItem xs="4">
+                            <MudButton FullWidth="true">
+                                <ChildContent>
+                                    <div style="@($"background: {color};");min-width: 100%;min-height:100px">
+                                    </div>
+                                </ChildContent>
+                            </MudButton>
+                        </MudItem>
+                    }
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
     </div>
-       
 </MudDrawer>
-
-<MudOverlay DarkBackground="false"
-            OnClick="@(() => ThemeDrawerOpenChanged.InvokeAsync(false))"
-            Visible="ThemeDrawerOpen"
-            VisibleChanged="ThemeDrawerOpenChanged" />
+<MudOverlay DarkBackground="false" OnClick="@(() => ThemeDrawerOpenChanged.InvokeAsync(false))"
+    Visible="ThemeDrawerOpen" VisibleChanged="ThemeDrawerOpenChanged" />
