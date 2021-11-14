@@ -11,56 +11,12 @@
     <MudDivider Style="margin-bottom:10px!important" />
     <div style="padding:20px!important">
         <MudExpansionPanels DisableBorders="true" Elevation="25">
-            <MudExpansionPanel Text="Mode">
-                <MudGrid Spacing="3">
-                    <MudItem xs="6">
-                        <MudButton Variant="Variant.Filled" Class="mode-button" style="padding: 10px!important;" FullWidth="true"
-                            OnClick="@(() => ToggleDarkLightMode(false))">
-                            <ChildContent>
-                                <MudIcon  Color="Color.Primary" Icon="@Icons.Material.Filled.WbSunny" />
-                            </ChildContent>
-                        </MudButton>
-                    </MudItem>
-                    <MudItem xs="6">
-                        <MudButton Variant="Variant.Filled" Class="mode-button" FullWidth="true" style="padding: 10px!important;"
-                            OnClick="@(() => ToggleDarkLightMode(true))">
-                            <ChildContent>
-                                <MudIcon Color="Color.Default" Icon="@Icons.Material.Filled.DarkMode" />
-                            </ChildContent>
-                        </MudButton>
-                    </MudItem>
-                </MudGrid>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Primary Color">
-                <MudGrid Spacing="3">
-                    @foreach (var color in _primaryColors)
-                    {
-                        <MudItem xs="4">
-                            <MudButton OnClick="@(() => UpdateThemePrimaryColor(color))">
-                                <ChildContent>
-                                    <div style="@($"background: {color};");min-width: 90%;min-height:50px">
-                                    </div>
-                                </ChildContent>
-                            </MudButton>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Secondary Color">
-                <MudGrid Class="my-3" Spacing="3">
-                    @foreach (var color in _primaryColors)
-                    {
-                        <MudItem xs="4">
-                            <MudButton FullWidth="true">
-                                <ChildContent>
-                                    <div style="@($"background: {color};");min-width: 100%;min-height:100px">
-                                    </div>
-                                </ChildContent>
-                            </MudButton>
-                        </MudItem>
-                    }
-                </MudGrid>
-            </MudExpansionPanel>
+            <DarkModePanel OnIconClicked="ToggleDarkLightMode" />
+            <ColorPanel OnColorClicked="UpdateThemePrimaryColor" Colors="_primaryColors" ColorType="Primary Color"
+                CurrentColor="Color.Primary" />
+            <ColorPanel OnColorClicked="UpdateThemeSecondaryColor" Colors="_primaryColors" ColorType="Secondary Color"
+                CurrentColor="Color.Secondary" />
+            <RadiusPanel OnSliderChanged="UpdateBorderRadius"/>
         </MudExpansionPanels>
     </div>
 </MudDrawer>

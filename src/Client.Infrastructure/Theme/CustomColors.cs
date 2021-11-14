@@ -1,7 +1,18 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
+﻿using MudBlazor;
+
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
 {
     public static class CustomColors
     {
+        public static readonly List<string> PrimaryColors = new()
+        {
+            "#3eaf7c",
+            Colors.Blue.Default,
+            Colors.BlueGrey.Default,
+            Colors.Purple.Default,
+            Colors.Orange.Default,
+            Colors.Red.Default
+        };
         public static class Light
         {
             public const string Primary = "#3eaf7c";
