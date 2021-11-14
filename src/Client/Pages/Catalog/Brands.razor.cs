@@ -1,11 +1,14 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Shared.Catalog;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Brands
 {
-
+    [CascadingParameter]
+    public Error Error { get; set; }
     private List<BrandDto> _brandList = new();
     private BrandDto _brand = new();
     private string _searchString = "";
@@ -22,7 +25,7 @@ public partial class Brands
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = _stateProvider.AuthenticationStateUser; 
+        _currentUser = _stateProvider.AuthenticationStateUser;
         _canCreateBrands = true;// (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Create)).Succeeded;
         _canEditBrands = true;// (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Edit)).Succeeded;
         _canDeleteBrands = true;//(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Delete)).Succeeded;
@@ -37,17 +40,22 @@ public partial class Brands
     {
         string[] orderBy = { "id" };
         BrandListFilter filter = new() { PageNumber = 1, PageSize = 10, OrderBy = orderBy };
-        var response = await _brandService.SearchBrandAsync(filter);
-        if (response.Succeeded)
+        try
         {
-            _brandList = response.Data.ToList();
-        }
-        else
-        {
-            foreach (var message in response.Messages)
+            var response = await _brandService.SearchBrandAsync(filter);
+            Console.WriteLine(response.Messages[0]);
+            if (response.Succeeded)
             {
-                _snackBar.Add(message, Severity.Error);
+                _brandList = response.Data.ToList();
             }
+            else
+            {
+                Error.ProcessError(response.Messages);
+            }
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex);
         }
     }
 

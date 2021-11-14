@@ -11,7 +11,13 @@
 
     public void ProcessError(Exception ex)
     {
-        Logger.LogError("Error:ProcessError - Type: {Type} Message: {Message}",
-        ex.GetType(), ex.Message);
+        _snackBar.Add(ex.Message, Severity.Error);
+    }
+    public void ProcessError(List<string> messages)
+    {
+        foreach (var message in messages)
+        {
+            _snackBar.Add(message, Severity.Error);
+        }
     }
 }

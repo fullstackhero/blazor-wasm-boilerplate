@@ -29,7 +29,6 @@ else
             </div>
         </MudExpansionPanel>
     }
-
     <MudTable Hover="true" Elevation="25" Items="_brandList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped"
     Filter="new Func<BrandDto, bool>(Search)" @bind-brand="_brand">
         <ToolBarContent>
