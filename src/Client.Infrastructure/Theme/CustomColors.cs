@@ -4,7 +4,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
 {
     public static class CustomColors
     {
-        public static readonly List<string> PrimaryColors = new()
+        public static readonly List<string> ThemeColors = new()
         {
             "#3eaf7c",
             Colors.Blue.Default,

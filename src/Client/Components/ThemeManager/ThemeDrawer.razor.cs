@@ -13,7 +13,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
         [EditorRequired] [Parameter] public ClientPreference? ThemePreference { get; set; }
         [EditorRequired] [Parameter] public EventCallback<ClientPreference> ThemePreferenceChanged { get; set; }
 
-        private readonly List<string> _primaryColors = CustomColors.PrimaryColors;
+        private readonly List<string> Colors = CustomColors.ThemeColors;
 
         private async Task UpdateThemePrimaryColor(string color)
         {

@@ -48,6 +48,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             _currentTheme.Palette.Primary = themePreference.PrimaryColor;
             _currentTheme.Palette.Secondary = themePreference.SecondaryColor;
             _currentTheme.LayoutProperties.DefaultBorderRadius = $"{themePreference.BorderRadius}px";
+            _currentTheme.LayoutProperties.DefaultBorderRadius = $"{themePreference.BorderRadius}px";
         }
 
         public void Dispose()

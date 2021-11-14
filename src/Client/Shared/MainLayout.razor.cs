@@ -24,10 +24,6 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
             await OnRightToLeftToggle.InvokeAsync(isRtl);
         }
-        private void SayHello()
-        {
-            Console.WriteLine("Hello!");
-        }
         public async Task ToggleDarkMode()
         {
             await OnDarkModeToggle.InvokeAsync();
@@ -35,8 +31,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
         protected override async Task OnInitializedAsync()
         {
-            var preference = await _clientPreferenceManager.GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await _clientPreferenceManager.GetPreference() is ClientPreference preference)
             {
                 _rightToLeft = preference.IsRTL;
                 _drawerOpen = preference.IsDrawerOpen;

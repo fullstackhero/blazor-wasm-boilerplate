@@ -5,11 +5,10 @@
             <MudBadge Content="@Radius.ToString()" Color="Color.Secondary" Overlap="true" Class="d-flex ml-auto">
                 <MudIcon Icon="@Icons.Filled.BorderStyle" Color="Color.Default" Class="d-flex ml-auto" />
             </MudBadge>
-
         </div>
     </TitleContent>
     <ChildContent>
-        <MudSlider @bind-Value="@Radius" Min="0" Max="30" Immediate="false" Step="1" Color="Color.Primary"
+        <MudSlider @bind-Value="@Radius" Min="0" Max="@MaxValue" Immediate="false" Step="1" Color="Color.Primary"
             @oninput="@((e) => ChangedSelection(e))">
             @Radius.ToString()</MudSlider>
     </ChildContent>
