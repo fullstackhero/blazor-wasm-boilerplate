@@ -8,8 +8,7 @@
         <NotAuthorized>
             <MudAppBar Elevation="0">
                 <MudSpacer />
-                <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit"
-                    OnClick="@((e) => DarkMode())" />
+                <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" />
             </MudAppBar>
             <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 100vh;">
                 <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
@@ -19,7 +18,10 @@
         </NotAuthorized>
         <Authorized>
             <MudLayout>
-                <MainLayout OnDarkModeToggle="@DarkMode" OnRightToLeftToggle="@RightToLeftToggle">
+                <ThemeDrawer @bind-ThemeDrawerOpen="_themeDrawerOpen" ThemePreference="_themePreference"
+                    ThemePreferenceChanged="ThemePreferenceChanged" />
+                <ThemeButton OnClick="@(() => _themeDrawerOpen = true)" />
+                <MainLayout>
                     @Body
                 </MainLayout>
             </MudLayout>

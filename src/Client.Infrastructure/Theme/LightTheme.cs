@@ -26,7 +26,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
 
             Typography = CustomTypography.FSHTypography;
             Shadows = new Shadow();
-            ZIndex = new ZIndex();
+            ZIndex = new ZIndex() { Drawer = 1300};
         }
     }
 }
