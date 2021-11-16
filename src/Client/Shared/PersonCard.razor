@@ -1,7 +1,15 @@
 ﻿<MudCard Elevation="0" Square="true" Class="@Class" Style="@Style">
     <MudCardHeader>
         <CardHeaderAvatar>
-            <MudAvatar Image="https://avatars.githubusercontent.com/u/31455818?v=4" />
+            @if(string.IsNullOrEmpty(this.ImageUri))
+            {
+                <MudAvatar Size="Size.Medium" Color="Color.Primary" Class="ma-2">@FullName?.ToUpper().FirstOrDefault()</MudAvatar>
+            }
+            else
+            {
+                <MudAvatar Image="https://avatars.githubusercontent.com/u/31455818?v=4" />
+            }
+            
         </CardHeaderAvatar>
         <CardHeaderContent>
             <MudText Typo="Typo.body1">@FullName</MudText>

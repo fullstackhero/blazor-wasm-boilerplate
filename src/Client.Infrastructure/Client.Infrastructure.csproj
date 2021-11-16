@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Identity\User\" />
+  </ItemGroup>
+
 </Project>

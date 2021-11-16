@@ -62,7 +62,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
         {
             await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
             await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
-            await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageURL);
+            await _localStorage.RemoveItemAsync(StorageConstants.Local.ImageUri);
             ((ApplicationAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
             return await Result.SuccessAsync();
