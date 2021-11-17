@@ -44,13 +44,13 @@
     </ToolBarContent>
     <HeaderContent>
         <MudTh>
-            <MudTableSortLabel SortBy="new Func<BrandDto, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="id" SortBy="new Func<BrandDto, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortBy="new Func<BrandDto, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel>
+            <MudTableSortLabel SortLabel="name" SortBy="new Func<BrandDto, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel>
         </MudTh>
         <MudTh>
-            <MudTableSortLabel SortBy="new Func<BrandDto, object>(x => x.Description)">@_localizer["Description"]
+            <MudTableSortLabel SortLabel="Description" SortBy="new Func<BrandDto, object>(x => x.Description)">@_localizer["Description"]
             </MudTableSortLabel>
         </MudTh>
         <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
