@@ -36,7 +36,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
         public async Task<IResult> Login(TokenRequest model)
         {
             _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("tenantKey", model.Tenant);
+            _httpClient.DefaultRequestHeaders.Add("tenant", model.Tenant);
             var response = await _httpClient.PostAsJsonAsync(TokenEndpoints.AuthenticationEndpoint, model);
             var result = await response.ToResult<TokenResponse>();
             if (result.Succeeded)
