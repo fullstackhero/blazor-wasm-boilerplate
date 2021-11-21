@@ -21,9 +21,11 @@
                 <ThemeDrawer @bind-ThemeDrawerOpen="_themeDrawerOpen" ThemePreference="_themePreference"
                     ThemePreferenceChanged="ThemePreferenceChanged" />
                 <ThemeButton OnClick="@(() => _themeDrawerOpen = true)" />
-                <MainLayout>
-                    @Body
-                </MainLayout>
+                <NotificationHub>
+                    <MainLayout>
+                        @Body
+                    </MainLayout>
+                </NotificationHub>
             </MudLayout>
         </Authorized>
     </AuthorizeView>

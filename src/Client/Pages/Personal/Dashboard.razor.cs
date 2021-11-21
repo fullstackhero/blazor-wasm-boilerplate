@@ -1,11 +1,12 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+﻿using System.Threading.Tasks;
+using FSH.BlazorWebAssembly.Client.Components.Hubs;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.Stats;
 using FSH.BlazorWebAssembly.Shared.Notifications;
 using FSH.BlazorWebAssembly.Shared.Notifications.Personal;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Personal
 {
@@ -13,6 +14,8 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal
     {
         [Inject]
         private IStatsService StatsService { get; set; }
+        [CascadingParameter]
+        public NotificationHub NotificationHub { get; set; }
         [Parameter]
         public int ProductCount { get; set; }
         [Parameter]
@@ -25,14 +28,12 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal
 
         private bool _loaded = false;
 
-        private HubConnection HubConnection { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
             await LoadDataAsync();
             _loaded = true;
-            HubConnection = HubConnection.TryInitialize(_localStorage);
-            HubConnection.On<NotificationMessage>("ReceiveMessage", async (notification) =>
+            NotificationHub.HubConnection = await NotificationHub.TryConnectAsync();
+            NotificationHub.HubConnection.On<NotificationMessage>("ReceiveMessage", async (notification) =>
             {
                 switch(notification.MessageType)
                 {
@@ -42,10 +43,6 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal
                         break;
                 }
             });
-            if (HubConnection.State == HubConnectionState.Disconnected)
-            {
-                await HubConnection.StartAsync();
-            }
         }
 
         private async Task LoadDataAsync()
