@@ -37,8 +37,6 @@ public partial class Brands
         _canDeleteBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Delete)).Succeeded;
         _canSearchBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Search)).Succeeded;
         await GetBrandsAsync();
-        throw new UnauthorizedAccessException();
-
     }
 
     private async Task<TableData<BrandDto>> ServerReload(TableState state)

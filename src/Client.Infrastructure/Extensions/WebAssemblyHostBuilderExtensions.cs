@@ -1,18 +1,12 @@
-﻿using Blazored.LocalStorage;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
-using FSH.BlazorWebAssembly.Shared.Constants;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
-using System;
 using System.Globalization;
-using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 

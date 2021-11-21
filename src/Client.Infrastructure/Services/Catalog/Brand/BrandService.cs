@@ -1,12 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
-using FSH.BlazorWebAssembly.Shared.Routes;
-using FSH.BlazorWebAssembly.Shared.Wrapper;
-using System;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog;
+﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog;
 public class BrandService : IBrandService
 {
     private readonly HttpClient _httpClient;
