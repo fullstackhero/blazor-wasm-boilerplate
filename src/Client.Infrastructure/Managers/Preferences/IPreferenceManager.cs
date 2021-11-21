@@ -1,5 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Preference;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 {

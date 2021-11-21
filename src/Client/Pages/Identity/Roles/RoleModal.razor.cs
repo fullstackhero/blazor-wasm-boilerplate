@@ -1,37 +1,34 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Threading.Tasks;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles
+namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
+public partial class RoleModal
 {
-    public partial class RoleModal
+    [Parameter]
+    public RoleRequest RoleModel { get; set; } = new();
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    public void Cancel()
     {
-        [Parameter] public RoleRequest RoleModel { get; set; } = new();
-        [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+        MudDialog.Cancel();
+    }
 
-        public void Cancel()
+    private async Task SaveAsync()
+    {
+        var response = await _roleService.SaveAsync(RoleModel);
+        if (response.Succeeded)
         {
-            MudDialog.Cancel();
+            _snackBar.Add(response.Messages[0], Severity.Success);
+            MudDialog.Close();
         }
-
-        protected override async Task OnInitializedAsync()
+        else
         {
-        }
-
-        private async Task SaveAsync()
-        {
-            var response = await _roleService.SaveAsync(RoleModel);
-            if (response.Succeeded)
+            foreach (string message in response.Messages)
             {
-                _snackBar.Add(response.Messages[0], Severity.Success);
-                MudDialog.Close();
-            }
-            else
-            {
-                foreach (var message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
+                _snackBar.Add(message, Severity.Error);
             }
         }
     }

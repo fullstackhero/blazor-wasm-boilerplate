@@ -1,6 +1,9 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Catalog;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
+using System;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using Routes = FSH.BlazorWebAssembly.Shared.Routes;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog
@@ -37,6 +40,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog
             var response = await _httpClient.PostAsJsonAsync(Routes.ProductsEndpoints.Save, request);
             return await response.ToResult<Guid>();
         }
+
         public async Task<IResult<Guid>> UpdateAsync(UpdateProductRequest request, Guid id)
         {
             var response = await _httpClient.PutAsJsonAsync(Routes.ProductsEndpoints.Save + id, request);

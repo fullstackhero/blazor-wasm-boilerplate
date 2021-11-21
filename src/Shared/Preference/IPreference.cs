@@ -2,6 +2,6 @@
 {
     public interface IPreference
     {
-        //public string LanguageCode { get; set; }
+        // public string LanguageCode { get; set; }
     }
 }

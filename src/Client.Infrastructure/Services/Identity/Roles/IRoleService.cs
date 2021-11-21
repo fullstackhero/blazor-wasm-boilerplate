@@ -1,6 +1,8 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Identity;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Roles
 {
@@ -12,8 +14,8 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Roles
 
         Task<IResult<string>> DeleteAsync(string id);
 
-        //Task<IResult<PermissionResponse>> GetPermissionsAsync(string roleId);
+        // Task<IResult<PermissionResponse>> GetPermissionsAsync(string roleId);
 
-        //Task<IResult<string>> UpdatePermissionsAsync(PermissionRequest request);
+        // Task<IResult<string>> UpdatePermissionsAsync(PermissionRequest request);
     }
 }

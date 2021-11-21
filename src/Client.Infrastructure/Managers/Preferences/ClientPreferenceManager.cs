@@ -4,7 +4,9 @@ using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using FSH.BlazorWebAssembly.Shared.Preference;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using MudBlazor;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 {
@@ -20,8 +22,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 
         public async Task<bool> ToggleDarkModeAsync()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
                 preference.IsDarkMode = !preference.IsDarkMode;
                 await SetPreference(preference);
@@ -33,8 +34,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 
         public async Task<bool> ToggleDrawerAsync()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
                 preference.IsDrawerOpen = !preference.IsDrawerOpen;
                 await SetPreference(preference);
@@ -46,20 +46,19 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 
         public async Task<bool> ToggleLayoutDirection()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
                 preference.IsRTL = !preference.IsRTL;
                 await SetPreference(preference);
                 return preference.IsRTL;
             }
+
             return false;
         }
 
         public async Task<IResult> ChangeLanguageAsync(string languageCode)
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
                 // preference.LanguageCode = languageCode;
                 await SetPreference(preference);
@@ -79,22 +78,23 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 
         public async Task<MudTheme> GetCurrentThemeAsync()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
-                if (preference.IsDarkMode == true) return new DarkTheme();
+                if (preference.IsDarkMode) return new DarkTheme();
             }
+
             return new LightTheme();
         }
 
         public async Task<string> GetPrimaryColorAsync()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
-                var colorCode = preference.PrimaryColor;
+                string colorCode = preference.PrimaryColor;
                 if (Regex.Match(colorCode, "^#(?:[0-9a-fA-F]{3,4}){1,2}$").Success)
+                {
                     return colorCode;
+                }
                 else
                 {
                     preference.PrimaryColor = CustomColors.Light.Primary;
@@ -102,26 +102,27 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
                     return preference.PrimaryColor;
                 }
             }
+
             return CustomColors.Light.Primary;
         }
 
         public async Task<bool> IsRTL()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
                 return preference.IsRTL;
             }
+
             return false;
         }
 
         public async Task<bool> IsDrawerOpen()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            if (await GetPreference() is ClientPreference preference)
             {
                 return preference.IsDrawerOpen;
             }
+
             return false;
         }
 

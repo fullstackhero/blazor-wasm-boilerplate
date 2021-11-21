@@ -1,14 +1,18 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Identity;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using MudBlazor;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 public partial class Roles
 {
     private List<RoleDto> _roleList = new();
     private RoleDto _role = new();
-    private string _searchString = "";
+    private string _searchString = string.Empty;
     private bool _dense = false;
     private bool _striped = true;
     private bool _bordered = false;
@@ -26,10 +30,10 @@ public partial class Roles
     {
         _currentUser = await _authService.CurrentUser();
         _canCreateRoles = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Create)).Succeeded;
-        _canEditRoles = true; //(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Edit)).Succeeded;
-        _canDeleteRoles = true; //(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Delete)).Succeeded;
-        _canSearchRoles = true; //(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Search)).Succeeded;
-        _canViewRoleClaims = true; //(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.RoleClaims.View)).Succeeded;
+        _canEditRoles = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Edit)).Succeeded;
+        _canDeleteRoles = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Delete)).Succeeded;
+        _canSearchRoles = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Search)).Succeeded;
+        _canViewRoleClaims = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.RoleClaims.View)).Succeeded;
 
         await GetRolesAsync();
         _loading = false;
@@ -45,11 +49,12 @@ public partial class Roles
         }
         else
         {
-            foreach (var message in response.Messages)
+            foreach (string message in response.Messages)
             {
                 _snackBar.Add(message, Severity.Error);
             }
         }
+
         _loading = false;
     }
 
@@ -58,7 +63,7 @@ public partial class Roles
         string deleteContent = _localizer["Delete Content"];
         var parameters = new DialogParameters
             {
-                {nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id)}
+                { nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id) }
             };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
         var dialog = _dialogService.Show<Shared.Dialogs.DeleteConfirmation>(_localizer["Delete"], parameters, options);
@@ -74,7 +79,7 @@ public partial class Roles
             else
             {
                 await Reset();
-                foreach (var message in response.Messages)
+                foreach (string message in response.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }
@@ -98,6 +103,7 @@ public partial class Roles
                 });
             }
         }
+
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
         var dialog = _dialogService.Show<RoleModal>(id == null ? _localizer["Create"] : _localizer["Edit"], parameters, options);
         var result = await dialog.Result;
@@ -120,10 +126,12 @@ public partial class Roles
         {
             return true;
         }
+
         if (role.Description?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
         {
             return true;
         }
+
         return false;
     }
 

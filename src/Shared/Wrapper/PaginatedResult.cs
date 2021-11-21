@@ -1,4 +1,7 @@
-﻿namespace FSH.BlazorWebAssembly.Shared.Wrapper
+﻿using System;
+using System.Collections.Generic;
+
+namespace FSH.BlazorWebAssembly.Shared.Wrapper
 {
     public class PaginatedResult<T> : Result
     {

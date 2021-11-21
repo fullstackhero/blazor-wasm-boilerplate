@@ -1,5 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Catalog;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
+using System;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog;
 public interface IBrandService : IApiService

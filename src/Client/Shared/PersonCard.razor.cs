@@ -1,17 +1,20 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {
     public partial class PersonCard
     {
-        [Parameter] public string? Class { get; set; }
-        [Parameter] public string? Style { get; set; }
+        [Parameter]
+        public string Class { get; set; }
+        [Parameter]
+        public string Style { get; set; }
 
-        private string? UserId { get; set; }
-        private string? Email { get; set; }
-        private string? FullName { get; set; }
-        private string? ImageUri { get; set; }
+        private string UserId { get; set; }
+        private string Email { get; set; }
+        private string FullName { get; set; }
+        private string ImageUri { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

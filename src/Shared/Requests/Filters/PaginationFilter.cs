@@ -1,3 +1,5 @@
+using System;
+
 namespace FSH.BlazorWebAssembly.Shared.Requests.Filters
 {
     public abstract class PaginationFilter : BaseFilter

@@ -1,4 +1,5 @@
 ﻿using MudBlazor;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 {

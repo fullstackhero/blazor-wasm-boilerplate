@@ -1,14 +1,17 @@
 ﻿using Blazored.LocalStorage;
 using FSH.BlazorWebAssembly.Shared.Constants;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
 {
     public class AuthenticationHeaderHandler : DelegatingHandler
     {
-        private readonly ILocalStorageService localStorage;
+        private readonly ILocalStorageService _localStorage;
 
-        public AuthenticationHeaderHandler(ILocalStorageService localStorage) => this.localStorage = localStorage;
+        public AuthenticationHeaderHandler(ILocalStorageService localStorage) => this._localStorage = localStorage;
 
         protected override async Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
@@ -16,7 +19,7 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
         {
             if (request.Headers.Authorization?.Scheme != "Bearer")
             {
-                var savedToken = await this.localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+                string savedToken = await this._localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
 
                 if (!string.IsNullOrWhiteSpace(savedToken))
                 {

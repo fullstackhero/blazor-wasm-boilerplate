@@ -2,17 +2,22 @@ using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.AuditLogs;
 using FSH.BlazorWebAssembly.Shared.Response.AuditLogs;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 public partial class AuditLogs
 {
-    [Inject] private IAuditLogsService AuditService { get; set; }
+    [Inject]
+    private IAuditLogsService AuditService { get; set; }
 
     public List<RelatedAuditTrail> Trails = new();
 
     private RelatedAuditTrail _trail = new();
-    private string _searchString = "";
+    private string _searchString = string.Empty;
     private bool _dense = true;
     private bool _striped = true;
     private bool _bordered = false;
@@ -22,13 +27,14 @@ public partial class AuditLogs
     private DateRange _dateRange;
 
     private ClaimsPrincipal _currentUser;
-    private bool _canExportAuditTrails;
+
+    // private bool _canExportAuditTrails;
     private bool _canSearchAuditTrails;
     private bool _loaded;
 
     private bool Search(AuditResponse response)
     {
-        var result = false;
+        bool result = false;
 
         // check Search String
         if (string.IsNullOrWhiteSpace(_searchString)) result = true;
@@ -38,11 +44,13 @@ public partial class AuditLogs
             {
                 result = true;
             }
+
             if (_searchInOldValues &&
                 response.OldValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
             {
                 result = true;
             }
+
             if (_searchInNewValues &&
                 response.NewValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
             {
@@ -56,6 +64,7 @@ public partial class AuditLogs
         {
             result = false;
         }
+
         if (_dateRange?.End != null && response.DateTime > _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))
         {
             result = false;
@@ -67,8 +76,9 @@ public partial class AuditLogs
     protected override async Task OnInitializedAsync()
     {
         _currentUser = await _authService.CurrentUser();
-        _canExportAuditTrails = true; //(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
-        _canSearchAuditTrails = true; //(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Search)).Succeeded;
+
+        // _canExportAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
+        _canSearchAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Search)).Succeeded;
 
         await GetDataAsync();
         _loaded = true;
@@ -76,7 +86,7 @@ public partial class AuditLogs
 
     private async Task GetDataAsync()
     {
-        var response = await AuditService.GetCurrentUserAuditLogsAsync();
+        var response = await AuditService?.GetCurrentUserAuditLogsAsync();
         if (response.Succeeded)
         {
             Trails = response.Data
@@ -96,7 +106,7 @@ public partial class AuditLogs
         }
         else
         {
-            foreach (var message in response.Messages)
+            foreach (string message in response.Messages)
             {
                 _snackBar.Add(message, Severity.Error);
             }
@@ -110,8 +120,10 @@ public partial class AuditLogs
         {
             trial.ShowDetails = false;
         }
+
         _trail.ShowDetails = !_trail.ShowDetails;
     }
+
     public class RelatedAuditTrail : AuditResponse
     {
         public bool ShowDetails { get; set; } = false;

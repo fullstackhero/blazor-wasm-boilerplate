@@ -4,19 +4,20 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
 {
     public partial class Login
     {
         [CascadingParameter]
-        public Error? Error { get; set; }
+        public Error Error { get; set; }
         public bool BusySubmitting { get; set; } = false;
         private bool _passwordVisibility;
         private InputType _passwordInput = InputType.Password;
         private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
 
-        void TogglePasswordVisibility()
+        private void TogglePasswordVisibility()
         {
             if (_passwordVisibility)
             {
@@ -34,11 +35,12 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
 
         private void FillAdministratorCredentials()
         {
-            tokenRequest.Email = "admin@root.com";
-            tokenRequest.Password = "123Pa$$word!";
-            tokenRequest.Tenant = "root";
+            _tokenRequest.Email = "admin@root.com";
+            _tokenRequest.Password = "123Pa$$word!";
+            _tokenRequest.Tenant = "root";
         }
-        protected override async Task OnInitializedAsync()
+
+        protected override async void OnInitialized()
         {
             var state = await _stateProvider.GetAuthenticationStateAsync();
             if (state != new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())))
@@ -46,14 +48,15 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
                 _navigationManager.NavigateTo("/");
             }
         }
-        private readonly TokenRequest tokenRequest = new();
+
+        private readonly TokenRequest _tokenRequest = new();
 
         private async Task SubmitAsync()
         {
             try
             {
                 BusySubmitting = true;
-                var result = await _authService.Login(tokenRequest);
+                var result = await _authService.Login(_tokenRequest);
                 if (!result.Succeeded)
                 {
                     Error?.ProcessError(result.Messages);
@@ -67,7 +70,6 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
             {
                 BusySubmitting = false;
             }
-
         }
     }
 }

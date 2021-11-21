@@ -1,5 +1,6 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 {
@@ -14,9 +15,10 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
         public EventCallback<double> OnSliderChanged { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            if (await _clientPreferenceManager.GetPreference() is not ClientPreference _themePreference) _themePreference = new ClientPreference();
-            Radius = _themePreference.BorderRadius;
+            if (await _clientPreferenceManager.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
+            Radius = themePreference.BorderRadius;
         }
+
         private async Task ChangedSelection(ChangeEventArgs args)
         {
             Radius = int.Parse(args?.Value?.ToString() ?? "0");

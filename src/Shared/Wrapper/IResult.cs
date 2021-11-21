@@ -1,4 +1,6 @@
-﻿namespace FSH.BlazorWebAssembly.Shared.Wrapper
+﻿using System.Collections.Generic;
+
+namespace FSH.BlazorWebAssembly.Shared.Wrapper
 {
     public interface IResult
     {
