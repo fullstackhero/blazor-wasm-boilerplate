@@ -1,5 +1,5 @@
 ﻿using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Shared.Constants;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using FSH.BlazorWebAssembly.Shared.Response.Identity;

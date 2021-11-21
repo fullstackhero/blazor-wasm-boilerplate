@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Routes
+﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Routes
 {
     public static class RolesEndpoints
     {
