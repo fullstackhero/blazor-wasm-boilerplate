@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using FSH.BlazorWebAssembly.Shared.Preference;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using MudBlazor;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 {

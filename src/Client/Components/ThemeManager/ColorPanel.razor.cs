@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 {

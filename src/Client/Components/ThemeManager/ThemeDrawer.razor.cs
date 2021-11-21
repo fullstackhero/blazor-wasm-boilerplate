@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 {
