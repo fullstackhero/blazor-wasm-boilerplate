@@ -14,6 +14,5 @@ public class ProductDto
     public string ImagePath { get; set; }
 
     public Guid BrandId { get; set; }
-
     public string BrandIdString { get => BrandId.ToString(); }
 }
