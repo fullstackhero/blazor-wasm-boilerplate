@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Host", "Host\Host.csproj", "{CB2F88F0-F072-420C-9B43-162C2C0773F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Host", "src\Host\Host.csproj", "{CB2F88F0-F072-420C-9B43-162C2C0773F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{D5DB6E8A-0161-4EF1-B4D9-467E9A7EF9A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "src\Client\Client.csproj", "{D5DB6E8A-0161-4EF1-B4D9-467E9A7EF9A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{0D7A7E2D-CCF4-496E-9F2B-141712F4C00F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\Shared\Shared.csproj", "{0D7A7E2D-CCF4-496E-9F2B-141712F4C00F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.Infrastructure", "Client.Infrastructure\Client.Infrastructure.csproj", "{28E5DFC7-A05B-40DB-9E35-AC1E84C008A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.Infrastructure", "src\Client.Infrastructure\Client.Infrastructure.csproj", "{28E5DFC7-A05B-40DB-9E35-AC1E84C008A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
