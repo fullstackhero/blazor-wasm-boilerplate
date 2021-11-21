@@ -9,7 +9,10 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
+using System;
 using System.Globalization;
+using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 
@@ -53,14 +56,13 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-
-                    //TODO : Make the API URI Configurable via appsettings
                     client.BaseAddress = new Uri("https://localhost:5001/");
                 })
                 .AddHttpMessageHandler<AuthenticationHeaderHandler>();
             builder.Services.AddHttpClientInterceptor();
             return builder;
         }
+
         public static IServiceCollection AutoRegisterInterfaces<T>(this IServiceCollection services)
         {
             var @interface = typeof(T);
@@ -91,7 +93,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
         {
             foreach (var prop in typeof(PermissionConstants).GetNestedTypes().SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
             {
-                var propertyValue = prop.GetValue(null);
+                object propertyValue = prop.GetValue(null);
                 if (propertyValue is not null)
                 {
                     options.AddPolicy(propertyValue.ToString(), policy => policy.RequireClaim(ClaimConstants.Permission, propertyValue.ToString()));

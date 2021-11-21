@@ -2,16 +2,20 @@
 using FSH.BlazorWebAssembly.Shared.Catalog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Products
 {
     [CascadingParameter]
-    public Error? Error { get; set; }
+    public Error Error { get; set; }
 
-    private IEnumerable<ProductDto>? _pagedData;
-    private MudTable<ProductDto>? _table;
+    private IEnumerable<ProductDto> _pagedData;
+    private MudTable<ProductDto> _table;
 
     private int _totalItems;
     private int _currentPage;
@@ -21,13 +25,13 @@ public partial class Products
     private bool _bordered = false;
     private bool _loading = true;
 
-    private ClaimsPrincipal? _currentUser;
+    private ClaimsPrincipal _currentUser;
     private bool _canCreateProducts;
     private bool _canEditProducts;
     private bool _canDeleteProducts;
     private bool _canSearchProducts;
 
-    public bool Label_CheckBox1 { get; set; } = true;
+    public bool checkBox { get; set; } = true;
     protected override void OnInitialized()
     {
         _currentUser = _stateProvider.AuthenticationStateUser;
@@ -53,7 +57,7 @@ public partial class Products
         _loading = true;
         try
         {
-            string[]? orderings = null;
+            string[] orderings = null;
             if (!string.IsNullOrEmpty(state.SortLabel))
             {
                 orderings = state.SortDirection != SortDirection.None ? new[] { $"{state.SortLabel} {state.SortDirection}" } : new[] { $"{state.SortLabel}" };
@@ -138,7 +142,7 @@ public partial class Products
             else
             {
                 OnSearch(string.Empty);
-                foreach (string? message in response.Messages)
+                foreach (string message in response.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }

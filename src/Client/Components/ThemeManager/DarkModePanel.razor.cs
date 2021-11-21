@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using Microsoft.AspNetCore.Components;
 

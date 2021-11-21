@@ -1,15 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.AuditLogs;
 using FSH.BlazorWebAssembly.Shared.Response.AuditLogs;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Personal
 {
     public partial class AuditLogs
     {
         [Inject]
-        private IAuditLogsService? AuditService { get; set; }
+        private IAuditLogsService AuditService { get; set; }
 
         public List<RelatedAuditTrail> Trails = new();
 
@@ -20,11 +24,12 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal
         private bool _bordered = false;
         private bool _searchInOldValues = false;
         private bool _searchInNewValues = false;
-        private MudDateRangePicker? _dateRangePicker;
-        private DateRange? _dateRange;
+        private MudDateRangePicker _dateRangePicker;
+        private DateRange _dateRange;
 
-        private ClaimsPrincipal? _currentUser;
-        private bool _canExportAuditTrails;
+        private ClaimsPrincipal _currentUser;
+
+        // private bool _canExportAuditTrails;
         private bool _canSearchAuditTrails;
         private bool _loaded;
 
@@ -69,10 +74,11 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal
             return result;
         }
 
-        protected override async void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             _currentUser = await _authService.CurrentUser();
-            _canExportAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
+
+            // _canExportAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
             _canSearchAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Search)).Succeeded;
 
             await GetDataAsync();
@@ -101,7 +107,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal
             }
             else
             {
-                foreach (string? message in response.Messages)
+                foreach (string message in response.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }

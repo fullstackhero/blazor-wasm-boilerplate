@@ -1,13 +1,14 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {
     public partial class MainLayout
     {
         [Parameter]
-        public RenderFragment? ChildContent { get; set; }
+        public RenderFragment ChildContent { get; set; }
 
         [Parameter]
         public EventCallback OnDarkModeToggle { get; set; }

@@ -35,7 +35,7 @@
                     <MudTextField For="@(() => UpdateProductRequest.Description)" @bind-Value="UpdateProductRequest.Description" Label="@_localizer["Description"]" />
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudAutocomplete T="Guid" Label="@_localizer["Brand"]" For="@(() => Id)" @bind-Value="UpdateProductRequest.BrandId" ResetValueOnEmptyText="true" SearchFunc="@SearchBrands" Variant="Variant.Filled" ToStringFunc="@(i => _brands.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)" OffsetY="true" />
+                    <MudAutocomplete T="Guid" Label="@_localizer["Brand"]" For="@(() => Id)" @bind-Value="UpdateProductRequest.BrandId" ResetValueOnEmptyText="true" Variant="Variant.Filled" ToStringFunc="@(i => _brands.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)" OffsetY="true" />
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField For="@(() => UpdateProductRequest.Rate)" @bind-Value="UpdateProductRequest.Rate" Label="@_localizer["Rate"]" />
@@ -45,7 +45,7 @@
                         <MudAvatar Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                     </MudItem>
                     <MudItem>
-                        <InputFile id="fileInput" hidden OnChange="UploadFiles" />
+                        @* <InputFile id="fileInput" hidden OnChange="UploadFiles" /> *@
                         <div>
                             <MudButton HtmlTag="label"
                                        Variant="Variant.Text"
@@ -55,8 +55,8 @@
                                        for="fileInput">
                                 @_localizer["Upload"]
                             </MudButton>
-                            
-                           
+
+
                         </div>
                     </MudItem>
                 </MudItem>

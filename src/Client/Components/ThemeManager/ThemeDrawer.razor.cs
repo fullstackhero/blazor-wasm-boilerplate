@@ -1,4 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using Microsoft.AspNetCore.Components;
 
@@ -6,15 +8,13 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 {
     public partial class ThemeDrawer
     {
-        [EditorRequired]
         [Parameter]
         public bool ThemeDrawerOpen { get; set; }
-        [EditorRequired]
         [Parameter]
         public EventCallback<bool> ThemeDrawerOpenChanged { get; set; }
         [EditorRequired]
         [Parameter]
-        public ClientPreference? ThemePreference { get; set; }
+        public ClientPreference ThemePreference { get; set; }
         [EditorRequired]
         [Parameter]
         public EventCallback<ClientPreference> ThemePreferenceChanged { get; set; }

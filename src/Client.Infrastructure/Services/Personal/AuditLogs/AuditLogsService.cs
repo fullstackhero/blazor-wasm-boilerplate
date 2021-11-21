@@ -1,5 +1,8 @@
 using FSH.BlazorWebAssembly.Shared.Response.AuditLogs;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.AuditLogs
 {

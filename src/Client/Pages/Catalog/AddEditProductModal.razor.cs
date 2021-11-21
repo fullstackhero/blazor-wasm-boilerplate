@@ -1,4 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FSH.BlazorWebAssembly.Shared.Catalog;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -13,7 +17,7 @@ public partial class AddEditProductModal
     [Parameter]
     public Guid Id { get; set; }
     [CascadingParameter]
-    private MudDialogInstance? MudDialog { get; set; }
+    private MudDialogInstance MudDialog { get; set; }
 
     private List<BrandDto> _brands = new();
 
@@ -47,7 +51,7 @@ public partial class AddEditProductModal
         {
             if (response.Messages.Count > 0)
             {
-                foreach (string? message in response.Messages)
+                foreach (string message in response.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }
@@ -77,7 +81,7 @@ public partial class AddEditProductModal
         }
     }
 
-    private IEnumerable<Guid> SearchBrands(string value)
+    public IEnumerable<Guid> SearchBrands(string value)
     {
         if (string.IsNullOrEmpty(value))
             return _brands.Select(x => x.Id);

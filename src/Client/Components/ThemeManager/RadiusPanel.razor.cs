@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using Microsoft.AspNetCore.Components;
 
@@ -12,7 +13,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
         public double MaxValue { get; set; } = 30;
         [Parameter]
         public EventCallback<double> OnSliderChanged { get; set; }
-        protected override async void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             if (await _clientPreferenceManager.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
             Radius = themePreference.BorderRadius;

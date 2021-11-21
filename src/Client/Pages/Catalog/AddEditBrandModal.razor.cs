@@ -1,4 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using System;
+using System.Threading.Tasks;
+using FSH.BlazorWebAssembly.Shared.Catalog;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -13,7 +15,7 @@ public partial class AddEditBrandModal
     [Parameter]
     public Guid Id { get; set; }
     [CascadingParameter]
-    private MudDialogInstance? MudDialog { get; set; }
+    private MudDialogInstance MudDialog { get; set; }
     public void Cancel()
     {
         MudDialog?.Cancel();
@@ -44,7 +46,7 @@ public partial class AddEditBrandModal
         {
             if (response.Messages.Count > 0)
             {
-                foreach (string? message in response.Messages)
+                foreach (string message in response.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }

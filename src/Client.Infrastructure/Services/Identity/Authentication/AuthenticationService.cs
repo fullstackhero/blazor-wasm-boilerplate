@@ -6,9 +6,12 @@ using FSH.BlazorWebAssembly.Shared.Response.Identity;
 using FSH.BlazorWebAssembly.Shared.Routes;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using Microsoft.AspNetCore.Components.Authorization;
+using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
 {
@@ -42,8 +45,8 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
             var result = await response.ToResult<TokenResponse>();
             if (result.Succeeded)
             {
-                string? token = result.Data.Token;
-                string? refreshToken = result.Data.RefreshToken;
+                string token = result.Data.Token;
+                string refreshToken = result.Data.RefreshToken;
                 await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
                 await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
 

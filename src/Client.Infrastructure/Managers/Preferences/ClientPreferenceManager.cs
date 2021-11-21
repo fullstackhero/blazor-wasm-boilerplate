@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
@@ -88,7 +90,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
         {
             if (await GetPreference() is ClientPreference preference)
             {
-                string? colorCode = preference.PrimaryColor;
+                string colorCode = preference.PrimaryColor;
                 if (Regex.Match(colorCode, "^#(?:[0-9a-fA-F]{3,4}){1,2}$").Success)
                 {
                     return colorCode;

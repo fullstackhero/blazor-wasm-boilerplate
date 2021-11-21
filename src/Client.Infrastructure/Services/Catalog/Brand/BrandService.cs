@@ -1,6 +1,9 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Catalog;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
+using System;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using Routes = FSH.BlazorWebAssembly.Shared.Routes;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Catalog;
@@ -32,11 +35,13 @@ public class BrandService : IBrandService
         var response = await _httpClient.PostAsJsonAsync(Routes.BrandsEndpoints.Search, request);
         return await response.ToPaginatedResult<BrandDto>();
     }
+
     public async Task<IResult<Guid>> CreateAsync(CreateBrandRequest request)
     {
         var response = await _httpClient.PostAsJsonAsync(Routes.BrandsEndpoints.Save, request);
         return await response.ToResult<Guid>();
     }
+
     public async Task<IResult<Guid>> UpdateAsync(UpdateBrandRequest request, Guid id)
     {
         var response = await _httpClient.PutAsJsonAsync(Routes.BrandsEndpoints.Save + id, request);

@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
 {
     public partial class Login
     {
         [CascadingParameter]
-        public Error? Error { get; set; }
+        public Error Error { get; set; }
         public bool BusySubmitting { get; set; } = false;
         private bool _passwordVisibility;
         private InputType _passwordInput = InputType.Password;

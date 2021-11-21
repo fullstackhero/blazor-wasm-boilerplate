@@ -1,12 +1,13 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using MudBlazor;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {
     public partial class BaseLayout
     {
-        private ClientPreference? _themePreference;
+        private ClientPreference _themePreference;
         private MudTheme _currentTheme = new LightTheme();
         private bool _themeDrawerOpen;
         private bool _rightToLeft = false;

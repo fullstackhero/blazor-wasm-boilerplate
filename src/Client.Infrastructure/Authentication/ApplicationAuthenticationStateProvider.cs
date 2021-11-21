@@ -1,9 +1,14 @@
 ﻿using Blazored.LocalStorage;
 using FSH.BlazorWebAssembly.Shared.Constants;
 using Microsoft.AspNetCore.Components.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
 {
@@ -12,8 +17,7 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
 
-        public ApplicationAuthenticationStateProvider(
-            HttpClient httpClient, ILocalStorageService localStorage)
+        public ApplicationAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
         {
             _httpClient = httpClient;
             _localStorage = localStorage;
@@ -44,7 +48,7 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string? savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+            string savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
             if (string.IsNullOrWhiteSpace(savedToken))
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
@@ -59,19 +63,19 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
         private IEnumerable<Claim> GetClaimsFromJwt(string jwt)
         {
             var claims = new List<Claim>();
-            string? payload = jwt.Split('.')[1];
-            byte[]? jsonBytes = ParseBase64WithoutPadding(payload);
+            string payload = jwt.Split('.')[1];
+            byte[] jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
             if (keyValuePairs != null)
             {
-                keyValuePairs.TryGetValue(ClaimTypes.Role, out var roles);
+                keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
 
                 if (roles != null)
                 {
                     if (roles.ToString().Trim().StartsWith("["))
                     {
-                        var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
+                        string[] parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
 
                         claims.AddRange(parsedRoles.Select(role => new Claim(ClaimTypes.Role, role)));
                     }
@@ -92,7 +96,7 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
         private byte[] ParseBase64WithoutPadding(string payload)
         {
             payload = payload.Trim().Replace('-', '+').Replace('_', '/');
-            string? base64 = payload.PadRight(payload.Length + ((4 - (payload.Length % 4)) % 4), '=');
+            string base64 = payload.PadRight(payload.Length + ((4 - (payload.Length % 4)) % 4), '=');
             return Convert.FromBase64String(base64);
         }
     }
