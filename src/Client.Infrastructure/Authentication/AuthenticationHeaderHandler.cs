@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication
 {
     public class AuthenticationHeaderHandler : DelegatingHandler
     {

@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication
 {
     public class ApplicationAuthenticationStateProvider : AuthenticationStateProvider
     {
