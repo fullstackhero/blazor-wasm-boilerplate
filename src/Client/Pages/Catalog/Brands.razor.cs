@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Catalog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Brands

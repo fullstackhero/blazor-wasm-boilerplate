@@ -7,5 +7,5 @@ public class ProductDto
     public decimal Rate { get; set; }
     public string ImagePath { get; set; }
     public Guid BrandId { get; set; }
-    public string BrandIdString { get => BrandId.ToString();}
+    public string BrandIdString { get => BrandId.ToString(); }
 }

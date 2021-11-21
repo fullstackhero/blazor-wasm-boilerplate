@@ -1,9 +1,9 @@
-﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
 {

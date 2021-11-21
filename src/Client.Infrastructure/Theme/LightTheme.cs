@@ -16,7 +16,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
                 DrawerBackground = CustomColors.Light.Background,
                 DrawerText = "rgba(0,0,0, 0.7)",
                 Success = CustomColors.Light.Primary,
-                TableLines  = "#e0e0e029",
+                TableLines = "#e0e0e029",
                 OverlayDark = "hsl(0deg 0% 0% / 75%)"
             };
             LayoutProperties = new LayoutProperties()
@@ -26,7 +26,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
 
             Typography = CustomTypography.FSHTypography;
             Shadows = new Shadow();
-            ZIndex = new ZIndex() { Drawer = 1300};
+            ZIndex = new ZIndex() { Drawer = 1300 };
         }
     }
 }

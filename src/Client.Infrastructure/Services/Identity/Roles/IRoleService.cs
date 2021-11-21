@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure;
-using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using FSH.BlazorWebAssembly.Shared.Identity;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 

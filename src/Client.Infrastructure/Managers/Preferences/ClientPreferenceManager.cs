@@ -1,10 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using FSH.BlazorWebAssembly.Shared.Preference;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using MudBlazor;
+using System.Text.RegularExpressions;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 {

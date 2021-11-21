@@ -1,7 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 {

@@ -1,6 +1,5 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 {
