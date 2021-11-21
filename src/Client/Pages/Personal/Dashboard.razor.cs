@@ -32,16 +32,10 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal
         {
             await LoadDataAsync();
             _loaded = true;
-            NotificationHub.HubConnection = await NotificationHub.TryConnectAsync();
-            NotificationHub.HubConnection.On<NotificationMessage>("ReceiveMessage", async (notification) =>
+            NotificationHub.TryConnectAsync().Result.On<StatsChangedNotification>(nameof(StatsChangedNotification), async (notification) =>
             {
-                switch(notification.MessageType)
-                {
-                    case nameof(StatsChangedNotification):
-                        await LoadDataAsync();
-                        StateHasChanged();
-                        break;
-                }
+                await LoadDataAsync();
+                StateHasChanged();
             });
         }
 
