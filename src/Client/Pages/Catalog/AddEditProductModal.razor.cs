@@ -70,10 +70,11 @@ public partial class AddEditProductModal
         await LoadBrandsAsync();
     }
 
-    private async Task LoadBrandsAsync()
+    private async Task LoadBrandsAsync(string searchKeyword = default)
     {
         string[] orderBy = { "id" };
         BrandListFilter filter = new() { PageNumber = 0, PageSize = 0, OrderBy = orderBy };
+        if (string.IsNullOrEmpty(searchKeyword)) filter.Keyword = searchKeyword;
         var response = await _brandService.SearchBrandAsync(filter);
         if (response.Succeeded)
         {
@@ -81,11 +82,12 @@ public partial class AddEditProductModal
         }
     }
 
-    public IEnumerable<Guid> SearchBrands(string value)
+    public async Task<IEnumerable<Guid>> SearchBrands(string value)
     {
         if (string.IsNullOrEmpty(value))
             return _brands.Select(x => x.Id);
 
+        await LoadBrandsAsync(value);
         return _brands.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase))
             .Select(x => x.Id);
     }

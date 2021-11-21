@@ -13,6 +13,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 
 @using MudBlazor
+@using Blazored.LocalStorage
 
 @using FSH.BlazorWebAssembly.Client
 @using FSH.BlazorWebAssembly.Client.Shared
@@ -24,6 +25,7 @@
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Roles
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
+@using FSH.BlazorWebAssembly.Client.Components.Hubs
 
 
 @attribute [Authorize]
@@ -37,3 +39,4 @@
 @inject IBrandService _brandService;
 @inject IProductService _productService;
 @inject IRoleService _roleService;
+@inject ILocalStorageService _localStorage;
