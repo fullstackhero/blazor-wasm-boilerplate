@@ -1,4 +1,7 @@
-﻿namespace FSH.BlazorWebAssembly.Shared.Wrapper
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace FSH.BlazorWebAssembly.Shared.Wrapper
 {
     public class Result : IResult
     {
@@ -77,8 +80,6 @@
     {
         public string Source { get; set; }
 
-        public string Exception { get; set; }
-
         public int ErrorCode { get; set; }
         public string StackTrace { get; set; }
     }
@@ -88,6 +89,7 @@
         public Result()
         {
         }
+
         public T Data { get; set; }
 
         public static new Result<T> Fail()

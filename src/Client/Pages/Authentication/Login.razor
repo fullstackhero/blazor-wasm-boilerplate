@@ -10,21 +10,21 @@
     <MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink></MudText>
 </div>
 <br />
-<EditForm Model="@tokenRequest" OnValidSubmit="SubmitAsync">
+<EditForm Model="@_tokenRequest" OnValidSubmit="SubmitAsync">
     <MudGrid>
         <DataAnnotationsValidator />
         <MudItem xs="12">
             <MudTextField T="string" Label="E-mail" Variant="Variant.Outlined"
-                          @bind-Value="tokenRequest.Email" For="@(() => tokenRequest.Email)" />
+                          @bind-Value="_tokenRequest.Email" For="@(() => _tokenRequest.Email)" />
         </MudItem>
         <MudItem xs="12">
             <MudTextField Label="Password" Variant="Variant.Outlined"
-                          @bind-Value="tokenRequest.Password" For="@(() => tokenRequest.Password)"
+                          @bind-Value="_tokenRequest.Password" For="@(() => _tokenRequest.Password)"
                           InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
         </MudItem>
         <MudItem xs="12">
             <MudTextField T="string" Label="Tenant" Variant="Variant.Outlined"
-                          @bind-Value="tokenRequest.Tenant" For="@(() => tokenRequest.Tenant)" />
+                          @bind-Value="_tokenRequest.Tenant" For="@(() => _tokenRequest.Tenant)" />
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-space-between align-center">
             <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1"></MudCheckBox> <MudLink Href="/account/forgot-password">Forgot password?</MudLink>

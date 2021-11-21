@@ -6,11 +6,11 @@ public static class BrandsEndpoints
         return $"{Export}?searchString={searchString}";
     }
 
-    public static string Export = "api/v1/brands/export";
+    public const string Export = "api/v1/brands/export";
 
-    public static string Search = "api/v1/brands/search";
-    public static string Delete = "api/v1/brands";
-    public static string Save = "api/v1/brands/";
-    public static string GetCount = "api/v1/brands/count";
-    public static string Import = "api/v1/brands/import";
+    public const string Search = "api/v1/brands/search";
+    public const string Delete = "api/v1/brands";
+    public const string Save = "api/v1/brands/";
+    public const string GetCount = "api/v1/brands/count";
+    public const string Import = "api/v1/brands/import";
 }

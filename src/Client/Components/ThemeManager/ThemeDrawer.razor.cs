@@ -1,19 +1,25 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 {
     public partial class ThemeDrawer
     {
+        [EditorRequired]
+        [Parameter]
+        public bool ThemeDrawerOpen { get; set; }
+        [EditorRequired]
+        [Parameter]
+        public EventCallback<bool> ThemeDrawerOpenChanged { get; set; }
+        [EditorRequired]
+        [Parameter]
+        public ClientPreference? ThemePreference { get; set; }
+        [EditorRequired]
+        [Parameter]
+        public EventCallback<ClientPreference> ThemePreferenceChanged { get; set; }
 
-        [EditorRequired] [Parameter] public bool ThemeDrawerOpen { get; set; }
-        [EditorRequired] [Parameter] public EventCallback<bool> ThemeDrawerOpenChanged { get; set; }
-        [EditorRequired] [Parameter] public ClientPreference? ThemePreference { get; set; }
-        [EditorRequired] [Parameter] public EventCallback<ClientPreference> ThemePreferenceChanged { get; set; }
-
-        private readonly List<string> Colors = CustomColors.ThemeColors;
+        private readonly List<string> _colors = CustomColors.ThemeColors;
 
         private async Task UpdateThemePrimaryColor(string color)
         {
@@ -23,6 +29,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
                 await ThemePreferenceChanged.InvokeAsync(ThemePreference);
             }
         }
+
         private async Task UpdateThemeSecondaryColor(string color)
         {
             if (ThemePreference is not null)
@@ -31,6 +38,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
                 await ThemePreferenceChanged.InvokeAsync(ThemePreference);
             }
         }
+
         private async Task UpdateBorderRadius(double radius)
         {
             if (ThemePreference is not null)
@@ -39,6 +47,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
                 await ThemePreferenceChanged.InvokeAsync(ThemePreference);
             }
         }
+
         private async Task ToggleDarkLightMode(bool isDarkMode)
         {
             if (ThemePreference is not null)

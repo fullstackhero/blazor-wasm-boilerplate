@@ -12,9 +12,9 @@
     <div style="padding:20px!important">
         <MudExpansionPanels DisableBorders="true" Elevation="25">
             <DarkModePanel OnIconClicked="ToggleDarkLightMode" />
-            <ColorPanel OnColorClicked="UpdateThemePrimaryColor" Colors="Colors" ColorType="Primary Color"
+            <ColorPanel OnColorClicked="UpdateThemePrimaryColor" Colors="_colors" ColorType="Primary Color"
                 CurrentColor="Color.Primary" />
-            <ColorPanel OnColorClicked="UpdateThemeSecondaryColor" Colors="Colors" ColorType="Secondary Color"
+            <ColorPanel OnColorClicked="UpdateThemeSecondaryColor" Colors="_colors" ColorType="Secondary Color"
                 CurrentColor="Color.Secondary" />
             <RadiusPanel Radius="ThemePreference==null ? 0 : ThemePreference.BorderRadius"
                 OnSliderChanged="UpdateBorderRadius" />

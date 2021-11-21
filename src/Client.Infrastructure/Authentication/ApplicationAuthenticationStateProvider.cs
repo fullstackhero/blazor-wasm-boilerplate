@@ -12,7 +12,8 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
 
-        public ApplicationAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+        public ApplicationAuthenticationStateProvider(
+            HttpClient httpClient, ILocalStorageService localStorage)
         {
             _httpClient = httpClient;
             _localStorage = localStorage;
@@ -43,11 +44,12 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+            string? savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
             if (string.IsNullOrWhiteSpace(savedToken))
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
             var state = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
             AuthenticationStateUser = state.User;
@@ -57,8 +59,8 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
         private IEnumerable<Claim> GetClaimsFromJwt(string jwt)
         {
             var claims = new List<Claim>();
-            var payload = jwt.Split('.')[1];
-            var jsonBytes = ParseBase64WithoutPadding(payload);
+            string? payload = jwt.Split('.')[1];
+            byte[]? jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
             if (keyValuePairs != null)
@@ -75,23 +77,22 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
                     }
                     else
                     {
-                        claims.Add(new Claim(ClaimTypes.Role, roles.ToString()));
+                        claims.Add(new Claim(ClaimTypes.Role, roles?.ToString()));
                     }
 
                     keyValuePairs.Remove(ClaimTypes.Role);
                 }
 
-                claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
+                claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value?.ToString())));
             }
+
             return claims;
         }
-
-
 
         private byte[] ParseBase64WithoutPadding(string payload)
         {
             payload = payload.Trim().Replace('-', '+').Replace('_', '/');
-            var base64 = payload.PadRight(payload.Length + (4 - payload.Length % 4) % 4, '=');
+            string? base64 = payload.PadRight(payload.Length + ((4 - (payload.Length % 4)) % 4), '=');
             return Convert.FromBase64String(base64);
         }
     }

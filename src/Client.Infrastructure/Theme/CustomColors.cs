@@ -21,6 +21,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme
             public const string AppbarBackground = "#FFF";
             public const string AppbarText = "#6e6e6e";
         }
+
         public static class Dark
         {
             public const string Primary = "#3eaf7c";

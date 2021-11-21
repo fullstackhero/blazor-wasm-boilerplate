@@ -27,6 +27,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
             _localStorage = localStorage;
             _authenticationStateProvider = authenticationStateProvider;
         }
+
         public async Task<ClaimsPrincipal> CurrentUser()
         {
             var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
@@ -41,8 +42,8 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
             var result = await response.ToResult<TokenResponse>();
             if (result.Succeeded)
             {
-                var token = result.Data.Token;
-                var refreshToken = result.Data.RefreshToken;
+                string? token = result.Data.Token;
+                string? refreshToken = result.Data.RefreshToken;
                 await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
                 await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
 

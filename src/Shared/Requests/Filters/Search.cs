@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace FSH.BlazorWebAssembly.Shared.Requests.Filters
 {
     public class Search

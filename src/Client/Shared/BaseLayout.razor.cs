@@ -17,7 +17,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             await Task.CompletedTask;
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override async void OnInitialized()
         {
             _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
             if (_themePreference == null) _themePreference = new ClientPreference();
@@ -34,8 +34,8 @@ namespace FSH.BlazorWebAssembly.Client.Shared
                     return Task.CompletedTask;
                 };
             });
-
         }
+
         private async Task ThemePreferenceChanged(ClientPreference themePreference)
         {
             SetCurrentTheme(themePreference);
