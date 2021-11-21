@@ -9,12 +9,7 @@
 </style>
 
 <FshTitle Title="@_localizer["Roles"]" Description="@_localizer["Manage Roles."]" />
-@if (!_loaded)
-{
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-}
-else
-{
+
      @if (_canSearchRoles)
     {
         <MudExpansionPanel Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;" Class="mud-elevation-25" Text="@_localizer["Search"]">
@@ -97,4 +92,3 @@ else
             <TablePager />
         </PagerContent>
     </MudTable>
-}

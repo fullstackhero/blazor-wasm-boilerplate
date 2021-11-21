@@ -19,7 +19,7 @@ public partial class Roles
     private bool _canDeleteRoles;
     private bool _canSearchRoles;
     private bool _canViewRoleClaims;
-    private bool _loaded;
+    private bool _loading = true;
 
     public bool Label_CheckBox1 { get; set; } = true;
     protected override async Task OnInitializedAsync()
@@ -32,11 +32,12 @@ public partial class Roles
         _canViewRoleClaims = true; //(await _authorizationService.AuthorizeAsync(_currentUser, Permissions.RoleClaims.View)).Succeeded;
 
         await GetRolesAsync();
-        _loaded = true;
+        _loading = false;
     }
 
     private async Task GetRolesAsync()
     {
+        _loading = true;
         var response = await _roleService.GetRolesAsync();
         if (response.Succeeded)
         {
@@ -49,6 +50,7 @@ public partial class Roles
                 _snackBar.Add(message, Severity.Error);
             }
         }
+        _loading = false;
     }
 
     private async Task Delete(string id)
