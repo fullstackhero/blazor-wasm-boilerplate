@@ -26,6 +26,7 @@
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 @using FSH.BlazorWebAssembly.Client.Components.Hubs
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor
 
 
 @attribute [Authorize]
@@ -40,3 +41,4 @@
 @inject IProductService _productService;
 @inject IRoleService _roleService;
 @inject ILocalStorageService _localStorage;
+@inject IHttpInterceptorService _interceptor

@@ -25,7 +25,7 @@ public partial class Roles
     private bool _canViewRoleClaims;
     private bool _loading = true;
 
-    public bool Label_CheckBox1 { get; set; } = true;
+    public bool checkBox { get; set; } = true;
     protected override async Task OnInitializedAsync()
     {
         _currentUser = await _authService.CurrentUser();

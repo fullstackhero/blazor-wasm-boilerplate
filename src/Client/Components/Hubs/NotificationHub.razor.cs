@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -7,6 +9,8 @@ namespace FSH.BlazorWebAssembly.Client.Components.Hubs
 {
     public partial class NotificationHub
     {
+        [CascadingParameter]
+        public Error Error { get; set; }
         [Parameter]
         public RenderFragment ChildContent { get; set; } = new RenderFragment(x => { });
 
@@ -14,7 +18,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.Hubs
 
         protected override async Task OnInitializedAsync()
         {
-            HubConnection = await TryConnectAsync();
+            HubConnection = await TryConnectAsync().ConfigureAwait(true);
         }
 
         public async Task<HubConnection> TryConnectAsync()

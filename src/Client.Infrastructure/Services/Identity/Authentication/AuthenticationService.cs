@@ -5,6 +5,7 @@ using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using FSH.BlazorWebAssembly.Shared.Response.Identity;
 using FSH.BlazorWebAssembly.Shared.Routes;
 using FSH.BlazorWebAssembly.Shared.Wrapper;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Net.Http;
@@ -17,6 +18,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {
+        private readonly NavigationManager _navigationManager;
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
@@ -24,11 +26,13 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
         public AuthenticationService(
             HttpClient httpClient,
             ILocalStorageService localStorage,
-            AuthenticationStateProvider authenticationStateProvider)
+            AuthenticationStateProvider authenticationStateProvider,
+            NavigationManager navigationManager)
         {
             _httpClient = httpClient;
             _localStorage = localStorage;
             _authenticationStateProvider = authenticationStateProvider;
+            _navigationManager = navigationManager;
         }
 
         public async Task<ClaimsPrincipal> CurrentUser()
@@ -69,6 +73,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
             await _localStorage.RemoveItemAsync(StorageConstants.Local.ImageUri);
             ((ApplicationAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
+            _navigationManager.NavigateTo("/login");
             return await Result.SuccessAsync();
         }
 

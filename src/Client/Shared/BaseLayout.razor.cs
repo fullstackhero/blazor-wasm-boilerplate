@@ -1,11 +1,15 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Services;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Shared
 {
-    public partial class BaseLayout
+    public partial class BaseLayout : IDisposable
     {
         private ClientPreference _themePreference;
         private MudTheme _currentTheme = new LightTheme();
@@ -23,6 +27,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
             if (_themePreference == null) _themePreference = new ClientPreference();
             SetCurrentTheme(_themePreference);
+            _interceptor.RegisterEvent();
             _snackBar.Add("Like this boilerplate? ", Severity.Normal, config =>
             {
                 config.BackgroundBlurred = true;
@@ -52,8 +57,6 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             _currentTheme.LayoutProperties.DefaultBorderRadius = $"{themePreference.BorderRadius}px";
         }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() => _interceptor.DisposeEvent();
     }
 }

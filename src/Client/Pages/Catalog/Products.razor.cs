@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Products
 {
-    [CascadingParameter]
-    public Error Error { get; set; }
 
     private IEnumerable<ProductDto> _pagedData;
     private MudTable<ProductDto> _table;
@@ -55,30 +53,19 @@ public partial class Products
     private async Task LoadData(int pageNumber, int pageSize, TableState state)
     {
         _loading = true;
-        try
+        string[] orderings = null;
+        if (!string.IsNullOrEmpty(state.SortLabel))
         {
-            string[] orderings = null;
-            if (!string.IsNullOrEmpty(state.SortLabel))
-            {
-                orderings = state.SortDirection != SortDirection.None ? new[] { $"{state.SortLabel} {state.SortDirection}" } : new[] { $"{state.SortLabel}" };
-            }
-
-            var request = new ProductListFilter { PageSize = pageSize, PageNumber = pageNumber + 1, Keyword = _searchString, OrderBy = orderings ?? Array.Empty<string>() };
-            var response = await _productService.GetProductsAsync(request);
-            if (response.Succeeded)
-            {
-                _totalItems = response.TotalCount;
-                _currentPage = response.CurrentPage;
-                _pagedData = response.Data;
-            }
-            else
-            {
-                Error?.ProcessError(response.Messages);
-            }
+            orderings = state.SortDirection != SortDirection.None ? new[] { $"{state.SortLabel} {state.SortDirection}" } : new[] { $"{state.SortLabel}" };
         }
-        catch (Exception ex)
+
+        var request = new ProductListFilter { PageSize = pageSize, PageNumber = pageNumber + 1, Keyword = _searchString, OrderBy = orderings ?? Array.Empty<string>() };
+        var response = await _productService.GetProductsAsync(request);
+        if (response.Succeeded)
         {
-            Error?.ProcessError(ex);
+            _totalItems = response.TotalCount;
+            _currentPage = response.CurrentPage;
+            _pagedData = response.Data;
         }
 
         _loading = false;
