@@ -7,7 +7,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
     public partial class DarkModePanel
     {
         private bool _isDarkMode = false;
-        protected override async void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             if (await _clientPreferenceManager.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
             _isDarkMode = themePreference.IsDarkMode;

@@ -18,6 +18,7 @@
 @using FSH.BlazorWebAssembly.Client
 @using FSH.BlazorWebAssembly.Client.Shared
 @using FSH.BlazorWebAssembly.Client.Pages.Authentication
+@using FSH.BlazorWebAssembly.Client.Pages.Multitenancy
 @using FSH.BlazorWebAssembly.Client.Shared.Components
 @using FSH.BlazorWebAssembly.Client.Components.ThemeManager
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication
@@ -27,7 +28,8 @@
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
 @using FSH.BlazorWebAssembly.Client.Components.Hubs
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor
-
+@using FSH.BlazorWebAssembly.Shared.Multitenancy;
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy
 
 @attribute [Authorize]
 @inject ClientPreferenceManager _clientPreferenceManager
@@ -41,4 +43,5 @@
 @inject IProductService _productService;
 @inject IRoleService _roleService;
 @inject ILocalStorageService _localStorage;
-@inject IHttpInterceptorService _interceptor
+@inject IHttpInterceptorService _interceptor;
+@inject ITenentService _tenentService;

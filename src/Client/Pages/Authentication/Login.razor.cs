@@ -40,7 +40,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
             _tokenRequest.Tenant = "root";
         }
 
-        protected override async void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             var state = await _stateProvider.GetAuthenticationStateAsync();
             if (state != new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())))
