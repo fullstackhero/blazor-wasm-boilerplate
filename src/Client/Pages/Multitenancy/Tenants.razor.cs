@@ -88,4 +88,33 @@ public partial class Tenents : ComponentBase
     {
         _searchString = text;
     }
+
+    public void InvokeModal(Guid id = new())
+    {
+        // var parameters = new DialogParameters
+        //    {
+        //        { nameof(AddEditBrandModal.IsCreate), id == new Guid() },
+        //        { nameof(AddEditBrandModal.Id), id }
+        //    };
+        // if (id != new Guid())
+        // {
+        //    var brand = _pagedData?.FirstOrDefault(c => c.Id == id);
+        //    if (brand != null)
+        //    {
+        //        parameters.Add(nameof(AddEditBrandModal.UpdateBrandRequest), new UpdateBrandRequest
+        //        {
+        //            Name = brand.Name,
+        //            Description = brand.Description,
+        //        });
+        //    }
+        // }
+
+        // var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        // var dialog = _dialogService.Show<AddEditBrandModal>(id == new Guid() ? _localizer["Create"] : _localizer["Edit"], parameters, options);
+        // var result = await dialog.Result;
+        // if (!result.Cancelled)
+        // {
+        //    await Reset();
+        // }
+    }
 }

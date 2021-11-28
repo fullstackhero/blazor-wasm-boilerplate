@@ -23,15 +23,16 @@
 
 <MudTable Loading="@_loading" Items="@Elements" Dense="@Dense" Hover="@Hover" ReadOnly="@Ronly" CanCancelEdit="true" Filter="new Func<TenantDto,bool>(FilterFunc)" @bind-SelectedItem="SelectedItem1" SortLabel="Sort By" 
  CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
-
-    <ColGroup>
-        <col style="width:50px;" />
-        <col style="width:80px;" />
-        <col style="width:50%;" />
-        <col />
-        <col />
-        <col style="width:50px;" />
-    </ColGroup>
+  <ToolBarContent>
+                <div class="justify-center mud-text-align-center">
+                        <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())"
+                        StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
+                        <MudButton DisableElevation Variant="Variant.Filled" OnClick="@(() => OnSearch(""))"
+                        StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary"
+                        Style="margin-left: 5px;">@_localizer["Reload"]</MudButton>
+                </div>
+                <MudSpacer />
+            </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<TenantDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
