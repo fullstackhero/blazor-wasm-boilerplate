@@ -61,7 +61,7 @@
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
             <MudMenuItem Link="https://mudblazor.com/getting-started/installation" Target="_blank">
                 @_localizer["MudBlazor Documentation"]</MudMenuItem>
-            <MudMenuItem Link="https://codewithmukesh.com/blog/blazor-hero-quick-start-guide/" Target="_blank">
+            <MudMenuItem Link="https://fullstackhero.net/getting-started/" Target="_blank">
                 @_localizer["Quick-Start Guide"]</MudMenuItem>
         </MudMenu>
     </MudHidden>
@@ -74,13 +74,14 @@
                 <PersonCard Class="mt-n2" Style="margin-bottom:0px!important"/>
                 <MudMenuItem>
                     <div class="d-flex">
-                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Person" />
-                        <MudText>Profile</MudText>
+                        <MudButton Class="mx-2" StartIcon="@Icons.Material.Filled.Person" OnClick="Profile">
+                        Profile
+                    </MudButton>
                     </div>
                 </MudMenuItem>
                 <MudMenuItem>
                     <div class="d-flex">
-                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Settings" />
+                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Settings" OnClick="Profile" />
                         <MudText>Settings</MudText>
                     </div>
                 </MudMenuItem>

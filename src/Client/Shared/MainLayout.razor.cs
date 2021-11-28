@@ -57,5 +57,10 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
             _dialogService.Show<Dialogs.Logout>(_localizer["Logout"], parameters, options);
         }
+
+        private void Profile()
+        {
+            _navigationManager.NavigateTo("/account");
+        }
     }
 }

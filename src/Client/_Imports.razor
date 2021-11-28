@@ -30,6 +30,7 @@
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor
 @using FSH.BlazorWebAssembly.Shared.Multitenancy;
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Account
 
 @attribute [Authorize]
 @inject ClientPreferenceManager _clientPreferenceManager
@@ -45,3 +46,4 @@
 @inject ILocalStorageService _localStorage;
 @inject IHttpInterceptorService _interceptor;
 @inject ITenentService _tenentService;
+@inject IAccountManager _accountManager;
