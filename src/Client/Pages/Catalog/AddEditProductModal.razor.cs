@@ -63,7 +63,7 @@ public partial class AddEditProductModal
         }
     }
 
-    protected override async void OnInitialized() => await LoadDataAsync();
+    protected override async Task OnInitializedAsync() => await LoadDataAsync();
 
     private async Task LoadDataAsync()
     {

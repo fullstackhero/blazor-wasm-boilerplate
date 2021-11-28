@@ -22,7 +22,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             await Task.CompletedTask;
         }
 
-        protected override async void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
             if (_themePreference == null) _themePreference = new ClientPreference();

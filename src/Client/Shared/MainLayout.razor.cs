@@ -31,7 +31,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
             await OnDarkModeToggle.InvokeAsync();
         }
 
-        protected override async void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             if (await _clientPreferenceManager.GetPreference() is ClientPreference preference)
             {
@@ -56,6 +56,11 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
             _dialogService.Show<Dialogs.Logout>(_localizer["Logout"], parameters, options);
+        }
+
+        private void Profile()
+        {
+            _navigationManager.NavigateTo("/account");
         }
     }
 }

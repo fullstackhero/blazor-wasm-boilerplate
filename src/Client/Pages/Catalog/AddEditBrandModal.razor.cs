@@ -58,7 +58,7 @@ public partial class AddEditBrandModal
         }
     }
 
-    protected override async void OnInitialized() => await LoadDataAsync();
+    protected override async Task OnInitializedAsync() => await LoadDataAsync();
 
     private async Task LoadDataAsync()
     {

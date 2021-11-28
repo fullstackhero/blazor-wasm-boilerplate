@@ -27,7 +27,7 @@ public partial class Brands
     private bool _canSearchBrands;
     private bool _loading = true;
     private int _totalItems;
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         _currentUser = _stateProvider.AuthenticationStateUser;
         _canCreateBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Create)).Succeeded;
