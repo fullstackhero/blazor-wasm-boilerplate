@@ -28,13 +28,14 @@ public partial class Products
     private bool _canSearchProducts;
 
     public bool checkBox { get; set; } = true;
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         _currentUser = _stateProvider.AuthenticationStateUser;
         _canCreateProducts = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Create)).Succeeded;
         _canEditProducts = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Edit)).Succeeded;
         _canDeleteProducts = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Delete)).Succeeded;
         _canSearchProducts = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Search)).Succeeded;
+        return Task.CompletedTask;
     }
 
     private async Task<TableData<ProductDto>> ServerReload(TableState state)

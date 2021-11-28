@@ -21,7 +21,7 @@ public class TenentService : ITenentService
         throw new NotImplementedException();
     }
 
-    public Task<IResult> UpdateAsync(UpgradeSubscriptionRequest request)
+    public Task<IResult> UpgradeAsync(UpgradeSubscriptionRequest request)
     {
         throw new NotImplementedException();
     }

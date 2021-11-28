@@ -6,6 +6,6 @@ public static class TenentEndpoints
     public const string GetAll = "api/tenants";
     public const string Create = "api/tenants";
     public const string Save = "api/tenants/upgrade";
-    public const string Activate = "api/tenants/beta/activate";
-    public const string Deactivate = "api/tenants/beta/deactivate";
+    public static string Activate = $"api/tenants/{0}/activate";
+    public static string Deactivate = $"api/tenants/{0}/deactivate";
 }
