@@ -51,7 +51,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-                    client.BaseAddress = new Uri(configs["ServerOptions:BaseUri"]);
+                    client.BaseAddress = new Uri(configs.GetValue<string>(ClientName));
                 })
                 .AddHttpMessageHandler<AuthenticationHeaderHandler>();
             builder.Services.AddHttpClientInterceptor();
