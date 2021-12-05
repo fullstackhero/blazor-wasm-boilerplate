@@ -9,10 +9,13 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
     {
         [Parameter]
         public List<string> Colors { get; set; } = new();
+
         [Parameter]
         public string ColorType { get; set; } = string.Empty;
+
         [Parameter]
         public Color CurrentColor { get; set; }
+
         [Parameter]
         public EventCallback<string> OnColorClicked { get; set; }
 

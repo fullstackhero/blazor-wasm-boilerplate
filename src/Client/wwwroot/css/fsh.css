@@ -15,10 +15,10 @@
     padding: 12px 16px 12px 38px;
 }
 
-.mud-nav-link.active:not(.mud-nav-link-disabled) {
-    border-right: 3px solid var(--mud-palette-primary);
-    background-color: rgba(var(--mud-palette-primary-rgb), 0.1);
-}
+    .mud-nav-link.active:not(.mud-nav-link-disabled) {
+        border-right: 3px solid var(--mud-palette-primary);
+        background-color: rgba(var(--mud-palette-primary-rgb), 0.1);
+    }
 
 .mud-table {
     padding: 20px !important;
@@ -26,5 +26,5 @@
 }
 
 .mud-card {
-    margin-bottom: 20px !important;    
+    margin-bottom: 20px !important;
 }

@@ -1,6 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.Catalog;
-using Microsoft.AspNetCore.Components;
+﻿using FSH.BlazorWebAssembly.Shared.Catalog;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
@@ -9,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
+
 public partial class Brands
 {
     private IEnumerable<BrandDto> _pagedData;
@@ -27,6 +26,7 @@ public partial class Brands
     private bool _canSearchBrands;
     private bool _loading = true;
     private int _totalItems;
+
     protected override async Task OnInitializedAsync()
     {
         _currentUser = _stateProvider.AuthenticationStateUser;

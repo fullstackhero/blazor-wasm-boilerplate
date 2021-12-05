@@ -8,14 +8,18 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
+
 public partial class AddEditProductModal
 {
     [Parameter]
     public UpdateProductRequest UpdateProductRequest { get; set; } = new();
+
     [Parameter]
     public bool IsCreate { get; set; }
+
     [Parameter]
     public Guid Id { get; set; }
+
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; }
 

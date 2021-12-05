@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
+
 public partial class Roles
 {
     private List<RoleDto> _roleList = new();
@@ -26,6 +27,7 @@ public partial class Roles
     private bool _loading = true;
 
     public bool checkBox { get; set; } = true;
+
     protected override async Task OnInitializedAsync()
     {
         _currentUser = await _authService.CurrentUser();

@@ -1,9 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Components.Hubs
 {
@@ -11,6 +10,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.Hubs
     {
         [CascadingParameter]
         public Error Error { get; set; }
+
         [Parameter]
         public RenderFragment ChildContent { get; set; } = new RenderFragment(x => { });
 

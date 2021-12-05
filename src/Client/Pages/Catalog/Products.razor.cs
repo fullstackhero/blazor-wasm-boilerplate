@@ -7,9 +7,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
+
 public partial class Products
 {
-
     private IEnumerable<ProductDto> _pagedData;
     private MudTable<ProductDto> _table;
 
@@ -28,6 +28,7 @@ public partial class Products
     private bool _canSearchProducts;
 
     public bool checkBox { get; set; } = true;
+
     protected override Task OnInitializedAsync()
     {
         _currentUser = _stateProvider.AuthenticationStateUser;

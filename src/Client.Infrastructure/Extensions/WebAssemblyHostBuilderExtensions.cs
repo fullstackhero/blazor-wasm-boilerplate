@@ -2,9 +2,11 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Services;
+using FSH.BlazorWebAssembly.Shared.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MudBlazor;
 using MudBlazor.Services;
 using System.Globalization;
@@ -16,8 +18,10 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
     public static class WebAssemblyHostBuilderExtensions
     {
         private const string ClientName = "FullStackHero.API";
-        public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder)
+        public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder, WebAssemblyHostConfiguration configs)
         {
+            var serviceProvider = builder.Services.BuildServiceProvider();
+            var serverOptions = serviceProvider.GetRequiredService<IOptions<ServerOptions>>().Value;
             builder
                 .Services
                 .AddDistributedMemoryCache()
@@ -51,7 +55,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-                    client.BaseAddress = new Uri("https://localhost:5001/");
+                    client.BaseAddress = new Uri(configs["ServerOptions:BaseUri"]);
                 })
                 .AddHttpMessageHandler<AuthenticationHeaderHandler>();
             builder.Services.AddHttpClientInterceptor();

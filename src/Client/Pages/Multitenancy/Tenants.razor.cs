@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Multitenancy;
+
 public partial class Tenents : ComponentBase
 {
     public bool Dense = false;
@@ -26,10 +27,13 @@ public partial class Tenents : ComponentBase
     public bool _loading = true;
 
     public List<TenantDto> Elements = new List<TenantDto>();
+
     [Inject]
     private ITenentService TenentService { get; set; }
+
     [Inject]
     private ISnackbar _snackBar { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         _loading = true;

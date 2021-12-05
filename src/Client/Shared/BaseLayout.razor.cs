@@ -1,8 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Services;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
-using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System;
 using System.Threading.Tasks;

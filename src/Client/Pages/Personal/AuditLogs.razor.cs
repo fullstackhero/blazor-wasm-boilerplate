@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
+
 public partial class AuditLogs
 {
     [Inject]
@@ -30,6 +31,7 @@ public partial class AuditLogs
 
     // private bool _canExportAuditTrails;
     private bool _canSearchAuditTrails;
+
     private bool _loaded;
 
     private bool Search(AuditResponse response)

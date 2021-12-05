@@ -12,6 +12,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication
     {
         [CascadingParameter]
         public Error Error { get; set; }
+
         public bool BusySubmitting { get; set; } = false;
         private bool _passwordVisibility;
         private InputType _passwordInput = InputType.Password;

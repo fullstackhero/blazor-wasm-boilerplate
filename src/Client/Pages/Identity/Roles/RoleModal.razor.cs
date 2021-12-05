@@ -4,10 +4,12 @@ using MudBlazor;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
+
 public partial class RoleModal
 {
     [Parameter]
     public RoleRequest RoleModel { get; set; } = new();
+
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; }
 

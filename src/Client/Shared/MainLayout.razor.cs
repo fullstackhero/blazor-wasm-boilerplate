@@ -15,6 +15,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared
 
         [Parameter]
         public EventCallback<bool> OnRightToLeftToggle { get; set; }
+
         private bool _drawerOpen = false;
         private bool _rightToLeft = false;
 

@@ -6,16 +6,21 @@ using System;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
+
 public partial class AddEditBrandModal
 {
     [Parameter]
     public UpdateBrandRequest UpdateBrandRequest { get; set; } = new();
+
     [Parameter]
     public bool IsCreate { get; set; }
+
     [Parameter]
     public Guid Id { get; set; }
+
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; }
+
     public void Cancel()
     {
         MudDialog?.Cancel();

@@ -1,3 +1,4 @@
+using FSH.BlazorWebAssembly.Shared.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

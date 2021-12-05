@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
+
 public partial class Security
 {
     private readonly ResetPasswordRequest _passwordModel = new();

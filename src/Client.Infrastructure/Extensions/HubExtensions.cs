@@ -12,7 +12,6 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
                 hubConnection = new HubConnectionBuilder()
                                   .WithUrl("https://localhost:5001/notifications", options =>
                                   {
-
                                       options.AccessTokenProvider = async () => (await localStorage.GetItemAsync<string>("authToken"));
                                   })
                                   .WithAutomaticReconnect()

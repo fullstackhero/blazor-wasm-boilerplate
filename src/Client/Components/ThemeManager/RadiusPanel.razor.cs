@@ -11,8 +11,10 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
 
         [Parameter]
         public double MaxValue { get; set; } = 30;
+
         [Parameter]
         public EventCallback<double> OnSliderChanged { get; set; }
+
         protected override async Task OnInitializedAsync()
         {
             if (await _clientPreferenceManager.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();

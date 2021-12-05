@@ -10,11 +10,14 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
     {
         [Parameter]
         public bool ThemeDrawerOpen { get; set; }
+
         [Parameter]
         public EventCallback<bool> ThemeDrawerOpenChanged { get; set; }
+
         [EditorRequired]
         [Parameter]
         public ClientPreference ThemePreference { get; set; }
+
         [EditorRequired]
         [Parameter]
         public EventCallback<ClientPreference> ThemePreferenceChanged { get; set; }
