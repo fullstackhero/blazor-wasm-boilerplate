@@ -2,6 +2,7 @@ using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Components.Hubs
@@ -23,7 +24,8 @@ namespace FSH.BlazorWebAssembly.Client.Components.Hubs
 
         public async Task<HubConnection> TryConnectAsync()
         {
-            HubConnection = HubConnection.TryInitialize(_localStorage);
+            string apiBaseUri = _configurations.GetValue<string>("FullStackHero.API");
+            HubConnection = HubConnection.TryInitialize(_localStorage, apiBaseUri);
             if (HubConnection.State == HubConnectionState.Disconnected)
             {
                 await HubConnection.StartAsync();

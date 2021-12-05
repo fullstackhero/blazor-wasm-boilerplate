@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.Extensions.Configuration
 @using Microsoft.JSInterop
 @using Microsoft.Extensions.DependencyInjection
 @using Microsoft.AspNetCore.Components
@@ -47,3 +48,4 @@
 @inject IHttpInterceptorService _interceptor;
 @inject ITenentService _tenentService;
 @inject IAccountManager _accountManager;
+@inject IConfiguration _configurations;
