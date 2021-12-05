@@ -1,8 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Services;
-using FSH.BlazorWebAssembly.Shared.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,8 +18,6 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
         private const string ClientName = "FullStackHero.API";
         public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder, WebAssemblyHostConfiguration configs)
         {
-            var serviceProvider = builder.Services.BuildServiceProvider();
-            var serverOptions = serviceProvider.GetRequiredService<IOptions<ServerOptions>>().Value;
             builder
                 .Services
                 .AddDistributedMemoryCache()
