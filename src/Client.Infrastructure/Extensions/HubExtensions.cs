@@ -1,24 +1,22 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.SignalR.Client;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+
+public static class HubExtensions
 {
-    public static class HubExtensions
+    public static HubConnection TryInitialize(this HubConnection hubConnection, ILocalStorageService localStorage, string apiBaseUri)
     {
-        public static HubConnection TryInitialize(this HubConnection hubConnection, ILocalStorageService localStorage, string apiBaseUri)
+        if (hubConnection == null)
         {
-            if (hubConnection == null)
-            {
-                hubConnection = new HubConnectionBuilder()
-                                  .WithUrl($"{apiBaseUri}notifications", options =>
-                                  {
-                                      options.AccessTokenProvider = async () => (await localStorage.GetItemAsync<string>("authToken"));
-                                  })
-                                  .WithAutomaticReconnect()
-                                  .Build();
-            }
-
-            return hubConnection;
+            hubConnection = new HubConnectionBuilder()
+                              .WithUrl($"{apiBaseUri}notifications", options =>
+                              {
+                                  options.AccessTokenProvider = async () => (await localStorage.GetItemAsync<string>("authToken"));
+                              })
+                              .WithAutomaticReconnect()
+                              .Build();
         }
+
+        return hubConnection;
     }
 }

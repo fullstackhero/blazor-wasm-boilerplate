@@ -1,6 +1,5 @@
-﻿using System;
+﻿namespace FSH.BlazorWebAssembly.Shared.Routes;
 
-namespace FSH.BlazorWebAssembly.Shared.Routes;
 public static class ProductsEndpoints
 {
     public const string GetCount = "api/v1/products/count";

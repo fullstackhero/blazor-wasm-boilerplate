@@ -2,8 +2,6 @@
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 

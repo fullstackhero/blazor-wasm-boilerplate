@@ -1,8 +1,7 @@
-﻿using FSH.BlazorWebAssembly.Shared.Constants;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Shared.Constants;
 using FSH.BlazorWebAssembly.Shared.Identity;
 using MudBlazor;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
 

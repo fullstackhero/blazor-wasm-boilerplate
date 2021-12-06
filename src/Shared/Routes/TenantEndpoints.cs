@@ -1,7 +1,6 @@
-﻿using System;
+﻿namespace FSH.BlazorWebAssembly.Shared.Routes;
 
-namespace FSH.BlazorWebAssembly.Shared.Routes;
-public static class TenentEndpoints
+public static class TenantEndpoints
 {
     public const string GetAll = "api/tenants";
     public const string Create = "api/tenants";

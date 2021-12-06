@@ -1,18 +1,19 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Multitenancy;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy;
-public class TenentService : ITenentService
+
+public class TenantService : ITenantService
 {
     private readonly HttpClient _httpClient;
 
-    public TenentService(HttpClient httpClient)
+    public TenantService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
     public async Task<IResult<List<TenantDto>>> GetAllAsync()
     {
-        var response = await _httpClient.GetAsync(TenentEndpoints.GetAll);
+        var response = await _httpClient.GetAsync(TenantEndpoints.GetAll);
         return await response.ToResult<List<TenantDto>>();
     }
 

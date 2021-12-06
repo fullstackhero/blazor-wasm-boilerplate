@@ -1,42 +1,39 @@
-﻿using System.Net.Http;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace FSH.BlazorWebAssembly.Shared.Wrapper
+namespace FSH.BlazorWebAssembly.Shared.Wrapper;
+
+public static class ResultExtensions
 {
-    public static class ResultExtensions
+    public static async Task<IResult<T>> ToResult<T>(this HttpResponseMessage response)
     {
-        public static async Task<IResult<T>> ToResult<T>(this HttpResponseMessage response)
+        string responseAsString = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonSerializer.Deserialize<Result<T>>(responseAsString, new JsonSerializerOptions
         {
-            string responseAsString = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonSerializer.Deserialize<Result<T>>(responseAsString, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                ReferenceHandler = ReferenceHandler.Preserve
-            });
-            return responseObject;
-        }
+            PropertyNameCaseInsensitive = true,
+            ReferenceHandler = ReferenceHandler.Preserve
+        });
+        return responseObject;
+    }
 
-        public static async Task<IResult> ToResult(this HttpResponseMessage response)
+    public static async Task<IResult> ToResult(this HttpResponseMessage response)
+    {
+        string responseAsString = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonSerializer.Deserialize<Result>(responseAsString, new JsonSerializerOptions
         {
-            string responseAsString = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonSerializer.Deserialize<Result>(responseAsString, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                ReferenceHandler = ReferenceHandler.Preserve
-            });
-            return responseObject;
-        }
+            PropertyNameCaseInsensitive = true,
+            ReferenceHandler = ReferenceHandler.Preserve
+        });
+        return responseObject;
+    }
 
-        public static async Task<PaginatedResult<T>> ToPaginatedResult<T>(this HttpResponseMessage response)
+    public static async Task<PaginatedResult<T>> ToPaginatedResult<T>(this HttpResponseMessage response)
+    {
+        string responseAsString = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonSerializer.Deserialize<PaginatedResult<T>>(responseAsString, new JsonSerializerOptions
         {
-            string responseAsString = await response.Content.ReadAsStringAsync();
-            var responseObject = JsonSerializer.Deserialize<PaginatedResult<T>>(responseAsString, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-            return responseObject;
-        }
+            PropertyNameCaseInsensitive = true
+        });
+        return responseObject;
     }
 }

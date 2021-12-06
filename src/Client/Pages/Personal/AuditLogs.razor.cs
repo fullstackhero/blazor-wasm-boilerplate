@@ -1,12 +1,8 @@
+using System.Security.Claims;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.AuditLogs;
 using FSH.BlazorWebAssembly.Shared.Response.AuditLogs;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 

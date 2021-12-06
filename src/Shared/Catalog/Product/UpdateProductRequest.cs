@@ -1,6 +1,5 @@
-using System;
-
 namespace FSH.BlazorWebAssembly.Shared.Catalog;
+
 public class UpdateProductRequest
 {
     public string Name { get; set; }

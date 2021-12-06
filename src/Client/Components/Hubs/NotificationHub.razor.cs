@@ -2,36 +2,33 @@ using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 
-namespace FSH.BlazorWebAssembly.Client.Components.Hubs
+namespace FSH.BlazorWebAssembly.Client.Components.Hubs;
+
+public partial class NotificationHub
 {
-    public partial class NotificationHub
+    [CascadingParameter]
+    public Error Error { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = new RenderFragment(x => { });
+
+    public HubConnection HubConnection { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        [CascadingParameter]
-        public Error Error { get; set; }
+        HubConnection = await TryConnectAsync().ConfigureAwait(true);
+    }
 
-        [Parameter]
-        public RenderFragment ChildContent { get; set; } = new RenderFragment(x => { });
-
-        public HubConnection HubConnection { get; set; }
-
-        protected override async Task OnInitializedAsync()
+    public async Task<HubConnection> TryConnectAsync()
+    {
+        string apiBaseUri = _configurations.GetValue<string>("FullStackHero.API");
+        HubConnection = HubConnection.TryInitialize(_localStorage, apiBaseUri);
+        if (HubConnection.State == HubConnectionState.Disconnected)
         {
-            HubConnection = await TryConnectAsync().ConfigureAwait(true);
+            await HubConnection.StartAsync();
         }
 
-        public async Task<HubConnection> TryConnectAsync()
-        {
-            string apiBaseUri = _configurations.GetValue<string>("FullStackHero.API");
-            HubConnection = HubConnection.TryInitialize(_localStorage, apiBaseUri);
-            if (HubConnection.State == HubConnectionState.Disconnected)
-            {
-                await HubConnection.StartAsync();
-            }
-
-            return HubConnection;
-        }
+        return HubConnection;
     }
 }

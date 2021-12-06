@@ -1,5 +1,3 @@
-using System;
-
 namespace FSH.BlazorWebAssembly.Shared.Multitenancy;
 
 public class UpgradeSubscriptionRequest

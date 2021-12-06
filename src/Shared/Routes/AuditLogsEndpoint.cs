@@ -1,7 +1,6 @@
-namespace FSH.BlazorWebAssembly.Shared.Routes
+namespace FSH.BlazorWebAssembly.Shared.Routes;
+
+public class AuditLogsEndpoint
 {
-    public class AuditLogsEndpoint
-    {
-        public const string GetLogs = "api/audit-logs";
-    }
+    public const string GetLogs = "api/audit-logs";
 }

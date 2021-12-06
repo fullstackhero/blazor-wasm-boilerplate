@@ -2,14 +2,10 @@
 using FSH.BlazorWebAssembly.Shared.Multitenancy;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Multitenancy;
 
-public partial class Tenents : ComponentBase
+public partial class Tenants
 {
     public bool Dense = false;
     public bool Hover = true;
@@ -29,15 +25,12 @@ public partial class Tenents : ComponentBase
     public List<TenantDto> Elements = new List<TenantDto>();
 
     [Inject]
-    private ITenentService TenentService { get; set; }
-
-    [Inject]
-    private ISnackbar _snackBar { get; set; }
+    private ITenantService TenantService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         _loading = true;
-        var response = await TenentService.GetAllAsync();
+        var response = await TenantService.GetAllAsync();
         if (response.Succeeded)
         {
             Elements = response.Data.ToList();

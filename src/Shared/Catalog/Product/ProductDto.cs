@@ -1,6 +1,5 @@
-using System;
-
 namespace FSH.BlazorWebAssembly.Shared.Catalog;
+
 public class ProductDto
 {
     public Guid Id { get; set; }

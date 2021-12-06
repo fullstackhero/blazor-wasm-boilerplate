@@ -1,11 +1,7 @@
-﻿using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Shared.Identity;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 

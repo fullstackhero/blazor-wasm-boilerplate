@@ -1,10 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Shared.Catalog;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
