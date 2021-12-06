@@ -33,10 +33,10 @@
             </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<TenantDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.Key)">Key</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.AdminEmail)">AdminEmail</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.ConnectionString)">ConnectionString</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<TenantDto, object?>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object?>(x=>x.Key)">Key</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object?>(x=>x.AdminEmail)">AdminEmail</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object?>(x=>x.ConnectionString)">ConnectionString</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.IsActive)">IsActive</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.ValidUpto)">ValidUpto</MudTableSortLabel></MudTh>
     </HeaderContent>

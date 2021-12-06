@@ -41,9 +41,9 @@ else
         <HeaderContent>
             <MudTHeadRow IgnoreCheckbox="true">
                 <MudTh><MudTableSortLabel SortBy="new Func<RelatedAuditTrail, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<RelatedAuditTrail, object>(x => x.TableName)">@_localizer["Table Name"]</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<RelatedAuditTrail, object?>(x => x.TableName)">@_localizer["Table Name"]</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<RelatedAuditTrail, object>(x => x.DateTime)">@_localizer["Date"]</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<RelatedAuditTrail, object>(x => x.Type)">@_localizer["Type"]</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<RelatedAuditTrail, object?>(x => x.Type)">@_localizer["Type"]</MudTableSortLabel></MudTh>
                 <MudTh Style="text-align: right"></MudTh>
             </MudTHeadRow>
         </HeaderContent>
@@ -97,7 +97,7 @@ else
                                             <td>@_localizer["Primary Key"]</td>
                                             <td>
                                                 <MudItem>
-                                                    <MudChip Label="true" Color="Color.Surface">@context.PrimaryKey.Trim('{').Trim('}').Replace('"', ' ').Trim()</MudChip>
+                                                    <MudChip Label="true" Color="Color.Surface">@context.PrimaryKey?.Trim('{').Trim('}').Replace('"', ' ').Trim()</MudChip>
                                                 </MudItem>
                                             </td>
                                         </tr>

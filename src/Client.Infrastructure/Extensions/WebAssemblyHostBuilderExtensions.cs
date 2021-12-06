@@ -85,12 +85,13 @@ public static class WebAssemblyHostBuilderExtensions
 
     private static void RegisterPermissionClaims(AuthorizationOptions options)
     {
-        foreach (var prop in typeof(PermissionConstants).GetNestedTypes().SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
+        foreach (var prop in typeof(PermissionConstants)
+            .GetNestedTypes()
+            .SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
         {
-            object propertyValue = prop.GetValue(null);
-            if (propertyValue is not null)
+            if (prop.GetValue(null)?.ToString() is string permission)
             {
-                options.AddPolicy(propertyValue.ToString(), policy => policy.RequireClaim(ClaimConstants.Permission, propertyValue.ToString()));
+                options.AddPolicy(permission, policy => policy.RequireClaim(ClaimConstants.Permission, permission));
             }
         }
     }

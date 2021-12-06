@@ -14,7 +14,7 @@ public class TenantService : ITenantService
     public async Task<IResult<List<TenantDto>>> GetAllAsync()
     {
         var response = await _httpClient.GetAsync(TenantEndpoints.GetAll);
-        return await response.ToResult<List<TenantDto>>();
+        return await response.ToResultAsync<List<TenantDto>>();
     }
 
     public Task<IResult> CreateAsync(CreateTenantRequest request)

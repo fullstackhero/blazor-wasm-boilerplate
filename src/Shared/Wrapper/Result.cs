@@ -2,24 +2,22 @@
 
 public class Result : IResult
 {
-    public Result()
-    {
-    }
-
-    public List<string> Messages { get; set; } = new();
+    public List<string>? Messages { get; set; } = new();
 
     public bool Succeeded { get; set; }
 
-    public string Exception { get; set; }
+    public string? Exception { get; set; }
 
     public static IResult Fail()
     {
         return new Result { Succeeded = false };
     }
 
-    public static IResult Fail(string message)
+    public static IResult Fail(string? message)
     {
-        return new Result { Succeeded = false, Messages = new List<string> { message } };
+        return string.IsNullOrEmpty(message)
+            ? Fail()
+            : new Result { Succeeded = false, Messages = new List<string> { message } };
     }
 
     public static IResult Fail(List<string> messages)
@@ -32,7 +30,7 @@ public class Result : IResult
         return Task.FromResult(Fail());
     }
 
-    public static Task<IResult> FailAsync(string message)
+    public static Task<IResult> FailAsync(string? message)
     {
         return Task.FromResult(Fail(message));
     }
@@ -75,19 +73,15 @@ public class Result : IResult
 
 public class ErrorResult<T> : Result<T>
 {
-    public string Source { get; set; }
+    public string? Source { get; set; }
 
     public int ErrorCode { get; set; }
-    public string StackTrace { get; set; }
+    public string? StackTrace { get; set; }
 }
 
 public class Result<T> : Result, IResult<T>
 {
-    public Result()
-    {
-    }
-
-    public T Data { get; set; }
+    public T? Data { get; set; }
 
     public static new Result<T> Fail()
     {

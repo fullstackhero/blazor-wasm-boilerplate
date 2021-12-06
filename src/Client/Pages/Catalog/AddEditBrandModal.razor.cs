@@ -17,11 +17,11 @@ public partial class AddEditBrandModal
     public Guid Id { get; set; }
 
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; }
+    private MudDialogInstance MudDialog { get; set; } = default!;
 
     public void Cancel()
     {
-        MudDialog?.Cancel();
+        MudDialog.Cancel();
     }
 
     private async Task SaveAsync()
@@ -39,15 +39,15 @@ public partial class AddEditBrandModal
 
         if (response.Succeeded)
         {
-            if (response.Messages.Count > 0)
+            if (response.Messages?.Count > 0)
                 _snackBar.Add(response.Messages[0], Severity.Success);
             else
                 _snackBar.Add(_localizer["Success"], Severity.Success);
-            MudDialog?.Close();
+            MudDialog.Close();
         }
         else
         {
-            if (response.Messages.Count > 0)
+            if (response.Messages?.Count > 0)
             {
                 foreach (string message in response.Messages)
                 {

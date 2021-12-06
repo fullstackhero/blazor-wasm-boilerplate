@@ -1,4 +1,5 @@
 ﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+
 public class ApplicationAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
@@ -26,12 +27,10 @@ public class ApplicationAuthenticationStateProvider : AuthenticationStateProvide
 
     public async Task<ClaimsPrincipal> GetAuthenticationStateProviderUserAsync()
     {
-        var state = await this.GetAuthenticationStateAsync();
-        var authenticationStateProviderUser = state.User;
-        return authenticationStateProviderUser;
+        return (await GetAuthenticationStateAsync()).User;
     }
 
-    public ClaimsPrincipal AuthenticationStateUser { get; set; }
+    public ClaimsPrincipal? AuthenticationStateUser { get; set; }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
@@ -54,27 +53,34 @@ public class ApplicationAuthenticationStateProvider : AuthenticationStateProvide
         byte[] jsonBytes = ParseBase64WithoutPadding(payload);
         var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
-        if (keyValuePairs != null)
+        if (keyValuePairs is not null)
         {
-            keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
+            keyValuePairs.TryGetValue(ClaimTypes.Role, out object? roles);
 
-            if (roles != null)
+            if (roles is not null)
             {
-                if (roles.ToString().Trim().StartsWith("["))
+                string? rolesString = roles.ToString();
+                if (!string.IsNullOrEmpty(rolesString))
                 {
-                    string[] parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
+                    if (rolesString.Trim().StartsWith("["))
+                    {
+                        string[]? parsedRoles = JsonSerializer.Deserialize<string[]>(rolesString);
 
-                    claims.AddRange(parsedRoles.Select(role => new Claim(ClaimTypes.Role, role)));
-                }
-                else
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, roles?.ToString()));
+                        if (parsedRoles is not null)
+                        {
+                            claims.AddRange(parsedRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+                        }
+                    }
+                    else
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, rolesString));
+                    }
                 }
 
                 keyValuePairs.Remove(ClaimTypes.Role);
             }
 
-            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value?.ToString())));
+            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString() ?? string.Empty)));
         }
 
         return claims;

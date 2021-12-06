@@ -13,8 +13,7 @@ public class AuditLogsService : IAuditLogsService
 
     public async Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserAuditLogsAsync()
     {
-        var response = await _httpClient.GetAsync(Shared.Routes.AuditLogsEndpoint.GetLogs);
-        var data = await response.ToResult<IEnumerable<AuditResponse>>();
-        return data;
+        var response = await _httpClient.GetAsync(AuditLogsEndpoint.GetLogs);
+        return await response.ToResultAsync<IEnumerable<AuditResponse>>();
     }
 }

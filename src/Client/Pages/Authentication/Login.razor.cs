@@ -10,7 +10,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
 public partial class Login
 {
     [CascadingParameter]
-    public Error Error { get; set; }
+    public Error? Error { get; set; }
 
     public bool BusySubmitting { get; set; } = false;
     private bool _passwordVisibility;
@@ -57,12 +57,12 @@ public partial class Login
         {
             BusySubmitting = true;
             var result = await _authService.Login(_tokenRequest);
-            if (!result.Succeeded)
+            if (!result.Succeeded && result.Messages is not null)
             {
                 Error?.ProcessError(result.Messages);
             }
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Error?.ProcessError(ex);
         }

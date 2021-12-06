@@ -7,7 +7,7 @@
 
 @code {
     [Parameter]
-    public RenderFragment ChildContent { get; set; } = new RenderFragment(x => { });
+    public RenderFragment ChildContent { get; set; } = default!;
 
     public void ProcessError(Exception ex)
     {

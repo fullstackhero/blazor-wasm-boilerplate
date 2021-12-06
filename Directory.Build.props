@@ -8,6 +8,7 @@
         <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
         <NoDefaultExcludes>true</NoDefaultExcludes>
         <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     
     <ItemGroup>

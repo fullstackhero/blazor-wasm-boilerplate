@@ -13,8 +13,8 @@ public class StatsService : IStatsService
 
     public async Task<IResult<StatsDto>> GetDataAsync()
     {
-        var response = await _httpClient.GetAsync(Shared.Routes.StatsEndpoint.GetData);
-        var data = await response.ToResult<StatsDto>();
+        var response = await _httpClient.GetAsync(StatsEndpoint.GetData);
+        var data = await response.ToResultAsync<StatsDto>();
         return data;
     }
 }

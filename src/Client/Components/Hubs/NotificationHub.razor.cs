@@ -8,12 +8,12 @@ namespace FSH.BlazorWebAssembly.Client.Components.Hubs;
 public partial class NotificationHub
 {
     [CascadingParameter]
-    public Error Error { get; set; }
+    public Error? Error { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; } = new RenderFragment(x => { });
+    public RenderFragment ChildContent { get; set; } = default!;
 
-    public HubConnection HubConnection { get; set; }
+    public HubConnection? HubConnection { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -23,7 +23,7 @@ public partial class NotificationHub
     public async Task<HubConnection> TryConnectAsync()
     {
         string apiBaseUri = _configurations.GetValue<string>("FullStackHero.API");
-        HubConnection = HubConnection.TryInitialize(_localStorage, apiBaseUri);
+        HubConnection = HubConnection!.TryInitialize(_localStorage, apiBaseUri);
         if (HubConnection.State == HubConnectionState.Disconnected)
         {
             await HubConnection.StartAsync();

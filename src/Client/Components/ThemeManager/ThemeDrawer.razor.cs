@@ -14,7 +14,7 @@ public partial class ThemeDrawer
 
     [EditorRequired]
     [Parameter]
-    public ClientPreference ThemePreference { get; set; }
+    public ClientPreference ThemePreference { get; set; } = default!;
 
     [EditorRequired]
     [Parameter]

@@ -6,7 +6,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared;
 
 public partial class BaseLayout : IDisposable
 {
-    private ClientPreference _themePreference;
+    private ClientPreference? _themePreference;
     private MudTheme _currentTheme = new LightTheme();
     private bool _themeDrawerOpen;
     private bool _rightToLeft = false;

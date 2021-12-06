@@ -7,7 +7,7 @@ namespace FSH.BlazorWebAssembly.Client.Shared;
 public partial class MainLayout
 {
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
     public EventCallback OnDarkModeToggle { get; set; }

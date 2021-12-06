@@ -10,10 +10,10 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 public partial class Dashboard
 {
     [Inject]
-    private IStatsService StatsService { get; set; }
+    private IStatsService StatsService { get; set; } = default!;
 
     [CascadingParameter]
-    public NotificationHub NotificationHub { get; set; }
+    public NotificationHub? NotificationHub { get; set; }
 
     [Parameter]
     public int ProductCount { get; set; }
@@ -33,7 +33,7 @@ public partial class Dashboard
     {
         await LoadDataAsync();
         _loaded = true;
-        NotificationHub.TryConnectAsync().Result.On<StatsChangedNotification>(nameof(StatsChangedNotification), async (notification) =>
+        NotificationHub!.TryConnectAsync().Result.On<StatsChangedNotification>(nameof(StatsChangedNotification), async (notification) =>
         {
             await LoadDataAsync();
             StateHasChanged();
@@ -45,12 +45,15 @@ public partial class Dashboard
         var response = await StatsService.GetDataAsync();
         if (response.Succeeded)
         {
-            ProductCount = response.Data.ProductCount;
-            BrandCount = response.Data.BrandCount;
-            UserCount = response.Data.UserCount;
-            RoleCount = response.Data.RoleCount;
+            if (response.Data is not null)
+            {
+                ProductCount = response.Data.ProductCount;
+                BrandCount = response.Data.BrandCount;
+                UserCount = response.Data.UserCount;
+                RoleCount = response.Data.RoleCount;
+            }
         }
-        else
+        else if (response.Messages is not null)
         {
             foreach (string message in response.Messages)
             {

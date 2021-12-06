@@ -35,11 +35,11 @@ public class AuthenticationService : IAuthenticationService
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("tenant", model.Tenant);
         var response = await _httpClient.PostAsJsonAsync(TokenEndpoints.AuthenticationEndpoint, model);
-        var result = await response.ToResult<TokenResponse>();
+        var result = await response.ToResultAsync<TokenResponse>();
         if (result.Succeeded)
         {
-            string token = result.Data.Token;
-            string refreshToken = result.Data.RefreshToken;
+            string? token = result.Data?.Token;
+            string? refreshToken = result.Data?.RefreshToken;
             await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
             await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
 

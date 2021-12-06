@@ -9,7 +9,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 public partial class AuditLogs
 {
     [Inject]
-    private IAuditLogsService AuditService { get; set; }
+    private IAuditLogsService AuditService { get; set; } = default!;
 
     public List<RelatedAuditTrail> Trails = new();
 
@@ -20,10 +20,10 @@ public partial class AuditLogs
     private bool _bordered = false;
     private bool _searchInOldValues = false;
     private bool _searchInNewValues = false;
-    private MudDateRangePicker _dateRangePicker;
-    private DateRange _dateRange;
+    private MudDateRangePicker _dateRangePicker = default!;
+    private DateRange? _dateRange;
 
-    private ClaimsPrincipal _currentUser;
+    // private ClaimsPrincipal _currentUser;
 
     // private bool _canExportAuditTrails;
     private bool _canSearchAuditTrails;
@@ -73,7 +73,7 @@ public partial class AuditLogs
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await _authService.CurrentUser();
+        // _currentUser = await _authService.CurrentUser();
 
         // _canExportAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
         _canSearchAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Search)).Succeeded;
@@ -84,25 +84,28 @@ public partial class AuditLogs
 
     private async Task GetDataAsync()
     {
-        var response = await AuditService?.GetCurrentUserAuditLogsAsync();
+        var response = await AuditService.GetCurrentUserAuditLogsAsync();
         if (response.Succeeded)
         {
-            Trails = response.Data
-                .Select(x => new RelatedAuditTrail
-                {
-                    AffectedColumns = x.AffectedColumns,
-                    DateTime = x.DateTime,
-                    Id = x.Id,
-                    NewValues = x.NewValues,
-                    OldValues = x.OldValues,
-                    PrimaryKey = x.PrimaryKey,
-                    TableName = x.TableName,
-                    Type = x.Type,
-                    UserId = x.UserId,
-                    LocalTime = DateTime.SpecifyKind(x.DateTime, DateTimeKind.Utc).ToLocalTime()
-                }).ToList();
+            if (response.Data is not null)
+            {
+                Trails = response.Data
+                    .Select(x => new RelatedAuditTrail
+                    {
+                        AffectedColumns = x.AffectedColumns,
+                        DateTime = x.DateTime,
+                        Id = x.Id,
+                        NewValues = x.NewValues,
+                        OldValues = x.OldValues,
+                        PrimaryKey = x.PrimaryKey,
+                        TableName = x.TableName,
+                        Type = x.Type,
+                        UserId = x.UserId,
+                        LocalTime = DateTime.SpecifyKind(x.DateTime, DateTimeKind.Utc).ToLocalTime()
+                    }).ToList();
+            }
         }
-        else
+        else if (response.Messages is not null)
         {
             foreach (string message in response.Messages)
             {

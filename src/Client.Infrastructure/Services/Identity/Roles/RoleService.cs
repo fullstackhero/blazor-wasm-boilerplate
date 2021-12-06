@@ -15,19 +15,19 @@ public class RoleService : IRoleService
     public async Task<IResult<string>> DeleteAsync(string id)
     {
         var response = await _httpClient.DeleteAsync($"{RolesEndpoints.Delete}/{id}");
-        return await response.ToResult<string>();
+        return await response.ToResultAsync<string>();
     }
 
     public async Task<IResult<List<RoleDto>>> GetRolesAsync()
     {
         var response = await _httpClient.GetAsync(RolesEndpoints.GetAll);
-        return await response.ToResult<List<RoleDto>>();
+        return await response.ToResultAsync<List<RoleDto>>();
     }
 
     public async Task<IResult<string>> SaveAsync(RoleRequest role)
     {
         var response = await _httpClient.PostAsJsonAsync(RolesEndpoints.Save, role);
-        return await response.ToResult<string>();
+        return await response.ToResultAsync<string>();
     }
 
     // public async Task<IResult<PermissionResponse>> GetPermissionsAsync(string roleId)

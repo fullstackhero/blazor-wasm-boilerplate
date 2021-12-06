@@ -2,6 +2,6 @@
 
 public class RandomNotification
 {
-    public string MessageType { get; set; }
-    public string Message { get; set; }
+    public string? MessageType { get; set; }
+    public string? Message { get; set; }
 }
