@@ -4,7 +4,6 @@ using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using MudBlazor;
 using MudBlazor.Services;
 using System.Globalization;

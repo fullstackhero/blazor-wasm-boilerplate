@@ -14,7 +14,6 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Extensions
                                   {
                                       options.AccessTokenProvider = async () => (await localStorage.GetItemAsync<string>("authToken"));
                                   })
-                                  .WithAutomaticReconnect()
                                   .Build();
             }
 
