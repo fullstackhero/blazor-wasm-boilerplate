@@ -28,3 +28,8 @@
 .mud-card {
     margin-bottom: 20px !important;
 }
+
+#blazor-error-ui {
+    color: var(--mud-palette-drawer-text);
+    background: var(--mud-palette-drawer-background);
+}
