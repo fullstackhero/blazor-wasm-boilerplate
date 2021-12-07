@@ -51,8 +51,13 @@ namespace FSH.BlazorWebAssembly.Client.Components.Hubs
 
         private async Task _hub_Closed(Exception arg)
         {
-            _snackBar.Add("SingalR Disconnected.", MudBlazor.Severity.Error);
-            await _authService.Logout();
+            _snackBar.Add("SingalR Connection Closed.", MudBlazor.Severity.Error, a =>
+            {
+                a.RequireInteraction = true;
+                a.ShowCloseIcon = true;
+            });
+
+            await Task.CompletedTask;
         }
     }
 }
