@@ -9,11 +9,12 @@ public static class HubExtensions
         if (hubConnection == null)
         {
             hubConnection = new HubConnectionBuilder()
-                              .WithUrl($"{apiBaseUri}notifications", options =>
-                              {
-                                  options.AccessTokenProvider = async () => (await localStorage.GetItemAsync<string>("authToken"));
-                              })
-                              .Build();
+                                .WithUrl($"{apiBaseUri}notifications", options =>
+                                {
+                                    options.AccessTokenProvider = async () => (await localStorage.GetItemAsync<string>("authToken"));
+                                })
+                                .WithAutomaticReconnect()
+                                .Build();
         }
 
         return hubConnection;
