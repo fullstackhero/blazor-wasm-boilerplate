@@ -1,25 +1,22 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Shared.Catalog;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
 public partial class Brands
 {
-    private IEnumerable<BrandDto> _pagedData;
-    private TableState _state;
-    private MudTable<BrandDto> _table;
+    private IEnumerable<BrandDto>? _pagedData;
+    private TableState? _state;
+    private MudTable<BrandDto>? _table;
     private string _searchString = string.Empty;
     private bool _dense = false;
     private bool _striped = true;
     private bool _bordered = false;
     private int _currentPage;
     public bool checkBox { get; set; } = true;
-    private ClaimsPrincipal _currentUser;
+
+    // private ClaimsPrincipal _currentUser;
     private bool _canCreateBrands;
     private bool _canEditBrands;
     private bool _canDeleteBrands;
@@ -29,7 +26,7 @@ public partial class Brands
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = _stateProvider.AuthenticationStateUser;
+        // _currentUser = _stateProvider.AuthenticationStateUser;
         _canCreateBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Create)).Succeeded;
         _canEditBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Edit)).Succeeded;
         _canDeleteBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Delete)).Succeeded;
@@ -64,7 +61,7 @@ public partial class Brands
         {
             _totalItems = response.TotalCount;
             _currentPage = response.CurrentPage;
-            _pagedData = response.Data.ToList();
+            _pagedData = response.Data;
         }
 
         _loading = false;
@@ -85,16 +82,14 @@ public partial class Brands
             var response = await _brandService.DeleteAsync(id);
             if (response.Succeeded)
             {
-                await Reset();
-                if (response.Messages.Count > 0)
+                if (response.Messages?.Count > 0)
                     _snackBar.Add(response.Messages[0], Severity.Success);
                 else
                     _snackBar.Add(_localizer["Success"], Severity.Success);
             }
             else
             {
-                await Reset();
-                if (response.Messages.Count > 0)
+                if (response.Messages?.Count > 0)
                 {
                     foreach (string message in response.Messages)
                     {
@@ -106,6 +101,8 @@ public partial class Brands
                     _snackBar.Add(response.Exception, Severity.Error);
                 }
             }
+
+            await Reset();
         }
     }
 

@@ -1,8 +1,7 @@
-﻿namespace FSH.BlazorWebAssembly.Shared.Constants
+﻿namespace FSH.BlazorWebAssembly.Shared.Constants;
+
+public static class RoleConstants
 {
-    public static class RoleConstants
-    {
-        public const string Admin = "Admin";
-        public const string Basic = "Basic";
-    }
+    public const string Admin = "Admin";
+    public const string Basic = "Basic";
 }

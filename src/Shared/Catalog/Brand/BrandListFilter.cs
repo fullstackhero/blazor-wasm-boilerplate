@@ -1,8 +1,7 @@
 using FSH.BlazorWebAssembly.Shared.Requests.Filters;
 
-namespace FSH.BlazorWebAssembly.Shared.Catalog
+namespace FSH.BlazorWebAssembly.Shared.Catalog;
+
+public class BrandListFilter : PaginationFilter
 {
-    public class BrandListFilter : PaginationFilter
-    {
-    }
 }

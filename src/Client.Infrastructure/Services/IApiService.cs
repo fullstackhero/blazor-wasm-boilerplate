@@ -1,7 +1,6 @@
-namespace FSH.BlazorWebAssembly.Client.Infrastructure
-{
-    public interface IApiService
-    {
+namespace FSH.BlazorWebAssembly.Client.Infrastructure;
 
-    }
+public interface IApiService
+{
+
 }

@@ -1,11 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Identity;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 
@@ -18,7 +13,7 @@ public partial class Roles
     private bool _striped = true;
     private bool _bordered = false;
 
-    private ClaimsPrincipal _currentUser;
+    // private ClaimsPrincipal _currentUser;
     private bool _canCreateRoles;
     private bool _canEditRoles;
     private bool _canDeleteRoles;
@@ -30,7 +25,7 @@ public partial class Roles
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await _authService.CurrentUser();
+        // _currentUser = await _authService.CurrentUser();
         _canCreateRoles = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Create)).Succeeded;
         _canEditRoles = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Edit)).Succeeded;
         _canDeleteRoles = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Delete)).Succeeded;
@@ -45,11 +40,11 @@ public partial class Roles
     {
         _loading = true;
         var response = await _roleService.GetRolesAsync();
-        if (response.Succeeded)
+        if (response.Succeeded && response.Data is not null)
         {
             _roleList = response.Data.ToList();
         }
-        else
+        else if (response.Messages is not null)
         {
             foreach (string message in response.Messages)
             {
@@ -60,8 +55,13 @@ public partial class Roles
         _loading = false;
     }
 
-    private async Task Delete(string id)
+    private async Task Delete(string? id)
     {
+        if (string.IsNullOrEmpty(id))
+        {
+            throw new ArgumentNullException(nameof(id));
+        }
+
         string deleteContent = _localizer["Delete Content"];
         var parameters = new DialogParameters
             {
@@ -75,35 +75,35 @@ public partial class Roles
             var response = await _roleService.DeleteAsync(id);
             if (response.Succeeded)
             {
-                await Reset();
-                _snackBar.Add(response.Messages[0], Severity.Success);
+                if (response.Messages?.Count > 0)
+                {
+                    _snackBar.Add(response.Messages[0], Severity.Success);
+                }
             }
-            else
+            else if (response.Messages is not null)
             {
-                await Reset();
                 foreach (string message in response.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }
             }
+
+            await Reset();
         }
     }
 
-    private async Task InvokeModal(string id = null)
+    private async Task InvokeModal(string? id = null)
     {
         var parameters = new DialogParameters();
-        if (id != null)
+        if (id is not null && _roleList.FirstOrDefault(c => c.Id == id) is RoleDto role)
         {
-            _role = _roleList.FirstOrDefault(c => c.Id == id);
-            if (_role != null)
+            _role = role;
+            parameters.Add(nameof(RoleModal.RoleModel), new RoleRequest
             {
-                parameters.Add(nameof(RoleModal.RoleModel), new RoleRequest
-                {
-                    Id = _role.Id,
-                    Name = _role.Name,
-                    Description = _role.Description
-                });
-            }
+                Id = _role.Id,
+                Name = _role.Name,
+                Description = _role.Description
+            });
         }
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
@@ -137,8 +137,13 @@ public partial class Roles
         return false;
     }
 
-    private void ManagePermissions(string roleId)
+    private void ManagePermissions(string? roleId)
     {
+        if (string.IsNullOrEmpty(roleId))
+        {
+            throw new ArgumentNullException(nameof(roleId));
+        }
+
         _navigationManager.NavigateTo($"/identity/role-permissions/{roleId}");
     }
 }

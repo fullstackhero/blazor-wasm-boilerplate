@@ -1,7 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 
@@ -11,7 +10,7 @@ public partial class RoleModal
     public RoleRequest RoleModel { get; set; } = new();
 
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; }
+    private MudDialogInstance MudDialog { get; set; } = default!;
 
     public void Cancel()
     {
@@ -23,10 +22,14 @@ public partial class RoleModal
         var response = await _roleService.SaveAsync(RoleModel);
         if (response.Succeeded)
         {
-            _snackBar.Add(response.Messages[0], Severity.Success);
+            if (response.Messages?.Count > 0)
+            {
+                _snackBar.Add(response.Messages[0], Severity.Success);
+            }
+
             MudDialog.Close();
         }
-        else
+        else if (response.Messages is not null)
         {
             foreach (string message in response.Messages)
             {

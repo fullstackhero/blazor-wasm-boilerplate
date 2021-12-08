@@ -1,17 +1,12 @@
 ﻿using FSH.BlazorWebAssembly.Shared.Catalog;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
 public partial class Products
 {
-    private IEnumerable<ProductDto> _pagedData;
-    private MudTable<ProductDto> _table;
+    private IEnumerable<ProductDto>? _pagedData;
+    private MudTable<ProductDto>? _table;
 
     private int _totalItems;
     private int _currentPage;
@@ -21,7 +16,7 @@ public partial class Products
     private bool _bordered = false;
     private bool _loading = true;
 
-    private ClaimsPrincipal _currentUser;
+    // private ClaimsPrincipal _currentUser;
     private bool _canCreateProducts;
     private bool _canEditProducts;
     private bool _canDeleteProducts;
@@ -31,7 +26,7 @@ public partial class Products
 
     protected override Task OnInitializedAsync()
     {
-        _currentUser = _stateProvider.AuthenticationStateUser;
+        // _currentUser = _stateProvider.AuthenticationStateUser;
         _canCreateProducts = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Create)).Succeeded;
         _canEditProducts = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Edit)).Succeeded;
         _canDeleteProducts = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Products.Delete)).Succeeded;
@@ -53,10 +48,12 @@ public partial class Products
     private async Task LoadData(int pageNumber, int pageSize, TableState state)
     {
         _loading = true;
-        string[] orderings = null;
+        string[]? orderings = null;
         if (!string.IsNullOrEmpty(state.SortLabel))
         {
-            orderings = state.SortDirection != SortDirection.None ? new[] { $"{state.SortLabel} {state.SortDirection}" } : new[] { $"{state.SortLabel}" };
+            orderings = state.SortDirection == SortDirection.None
+                ? new[] { $"{state.SortLabel}" }
+                : new[] { $"{state.SortLabel} {state.SortDirection}" };
         }
 
         var request = new ProductListFilter { PageSize = pageSize, PageNumber = pageNumber + 1, Keyword = _searchString, OrderBy = orderings ?? Array.Empty<string>() };
@@ -87,7 +84,7 @@ public partial class Products
         if (id != new Guid())
         {
             var product = _pagedData?.FirstOrDefault(c => c.Id == id);
-            if (product != null)
+            if (product is not null)
             {
                 parameters.Add(nameof(AddEditProductModal.UpdateProductRequest), new UpdateProductRequest
                 {
@@ -123,17 +120,20 @@ public partial class Products
             var response = await _productService.DeleteAsync(id);
             if (response.Succeeded)
             {
-                OnSearch(string.Empty);
-                _snackBar.Add(response.Messages[0], Severity.Success);
+                if (response.Messages?.First() is string message)
+                {
+                    _snackBar.Add(message, Severity.Success);
+                }
             }
-            else
+            else if (response.Messages is not null)
             {
-                OnSearch(string.Empty);
                 foreach (string message in response.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }
             }
+
+            OnSearch(string.Empty);
         }
     }
 }

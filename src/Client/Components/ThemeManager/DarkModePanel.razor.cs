@@ -1,26 +1,24 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
 using Microsoft.AspNetCore.Components;
-using System.Threading.Tasks;
 
-namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager
+namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager;
+
+public partial class DarkModePanel
 {
-    public partial class DarkModePanel
+    private bool _isDarkMode = false;
+
+    protected override async Task OnInitializedAsync()
     {
-        private bool _isDarkMode = false;
+        if (await _clientPreferenceManager.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
+        _isDarkMode = themePreference.IsDarkMode;
+    }
 
-        protected override async Task OnInitializedAsync()
-        {
-            if (await _clientPreferenceManager.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
-            _isDarkMode = themePreference.IsDarkMode;
-        }
+    [Parameter]
+    public EventCallback<bool> OnIconClicked { get; set; }
 
-        [Parameter]
-        public EventCallback<bool> OnIconClicked { get; set; }
-
-        private async Task ToggleDarkMode()
-        {
-            _isDarkMode = !_isDarkMode;
-            await OnIconClicked.InvokeAsync(_isDarkMode);
-        }
+    private async Task ToggleDarkMode()
+    {
+        _isDarkMode = !_isDarkMode;
+        await OnIconClicked.InvokeAsync(_isDarkMode);
     }
 }

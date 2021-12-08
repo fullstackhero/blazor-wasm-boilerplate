@@ -2,10 +2,6 @@
 using FSH.BlazorWebAssembly.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
@@ -21,13 +17,13 @@ public partial class AddEditProductModal
     public Guid Id { get; set; }
 
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; }
+    private MudDialogInstance MudDialog { get; set; } = default!;
 
     private List<BrandDto> _brands = new();
 
     public void Cancel()
     {
-        MudDialog?.Cancel();
+        MudDialog.Cancel();
     }
 
     private async Task SaveAsync()
@@ -45,15 +41,15 @@ public partial class AddEditProductModal
 
         if (response.Succeeded)
         {
-            if (response.Messages.Count > 0)
+            if (response.Messages?.Count > 0)
                 _snackBar.Add(response.Messages[0], Severity.Success);
             else
                 _snackBar.Add(_localizer["Success"], Severity.Success);
-            MudDialog?.Close();
+            MudDialog.Close();
         }
         else
         {
-            if (response.Messages.Count > 0)
+            if (response.Messages?.Count > 0)
             {
                 foreach (string message in response.Messages)
                 {
@@ -74,13 +70,13 @@ public partial class AddEditProductModal
         await LoadBrandsAsync();
     }
 
-    private async Task LoadBrandsAsync(string searchKeyword = default)
+    private async Task LoadBrandsAsync(string? searchKeyword = default)
     {
         string[] orderBy = { "id" };
         BrandListFilter filter = new() { PageNumber = 0, PageSize = 0, OrderBy = orderBy };
         if (string.IsNullOrEmpty(searchKeyword)) filter.Keyword = searchKeyword;
         var response = await _brandService.SearchBrandAsync(filter);
-        if (response.Succeeded)
+        if (response.Succeeded && response.Data is not null)
         {
             _brands = response.Data.ToList();
         }
@@ -92,7 +88,7 @@ public partial class AddEditProductModal
             return _brands.Select(x => x.Id);
 
         await LoadBrandsAsync(value);
-        return _brands.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+        return _brands.Where(x => x.Name?.Contains(value, StringComparison.InvariantCultureIgnoreCase) ?? false)
             .Select(x => x.Id);
     }
 }

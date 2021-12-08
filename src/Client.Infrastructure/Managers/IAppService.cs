@@ -1,6 +1,5 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers
+﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
+
+public interface IManager
 {
-    public interface IManager
-    {
-    }
 }
