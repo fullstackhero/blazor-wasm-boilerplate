@@ -14,23 +14,23 @@ public partial class NotificationHub
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    private HubConnection? _hub { get; set; }
+    private HubConnection? _hubConnection { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _hub = await TryConnectAsync().ConfigureAwait(true);
+        _hubConnection = await TryConnectAsync().ConfigureAwait(true);
     }
 
     public async Task<HubConnection> TryConnectAsync()
     {
         string apiBaseUri = _configurations.GetValue<string>("FullStackHero.API");
-        _hub = _hub!.TryInitialize(_localStorage, apiBaseUri);
-        _hub.Closed += Hub_Closed;
+        _hubConnection = _hubConnection!.TryInitialize(_localStorage, apiBaseUri);
+        _hubConnection.Closed += Hub_Closed;
         try
         {
-            if (_hub.State == HubConnectionState.Disconnected)
+            if (_hubConnection.State == HubConnectionState.Disconnected)
             {
-                await _hub.StartAsync();
+                await _hubConnection.StartAsync();
             }
         }
         catch (HttpRequestException requestException)
@@ -42,12 +42,17 @@ public partial class NotificationHub
             }
         }
 
-        return _hub;
+        return _hubConnection;
     }
 
     private async Task Hub_Closed(Exception? arg)
     {
-        _snackBar.Add("SingalR Disconnected.", MudBlazor.Severity.Error);
-        await _authService.Logout();
+        _snackBar.Add("SingalR Connection Closed.", MudBlazor.Severity.Error, a =>
+        {
+            a.RequireInteraction = true;
+            a.ShowCloseIcon = true;
+        });
+
+        await Task.CompletedTask;
     }
 }
