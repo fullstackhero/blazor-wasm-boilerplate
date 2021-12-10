@@ -22,7 +22,8 @@ public static class Startup
             .Services
             .AddDistributedMemoryCache()
             .AddLocalization(options => options.ResourcesPath = "Resources")
-            .AddAuthorizationCore(RegisterPermissionClaims)
+
+            // .AddAuthorizationCore(RegisterPermissionClaims)
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
                 {
@@ -33,22 +34,40 @@ public static class Startup
                     configuration.SnackbarConfiguration.ShowCloseIcon = false;
                 })
             .AddScoped<ClientPreferenceManager>()
+
             .AddScoped<ApplicationAuthenticationStateProvider>()
-            .AddScoped<AuthenticationStateProvider, ApplicationAuthenticationStateProvider>()
-            .AddTransient<AuthenticationHeaderHandler>()
+            .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<ApplicationAuthenticationStateProvider>())
+
+            // .AddTransient<AuthenticationHeaderHandler>()
+            .AddScoped<ApiAuthorizationMessageHandler>()
             .AutoRegisterInterfaces<IManager>()
             .AutoRegisterInterfaces<IApiService>()
             .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient(ClientName)
-                .EnableIntercept(sp))
+                .CreateClient(ClientName))
+
+            // .EnableIntercept(sp))
             .AddHttpClient(ClientName, client =>
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
                     client.BaseAddress = new Uri(configs.GetValue<string>(ClientName));
-                })
-                .AddHttpMessageHandler<AuthenticationHeaderHandler>();
-        builder.Services.AddHttpClientInterceptor();
+                });
+
+                // When I add this call, the app hangs on startup
+                // Without it, I get further but then get invalidcastexception
+                // .AddHttpMessageHandler<ApiAuthorizationMessageHandler>();
+
+                // .AddHttpMessageHandler<AuthenticationHeaderHandler>();
+
+        builder.Services.AddMsalAuthentication(options =>
+             {
+                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
+                 options.ProviderOptions.DefaultAccessTokenScopes.Add("api://366b8128-1694-433e-8641-bdaa8913515c/access_as_user");
+
+                 options.ProviderOptions.LoginMode = "redirect";
+             });
+
+        // builder.Services.AddHttpClientInterceptor();
         return builder;
     }
 

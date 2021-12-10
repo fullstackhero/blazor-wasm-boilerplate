@@ -1,10 +1,14 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
 
 public partial class PersonCard
 {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = default!;
+
     [Parameter]
     public string? Class { get; set; }
 
@@ -26,8 +30,8 @@ public partial class PersonCard
 
     private async Task LoadUserData()
     {
-        var state = await _stateProvider.GetAuthenticationStateAsync();
-        var user = state.User;
+        var authState = await AuthState;
+        var user = authState.User;
         if (user == null) return;
         if (user.Identity?.IsAuthenticated == true)
         {

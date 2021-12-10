@@ -10,6 +10,9 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
 public partial class Login
 {
     [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = default!;
+
+    [CascadingParameter]
     public Error? Error { get; set; }
 
     public bool BusySubmitting { get; set; } = false;
@@ -40,13 +43,17 @@ public partial class Login
         _tokenRequest.Tenant = "root";
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-        var state = await _stateProvider.GetAuthenticationStateAsync();
-        if (state != new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())))
-        {
-            _navigationManager.NavigateTo("/");
-        }
+        _navigationManager.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(_navigationManager.Uri)}");
+
+        return Task.CompletedTask;
+
+        // var authState = await AuthState;
+        // if (authState.User.Identity?.IsAuthenticated is true)
+        // {
+        //    _navigationManager.NavigateTo("/");
+        // }
     }
 
     private readonly TokenRequest _tokenRequest = new();
