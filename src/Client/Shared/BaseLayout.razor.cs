@@ -4,7 +4,7 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
 
-public partial class BaseLayout : IDisposable
+public partial class BaseLayout // : IDisposable
 {
     private ClientPreference? _themePreference;
     private MudTheme _currentTheme = new LightTheme();
@@ -22,7 +22,8 @@ public partial class BaseLayout : IDisposable
         _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
         if (_themePreference == null) _themePreference = new ClientPreference();
         SetCurrentTheme(_themePreference);
-        _interceptor.RegisterEvent();
+
+        // _interceptor.RegisterEvent();
         _snackBar.Add("Like this boilerplate? ", Severity.Normal, config =>
         {
             config.BackgroundBlurred = true;
@@ -52,5 +53,5 @@ public partial class BaseLayout : IDisposable
         _currentTheme.LayoutProperties.DefaultBorderRadius = $"{themePreference.BorderRadius}px";
     }
 
-    public void Dispose() => _interceptor.DisposeEvent();
+    // public void Dispose() => _interceptor.DisposeEvent();
 }

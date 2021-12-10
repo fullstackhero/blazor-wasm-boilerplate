@@ -1,12 +1,17 @@
 ﻿using System.Security.Claims;
 using FSH.BlazorWebAssembly.Shared.Constants;
 using FSH.BlazorWebAssembly.Shared.Identity;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
 
 public partial class Security
 {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = default!;
+
     private readonly ResetPasswordRequest _passwordModel = new();
     private string? ConfirmationPassword { get; set; }
 
@@ -14,7 +19,8 @@ public partial class Security
     {
         if (_passwordModel.Password?.Equals(ConfirmationPassword) ?? false)
         {
-            _passwordModel.Email = _stateProvider.AuthenticationStateUser.FindFirstValue(ClaimTypes.Email);
+            var authState = await AuthState;
+            _passwordModel.Email = authState.User.FindFirstValue(ClaimTypes.Email);
             _passwordModel.Token = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
             var response = await _accountManager.ChangePasswordAsync(_passwordModel);
             if (response.Succeeded)

@@ -36,7 +36,7 @@
 
 @attribute [Authorize]
 @inject ClientPreferenceManager _clientPreferenceManager
-@inject ApplicationAuthenticationStateProvider _stateProvider
+@*@inject AuthenticationStateProvider _stateProvider*@
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackBar
 
@@ -46,7 +46,7 @@
 @inject IProductService _productService;
 @inject IRoleService _roleService;
 @inject ILocalStorageService _localStorage;
-@inject IHttpInterceptorService _interceptor;
+@*@inject IHttpInterceptorService _interceptor;*@
 @inject ITenantService _tenantService;
 @inject IAccountManager _accountManager;
 @inject IConfiguration _configurations;

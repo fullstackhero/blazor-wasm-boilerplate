@@ -10,12 +10,12 @@ public class AuthenticationService : IAuthenticationService
     private readonly NavigationManager _navigationManager;
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
-    private readonly AuthenticationStateProvider _authenticationStateProvider;
+    private readonly ApplicationAuthenticationStateProvider _authenticationStateProvider;
 
     public AuthenticationService(
         HttpClient httpClient,
         ILocalStorageService localStorage,
-        AuthenticationStateProvider authenticationStateProvider,
+        ApplicationAuthenticationStateProvider authenticationStateProvider,
         NavigationManager navigationManager)
     {
         _httpClient = httpClient;
@@ -43,7 +43,7 @@ public class AuthenticationService : IAuthenticationService
             await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
             await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
 
-            await ((ApplicationAuthenticationStateProvider)this._authenticationStateProvider).StateChangedAsync();
+            await _authenticationStateProvider.StateChangedAsync();
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -60,7 +60,7 @@ public class AuthenticationService : IAuthenticationService
         await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
         await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
         await _localStorage.RemoveItemAsync(StorageConstants.Local.ImageUri);
-        ((ApplicationAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+        _authenticationStateProvider.MarkUserAsLoggedOut();
         _httpClient.DefaultRequestHeaders.Authorization = null;
         _navigationManager.NavigateTo("/login");
         return await Result.SuccessAsync();
