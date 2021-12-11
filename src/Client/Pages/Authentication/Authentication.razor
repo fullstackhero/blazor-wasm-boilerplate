@@ -1,8 +1,66 @@
 ﻿@page "/authentication/{action}"
 @attribute [AllowAnonymous]
 
-<RemoteAuthenticatorView Action="@Action" />
+@inject IStringLocalizer<Authentication> L;
+
+<RemoteAuthenticatorView Action="@Action" OnLogInSucceeded="OnLoginSucceeded" OnLogOutSucceeded="OnLogOutSucceeded" >
+    @* Override the different child items to adapt them to our own style
+       I've done this for LogOutSucceeded now, already added the rest but with the defaults (and localization). *@
+    <LogOutSucceeded>
+        <MudItem Class="d-flex justify-center">
+            <MudText Typo="Typo.h5" GutterBottom="true">
+                @L["You were successfully logged out."]
+            </MudText>
+        </MudItem>
+        <MudItem Class="d-flex justify-center">
+            <MudButton OnClick="GoHome" Color="Color.Primary" Size="Size.Large">
+                @L["Click here to log back in"].
+            </MudButton>
+        </MudItem>
+    </LogOutSucceeded>
+    <LoggingIn>
+        <span>@L["Logging you in..."]</span>
+    </LoggingIn>
+    <CompletingLoggingIn>
+        <span>@L["Checking permissions..."]</span>
+    </CompletingLoggingIn>
+    <LogInFailed>
+        <span>@L["Sorry, your login failed. Please try again or contact support."]</span>
+    </LogInFailed>
+    <LogOut>
+        <span>@L["Logging you out..."]</span>
+    </LogOut>
+    <CompletingLogOut>
+        <span>@L["Logging you out..."]</span>
+    </CompletingLogOut>
+    <LogOutFailed>
+        <span>@L["Sorry, log out operation failed. Please try again or contact support."]</span>
+    </LogOutFailed>
+    <UserProfile>
+        <span>@L["Retrieving profile..."]</span>
+    </UserProfile>
+    <Registering>
+        <span>@L["Registering account..."]</span>
+    </Registering>
+</RemoteAuthenticatorView>
 
 @code{
     [Parameter] public string? Action { get; set; }
+
+    //[CascadingParameter] Task<AuthenticationState> AuthState { get; set; } = default!;
+
+    public void OnLoginSucceeded()
+    {
+        // Here we'll have to do a call to UserService.GetMe or something like that
+        // to get the rest of the data of the user (and especially their premissions)
+
+        // This can be called multiple times, so let's make sure we only do the call once.
+    }
+
+    public void OnLogOutSucceeded()
+    {
+        //_navigationManager.NavigateTo("/");
+    }
+
+    public void GoHome() => _navigationManager.NavigateTo("/");
 }
