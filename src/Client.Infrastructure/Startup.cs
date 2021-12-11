@@ -16,14 +16,13 @@ public static class Startup
 {
     private const string ClientName = "FullStackHero.API";
 
-    public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder, WebAssemblyHostConfiguration configs)
+    public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder, WebAssemblyHostConfiguration config)
     {
         builder
             .Services
             .AddDistributedMemoryCache()
             .AddLocalization(options => options.ResourcesPath = "Resources")
-
-            // .AddAuthorizationCore(RegisterPermissionClaims)
+            .AddAuthorizationCore(RegisterPermissionClaims)
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
                 {
@@ -33,10 +32,10 @@ public static class Startup
                     configuration.SnackbarConfiguration.VisibleStateDuration = 3000;
                     configuration.SnackbarConfiguration.ShowCloseIcon = false;
                 })
-            .AddScoped<ClientPreferenceManager>()
+            .AddScoped<IClientPreferenceManager, ClientPreferenceManager>()
 
-            .AddScoped<ApplicationAuthenticationStateProvider>()
-            .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<ApplicationAuthenticationStateProvider>())
+            // .AddScoped<AuthenticationStateProvider, ApplicationAuthenticationStateProvider>()
+            // .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<ApplicationAuthenticationStateProvider>())
 
             // .AddTransient<AuthenticationHeaderHandler>()
             .AddScoped<ApiAuthorizationMessageHandler>()
@@ -45,25 +44,21 @@ public static class Startup
             .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
                 .CreateClient(ClientName))
 
-            // .EnableIntercept(sp))
+                // .EnableIntercept(sp))
             .AddHttpClient(ClientName, client =>
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-                    client.BaseAddress = new Uri(configs.GetValue<string>(ClientName));
-                });
-
-                // When I add this call, the app hangs on startup
-                // Without it, I get further but then get invalidcastexception
-                // .AddHttpMessageHandler<ApiAuthorizationMessageHandler>();
+                    client.BaseAddress = new Uri(config.GetValue<string>("ApiUrl"));
+                })
+                .AddHttpMessageHandler<ApiAuthorizationMessageHandler>();
 
                 // .AddHttpMessageHandler<AuthenticationHeaderHandler>();
 
         builder.Services.AddMsalAuthentication(options =>
              {
                  builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
-                 options.ProviderOptions.DefaultAccessTokenScopes.Add("api://<YourClientId>/access_as_user");
-
+                 options.ProviderOptions.DefaultAccessTokenScopes.Add(config.GetValue<string>("AzureAd:ApiScope"));
                  options.ProviderOptions.LoginMode = "redirect";
              });
 

@@ -25,13 +25,6 @@ public class ApplicationAuthenticationStateProvider : AuthenticationStateProvide
         NotifyAuthenticationStateChanged(authState);
     }
 
-    public async Task<ClaimsPrincipal> GetAuthenticationStateProviderUserAsync()
-    {
-        return (await GetAuthenticationStateAsync()).User;
-    }
-
-    public ClaimsPrincipal? AuthenticationStateUser { get; set; }
-
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         string savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
@@ -42,7 +35,6 @@ public class ApplicationAuthenticationStateProvider : AuthenticationStateProvide
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
         var state = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
-        AuthenticationStateUser = state.User;
         return state;
     }
 

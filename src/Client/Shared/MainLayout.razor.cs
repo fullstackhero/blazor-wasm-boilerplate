@@ -20,7 +20,7 @@ public partial class MainLayout
 
     private async Task RightToLeftToggle()
     {
-        bool isRtl = await _clientPreferenceManager.ToggleLayoutDirection();
+        bool isRtl = await _clientPreferenceManager.ToggleLayoutDirectionAsync();
         _rightToLeft = isRtl;
 
         await OnRightToLeftToggle.InvokeAsync(isRtl);

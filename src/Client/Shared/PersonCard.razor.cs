@@ -1,6 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
 
@@ -37,9 +38,9 @@ public partial class PersonCard
         {
             if (string.IsNullOrEmpty(UserId))
             {
-                FullName = user.GetName();
+                FullName = user.FindFirstValue("name"); // user.GetName();
                 UserId = user.GetUserId();
-                Email = user.GetEmail();
+                Email = user.FindFirstValue("preferred_username"); // user.GetEmail();
                 StateHasChanged();
             }
         }

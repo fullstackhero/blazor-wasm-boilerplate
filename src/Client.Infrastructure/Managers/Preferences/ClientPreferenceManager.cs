@@ -40,7 +40,7 @@ public class ClientPreferenceManager : IClientPreferenceManager
         return false;
     }
 
-    public async Task<bool> ToggleLayoutDirection()
+    public async Task<bool> ToggleLayoutDirectionAsync()
     {
         if (await GetPreference() is ClientPreference preference)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using Microsoft.AspNetCore.Components;
@@ -14,6 +15,9 @@ public partial class Login
 
     [CascadingParameter]
     public Error? Error { get; set; }
+
+    [Inject]
+    public IAuthenticationService AuthService { get; set; } = default!;
 
     public bool BusySubmitting { get; set; } = false;
     private bool _passwordVisibility;
@@ -63,7 +67,7 @@ public partial class Login
         try
         {
             BusySubmitting = true;
-            var result = await _authService.Login(_tokenRequest);
+            var result = await AuthService.Login(_tokenRequest);
             if (!result.Succeeded && result.Messages is not null)
             {
                 Error?.ProcessError(result.Messages);

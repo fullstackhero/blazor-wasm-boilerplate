@@ -2,17 +2,18 @@ using System.Net;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace FSH.BlazorWebAssembly.Client.Components.Hubs;
 
 public partial class NotificationHub
 {
-    [CascadingParameter]
-    public Error? Error { get; set; }
-
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
+
+    [Inject]
+    public IAccessTokenProvider TokenProvider { get; set; } = default!;
 
     private HubConnection? _hubConnection { get; set; }
 
@@ -23,8 +24,8 @@ public partial class NotificationHub
 
     public async Task<HubConnection> TryConnectAsync()
     {
-        string apiBaseUri = _configurations.GetValue<string>("FullStackHero.API");
-        _hubConnection = _hubConnection!.TryInitialize(_localStorage, apiBaseUri);
+        string apiBaseUri = _configurations.GetValue<string>("ApiUrl");
+        _hubConnection = _hubConnection!.TryInitialize(_localStorage, TokenProvider, apiBaseUri);
         _hubConnection.Closed += Hub_Closed;
         try
         {
@@ -38,7 +39,8 @@ public partial class NotificationHub
             if (requestException.StatusCode == HttpStatusCode.Unauthorized)
             {
                 _snackBar.Add("SingalR Client Unauthorized.", MudBlazor.Severity.Error);
-                await _authService.Logout();
+
+                // await _authService.Logout();
             }
         }
 
