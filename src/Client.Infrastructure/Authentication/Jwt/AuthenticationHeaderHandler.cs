@@ -12,7 +12,7 @@ public class AuthenticationHeaderHandler : DelegatingHandler
     {
         if (request.Headers.Authorization?.Scheme != "Bearer")
         {
-            string savedToken = await this._localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+            string savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
 
             if (!string.IsNullOrWhiteSpace(savedToken))
             {

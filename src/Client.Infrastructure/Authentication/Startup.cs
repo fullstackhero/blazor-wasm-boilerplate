@@ -22,7 +22,7 @@ internal static class Startup
             // Jwt
             _ => services
                 .AddTransient<IAuthenticationService, Jwt.JwtAuthenticationService>()
-                .AddScoped<AuthenticationStateProvider, Jwt.ApplicationAuthenticationStateProvider>()
+                .AddScoped<Jwt.ApplicationAuthenticationStateProvider>()
                 .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<Jwt.ApplicationAuthenticationStateProvider>())
                 .AddTransient<Jwt.AuthenticationHeaderHandler>()
         };
