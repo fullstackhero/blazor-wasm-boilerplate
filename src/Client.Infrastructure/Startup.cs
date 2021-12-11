@@ -1,14 +1,13 @@
 ﻿using System.Globalization;
 using System.Reflection;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
-using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure;
 
@@ -16,13 +15,12 @@ public static class Startup
 {
     private const string ClientName = "FullStackHero.API";
 
-    public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder, WebAssemblyHostConfiguration config)
+    public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder, IConfiguration config)
     {
         builder
             .Services
-            .AddDistributedMemoryCache()
+            .AddDistributedMemoryCache() // why do we need a distributed memorycache in a client application?
             .AddLocalization(options => options.ResourcesPath = "Resources")
-            .AddAuthorizationCore(RegisterPermissionClaims)
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
                 {
@@ -33,35 +31,24 @@ public static class Startup
                     configuration.SnackbarConfiguration.ShowCloseIcon = false;
                 })
             .AddScoped<IClientPreferenceManager, ClientPreferenceManager>()
-
-            // .AddScoped<AuthenticationStateProvider, ApplicationAuthenticationStateProvider>()
-            // .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<ApplicationAuthenticationStateProvider>())
-
-            // .AddTransient<AuthenticationHeaderHandler>()
-            .AddScoped<ApiAuthorizationMessageHandler>()
             .AutoRegisterInterfaces<IManager>()
             .AutoRegisterInterfaces<IApiService>()
-            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient(ClientName))
 
-                // .EnableIntercept(sp))
+            .AddAuthorizationCore(RegisterPermissionClaims)
+            .AddAuthentication(config)
+
             .AddHttpClient(ClientName, client =>
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-                    client.BaseAddress = new Uri(config.GetValue<string>("ApiUrl"));
+                    client.BaseAddress = new Uri(config["ApiUrl"]);
                 })
-                .AddHttpMessageHandler<ApiAuthorizationMessageHandler>();
+                .AddAuthenticationHandler(config)
+                .Services
+            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName)/*.EnableIntercept(sp)*/);
 
-                // .AddHttpMessageHandler<AuthenticationHeaderHandler>();
-
-        builder.Services.AddMsalAuthentication(options =>
-             {
-                 builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
-                 options.ProviderOptions.DefaultAccessTokenScopes.Add(config.GetValue<string>("AzureAd:ApiScope"));
-                 options.ProviderOptions.LoginMode = "redirect";
-             });
-
+        // I don't think we neccessarily need this interceptor. Getting and refreshing the accesstoken should all be possible
+        // with only the HttpMessageHandler, as Msal is doing it that way as well...
         // builder.Services.AddHttpClientInterceptor();
         return builder;
     }

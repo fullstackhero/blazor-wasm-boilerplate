@@ -1,6 +1,5 @@
 using System.Net;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
-using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;

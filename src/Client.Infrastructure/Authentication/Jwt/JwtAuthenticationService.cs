@@ -1,18 +1,17 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
-using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using FSH.BlazorWebAssembly.Shared.Response.Identity;
 using Microsoft.AspNetCore.Components;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
-public class AuthenticationService : IAuthenticationService
+public class JwtAuthenticationService : IAuthenticationService
 {
     private readonly NavigationManager _navigationManager;
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
     private readonly ApplicationAuthenticationStateProvider _authenticationStateProvider;
 
-    public AuthenticationService(
+    public JwtAuthenticationService(
         HttpClient httpClient,
         ILocalStorageService localStorage,
         ApplicationAuthenticationStateProvider authenticationStateProvider,
@@ -24,11 +23,7 @@ public class AuthenticationService : IAuthenticationService
         _navigationManager = navigationManager;
     }
 
-    public async Task<ClaimsPrincipal> CurrentUser()
-    {
-        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-        return state.User;
-    }
+    public AuthProvider ProviderType => AuthProvider.Jwt;
 
     public async Task<IResult> Login(TokenRequest model)
     {
@@ -45,6 +40,7 @@ public class AuthenticationService : IAuthenticationService
 
             await _authenticationStateProvider.StateChangedAsync();
 
+            // TODO: Shouldn't this be handled by the AuthenticationHeaderHandler?
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             return await Result.SuccessAsync();

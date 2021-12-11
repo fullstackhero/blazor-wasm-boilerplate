@@ -23,32 +23,27 @@
 @using FSH.BlazorWebAssembly.Client.Pages.Authentication
 @using FSH.BlazorWebAssembly.Client.Pages.Multitenancy
 @using FSH.BlazorWebAssembly.Client.Shared.Components
-@using FSH.BlazorWebAssembly.Client.Components.ThemeManager
 @using FSH.BlazorWebAssembly.Client.Components.ErrorHandler
+@using FSH.BlazorWebAssembly.Client.Components.Hubs
+@using FSH.BlazorWebAssembly.Client.Components.ThemeManager
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Catalog
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Roles
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
-@using FSH.BlazorWebAssembly.Client.Components.Hubs
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor
-@using FSH.BlazorWebAssembly.Shared.Multitenancy;
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Account
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Roles
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy
+@using FSH.BlazorWebAssembly.Shared.Multitenancy;
 
 @attribute [Authorize]
-@inject IClientPreferenceManager _clientPreferenceManager
-@*@inject AuthenticationStateProvider _stateProvider*@
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackBar
-
-@*@inject IAuthenticationService _authService;*@
 @inject IDialogService _dialogService
+@inject IConfiguration _configurations;
+
+@inject IClientPreferenceManager _clientPreferenceManager
 @inject IBrandService _brandService;
 @inject IProductService _productService;
 @inject IRoleService _roleService;
 @inject ILocalStorageService _localStorage;
-@*@inject IHttpInterceptorService _interceptor;*@
 @inject ITenantService _tenantService;
 @inject IAccountManager _accountManager;
-@inject IConfiguration _configurations;

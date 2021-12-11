@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using Microsoft.AspNetCore.Components;
@@ -13,6 +12,7 @@ public partial class Login
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = default!;
 
+    // Right now error is not used anywhere apparently, so it will always be null?
     [CascadingParameter]
     public Error? Error { get; set; }
 
@@ -23,6 +23,21 @@ public partial class Login
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthService.ProviderType == AuthProvider.AzureAd)
+        {
+            _navigationManager.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(_navigationManager.Uri)}");
+            return;
+        }
+
+        var authState = await AuthState;
+        if (authState.User.Identity?.IsAuthenticated is true)
+        {
+            _navigationManager.NavigateTo("/");
+        }
+    }
 
     private void TogglePasswordVisibility()
     {
@@ -45,19 +60,6 @@ public partial class Login
         _tokenRequest.Email = "admin@root.com";
         _tokenRequest.Password = "123Pa$$word!";
         _tokenRequest.Tenant = "root";
-    }
-
-    protected override Task OnInitializedAsync()
-    {
-        _navigationManager.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(_navigationManager.Uri)}");
-
-        return Task.CompletedTask;
-
-        // var authState = await AuthState;
-        // if (authState.User.Identity?.IsAuthenticated is true)
-        // {
-        //    _navigationManager.NavigateTo("/");
-        // }
     }
 
     private readonly TokenRequest _tokenRequest = new();

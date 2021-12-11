@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using FSH.BlazorWebAssembly.Shared.Catalog;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;

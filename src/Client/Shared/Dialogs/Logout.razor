@@ -1,8 +1,7 @@
 ﻿@namespace FSH.BlazorWebAssembly.Client.Shared.Dialogs
 
 @inject IStringLocalizer<Logout> L
-@*@inject IAuthenticationService AuthService*@
-@inject SignOutSessionStateManager SignOutManager
+@inject IAuthenticationService AuthService
 
 <MudDialog>
     <TitleContent>
@@ -31,10 +30,7 @@
 
     async Task Submit()
     {
-        await SignOutManager.SetSignOutState();
-        _navigationManager.NavigateTo("authentication/logout");
-        //await AuthService.Logout();
-        //_navigationManager.NavigateTo("/login");
+        await AuthService.Logout();
         MudDialog.Close(DialogResult.Ok(true));
     }
 

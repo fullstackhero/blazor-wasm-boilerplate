@@ -13,6 +13,5 @@ global using FSH.BlazorWebAssembly.Shared.Catalog;
 global using FSH.BlazorWebAssembly.Shared.Constants;
 global using FSH.BlazorWebAssembly.Shared.Routes;
 global using FSH.BlazorWebAssembly.Shared.Wrapper;
-global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.Extensions.Configuration;

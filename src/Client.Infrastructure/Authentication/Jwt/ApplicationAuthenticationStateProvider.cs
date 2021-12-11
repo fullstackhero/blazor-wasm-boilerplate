@@ -1,4 +1,4 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public class ApplicationAuthenticationStateProvider : AuthenticationStateProvider
 {
@@ -33,9 +33,10 @@ public class ApplicationAuthenticationStateProvider : AuthenticationStateProvide
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
+        // TODO: Shouldn't this be handled by the AuthenticationHeaderHandler?
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
-        var state = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
-        return state;
+
+        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
     }
 
     private IEnumerable<Claim> GetClaimsFromJwt(string jwt)

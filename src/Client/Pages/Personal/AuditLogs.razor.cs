@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.AuditLogs;
 using FSH.BlazorWebAssembly.Shared.Response.AuditLogs;
 using Microsoft.AspNetCore.Components;

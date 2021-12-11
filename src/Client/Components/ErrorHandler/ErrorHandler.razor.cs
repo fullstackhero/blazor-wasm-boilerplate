@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -19,7 +19,6 @@ public partial class ErrorHandler
             case UnauthorizedAccessException:
                 await AuthService.Logout();
                 _snackBar.Add("Authentication Failed", Severity.Error);
-                _navigationManager.NavigateTo("/login");
                 break;
         }
     }

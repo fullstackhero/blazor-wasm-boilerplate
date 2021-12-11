@@ -1,9 +1,11 @@
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 
-public interface IAuthenticationService : IApiService
+public interface IAuthenticationService
 {
+    AuthProvider ProviderType { get; }
+
     Task<IResult> Login(TokenRequest model);
 
     Task<IResult> Logout();
@@ -13,6 +15,4 @@ public interface IAuthenticationService : IApiService
     Task<string> TryRefreshToken();
 
     Task<string> TryForceRefreshToken();
-
-    Task<ClaimsPrincipal> CurrentUser();
 }

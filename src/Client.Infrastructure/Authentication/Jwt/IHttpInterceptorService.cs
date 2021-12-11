@@ -1,6 +1,6 @@
 ﻿using Toolbelt.Blazor;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public interface IHttpInterceptorService : IApiService
 {

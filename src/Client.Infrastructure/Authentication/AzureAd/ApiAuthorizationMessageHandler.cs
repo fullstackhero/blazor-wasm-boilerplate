@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
 
 public class ApiAuthorizationMessageHandler : AuthorizationMessageHandler
 {
@@ -9,7 +9,7 @@ public class ApiAuthorizationMessageHandler : AuthorizationMessageHandler
         : base(provider, navigation)
     {
         ConfigureHandler(
-            new[] { config.GetValue<string>("ApiUrl") },
-            new[] { config.GetValue<string>("AzureAd:ApiScope") });
+            new[] { config["ApiUrl"] },
+            new[] { config[$"{nameof(AuthProvider.AzureAd)}:ApiScope"] });
     }
 }
