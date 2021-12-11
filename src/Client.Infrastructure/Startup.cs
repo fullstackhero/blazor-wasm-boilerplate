@@ -22,7 +22,8 @@ public static class Startup
             .Services
             .AddDistributedMemoryCache()
             .AddLocalization(options => options.ResourcesPath = "Resources")
-            .AddAuthorizationCore(RegisterPermissionClaims)
+
+            // .AddAuthorizationCore(RegisterPermissionClaims)
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
                 {
