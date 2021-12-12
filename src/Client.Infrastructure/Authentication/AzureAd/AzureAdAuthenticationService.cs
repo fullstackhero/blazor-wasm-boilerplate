@@ -6,23 +6,16 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
 
 internal class AzureAdAuthenticationService : IAuthenticationService
 {
-    private readonly AuthenticationStateProvider _authState;
     private readonly SignOutSessionStateManager _signOut;
     private readonly NavigationManager _navigation;
 
-    public AzureAdAuthenticationService(AuthenticationStateProvider authState, SignOutSessionStateManager signOut, NavigationManager navigation)
-    {
-        _authState = authState;
-        _signOut = signOut;
-        _navigation = navigation;
-    }
+    public AzureAdAuthenticationService(SignOutSessionStateManager signOut, NavigationManager navigation) =>
+        (_signOut, _navigation) = (signOut, navigation);
 
     public AuthProvider ProviderType => AuthProvider.AzureAd;
 
-    public Task<IResult> Login(TokenRequest model)
-    {
+    public Task<IResult> Login(TokenRequest model) =>
         throw new NotImplementedException();
-    }
 
     public async Task<IResult> Logout()
     {
@@ -31,18 +24,12 @@ internal class AzureAdAuthenticationService : IAuthenticationService
         return await Result.SuccessAsync();
     }
 
-    public Task<string> RefreshToken()
-    {
+    public Task<string> RefreshToken() =>
         throw new NotImplementedException();
-    }
 
-    public Task<string> TryForceRefreshToken()
-    {
+    public Task<string> TryForceRefreshToken() =>
         throw new NotImplementedException();
-    }
 
-    public Task<string> TryRefreshToken()
-    {
+    public Task<string> TryRefreshToken() =>
         throw new NotImplementedException();
-    }
 }

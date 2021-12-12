@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 
@@ -9,8 +12,8 @@ internal static class Startup
         {
             // AzureAd
             nameof(AuthProvider.AzureAd) => services
-                .AddTransient<IAuthenticationService, AzureAd.AzureAdAuthenticationService>()
-                .AddScoped<AzureAd.ApiAuthorizationMessageHandler>()
+                .AddTransient<IAuthenticationService, AzureAdAuthenticationService>()
+                .AddScoped<AzureAdAuthorizationMessageHandler>()
                 .AddMsalAuthentication(options =>
                     {
                         config.Bind(nameof(AuthProvider.AzureAd), options.ProviderOptions.Authentication);
@@ -21,10 +24,11 @@ internal static class Startup
 
             // Jwt
             _ => services
-                .AddTransient<IAuthenticationService, Jwt.JwtAuthenticationService>()
-                .AddScoped<Jwt.ApplicationAuthenticationStateProvider>()
-                .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<Jwt.ApplicationAuthenticationStateProvider>())
-                .AddTransient<Jwt.AuthenticationHeaderHandler>()
+                .AddTransient<IAuthenticationService, JwtAuthenticationService>()
+                .AddTransient<IAccessTokenProvider, JwtAccessTokenProvider>()
+                .AddScoped<JwtAuthenticationStateProvider>()
+                .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<JwtAuthenticationStateProvider>())
+                .AddScoped<JwtAuthenticationHeaderHandler>()
         };
 
     public static IHttpClientBuilder AddAuthenticationHandler(this IHttpClientBuilder builder, IConfiguration config) =>
@@ -32,9 +36,9 @@ internal static class Startup
         {
             // AzureAd
             nameof(AuthProvider.AzureAd) =>
-                builder.AddHttpMessageHandler<AzureAd.ApiAuthorizationMessageHandler>(),
+                builder.AddHttpMessageHandler<AzureAd.AzureAdAuthorizationMessageHandler>(),
 
             // Jwt
-            _ => builder.AddHttpMessageHandler<Jwt.AuthenticationHeaderHandler>()
+            _ => builder.AddHttpMessageHandler<Jwt.JwtAuthenticationHeaderHandler>()
         };
 }

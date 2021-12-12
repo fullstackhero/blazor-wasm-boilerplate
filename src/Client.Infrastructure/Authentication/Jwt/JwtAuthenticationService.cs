@@ -9,12 +9,12 @@ public class JwtAuthenticationService : IAuthenticationService
     private readonly NavigationManager _navigationManager;
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
-    private readonly ApplicationAuthenticationStateProvider _authenticationStateProvider;
+    private readonly JwtAuthenticationStateProvider _authenticationStateProvider;
 
     public JwtAuthenticationService(
         HttpClient httpClient,
         ILocalStorageService localStorage,
-        ApplicationAuthenticationStateProvider authenticationStateProvider,
+        JwtAuthenticationStateProvider authenticationStateProvider,
         NavigationManager navigationManager)
     {
         _httpClient = httpClient;

@@ -18,13 +18,13 @@ public partial class NotificationHub
 
     protected override async Task OnInitializedAsync()
     {
-        _hubConnection = await TryConnectAsync().ConfigureAwait(true);
+        _hubConnection = await TryConnectAsync();
     }
 
     public async Task<HubConnection> TryConnectAsync()
     {
         string apiBaseUri = _configurations.GetValue<string>("ApiUrl");
-        _hubConnection = _hubConnection!.TryInitialize(_localStorage, TokenProvider, apiBaseUri);
+        _hubConnection = _hubConnection!.TryInitialize(TokenProvider, apiBaseUri);
         _hubConnection.Closed += Hub_Closed;
         try
         {
@@ -39,14 +39,14 @@ public partial class NotificationHub
             {
                 _snackBar.Add("SingalR Client Unauthorized.", MudBlazor.Severity.Error);
 
-                // await _authService.Logout();
+                _navigationManager.NavigateTo("/login");
             }
         }
 
         return _hubConnection;
     }
 
-    private async Task Hub_Closed(Exception? arg)
+    private Task Hub_Closed(Exception? arg)
     {
         _snackBar.Add("SingalR Connection Closed.", MudBlazor.Severity.Error, a =>
         {
@@ -54,6 +54,6 @@ public partial class NotificationHub
             a.ShowCloseIcon = true;
         });
 
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 }

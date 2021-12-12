@@ -1,18 +1,17 @@
 ﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
-public class AuthenticationHeaderHandler : DelegatingHandler
+public class JwtAuthenticationHeaderHandler : DelegatingHandler
 {
     private readonly ILocalStorageService _localStorage;
 
-    public AuthenticationHeaderHandler(ILocalStorageService localStorage) => _localStorage = localStorage;
+    public JwtAuthenticationHeaderHandler(ILocalStorageService localStorage) =>
+        _localStorage = localStorage;
 
-    protected override async Task<HttpResponseMessage> SendAsync(
-        HttpRequestMessage request,
-        CancellationToken cancellationToken)
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         if (request.Headers.Authorization?.Scheme != "Bearer")
         {
-            string savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+            string? savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
 
             if (!string.IsNullOrWhiteSpace(savedToken))
             {

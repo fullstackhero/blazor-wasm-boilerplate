@@ -1,11 +1,11 @@
 ﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
-public class ApplicationAuthenticationStateProvider : AuthenticationStateProvider
+public class JwtAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
 
-    public ApplicationAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+    public JwtAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
