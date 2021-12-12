@@ -28,10 +28,11 @@
 @using FSH.BlazorWebAssembly.Client.Components.ThemeManager
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Catalog
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Account
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Roles
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy
+@using FSH.BlazorWebAssembly.Shared.Catalog
+@using FSH.BlazorWebAssembly.Shared.Constants
 @using FSH.BlazorWebAssembly.Shared.Multitenancy;
 
 @attribute [Authorize]
@@ -46,4 +47,3 @@
 @inject IRoleService _roleService;
 @inject ILocalStorageService _localStorage;
 @inject ITenantService _tenantService;
-@inject IAccountManager _accountManager;

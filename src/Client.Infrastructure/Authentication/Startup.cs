@@ -17,9 +17,11 @@ internal static class Startup
                 .AddMsalAuthentication(options =>
                     {
                         config.Bind(nameof(AuthProvider.AzureAd), options.ProviderOptions.Authentication);
-                        options.ProviderOptions.DefaultAccessTokenScopes.Add(config[$"{nameof(AuthProvider.AzureAd)}:ApiScope"]);
+                        options.ProviderOptions.DefaultAccessTokenScopes.Add(
+                            config[$"{nameof(AuthProvider.AzureAd)}:ApiScope"]);
                         options.ProviderOptions.LoginMode = "redirect";
                     })
+                    .AddAccountClaimsPrincipalFactory<AzureAdClaimsPrincipalFactory>()
                     .Services,
 
             // Jwt

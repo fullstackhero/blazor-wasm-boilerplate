@@ -34,8 +34,8 @@ public static class Startup
             .AutoRegisterInterfaces<IManager>()
             .AutoRegisterInterfaces<IApiService>()
 
-            .AddAuthorizationCore(RegisterPermissionClaims)
             .AddAuthentication(config)
+            .AddAuthorizationCore(RegisterPermissionClaims)
 
             .AddHttpClient(ClientName, client =>
                 {

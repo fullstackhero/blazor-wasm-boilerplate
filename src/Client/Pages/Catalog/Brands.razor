@@ -1,6 +1,8 @@
 ﻿@page "/catalog/brands"
+@attribute [Authorize(Policy = PermissionConstants.Brands.View)]
+
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Brands> _localizer
-@using FSH.BlazorWebAssembly.Shared.Catalog
+
 <style>
     .mud-table-container {
         overflow: auto;

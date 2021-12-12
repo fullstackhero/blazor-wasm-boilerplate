@@ -1,4 +1,4 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Routes;
+﻿namespace FSH.BlazorWebAssembly.Shared.Routes;
 
 public static class RolesEndpoints
 {
