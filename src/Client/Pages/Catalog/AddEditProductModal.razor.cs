@@ -73,7 +73,7 @@ public partial class AddEditProductModal
     private async Task LoadBrandsAsync(string? searchKeyword = default)
     {
         string[] orderBy = { "id" };
-        BrandListFilter filter = new() { PageNumber = 0, PageSize = 0, OrderBy = orderBy };
+        BrandListFilter filter = new() { PageNumber = 0, PageSize = 10, OrderBy = orderBy };
         if (string.IsNullOrEmpty(searchKeyword)) filter.Keyword = searchKeyword;
         var response = await _brandService.SearchBrandAsync(filter);
         if (response.Succeeded && response.Data is not null)
