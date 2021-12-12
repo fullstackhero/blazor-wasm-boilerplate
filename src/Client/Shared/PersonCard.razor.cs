@@ -1,10 +1,15 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
 
 public partial class PersonCard
 {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = default!;
+
     [Parameter]
     public string? Class { get; set; }
 
@@ -26,16 +31,18 @@ public partial class PersonCard
 
     private async Task LoadUserData()
     {
-        var state = await _stateProvider.GetAuthenticationStateAsync();
-        var user = state.User;
+        // This should load its data from the userdata cache that's hydrated
+        // when the user logged in (Authentication.OnLoginSucceeded for AzureAd)
+        var authState = await AuthState;
+        var user = authState.User;
         if (user == null) return;
         if (user.Identity?.IsAuthenticated == true)
         {
             if (string.IsNullOrEmpty(UserId))
             {
-                FullName = user.GetName();
+                FullName = user.FindFirstValue("name") ?? user.GetName();
                 UserId = user.GetUserId();
-                Email = user.GetEmail();
+                Email = user.FindFirstValue("preferred_username") ?? user.GetEmail();
                 StateHasChanged();
             }
         }

@@ -8,7 +8,8 @@
     <base href="/" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-    <link href="FSH.BlazorWebAssembly.Client.styles.css" rel="stylesheet" />
+    <!-- This file is only needed (and apparently also only generated) if there are any Page or Component specific styles used. -->
+    <!--<link href="FSH.BlazorWebAssembly.Client.styles.css" rel="stylesheet" />-->
     <link href="css/fsh.css" rel="stylesheet" />
     <link href="manifest.json" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="full-stack-hero-logo.png" />
@@ -61,6 +62,7 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+    <script src="_content/Microsoft.Authentication.WebAssembly.Msal/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>

@@ -1,31 +1,31 @@
-﻿using MudBlazor;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.ErrorHandler
+namespace FSH.BlazorWebAssembly.Client.Components.ErrorHandler;
+
+public partial class ErrorHandler
 {
-    public partial class ErrorHandler
+    [Inject]
+    public IAuthenticationService AuthService { get; set; } = default!;
+
+    public List<Exception> _receivedExceptions = new();
+
+    protected async override Task OnErrorAsync(Exception exception)
     {
-        public List<Exception> _receivedExceptions = new();
-
-        protected async override Task OnErrorAsync(Exception exception)
+        _receivedExceptions.Add(exception);
+        switch (exception)
         {
-            _receivedExceptions.Add(exception);
-            switch (exception)
-            {
-                case UnauthorizedAccessException:
-                    await _authService.Logout();
-                    _snackBar.Add("Authentication Failed", Severity.Error);
-                    _navigationManager.NavigateTo("/login");
-                    break;
-            }
+            case UnauthorizedAccessException:
+                await AuthService.Logout();
+                _snackBar.Add("Authentication Failed", Severity.Error);
+                break;
         }
+    }
 
-        public new void Recover()
-        {
-            _receivedExceptions.Clear();
-            base.Recover();
-        }
+    public new void Recover()
+    {
+        _receivedExceptions.Clear();
+        base.Recover();
     }
 }

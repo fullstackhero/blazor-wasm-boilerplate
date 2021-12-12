@@ -1,11 +1,11 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
-public class ApplicationAuthenticationStateProvider : AuthenticationStateProvider
+public class JwtAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
 
-    public ApplicationAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+    public JwtAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
     {
         _httpClient = httpClient;
         _localStorage = localStorage;
@@ -25,13 +25,6 @@ public class ApplicationAuthenticationStateProvider : AuthenticationStateProvide
         NotifyAuthenticationStateChanged(authState);
     }
 
-    public async Task<ClaimsPrincipal> GetAuthenticationStateProviderUserAsync()
-    {
-        return (await GetAuthenticationStateAsync()).User;
-    }
-
-    public ClaimsPrincipal? AuthenticationStateUser { get; set; }
-
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         string savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
@@ -40,10 +33,10 @@ public class ApplicationAuthenticationStateProvider : AuthenticationStateProvide
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
+        // TODO: Shouldn't this be handled by the AuthenticationHeaderHandler?
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
-        var state = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
-        AuthenticationStateUser = state.User;
-        return state;
+
+        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
     }
 
     private IEnumerable<Claim> GetClaimsFromJwt(string jwt)

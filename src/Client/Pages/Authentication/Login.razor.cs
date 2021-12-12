@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using Microsoft.AspNetCore.Components;
@@ -10,12 +10,34 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
 public partial class Login
 {
     [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = default!;
+
+    // Right now error is not used anywhere apparently, so it will always be null?
+    [CascadingParameter]
     public Error? Error { get; set; }
+
+    [Inject]
+    public IAuthenticationService AuthService { get; set; } = default!;
 
     public bool BusySubmitting { get; set; } = false;
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthService.ProviderType == AuthProvider.AzureAd)
+        {
+            _navigationManager.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(_navigationManager.Uri)}");
+            return;
+        }
+
+        var authState = await AuthState;
+        if (authState.User.Identity?.IsAuthenticated is true)
+        {
+            _navigationManager.NavigateTo("/");
+        }
+    }
 
     private void TogglePasswordVisibility()
     {
@@ -40,15 +62,6 @@ public partial class Login
         _tokenRequest.Tenant = "root";
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var state = await _stateProvider.GetAuthenticationStateAsync();
-        if (state != new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())))
-        {
-            _navigationManager.NavigateTo("/");
-        }
-    }
-
     private readonly TokenRequest _tokenRequest = new();
 
     private async Task SubmitAsync()
@@ -56,7 +69,7 @@ public partial class Login
         try
         {
             BusySubmitting = true;
-            var result = await _authService.Login(_tokenRequest);
+            var result = await AuthService.Login(_tokenRequest);
             if (!result.Succeeded && result.Messages is not null)
             {
                 Error?.ProcessError(result.Messages);

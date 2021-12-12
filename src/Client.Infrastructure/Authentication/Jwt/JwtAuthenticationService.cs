@@ -1,21 +1,20 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
-using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
 using FSH.BlazorWebAssembly.Shared.Response.Identity;
 using Microsoft.AspNetCore.Components;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
-public class AuthenticationService : IAuthenticationService
+public class JwtAuthenticationService : IAuthenticationService
 {
     private readonly NavigationManager _navigationManager;
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
-    private readonly AuthenticationStateProvider _authenticationStateProvider;
+    private readonly JwtAuthenticationStateProvider _authenticationStateProvider;
 
-    public AuthenticationService(
+    public JwtAuthenticationService(
         HttpClient httpClient,
         ILocalStorageService localStorage,
-        AuthenticationStateProvider authenticationStateProvider,
+        JwtAuthenticationStateProvider authenticationStateProvider,
         NavigationManager navigationManager)
     {
         _httpClient = httpClient;
@@ -24,11 +23,7 @@ public class AuthenticationService : IAuthenticationService
         _navigationManager = navigationManager;
     }
 
-    public async Task<ClaimsPrincipal> CurrentUser()
-    {
-        var state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-        return state.User;
-    }
+    public AuthProvider ProviderType => AuthProvider.Jwt;
 
     public async Task<IResult> Login(TokenRequest model)
     {
@@ -43,8 +38,9 @@ public class AuthenticationService : IAuthenticationService
             await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
             await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
 
-            await ((ApplicationAuthenticationStateProvider)this._authenticationStateProvider).StateChangedAsync();
+            await _authenticationStateProvider.StateChangedAsync();
 
+            // TODO: Shouldn't this be handled by the AuthenticationHeaderHandler?
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             return await Result.SuccessAsync();
@@ -60,7 +56,7 @@ public class AuthenticationService : IAuthenticationService
         await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
         await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
         await _localStorage.RemoveItemAsync(StorageConstants.Local.ImageUri);
-        ((ApplicationAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+        _authenticationStateProvider.MarkUserAsLoggedOut();
         _httpClient.DefaultRequestHeaders.Authorization = null;
         _navigationManager.NavigateTo("/login");
         return await Result.SuccessAsync();

@@ -1,8 +1,43 @@
 ﻿@page "/home"
 @page "/"
+@using System.Security.Claims
 
 <PageTitle>Home</PageTitle>
 
 <MudText Typo="Typo.h4" GutterBottom="true">Hello World</MudText>
 
 Welcome to your new app.
+
+<MudItem xs="12" md="12">
+    <MudText Typo="Typo.h6" GutterBottom="true">Claims:</MudText>
+    <MudPaper>
+        <MudList Dense="true">
+            @if (Claims is not null)
+            {
+                @foreach (var claim in Claims)
+                {
+                    <MudListItem>
+                        <MudChip>
+                            @claim.Type
+                        </MudChip>
+                        @claim.Value
+                    </MudListItem>
+                    <MudDivider DividerType="DividerType.Inset" />
+                }
+            }
+        </MudList>
+    </MudPaper>
+</MudItem>
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = default!;
+
+    public IEnumerable<Claim>? Claims { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        Claims = authState.User.Claims;
+    }
+}

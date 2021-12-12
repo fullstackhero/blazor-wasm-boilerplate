@@ -1,10 +1,9 @@
 ﻿using System.Net;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Authentication;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Toolbelt.Blazor;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Services.Interceptor;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public class HttpInterceptorService : IHttpInterceptorService
 {
@@ -12,6 +11,7 @@ public class HttpInterceptorService : IHttpInterceptorService
     private readonly NavigationManager _navManager;
     private readonly IAuthenticationService _authenticationService;
     private readonly ISnackbar _snackBar;
+
     public HttpInterceptorService(HttpClientInterceptor interceptor, NavigationManager navManager, IAuthenticationService authenticationService, ISnackbar snackBar)
     {
         _interceptor = interceptor;
@@ -21,6 +21,7 @@ public class HttpInterceptorService : IHttpInterceptorService
     }
 
     public void RegisterEvent() => _interceptor.AfterSendAsync += InterceptResponseAsync;
+
     public async Task InterceptResponseAsync(object sender, HttpClientInterceptorEventArgs e)
     {
         string message = string.Empty;
