@@ -40,9 +40,11 @@ public partial class NotificationHub
         {
             if (requestException.StatusCode == HttpStatusCode.Unauthorized)
             {
-                _snackBar.Add("SingalR Client Unauthorized.", MudBlazor.Severity.Error);
-
-                _navigationManager.NavigateTo("/login");
+                // The signalR connections is usually the first hit to the actual api after a user logs in with an external Auth Provider (e.g. AzureAd).
+                // If a 401 is thrown here, it means the user doesn't have access to the application, so we guide them to a "Not Authorized" page.
+                // Sending them back to /login would throw them in an endless loop.
+                // In the case of regular jwt auth, this shouldn't happen. If it does, there must be something else wrong...
+                _navigationManager.NavigateTo("/notfound");
             }
         }
 
