@@ -1,12 +1,16 @@
-﻿using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+using FSH.BlazorWebAssembly.Shared.Identity;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
-// A simple implementation of IAccessTokenProvider used by both JwtAuthenticationHeaderHandler and SignalR (HubExtentions.TryInitialize)
+// A simple implementation of IAccessTokenProvider used for both the Api
+// (JwtAuthenticationHeaderHandler) and SignalR (HubExtentions.TryInitialize)
 internal class JwtAccessTokenProvider : IAccessTokenProvider
 {
+    // can't work with actual services in the constructor here, have to
+    // use IServiceProvider, otherwise the app hangs at startup
     private readonly IServiceProvider _services;
 
     public JwtAccessTokenProvider(IServiceProvider serviceProvider) =>
@@ -21,11 +25,10 @@ internal class JwtAccessTokenProvider : IAccessTokenProvider
         {
             token = await authStateProvider.GetAuthTokenAsync();
 
-            // Check if token needs to be refreshed
-            string? exp = authState.User.FindFirstValue("exp");
-            var expTime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(exp));
+            // Check if token needs to be refreshed (when its expiration time is less than 1 minute away)
+            var expTime = authState.User.GetExpiration();
             var diff = expTime - DateTime.UtcNow;
-            if (diff.TotalMinutes <= 2)
+            if (diff.TotalMinutes <= 1)
             {
                 string? refreshToken = await authStateProvider.GetRefreshTokenAsync();
                 var response = await _services.GetRequiredService<IAuthenticationService>()

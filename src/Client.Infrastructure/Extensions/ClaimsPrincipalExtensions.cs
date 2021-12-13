@@ -5,10 +5,10 @@ public static class ClaimsPrincipalExtensions
         => claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
     public static string? GetTenant(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue("tenant");
+        => claimsPrincipal.FindFirstValue(ClaimConstants.Tenant);
 
     public static string? GetName(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal?.FindFirst("fullName")?.Value;
+        => claimsPrincipal?.FindFirst(ClaimConstants.Fullname)?.Value;
 
     public static string? GetPhoneNumber(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal.FindFirstValue(ClaimTypes.MobilePhone);
@@ -17,5 +17,9 @@ public static class ClaimsPrincipalExtensions
        => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 
     public static string? GetImageUrl(this ClaimsPrincipal claimsPrincipal)
-       => claimsPrincipal.FindFirstValue("image_url");
+       => claimsPrincipal.FindFirstValue(ClaimConstants.ImageUrl);
+
+    public static DateTimeOffset GetExpiration(this ClaimsPrincipal claimsPrincipal) =>
+        DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(
+            claimsPrincipal.FindFirstValue(ClaimConstants.Expiration)));
 }

@@ -1,10 +1,9 @@
 ﻿using System.Globalization;
 using System.Reflection;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
@@ -15,10 +14,8 @@ public static class Startup
 {
     private const string ClientName = "FullStackHero.API";
 
-    public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder, IConfiguration config)
-    {
-        builder
-            .Services
+    public static IServiceCollection AddClientServices(this IServiceCollection services, IConfiguration config) =>
+        services
             .AddDistributedMemoryCache() // why do we need a distributed memorycache in a client application?
             .AddLocalization(options => options.ResourcesPath = "Resources")
             .AddBlazoredLocalStorage()
@@ -41,17 +38,11 @@ public static class Startup
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-                    client.BaseAddress = new Uri(config["ApiUrl"]);
+                    client.BaseAddress = new Uri(config[ConfigConstants.ApiBaseUrl]);
                 })
                 .AddAuthenticationHandler(config)
                 .Services
-            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName)/*.EnableIntercept(sp)*/);
-
-        // I don't think we neccessarily need this interceptor. Getting and refreshing the accesstoken should all be possible
-        // with only the HttpMessageHandler, as Msal is doing it that way as well...
-        // builder.Services.AddHttpClientInterceptor();
-        return builder;
-    }
+            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName));
 
     private static void RegisterPermissionClaims(AuthorizationOptions options)
     {

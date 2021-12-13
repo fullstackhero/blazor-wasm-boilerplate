@@ -18,7 +18,7 @@ internal static class Startup
                     {
                         config.Bind(nameof(AuthProvider.AzureAd), options.ProviderOptions.Authentication);
                         options.ProviderOptions.DefaultAccessTokenScopes.Add(
-                            config[$"{nameof(AuthProvider.AzureAd)}:ApiScope"]);
+                            config[$"{nameof(AuthProvider.AzureAd)}:{ConfigConstants.ApiScope}"]);
                         options.ProviderOptions.LoginMode = "redirect";
                     })
                     .AddAccountClaimsPrincipalFactory<AzureAdClaimsPrincipalFactory>()

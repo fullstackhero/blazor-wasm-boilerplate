@@ -7,11 +7,8 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
     private readonly ILocalStorageService _localStorage;
     private readonly IUserService _userService;
 
-    public JwtAuthenticationStateProvider(ILocalStorageService localStorage, IUserService userService)
-    {
-        _localStorage = localStorage;
-        _userService = userService;
-    }
+    public JwtAuthenticationStateProvider(ILocalStorageService localStorage, IUserService userService) =>
+        (_localStorage, _userService) = (localStorage, userService);
 
     public async Task MarkUserAsLoggedInAsync(string token, string refreshToken)
     {
@@ -46,8 +43,6 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
         await _localStorage.RemoveItemAsync(StorageConstants.Local.ImageUri);
         await _localStorage.RemoveItemAsync(StorageConstants.Local.Permissions);
 
-        var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
-
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 
@@ -77,7 +72,7 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
         // Add permission claims from local storage
         if (await _localStorage.GetItemAsync<List<string>>(StorageConstants.Local.Permissions) is List<string> permissionClaims)
         {
-            claimsIdentity.AddClaims(permissionClaims.Select(p => new Claim("permission", p)));
+            claimsIdentity.AddClaims(permissionClaims.Select(p => new Claim(ClaimConstants.Permission, p)));
         }
 
         return new AuthenticationState(new ClaimsPrincipal(claimsIdentity));

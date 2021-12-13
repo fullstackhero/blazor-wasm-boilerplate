@@ -39,9 +39,9 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                     userIdentity.AddClaim(new Claim(ClaimTypes.MobilePhone, userDetails.PhoneNumber));
                 }
 
-                if (!userIdentity.HasClaim(c => c.Type == "fullname"))
+                if (!userIdentity.HasClaim(c => c.Type == ClaimConstants.Fullname))
                 {
-                    userIdentity.AddClaim(new Claim("fullname", $"{userDetails.FirstName} {userDetails.LastName}"));
+                    userIdentity.AddClaim(new Claim(ClaimConstants.Fullname, $"{userDetails.FirstName} {userDetails.LastName}"));
                 }
 
                 if (!userIdentity.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
@@ -49,9 +49,9 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                     userIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()));
                 }
 
-                if (!userIdentity.HasClaim(c => c.Type == "image_url") && userDetails.ImageUrl is not null)
+                if (!userIdentity.HasClaim(c => c.Type == ClaimConstants.ImageUrl) && userDetails.ImageUrl is not null)
                 {
-                    userIdentity.AddClaim(new Claim("image_url", userDetails.ImageUrl));
+                    userIdentity.AddClaim(new Claim(ClaimConstants.ImageUrl, userDetails.ImageUrl));
                 }
 
                 var permissionsResult = await _serviceProvider.GetRequiredService<IUserService>()
@@ -61,7 +61,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                 {
                     userIdentity.AddClaims(permissionsResult.Data
                         .Where(p => !string.IsNullOrWhiteSpace(p.Permission))
-                        .Select(p => new Claim("Permission", p.Permission!)));
+                        .Select(p => new Claim(ClaimConstants.Permission, p.Permission!)));
                 }
             }
         }

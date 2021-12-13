@@ -1,5 +1,6 @@
 using System.Net;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+using FSH.BlazorWebAssembly.Shared.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -18,7 +19,7 @@ public partial class NotificationHub
 
     protected override async Task OnInitializedAsync()
     {
-        string apiBaseUri = _configurations.GetValue<string>("ApiUrl");
+        string apiBaseUri = _configurations[ConfigConstants.ApiBaseUrl];
         _hubConnection = _hubConnection!.TryInitialize(TokenProvider, apiBaseUri);
         _hubConnection.Reconnecting += Hub_Reconnecting;
         _hubConnection.Reconnected += Hub_Reconnected;
