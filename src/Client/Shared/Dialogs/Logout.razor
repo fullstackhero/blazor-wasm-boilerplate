@@ -30,7 +30,7 @@
 
     async Task Submit()
     {
-        await AuthService.Logout();
+        await AuthService.LogoutAsync();
         MudDialog.Close(DialogResult.Ok(true));
     }
 

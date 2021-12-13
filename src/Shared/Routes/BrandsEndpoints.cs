@@ -1,4 +1,5 @@
 ﻿namespace FSH.BlazorWebAssembly.Shared.Routes;
+
 public static class BrandsEndpoints
 {
     public static string ExportFiltered(string searchString)

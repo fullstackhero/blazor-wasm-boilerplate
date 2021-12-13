@@ -1,5 +1,6 @@
 ﻿@page "/dashboard"
-@using System.Globalization
+@attribute [Authorize(Policy = PermissionConstants.Dashboard.View)]
+
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Dashboard> _localizer
 
 <FshTitle Title="@_localizer["Dashboard"]" Description="@_localizer["Realtime Updates & Insights with SignalR."]" />

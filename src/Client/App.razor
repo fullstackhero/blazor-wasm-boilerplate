@@ -3,7 +3,14 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(BaseLayout)">
                 <NotAuthorized>
-                    <Login />
+                    @if (@context.User.Identity?.IsAuthenticated is true)
+                    {
+                        <p>You are not authorized to be here.</p>
+                    }
+                    else
+                    {
+                        <Login />
+                    }
                 </NotAuthorized>
             </AuthorizeRouteView>
         </Found>

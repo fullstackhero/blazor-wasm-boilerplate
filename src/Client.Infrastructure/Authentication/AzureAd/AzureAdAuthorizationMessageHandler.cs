@@ -9,7 +9,7 @@ public class AzureAdAuthorizationMessageHandler : AuthorizationMessageHandler
         : base(provider, navigation)
     {
         ConfigureHandler(
-            new[] { config["ApiUrl"] },
-            new[] { config[$"{nameof(AuthProvider.AzureAd)}:ApiScope"] });
+            new[] { config[ConfigConstants.ApiBaseUrl] },
+            new[] { config[$"{nameof(AuthProvider.AzureAd)}:{ConfigConstants.ApiScope}"] });
     }
 }

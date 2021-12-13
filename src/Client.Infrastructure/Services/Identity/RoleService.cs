@@ -1,8 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Routes;
-using FSH.BlazorWebAssembly.Shared.Identity;
-using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+﻿using FSH.BlazorWebAssembly.Shared.Identity;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Identity.Roles;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity;
 public class RoleService : IRoleService
 {
     private readonly HttpClient _httpClient;

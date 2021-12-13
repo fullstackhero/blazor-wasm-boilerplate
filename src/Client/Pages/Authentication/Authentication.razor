@@ -3,7 +3,7 @@
 
 @inject IStringLocalizer<Authentication> L;
 
-<RemoteAuthenticatorView Action="@Action" OnLogInSucceeded="OnLoginSucceeded" OnLogOutSucceeded="OnLogOutSucceeded" >
+<RemoteAuthenticatorView Action="@Action">
     @* Override the different child items to adapt them to our own style
        I've done this for LogOutSucceeded now, already added the rest but with the defaults (and localization). *@
     <LogOutSucceeded>
@@ -47,21 +47,6 @@
 @code{
     [Parameter] public string? Action { get; set; }
 
-    //[CascadingParameter] Task<AuthenticationState> AuthState { get; set; } = default!;
-
-    public void OnLoginSucceeded()
-    {
-        // Here we'll have to do a call to UserService.GetMe or something like that
-        // to get the rest of the data of the user (and especially their premissions)
-        // and cache it locally
-
-        // This can be called multiple times, so let's make sure we only do the call once.
-    }
-
-    public void OnLogOutSucceeded()
-    {
-        //_navigationManager.NavigateTo("/");
-    }
-
-    public void GoHome() => _navigationManager.NavigateTo("/");
+    public void GoHome() =>
+        _navigationManager.NavigateTo("/");
 }

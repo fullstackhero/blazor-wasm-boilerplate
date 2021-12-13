@@ -1,22 +1,51 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+using FSH.BlazorWebAssembly.Shared.Identity;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
-// A simple implementation of IAccessTokenProvider right now just to be able to use the same
-// interface for providing tokens to the signalr connection (in HubExtensions.TryInitialize)
+// A simple implementation of IAccessTokenProvider used for both the Api
+// (JwtAuthenticationHeaderHandler) and SignalR (HubExtentions.TryInitialize)
 internal class JwtAccessTokenProvider : IAccessTokenProvider
 {
-    private readonly ILocalStorageService _localStorage;
+    // can't work with actual services in the constructor here, have to
+    // use IServiceProvider, otherwise the app hangs at startup
+    private readonly IServiceProvider _services;
 
-    public JwtAccessTokenProvider(ILocalStorageService localStorage) =>
-        _localStorage = localStorage;
+    public JwtAccessTokenProvider(IServiceProvider serviceProvider) =>
+        _services = serviceProvider;
 
-    public async ValueTask<AccessTokenResult> RequestAccessToken() =>
-        new AccessTokenResult(
+    public async ValueTask<AccessTokenResult> RequestAccessToken()
+    {
+        var authStateProvider = _services.GetRequiredService<JwtAuthenticationStateProvider>();
+        var authState = await authStateProvider.GetAuthenticationStateAsync();
+        string? token = null;
+        if (authState.User.Identity?.IsAuthenticated == true)
+        {
+            token = await authStateProvider.GetAuthTokenAsync();
+
+            // Check if token needs to be refreshed (when its expiration time is less than 1 minute away)
+            var expTime = authState.User.GetExpiration();
+            var diff = expTime - DateTime.UtcNow;
+            if (diff.TotalMinutes <= 1)
+            {
+                string? refreshToken = await authStateProvider.GetRefreshTokenAsync();
+                var response = await _services.GetRequiredService<IAuthenticationService>()
+                    .RefreshTokenAsync(new RefreshTokenRequest(token, refreshToken));
+                if (response.Succeeded)
+                {
+                    token = response.Data?.Token;
+                }
+            }
+        }
+
+        return new AccessTokenResult(
             AccessTokenResultStatus.Success,
-            new AccessToken() { Value = await _localStorage.GetItemAsync<string>("authToken") },
+            new AccessToken() { Value = token },
             string.Empty);
+    }
 
     public ValueTask<AccessTokenResult> RequestAccessToken(AccessTokenRequestOptions options) =>
-        throw new NotImplementedException();
+        RequestAccessToken();
 }

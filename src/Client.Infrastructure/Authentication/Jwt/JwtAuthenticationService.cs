@@ -1,47 +1,44 @@
-﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
-using FSH.BlazorWebAssembly.Shared.Response.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+using FSH.BlazorWebAssembly.Shared.Identity;
 using Microsoft.AspNetCore.Components;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public class JwtAuthenticationService : IAuthenticationService
 {
-    private readonly NavigationManager _navigationManager;
     private readonly HttpClient _httpClient;
-    private readonly ILocalStorageService _localStorage;
-    private readonly JwtAuthenticationStateProvider _authenticationStateProvider;
+    private readonly JwtAuthenticationStateProvider _authStateProvider;
+    private readonly NavigationManager _navigationManager;
 
     public JwtAuthenticationService(
         HttpClient httpClient,
-        ILocalStorageService localStorage,
-        JwtAuthenticationStateProvider authenticationStateProvider,
+        JwtAuthenticationStateProvider authStateProvider,
         NavigationManager navigationManager)
     {
         _httpClient = httpClient;
-        _localStorage = localStorage;
-        _authenticationStateProvider = authenticationStateProvider;
+        _authStateProvider = authStateProvider;
         _navigationManager = navigationManager;
     }
 
     public AuthProvider ProviderType => AuthProvider.Jwt;
 
-    public async Task<IResult> Login(TokenRequest model)
+    public async Task<IResult> LoginAsync(TokenRequest model)
     {
         _httpClient.DefaultRequestHeaders.Clear();
-        _httpClient.DefaultRequestHeaders.Add("tenant", model.Tenant);
+        _httpClient.DefaultRequestHeaders.Add(HeaderConstants.Tenant, model.Tenant);
         var response = await _httpClient.PostAsJsonAsync(TokenEndpoints.AuthenticationEndpoint, model);
         var result = await response.ToResultAsync<TokenResponse>();
         if (result.Succeeded)
         {
             string? token = result.Data?.Token;
             string? refreshToken = result.Data?.RefreshToken;
-            await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
-            await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
 
-            await _authenticationStateProvider.StateChangedAsync();
+            if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(refreshToken))
+            {
+                return Result.Fail("Invalid token received.");
+            }
 
-            // TODO: Shouldn't this be handled by the AuthenticationHeaderHandler?
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            await _authStateProvider.MarkUserAsLoggedInAsync(token, refreshToken);
 
             return await Result.SuccessAsync();
         }
@@ -51,29 +48,26 @@ public class JwtAuthenticationService : IAuthenticationService
         }
     }
 
-    public async Task<IResult> Logout()
+    public async Task<IResult> LogoutAsync()
     {
-        await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
-        await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
-        await _localStorage.RemoveItemAsync(StorageConstants.Local.ImageUri);
-        _authenticationStateProvider.MarkUserAsLoggedOut();
-        _httpClient.DefaultRequestHeaders.Authorization = null;
+        await _authStateProvider.MarkUserAsLoggedOutAsync();
+
         _navigationManager.NavigateTo("/login");
         return await Result.SuccessAsync();
     }
 
-    public Task<string> RefreshToken()
+    public async Task<IResult<TokenResponse>> RefreshTokenAsync(RefreshTokenRequest request)
     {
-        throw new NotImplementedException();
-    }
+        var authState = await _authStateProvider.GetAuthenticationStateAsync();
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add(HeaderConstants.Tenant, authState.User.GetTenant());
+        var response = await _httpClient.PostAsJsonAsync(TokenEndpoints.Refresh, request);
+        var tokenResponse = await response.ToResultAsync<TokenResponse>();
+        if (tokenResponse.Succeeded && tokenResponse.Data is not null)
+        {
+            await _authStateProvider.SaveAuthTokens(tokenResponse.Data.Token, tokenResponse.Data.RefreshToken);
+        }
 
-    public Task<string> TryForceRefreshToken()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<string> TryRefreshToken()
-    {
-        throw new NotImplementedException();
+        return tokenResponse;
     }
 }

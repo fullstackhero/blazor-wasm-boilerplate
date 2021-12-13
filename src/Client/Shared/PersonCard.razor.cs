@@ -1,7 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
 
@@ -31,8 +30,6 @@ public partial class PersonCard
 
     private async Task LoadUserData()
     {
-        // This should load its data from the userdata cache that's hydrated
-        // when the user logged in (Authentication.OnLoginSucceeded for AzureAd)
         var authState = await AuthState;
         var user = authState.User;
         if (user == null) return;
@@ -40,9 +37,10 @@ public partial class PersonCard
         {
             if (string.IsNullOrEmpty(UserId))
             {
-                FullName = user.FindFirstValue("name") ?? user.GetName();
+                FullName = user.GetName();
                 UserId = user.GetUserId();
-                Email = user.FindFirstValue("preferred_username") ?? user.GetEmail();
+                Email = user.GetEmail();
+                ImageUri = user.GetImageUrl();
                 StateHasChanged();
             }
         }

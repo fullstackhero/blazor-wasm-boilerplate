@@ -1,4 +1,4 @@
-namespace FSH.BlazorWebAssembly.Shared.Response.Identity;
+namespace FSH.BlazorWebAssembly.Shared.Identity;
 
 public class TokenResponse
 {

@@ -23,14 +23,14 @@ public partial class Brands
     private bool _loading = true;
     private int _totalItems;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         // _currentUser = _stateProvider.AuthenticationStateUser;
         _canCreateBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Create)).Succeeded;
         _canEditBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Edit)).Succeeded;
         _canDeleteBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Delete)).Succeeded;
         _canSearchBrands = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Search)).Succeeded;
-        await GetBrandsAsync();
+        return Task.CompletedTask;
     }
 
     private async Task<TableData<BrandDto>> ServerReload(TableState state)

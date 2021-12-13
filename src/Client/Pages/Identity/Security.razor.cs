@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity;
 using FSH.BlazorWebAssembly.Shared.Constants;
 using FSH.BlazorWebAssembly.Shared.Identity;
 using Microsoft.AspNetCore.Components;
@@ -12,6 +13,9 @@ public partial class Security
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = default!;
 
+    [Inject]
+    public IIdentityService Identity { get; set; } = default!;
+
     private readonly ResetPasswordRequest _passwordModel = new();
     private string? ConfirmationPassword { get; set; }
 
@@ -22,7 +26,7 @@ public partial class Security
             var authState = await AuthState;
             _passwordModel.Email = authState.User.FindFirstValue(ClaimTypes.Email);
             _passwordModel.Token = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
-            var response = await _accountManager.ChangePasswordAsync(_passwordModel);
+            var response = await Identity.ResetPasswordAsync(_passwordModel);
             if (response.Succeeded)
             {
                 _snackBar.Add(_localizer["Password Changed!"], Severity.Success);

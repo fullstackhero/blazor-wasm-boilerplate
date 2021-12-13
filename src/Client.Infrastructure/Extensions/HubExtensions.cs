@@ -12,17 +12,11 @@ public static class HubExtensions
             hubConnection = new HubConnectionBuilder()
                 .WithUrl($"{apiBaseUri}notifications", options =>
                     options.AccessTokenProvider =
-                        () => GetAccessTokenAsync(tokenProvider))
+                        () => tokenProvider.GetAccessTokenAsync())
                 .WithAutomaticReconnect()
                 .Build();
         }
 
         return hubConnection;
     }
-
-    private static async Task<string?> GetAccessTokenAsync(IAccessTokenProvider tokenProvider) =>
-        (await tokenProvider.RequestAccessToken())
-            .TryGetToken(out var token)
-                ? token.Value
-                : null;
 }

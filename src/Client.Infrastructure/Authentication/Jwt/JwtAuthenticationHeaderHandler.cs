@@ -1,22 +1,24 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public class JwtAuthenticationHeaderHandler : DelegatingHandler
 {
-    private readonly ILocalStorageService _localStorage;
+    private readonly IAccessTokenProvider _tokenProvider;
 
-    public JwtAuthenticationHeaderHandler(ILocalStorageService localStorage) =>
-        _localStorage = localStorage;
+    public JwtAuthenticationHeaderHandler(IAccessTokenProvider tokenProvider) =>
+        _tokenProvider = tokenProvider;
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        if (request.Headers.Authorization?.Scheme != "Bearer")
+        // skip token endpoints
+        if (request.RequestUri?.AbsolutePath.Contains("/tokens") == false)
         {
-            string? savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
-
-            if (!string.IsNullOrWhiteSpace(savedToken))
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
-            }
+            request.Headers.Authorization =
+                await _tokenProvider.GetAccessTokenAsync() is string token
+                    ? new AuthenticationHeaderValue("Bearer", token)
+                    : null;
         }
 
         return await base.SendAsync(request, cancellationToken);
