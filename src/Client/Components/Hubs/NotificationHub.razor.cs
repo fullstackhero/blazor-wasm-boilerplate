@@ -4,6 +4,7 @@ using FSH.BlazorWebAssembly.Shared.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
+using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.Hubs;
 
@@ -15,25 +16,25 @@ public partial class NotificationHub
     [Inject]
     public IAccessTokenProvider TokenProvider { get; set; } = default!;
 
-    private HubConnection _hubConnection { get; set; } = default!;
+    private HubConnection HubConnection { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
         string apiBaseUri = _configurations[ConfigConstants.ApiBaseUrl];
-        _hubConnection = _hubConnection!.TryInitialize(TokenProvider, apiBaseUri);
-        _hubConnection.Reconnecting += Hub_Reconnecting;
-        _hubConnection.Reconnected += Hub_Reconnected;
-        _hubConnection.Closed += Hub_Closed;
-        _hubConnection = await TryConnectAsync();
+        HubConnection = HubConnection!.TryInitialize(TokenProvider, apiBaseUri);
+        HubConnection.Reconnecting += Hub_Reconnecting;
+        HubConnection.Reconnected += Hub_Reconnected;
+        HubConnection.Closed += Hub_Closed;
+        HubConnection = await TryConnectAsync();
     }
 
     public async Task<HubConnection> TryConnectAsync()
     {
         try
         {
-            if (_hubConnection.State == HubConnectionState.Disconnected)
+            if (HubConnection.State == HubConnectionState.Disconnected)
             {
-                await _hubConnection.StartAsync();
+                await HubConnection.StartAsync();
             }
         }
         catch (HttpRequestException requestException)
@@ -46,13 +47,14 @@ public partial class NotificationHub
             }
         }
 
-        return _hubConnection;
+        return HubConnection;
     }
 
     private async Task Hub_Closed(Exception? arg)
     {
-        _snackBar.Add($"SignalR Connection Closed ({arg?.Message}). Will try to reconnect in a bit.", MudBlazor.Severity.Error, a =>
+        _snackBar.Add("SignalR Connection Lost.", MudBlazor.Severity.Error, a =>
         {
+            a.Icon = Icons.Material.Filled.Error;
             a.RequireInteraction = true;
             a.ShowCloseIcon = true;
         });
@@ -64,13 +66,19 @@ public partial class NotificationHub
 
     private Task Hub_Reconnected(string? arg)
     {
-        _snackBar.Add($"SignalR Connection Reconnected ({arg}).", MudBlazor.Severity.Error);
+        _snackBar.Add("SignalR Connected Restored.", MudBlazor.Severity.Success, a =>
+        {
+            a.Icon = Icons.Material.Filled.CheckCircle;
+        });
         return Task.CompletedTask;
     }
 
     private Task Hub_Reconnecting(Exception? arg)
     {
-        _snackBar.Add($"SignalR Connection Reconnecting ({arg?.Message}).", MudBlazor.Severity.Error);
+        _snackBar.Add("SignalR Reconnecting.", MudBlazor.Severity.Info, a =>
+        {
+            a.Icon = Icons.Material.Filled.Refresh;
+        });
         return Task.CompletedTask;
     }
 }
