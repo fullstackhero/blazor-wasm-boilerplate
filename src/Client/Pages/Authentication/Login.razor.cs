@@ -1,6 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+using FSH.BlazorWebAssembly.Shared.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -69,7 +69,7 @@ public partial class Login
         try
         {
             BusySubmitting = true;
-            var result = await AuthService.Login(_tokenRequest);
+            var result = await AuthService.LoginAsync(_tokenRequest);
             if (!result.Succeeded && result.Messages is not null)
             {
                 Error?.ProcessError(result.Messages);

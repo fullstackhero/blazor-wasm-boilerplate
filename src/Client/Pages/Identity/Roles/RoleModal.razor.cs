@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+﻿using FSH.BlazorWebAssembly.Shared.Identity;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

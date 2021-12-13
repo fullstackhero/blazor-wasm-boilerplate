@@ -1,4 +1,4 @@
-namespace FSH.BlazorWebAssembly.Shared.Requests.Identity;
+namespace FSH.BlazorWebAssembly.Shared.Identity;
 
 public class RoleClaimRequest
 {

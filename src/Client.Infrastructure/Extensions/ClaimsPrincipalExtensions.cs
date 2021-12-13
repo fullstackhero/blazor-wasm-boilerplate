@@ -5,7 +5,7 @@ public static class ClaimsPrincipalExtensions
         => claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
     public static string? GetTenant(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(ClaimTypes.Name); // Todo: ?? think this is not right
+        => claimsPrincipal.FindFirstValue("tenant");
 
     public static string? GetName(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal?.FindFirst("fullName")?.Value;

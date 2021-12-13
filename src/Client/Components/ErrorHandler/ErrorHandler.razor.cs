@@ -17,7 +17,7 @@ public partial class ErrorHandler
         switch (exception)
         {
             case UnauthorizedAccessException:
-                await AuthService.Logout();
+                await AuthService.LogoutAsync();
                 _snackBar.Add("Authentication Failed", Severity.Error);
                 break;
         }

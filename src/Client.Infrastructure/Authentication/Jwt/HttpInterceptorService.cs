@@ -33,7 +33,7 @@ public class HttpInterceptorService : IHttpInterceptorService
                 case HttpStatusCode.NotFound:
                     break;
                 case HttpStatusCode.Unauthorized:
-                    await _authenticationService.Logout();
+                    await _authenticationService.LogoutAsync();
                     _snackBar.Add("Authentication Failed", Severity.Error);
                     _navManager.NavigateTo("/login");
                     break;

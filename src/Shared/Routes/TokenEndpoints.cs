@@ -3,5 +3,5 @@
 public static class TokenEndpoints
 {
     public static string AuthenticationEndpoint = "api/tokens";
-    public static string Refresh = "api/identity/token/refresh";
+    public static string Refresh = "api/tokens/refresh";
 }

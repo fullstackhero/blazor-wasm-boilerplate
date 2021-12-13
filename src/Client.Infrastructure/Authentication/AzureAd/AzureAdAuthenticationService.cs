@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Shared.Requests.Identity;
+﻿using FSH.BlazorWebAssembly.Shared.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
@@ -14,22 +14,16 @@ internal class AzureAdAuthenticationService : IAuthenticationService
 
     public AuthProvider ProviderType => AuthProvider.AzureAd;
 
-    public Task<IResult> Login(TokenRequest model) =>
+    public Task<IResult> LoginAsync(TokenRequest model) =>
         throw new NotImplementedException();
 
-    public async Task<IResult> Logout()
+    public async Task<IResult> LogoutAsync()
     {
         await _signOut.SetSignOutState();
         _navigation.NavigateTo("authentication/logout");
         return await Result.SuccessAsync();
     }
 
-    public Task<string> RefreshToken() =>
-        throw new NotImplementedException();
-
-    public Task<string> TryForceRefreshToken() =>
-        throw new NotImplementedException();
-
-    public Task<string> TryRefreshToken() =>
+    public Task<IResult<TokenResponse>> RefreshTokenAsync(RefreshTokenRequest request) =>
         throw new NotImplementedException();
 }

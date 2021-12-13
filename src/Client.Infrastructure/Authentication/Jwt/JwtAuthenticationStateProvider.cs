@@ -1,42 +1,86 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity;
+
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public class JwtAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
+    private readonly IUserService _userService;
 
-    public JwtAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
+    public JwtAuthenticationStateProvider(ILocalStorageService localStorage, IUserService userService)
     {
-        _httpClient = httpClient;
         _localStorage = localStorage;
+        _userService = userService;
     }
 
-    public async Task StateChangedAsync()
+    public async Task MarkUserAsLoggedInAsync(string token, string refreshToken)
     {
-        var authState = Task.FromResult(await GetAuthenticationStateAsync());
-        NotifyAuthenticationStateChanged(authState);
+        await SaveAuthTokens(token, refreshToken);
+
+        // get userid from token
+        var claims = GetClaimsFromJwt(token);
+        string? userId = claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (!string.IsNullOrWhiteSpace(userId))
+        {
+            // get permissions for this user
+            var permissionResult = await _userService.GetPermissionsAsync(userId);
+            if (permissionResult.Succeeded && permissionResult.Data is not null)
+            {
+                // store them in localstorage
+                await _localStorage.SetItemAsync(
+                    StorageConstants.Local.Permissions,
+                    permissionResult.Data
+                        .Where(p => !string.IsNullOrWhiteSpace(p.Permission))
+                        .Select(p => p.Permission!)
+                        .ToList());
+            }
+        }
+
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 
-    public void MarkUserAsLoggedOut()
+    public async Task MarkUserAsLoggedOutAsync()
     {
+        await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
+        await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
+        await _localStorage.RemoveItemAsync(StorageConstants.Local.ImageUri);
+        await _localStorage.RemoveItemAsync(StorageConstants.Local.Permissions);
+
         var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
-        var authState = Task.FromResult(new AuthenticationState(anonymousUser));
 
-        NotifyAuthenticationStateChanged(authState);
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
+
+    public async ValueTask SaveAuthTokens(string? token, string? refreshToken)
+    {
+        await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
+        await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
+    }
+
+    public ValueTask<string> GetAuthTokenAsync() =>
+        _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+
+    public ValueTask<string> GetRefreshTokenAsync() =>
+        _localStorage.GetItemAsync<string>(StorageConstants.Local.RefreshToken);
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        string savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+        string savedToken = await GetAuthTokenAsync();
         if (string.IsNullOrWhiteSpace(savedToken))
         {
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
-        // TODO: Shouldn't this be handled by the AuthenticationHeaderHandler?
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
+        // Generate claimsIdentity from saved token
+        var claimsIdentity = new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt");
 
-        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
+        // Add permission claims from local storage
+        if (await _localStorage.GetItemAsync<List<string>>(StorageConstants.Local.Permissions) is List<string> permissionClaims)
+        {
+            claimsIdentity.AddClaims(permissionClaims.Select(p => new Claim("permission", p)));
+        }
+
+        return new AuthenticationState(new ClaimsPrincipal(claimsIdentity));
     }
 
     private IEnumerable<Claim> GetClaimsFromJwt(string jwt)
