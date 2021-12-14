@@ -3,6 +3,7 @@ using System.Reflection;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -34,6 +35,7 @@ public static class Startup
             .AddAuthentication(config)
             .AddAuthorizationCore(RegisterPermissionClaims)
 
+            // Add Api Client
             .AddHttpClient(ClientName, client =>
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
@@ -42,7 +44,11 @@ public static class Startup
                 })
                 .AddAuthenticationHandler(config)
                 .Services
-            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName));
+            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName))
+
+            // Add SignalR Connection (also register the Hub separately so it can be injected)
+            .AddScoped<NotificationClient>()
+            .AddScoped(sp => sp.GetRequiredService<NotificationClient>().Hub);
 
     private static void RegisterPermissionClaims(AuthorizationOptions options)
     {

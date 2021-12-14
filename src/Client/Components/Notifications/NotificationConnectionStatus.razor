@@ -1,0 +1,43 @@
+@inject NotificationClient Notifications
+
+<MudTooltip Text="@TooltipText">
+    <MudIcon Icon="@Icon" Color="@IconColor"></MudIcon>
+</MudTooltip>
+
+@code {
+    public string TooltipText { get; set; } = "No Connection";
+    public string Icon { get; set; } = Icons.Filled.SignalWifi0Bar;
+    public Color IconColor { get; set; } = Color.Error;
+
+    protected override void OnInitialized()
+    {
+        Notifications.ConnectionStateChanged += (obj, arg) =>
+            SetState(arg.State, arg.Message);
+    }
+
+    private Task SetState(ConnectionState state, string? message)
+    {
+        switch (state)
+        {
+            case ConnectionState.Connected:
+                TooltipText = $"Connection OK! (ConnectionId: {message}).";
+                Icon = Icons.Filled.Wifi;
+                IconColor = Color.Success;
+                break;
+
+            case ConnectionState.Connecting:
+                TooltipText = $"(Re)connecting... ({message}).";
+                Icon = Icons.Filled.Wifi;
+                IconColor = Color.Warning;
+                break;
+
+            case ConnectionState.Disconnected:
+                TooltipText = $"Connection Closed ({message}).";
+                Icon = @Icons.Filled.SignalWifi0Bar;
+                IconColor = Color.Error;
+                break;
+        }
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}

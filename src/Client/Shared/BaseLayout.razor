@@ -5,18 +5,14 @@
     <MudDialogProvider />
     <MudSnackbarProvider />
     <AuthorizeView>
-        <NotAuthorized>
-            
-               
+        <NotAuthorized>  
             <MudAppBar Elevation="0">
-                 <ThemeDrawer @bind-ThemeDrawerOpen="_themeDrawerOpen" ThemePreference="_themePreference"
+                <ThemeDrawer @bind-ThemeDrawerOpen="_themeDrawerOpen" ThemePreference="_themePreference"
                     ThemePreferenceChanged="ThemePreferenceChanged" />
                 <ThemeButton OnClick="@(() => _themeDrawerOpen = true)" />
             </MudAppBar>
-            
             <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 100vh;">
-                <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
-                    
+                <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">                    
                     @Body
                 </MudPaper>
             </MudContainer>
@@ -26,11 +22,9 @@
                 <ThemeDrawer @bind-ThemeDrawerOpen="_themeDrawerOpen" ThemePreference="_themePreference"
                     ThemePreferenceChanged="ThemePreferenceChanged" />
                 <ThemeButton OnClick="@(() => _themeDrawerOpen = true)" />
-                <NotificationHub>
-                    <MainLayout>
-                        @Body
-                    </MainLayout>
-                </NotificationHub>
+                <MainLayout>
+                    @Body
+                </MainLayout>
             </MudLayout>
         </Authorized>
     </AuthorizeView>
