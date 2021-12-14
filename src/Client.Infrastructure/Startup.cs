@@ -35,7 +35,7 @@ public static class Startup
             .AddAuthentication(config)
             .AddAuthorizationCore(RegisterPermissionClaims)
 
-            // Add Api Client
+            // Add Api Http Client.
             .AddHttpClient(ClientName, client =>
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
@@ -46,7 +46,8 @@ public static class Startup
                 .Services
             .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName))
 
-            // Add SignalR Connection (also register the Hub separately so it can be injected)
+            // Add Notification SignalR Client. The HubConnection is also registered separately so it can be injected
+            // to subscribe to hub events. See the Dashboard page for how that's done.
             .AddScoped<NotificationClient>()
             .AddScoped(sp => sp.GetRequiredService<NotificationClient>().Hub);
 
