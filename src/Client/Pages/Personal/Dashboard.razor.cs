@@ -33,7 +33,8 @@ public partial class Dashboard
     {
         await LoadDataAsync();
         _loaded = true;
-        NotificationHub!.TryConnectAsync().Result.On<StatsChangedNotification>(nameof(StatsChangedNotification), async (notification) =>
+        var hubConnection = await NotificationHub!.TryConnectAsync();
+        hubConnection.On<StatsChangedNotification>(nameof(StatsChangedNotification), async _ =>
         {
             await LoadDataAsync();
             StateHasChanged();
