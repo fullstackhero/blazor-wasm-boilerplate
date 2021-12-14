@@ -41,7 +41,7 @@ public partial class NotificationHub
         {
             if (requestException.StatusCode == HttpStatusCode.Unauthorized)
             {
-                // The signalR connections is usually the first hit to the actual api after a user logs in with an external Auth Provider (e.g. AzureAd).
+                // The signalR connection is usually the first hit to the actual api after a user logs in with an external Auth Provider (e.g. AzureAd).
                 // If a 401 is thrown here, it means the user doesn't have access to the application, so we guide them to a "Not Authorized" page.
                 // Sending them back to /login would throw them in an endless loop.
                 // In the case of regular jwt auth, this shouldn't happen. If it does, there must be something else wrong...
@@ -54,7 +54,7 @@ public partial class NotificationHub
 
     private async Task Hub_Closed(Exception? arg)
     {
-        _snackBar.Add("SignalR Connection Lost.", MudBlazor.Severity.Error, a =>
+        _snackBar.Add("SignalR Connection Lost.", Severity.Error, a =>
         {
             a.Icon = Icons.Material.Filled.Error;
             a.RequireInteraction = true;
@@ -68,7 +68,7 @@ public partial class NotificationHub
 
     private Task Hub_Reconnected(string? arg)
     {
-        _snackBar.Add("SignalR Connected Restored.", MudBlazor.Severity.Success, a =>
+        _snackBar.Add("SignalR Connected Restored.", Severity.Success, a =>
         {
             a.Icon = Icons.Material.Filled.CheckCircle;
         });
@@ -77,7 +77,7 @@ public partial class NotificationHub
 
     private Task Hub_Reconnecting(Exception? arg)
     {
-        _snackBar.Add("SignalR Reconnecting.", MudBlazor.Severity.Info, a =>
+        _snackBar.Add("SignalR Reconnecting.", Severity.Info, a =>
         {
             a.Icon = Icons.Material.Filled.Refresh;
         });
