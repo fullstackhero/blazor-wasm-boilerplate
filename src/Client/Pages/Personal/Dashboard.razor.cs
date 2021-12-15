@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.Hubs;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.Stats;
 using FSH.BlazorWebAssembly.Shared.Notifications.Personal;
 using Microsoft.AspNetCore.Components;
@@ -12,8 +12,8 @@ public partial class Dashboard
     [Inject]
     private IStatsService StatsService { get; set; } = default!;
 
-    [CascadingParameter]
-    public NotificationHub? NotificationHub { get; set; }
+    [Inject]
+    private HubConnection HubConnection { get; set; } = default!;
 
     [Parameter]
     public int ProductCount { get; set; }
@@ -33,8 +33,7 @@ public partial class Dashboard
     {
         await LoadDataAsync();
         _loaded = true;
-        var hubConnection = await NotificationHub!.TryConnectAsync();
-        hubConnection.On<StatsChangedNotification>(nameof(StatsChangedNotification), async _ =>
+        HubConnection.On<StatsChangedNotification>(nameof(StatsChangedNotification), async _ =>
         {
             await LoadDataAsync();
             StateHasChanged();

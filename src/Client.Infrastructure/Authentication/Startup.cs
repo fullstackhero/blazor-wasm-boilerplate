@@ -12,7 +12,7 @@ internal static class Startup
         {
             // AzureAd
             nameof(AuthProvider.AzureAd) => services
-                .AddScoped<IAuthenticationService, AzureAdAuthenticationService>()
+                .AddTransient<IAuthenticationService, AzureAdAuthenticationService>()
                 .AddScoped<AzureAdAuthorizationMessageHandler>()
                 .AddMsalAuthentication(options =>
                     {
@@ -26,8 +26,8 @@ internal static class Startup
 
             // Jwt
             _ => services
-                .AddScoped<IAuthenticationService, JwtAuthenticationService>()
-                .AddScoped<IAccessTokenProvider, JwtAccessTokenProvider>()
+                .AddTransient<IAuthenticationService, JwtAuthenticationService>()
+                .AddTransient<IAccessTokenProvider, JwtAccessTokenProvider>()
                 .AddScoped<JwtAuthenticationStateProvider>()
                 .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<JwtAuthenticationStateProvider>())
                 .AddScoped<JwtAuthenticationHeaderHandler>()
