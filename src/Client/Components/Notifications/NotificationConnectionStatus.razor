@@ -11,11 +11,12 @@
 
     protected override void OnInitialized()
     {
+        SetConnectionState(Notifications.ConnectionState, Notifications.HubConnection.ConnectionId);
         Notifications.ConnectionStateChanged += (obj, arg) =>
-            SetState(arg.State, arg.Message);
+            SetConnectionState(arg.State, arg.Message);
     }
 
-    private Task SetState(ConnectionState state, string? message)
+    private Task SetConnectionState(ConnectionState state, string? message)
     {
         switch (state)
         {

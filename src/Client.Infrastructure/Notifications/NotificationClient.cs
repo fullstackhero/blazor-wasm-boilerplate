@@ -11,27 +11,35 @@ public class NotificationClient : IAsyncDisposable
     private readonly NavigationManager _navigation;
     private CancellationTokenSource _cts = new();
 
-    public HubConnection Hub { get; private set; }
+    public HubConnection HubConnection { get; private set; }
+
+    public ConnectionState ConnectionState =>
+        HubConnection.State switch
+        {
+            HubConnectionState.Connected => ConnectionState.Connected,
+            HubConnectionState.Disconnected => ConnectionState.Disconnected,
+            _ => ConnectionState.Connecting
+        };
 
     public event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
 
     public NotificationClient(IAccessTokenProvider tokenProvider, IConfiguration config, NavigationManager navigation)
     {
         _navigation = navigation;
-        Hub = new HubConnectionBuilder()
+        HubConnection = new HubConnectionBuilder()
             .WithUrl($"{config[ConfigConstants.ApiBaseUrl]}notifications", options =>
                 options.AccessTokenProvider =
                     () => tokenProvider.GetAccessTokenAsync())
             .WithAutomaticReconnect()
             .Build();
 
-        Hub.Reconnecting += ex =>
+        HubConnection.Reconnecting += ex =>
             OnConnectionStateChangedAsync(ConnectionState.Connecting, ex?.Message);
 
-        Hub.Reconnected += id =>
+        HubConnection.Reconnected += id =>
             OnConnectionStateChangedAsync(ConnectionState.Connected, id);
 
-        Hub.Closed += async ex =>
+        HubConnection.Closed += async ex =>
         {
             await OnConnectionStateChangedAsync(ConnectionState.Disconnected, ex?.Message);
 
@@ -42,14 +50,14 @@ public class NotificationClient : IAsyncDisposable
         };
     }
 
+    public Task TryConnectAsync() =>
+        ConnectWithRetryAsync(_cts.Token);
+
     protected virtual Task OnConnectionStateChangedAsync(ConnectionState state, string? message)
     {
         ConnectionStateChanged?.Invoke(this, new(state, message));
         return Task.CompletedTask;
     }
-
-    public Task TryConnectAsync() =>
-        ConnectWithRetryAsync(_cts.Token);
 
     private async Task ConnectWithRetryAsync(CancellationToken cancellationToken)
     {
@@ -58,8 +66,8 @@ public class NotificationClient : IAsyncDisposable
         {
             try
             {
-                await Hub.StartAsync(cancellationToken);
-                await OnConnectionStateChangedAsync(ConnectionState.Connected, Hub.ConnectionId);
+                await HubConnection.StartAsync(cancellationToken);
+                await OnConnectionStateChangedAsync(ConnectionState.Connected, HubConnection.ConnectionId);
             }
             catch when (cancellationToken.IsCancellationRequested)
             {
@@ -85,6 +93,6 @@ public class NotificationClient : IAsyncDisposable
     {
         _cts.Cancel();
         _cts.Dispose();
-        await Hub.DisposeAsync();
+        await HubConnection.DisposeAsync();
     }
 }
