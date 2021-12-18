@@ -80,6 +80,7 @@ public class NotificationClient : IAsyncDisposable
                 // Sending them back to /login would throw them in an endless loop.
                 // In the case of regular jwt auth, this shouldn't happen. If it does, there must be something else wrong...
                 _navigation.NavigateTo("/notfound");
+                return;
             }
             catch
             {
