@@ -22,5 +22,11 @@
     <ItemGroup>
         <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
     </ItemGroup>
-
+    
+    <ItemGroup>
+        <!-- Avoid trimming of the Msal library.
+             There's something too much trimmed from Msal in the publish step. Then, after logging in,
+             the user gets redirected to authentication/login-failed with no error message. -->
+        <TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
+    </ItemGroup>
 </Project>
