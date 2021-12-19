@@ -1,7 +1,7 @@
 @inject NotificationClient Notifications
 
 <MudTooltip Text="@TooltipText">
-    <MudIcon Icon="@Icon" Color="@IconColor"></MudIcon>
+    <MudIconButton Icon="@Icon" Color="@IconColor"/>
 </MudTooltip>
 
 @code {
@@ -22,19 +22,19 @@
         {
             case ConnectionState.Connected:
                 TooltipText = $"Connection OK! (ConnectionId: {message}).";
-                Icon = Icons.Filled.Wifi;
+                Icon = @Icons.Filled.SignalWifiStatusbar4Bar;
                 IconColor = Color.Success;
                 break;
 
             case ConnectionState.Connecting:
                 TooltipText = $"(Re)connecting... ({message}).";
-                Icon = Icons.Filled.Wifi;
+                Icon = @Icons.Filled.SignalWifiStatusbarConnectedNoInternet4;
                 IconColor = Color.Warning;
                 break;
 
             case ConnectionState.Disconnected:
                 TooltipText = $"Connection Closed ({message}).";
-                Icon = @Icons.Filled.SignalWifi0Bar;
+                Icon = @Icons.Filled.SignalWifiOff;
                 IconColor = Color.Error;
                 break;
         }
