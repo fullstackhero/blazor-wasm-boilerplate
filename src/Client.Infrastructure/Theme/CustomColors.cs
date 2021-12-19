@@ -6,7 +6,7 @@ public static class CustomColors
 {
     public static readonly List<string> ThemeColors = new()
     {
-        "#3eaf7c",
+        Light.Primary,
         Colors.Blue.Default,
         Colors.BlueGrey.Default,
         Colors.Purple.Default,
