@@ -1,10 +1,14 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
 public partial class Brands
 {
+    [Inject]
+    private IBrandsClient _brandsClient { get; set; } = default!;
+
     private IEnumerable<BrandDto>? _pagedData;
     private TableState? _state;
     private MudTable<BrandDto>? _table;
@@ -20,7 +24,7 @@ public partial class Brands
     private bool _canEditBrands;
     private bool _canDeleteBrands;
     private bool _canSearchBrands;
-    private bool _loading = true;
+    private bool _loading;
     private int _totalItems;
 
     protected override Task OnInitializedAsync()
@@ -42,24 +46,35 @@ public partial class Brands
 
         _state = state;
 
-        if (!_loading)
-        {
-            await GetBrandsAsync();
-        }
+        await GetBrandsAsync();
+
         return new TableData<BrandDto> { TotalItems = _totalItems, Items = _pagedData };
     }
 
     private async Task GetBrandsAsync()
     {
-        _loading = true;
-        string[] orderings = Array.Empty<string>();
-        if (_state != null && !string.IsNullOrEmpty(_state.SortLabel))
+        if (_loading)
         {
-            orderings = _state.SortDirection != SortDirection.None ? new[] { $"{_state.SortLabel} {_state.SortDirection}" } : new[] { $"{_state.SortLabel}" };
+            return;
         }
 
-        BrandListFilter filter = new() { PageSize = _state == null ? 10 : _state.PageSize, PageNumber = (_state == null ? 0 : _state.Page) + 1, Keyword = _searchString, OrderBy = orderings };
-        var response = await _brandService.SearchBrandAsync(filter);
+        _loading = true;
+
+        string[] orderings = string.IsNullOrEmpty(_state?.SortLabel)
+            ? Array.Empty<string>()
+            : _state.SortDirection != SortDirection.None
+                ? new[] { $"{_state.SortLabel} {_state.SortDirection}" }
+                : new[] { $"{_state.SortLabel}" };
+
+        var filter = new BrandListFilter
+        {
+            PageSize = _state == null ? 10 : _state.PageSize,
+            PageNumber = (_state == null ? 0 : _state.Page) + 1,
+            Keyword = _searchString,
+            OrderBy = orderings
+        };
+
+        var response = await _brandsClient.SearchAsync(filter);
         if (response.Succeeded)
         {
             _totalItems = response.TotalCount;
@@ -82,11 +97,11 @@ public partial class Brands
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var response = await _brandService.DeleteAsync(id);
+            var response = await _brandsClient.DeleteAsync(id);
             if (response.Succeeded)
             {
                 if (response.Messages?.Count > 0)
-                    _snackBar.Add(response.Messages[0], Severity.Success);
+                    _snackBar.Add(response.Messages.First(), Severity.Success);
                 else
                     _snackBar.Add(_localizer["Success"], Severity.Success);
             }
@@ -99,24 +114,20 @@ public partial class Brands
                         _snackBar.Add(message, Severity.Error);
                     }
                 }
-                else if (!string.IsNullOrEmpty(response.Exception))
-                {
-                    _snackBar.Add(response.Exception, Severity.Error);
-                }
             }
 
             await Reset();
         }
     }
 
-    private async Task InvokeModal(Guid id = new())
+    private async Task InvokeModal(Guid id = default)
     {
         var parameters = new DialogParameters
             {
-                { nameof(AddEditBrandModal.IsCreate), id == new Guid() },
+                { nameof(AddEditBrandModal.IsCreate), id == default },
                 { nameof(AddEditBrandModal.Id), id }
             };
-        if (id != new Guid())
+        if (id != default)
         {
             var brand = _pagedData?.FirstOrDefault(c => c.Id == id);
             if (brand != null)
@@ -130,7 +141,7 @@ public partial class Brands
         }
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<AddEditBrandModal>(id == new Guid() ? _localizer["Create"] : _localizer["Edit"], parameters, options);
+        var dialog = _dialogService.Show<AddEditBrandModal>(id == default ? _localizer["Create"] : _localizer["Edit"], parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {

@@ -1,7 +1,7 @@
 ﻿@page "/catalog/products"
+@using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
+
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Products> _localizer
-@using FSH.BlazorWebAssembly.Client.Shared.Components
-@using FSH.BlazorWebAssembly.Shared.Catalog
 
 <style>
     .mud-table-container {
@@ -58,7 +58,7 @@
                     <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
                 </MudTd>
                 <MudTd DataLabel="Brand">
-                    <MudHighlighter Text="@context.BrandIdString" HighlightedText="@_searchString" />
+                    <MudHighlighter Text="@context.BrandId.ToString()" HighlightedText="@_searchString" />
                 </MudTd>
                 <MudTd DataLabel="Description">
                     <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
