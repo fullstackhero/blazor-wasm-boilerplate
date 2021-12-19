@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -9,6 +10,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 public class NotificationClient : IAsyncDisposable
 {
     private readonly NavigationManager _navigation;
+    private readonly IConfiguration _configuration;
+    [Inject]
+    public IAuthenticationService AuthService { get; set; } = default!;
     private CancellationTokenSource _cts = new();
 
     public HubConnection HubConnection { get; private set; }
@@ -26,6 +30,7 @@ public class NotificationClient : IAsyncDisposable
     public NotificationClient(IAccessTokenProvider tokenProvider, IConfiguration config, NavigationManager navigation)
     {
         _navigation = navigation;
+        _configuration = config;
         HubConnection = new HubConnectionBuilder()
             .WithUrl($"{config[ConfigConstants.ApiBaseUrl]}notifications", options =>
                 options.AccessTokenProvider =
@@ -79,7 +84,17 @@ public class NotificationClient : IAsyncDisposable
                 // If a 401 is thrown here, it means the user doesn't have access to the application, so we guide them to a "Not Found" page.
                 // Sending them back to /login would throw them in an endless loop.
                 // In the case of regular jwt auth, this shouldn't happen. If it does, there must be something else wrong...
-                _navigation.NavigateTo("/notfound");
+
+                switch (_configuration[nameof(AuthProvider)])
+                {
+                    case nameof(AuthProvider.AzureAd):
+                        _navigation.NavigateTo("/notfound");
+                        break;
+                    default:
+                        await AuthService.LogoutAsync();
+                        break;
+                }
+
                 return;
             }
             catch
