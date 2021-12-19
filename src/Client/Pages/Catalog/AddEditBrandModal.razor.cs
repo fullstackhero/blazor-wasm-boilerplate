@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
-using FSH.BlazorWebAssembly.Shared.Wrapper;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -19,6 +18,9 @@ public partial class AddEditBrandModal
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; } = default!;
 
+    [Inject]
+    public IBrandsClient _brandsClient { get; set; } = default!;
+
     public void Cancel()
     {
         MudDialog.Cancel();
@@ -26,21 +28,21 @@ public partial class AddEditBrandModal
 
     private async Task SaveAsync()
     {
-        IResult<Guid> response;
+        ResultOfGuid response;
         if (IsCreate)
         {
             CreateBrandRequest createBrandRequest = new() { Name = UpdateBrandRequest.Name, Description = UpdateBrandRequest.Description };
-            response = await _brandService.CreateAsync(createBrandRequest);
+            response = await _brandsClient.CreateAsync(createBrandRequest);
         }
         else
         {
-            response = await _brandService.UpdateAsync(UpdateBrandRequest, Id);
+            response = await _brandsClient.UpdateAsync(Id, UpdateBrandRequest);
         }
 
         if (response.Succeeded)
         {
             if (response.Messages?.Count > 0)
-                _snackBar.Add(response.Messages[0], Severity.Success);
+                _snackBar.Add(response.Messages.First(), Severity.Success);
             else
                 _snackBar.Add(_localizer["Success"], Severity.Success);
             MudDialog.Close();
@@ -53,10 +55,6 @@ public partial class AddEditBrandModal
                 {
                     _snackBar.Add(message, Severity.Error);
                 }
-            }
-            else if (!string.IsNullOrEmpty(response.Exception))
-            {
-                _snackBar.Add(response.Exception, Severity.Error);
             }
         }
     }
