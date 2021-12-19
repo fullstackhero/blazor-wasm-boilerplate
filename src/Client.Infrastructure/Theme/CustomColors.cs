@@ -11,7 +11,13 @@ public static class CustomColors
         Colors.BlueGrey.Default,
         Colors.Purple.Default,
         Colors.Orange.Default,
-        Colors.Red.Default
+        Colors.Red.Default,
+        Colors.Amber.Default,
+        Colors.DeepPurple.Default,
+        Colors.Pink.Default,
+        Colors.Indigo.Default,
+        Colors.LightBlue.Default,
+        Colors.Cyan.Default,
     };
     public static class Light
     {
