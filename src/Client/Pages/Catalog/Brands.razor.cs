@@ -46,6 +46,7 @@ public partial class Brands
         {
             await GetBrandsAsync();
         }
+
         return new TableData<BrandDto> { TotalItems = _totalItems, Items = _pagedData };
     }
 
