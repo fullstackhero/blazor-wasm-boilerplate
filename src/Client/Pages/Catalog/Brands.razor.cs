@@ -6,7 +6,6 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 public partial class Brands
 {
     private IEnumerable<BrandDto>? _pagedData;
-    private TableState? _state;
     private MudTable<BrandDto>? _table;
     private string _searchString = string.Empty;
     private bool _dense = false;
@@ -40,26 +39,22 @@ public partial class Brands
             state.Page = 0;
         }
 
-        _state = state;
-
-        if (!_loading)
-        {
-            await GetBrandsAsync();
-        }
-
+        await LoadDataAsync(state.Page, state.PageSize, state);
         return new TableData<BrandDto> { TotalItems = _totalItems, Items = _pagedData };
     }
 
-    private async Task GetBrandsAsync()
+    private async Task LoadDataAsync(int pageNumber, int pageSize, TableState state)
     {
         _loading = true;
-        string[] orderings = Array.Empty<string>();
-        if (_state != null && !string.IsNullOrEmpty(_state.SortLabel))
+        string[]? orderings = null;
+        if (!string.IsNullOrEmpty(state.SortLabel))
         {
-            orderings = _state.SortDirection != SortDirection.None ? new[] { $"{_state.SortLabel} {_state.SortDirection}" } : new[] { $"{_state.SortLabel}" };
+            orderings = state.SortDirection == SortDirection.None
+                ? new[] { $"{state.SortLabel}" }
+                : new[] { $"{state.SortLabel} {state.SortDirection}" };
         }
 
-        BrandListFilter filter = new() { PageSize = _state == null ? 10 : _state.PageSize, PageNumber = (_state == null ? 0 : _state.Page) + 1, Keyword = _searchString, OrderBy = orderings };
+        BrandListFilter filter = new() { PageSize = pageSize, PageNumber = pageNumber + 1, Keyword = _searchString, OrderBy = orderings ?? Array.Empty<string>() };
         var response = await _brandService.SearchBrandAsync(filter);
         if (response.Succeeded)
         {
@@ -106,7 +101,7 @@ public partial class Brands
                 }
             }
 
-            await Reset();
+            OnSearch(string.Empty);
         }
     }
 
@@ -135,15 +130,8 @@ public partial class Brands
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            await Reset();
+            OnSearch(string.Empty);
         }
-    }
-
-    private async Task Reset()
-    {
-        await GetBrandsAsync();
-        OnSearch(string.Empty);
-        StateHasChanged();
     }
 
     private bool Search(BrandDto brand)
@@ -160,6 +148,7 @@ public partial class Brands
     private void OnSearch(string text)
     {
         _searchString = text;
+        if(_loading) return;
         _table?.ReloadServerData();
     }
 }

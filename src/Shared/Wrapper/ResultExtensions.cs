@@ -42,7 +42,7 @@ public static class ResultExtensions
         string responseAsString = await response.Content.ReadAsStringAsync();
         if (string.IsNullOrWhiteSpace(responseAsString))
         {
-            throw new InvalidOperationException($"API returned emtpy response. StatusCode: {response.StatusCode}");
+            throw new InvalidOperationException($"API returned empty response. StatusCode: {response.StatusCode}");
         }
 
         return JsonSerializer.Deserialize<PaginatedResult<T>>(responseAsString, new JsonSerializerOptions

@@ -41,11 +41,11 @@ public partial class Products
             state.Page = 0;
         }
 
-        await LoadData(state.Page, state.PageSize, state);
+        await LoadDataAsync(state.Page, state.PageSize, state);
         return new TableData<ProductDto> { TotalItems = _totalItems, Items = _pagedData };
     }
 
-    private async Task LoadData(int pageNumber, int pageSize, TableState state)
+    private async Task LoadDataAsync(int pageNumber, int pageSize, TableState state)
     {
         _loading = true;
         string[]? orderings = null;
@@ -71,6 +71,7 @@ public partial class Products
     private void OnSearch(string text)
     {
         _searchString = text;
+        if(_loading) return;
         _table?.ReloadServerData();
     }
 
