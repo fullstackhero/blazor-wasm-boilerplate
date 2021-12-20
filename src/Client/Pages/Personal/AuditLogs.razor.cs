@@ -1,5 +1,4 @@
-using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.AuditLogs;
-using FSH.BlazorWebAssembly.Shared.Response.AuditLogs;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -8,7 +7,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 public partial class AuditLogs
 {
     [Inject]
-    private IAuditLogsService AuditService { get; set; } = default!;
+    private IAuditLogsClient AuditLogsClient { get; set; } = default!;
 
     public List<RelatedAuditTrail> Trails = new();
 
@@ -83,15 +82,16 @@ public partial class AuditLogs
 
     private async Task GetDataAsync()
     {
-        var response = await AuditService.GetCurrentUserAuditLogsAsync();
+        var response = await AuditLogsClient.GetMyLogsAsync();
         if (response.Succeeded)
         {
             if (response.Data is not null)
             {
                 Trails = response.Data
+                    .Where(x => x is not null)
                     .Select(x => new RelatedAuditTrail
                     {
-                        AffectedColumns = x.AffectedColumns,
+                        AffectedColumns = x!.AffectedColumns,
                         DateTime = x.DateTime,
                         Id = x.Id,
                         NewValues = x.NewValues,
