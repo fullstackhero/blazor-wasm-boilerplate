@@ -1,6 +1,5 @@
 ﻿@page "/catalog/brands"
-@using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
-@attribute [Authorize(Policy = PermissionConstants.Brands.View)]
+@attribute [Authorize(Policy = FSHPermissions.Brands.View)]
 
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Brands> _localizer
 

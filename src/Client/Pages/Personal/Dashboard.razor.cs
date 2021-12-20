@@ -1,5 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Shared.Notifications.Personal;
+using FSH.BlazorWebAssembly.Shared.Notifications.Dashboard;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;

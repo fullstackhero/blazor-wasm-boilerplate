@@ -1,5 +1,5 @@
 ﻿@page "/dashboard"
-@attribute [Authorize(Policy = PermissionConstants.Dashboard.View)]
+@attribute [Authorize(Policy = FSHPermissions.Dashboard.View)]
 
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Dashboard> _localizer
 

@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -33,7 +32,7 @@ public class NotificationClient : IAsyncDisposable
         _authService = authService;
 
         HubConnection = new HubConnectionBuilder()
-            .WithUrl($"{config[ConfigConstants.ApiBaseUrl]}notifications", options =>
+            .WithUrl($"{config[ConfigNames.ApiBaseUrl]}notifications", options =>
                 options.AccessTokenProvider =
                     () => tokenProvider.GetAccessTokenAsync())
             .WithAutomaticReconnect()

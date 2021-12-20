@@ -1,4 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Shared.Authorization;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
@@ -72,7 +73,7 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
         // Add permission claims from local storage
         if (await _localStorage.GetItemAsync<List<string>>(StorageConstants.Local.Permissions) is List<string> permissionClaims)
         {
-            claimsIdentity.AddClaims(permissionClaims.Select(p => new Claim(ClaimConstants.Permission, p)));
+            claimsIdentity.AddClaims(permissionClaims.Select(p => new Claim(FSHClaims.Permission, p)));
         }
 
         return new AuthenticationState(new ClaimsPrincipal(claimsIdentity));

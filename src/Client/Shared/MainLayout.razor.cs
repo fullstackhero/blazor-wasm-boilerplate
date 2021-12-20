@@ -1,5 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Preference;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

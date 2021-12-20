@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
 using System.Reflection;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Managers;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -29,7 +30,7 @@ public static class Startup
                     configuration.SnackbarConfiguration.ShowCloseIcon = false;
                 })
             .AddScoped<IClientPreferenceManager, ClientPreferenceManager>()
-            .AutoRegisterInterfaces<IManager>()
+            .AutoRegisterInterfaces<IAppService>()
             .AutoRegisterInterfaces<IApiService>()
 
             .AddAuthentication(config)
@@ -40,7 +41,7 @@ public static class Startup
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
-                    client.BaseAddress = new Uri(config[ConfigConstants.ApiBaseUrl]);
+                    client.BaseAddress = new Uri(config[ConfigNames.ApiBaseUrl]);
                 })
                 .AddAuthenticationHandler(config)
                 .Services
@@ -53,13 +54,13 @@ public static class Startup
 
     private static void RegisterPermissionClaims(AuthorizationOptions options)
     {
-        foreach (var prop in typeof(PermissionConstants)
+        foreach (var prop in typeof(FSHPermissions)
             .GetNestedTypes()
             .SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
         {
             if (prop.GetValue(null)?.ToString() is string permission)
             {
-                options.AddPolicy(permission, policy => policy.RequireClaim(ClaimConstants.Permission, permission));
+                options.AddPolicy(permission, policy => policy.RequireClaim(FSHClaims.Permission, permission));
             }
         }
     }
