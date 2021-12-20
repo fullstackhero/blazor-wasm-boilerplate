@@ -27,8 +27,8 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
                 await _localStorage.SetItemAsync(
                     StorageConstants.Local.Permissions,
                     permissionResult.Data
-                        .Where(p => !string.IsNullOrWhiteSpace(p.Permission))
-                        .Select(p => p.Permission!)
+                        .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
+                        .Select(p => p!.Permission)
                         .ToList());
             }
         }

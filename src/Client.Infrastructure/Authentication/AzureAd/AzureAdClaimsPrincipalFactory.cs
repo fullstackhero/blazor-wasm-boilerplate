@@ -59,8 +59,8 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                 if (permissionsResult.Succeeded && permissionsResult.Data is not null)
                 {
                     userIdentity.AddClaims(permissionsResult.Data
-                        .Where(p => !string.IsNullOrWhiteSpace(p.Permission))
-                        .Select(p => new Claim(ClaimConstants.Permission, p.Permission!)));
+                        .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
+                        .Select(p => new Claim(ClaimConstants.Permission, p!.Permission!)));
                 }
             }
         }
