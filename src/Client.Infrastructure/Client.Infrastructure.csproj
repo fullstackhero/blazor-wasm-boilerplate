@@ -29,7 +29,7 @@
         <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
-    <Target Name="NSwag" AfterTargets="PreBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
+    <Target Name="NSwag">
         <Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration)" />
     </Target>
     
