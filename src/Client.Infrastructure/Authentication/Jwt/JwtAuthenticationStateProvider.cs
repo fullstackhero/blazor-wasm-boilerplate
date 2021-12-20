@@ -1,14 +1,14 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public class JwtAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly ILocalStorageService _localStorage;
-    private readonly IUserService _userService;
+    private readonly IUsersClient _usersClient;
 
-    public JwtAuthenticationStateProvider(ILocalStorageService localStorage, IUserService userService) =>
-        (_localStorage, _userService) = (localStorage, userService);
+    public JwtAuthenticationStateProvider(ILocalStorageService localStorage, IUsersClient usersClient) =>
+        (_localStorage, _usersClient) = (localStorage, usersClient);
 
     public async Task MarkUserAsLoggedInAsync(string token, string refreshToken)
     {
@@ -20,7 +20,7 @@ public class JwtAuthenticationStateProvider : AuthenticationStateProvider
         if (!string.IsNullOrWhiteSpace(userId))
         {
             // get permissions for this user
-            var permissionResult = await _userService.GetPermissionsAsync(userId);
+            var permissionResult = await _usersClient.GetPermissionsAsync(userId);
             if (permissionResult.Succeeded && permissionResult.Data is not null)
             {
                 // store them in localstorage

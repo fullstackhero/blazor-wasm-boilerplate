@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity;
-using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +21,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
 
         if (principal.Identity?.IsAuthenticated is true)
         {
-            var profileResult = await _serviceProvider.GetRequiredService<IIdentityService>()
+            var profileResult = await _serviceProvider.GetRequiredService<IIdentityClient>()
                 .GetProfileDetailsAsync();
 
             if (profileResult.Succeeded && profileResult.Data is UserDetailsDto userDetails)
@@ -54,7 +53,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                     userIdentity.AddClaim(new Claim(ClaimConstants.ImageUrl, userDetails.ImageUrl));
                 }
 
-                var permissionsResult = await _serviceProvider.GetRequiredService<IUserService>()
+                var permissionsResult = await _serviceProvider.GetRequiredService<IUsersClient>()
                     .GetPermissionsAsync(profileResult.Data.Id.ToString());
 
                 if (permissionsResult.Succeeded && permissionsResult.Data is not null)

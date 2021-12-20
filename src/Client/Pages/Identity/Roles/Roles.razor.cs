@@ -1,10 +1,14 @@
-﻿using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 
 public partial class Roles
 {
+    [Inject]
+    private IRolesClient RolesClient { get; set; } = default!;
+
     private List<RoleDto> _roleList = new();
     private RoleDto _role = new();
     private string _searchString = string.Empty;
@@ -38,10 +42,10 @@ public partial class Roles
     private async Task GetRolesAsync()
     {
         _loading = true;
-        var response = await _roleService.GetRolesAsync();
+        var response = await RolesClient.GetListAsync();
         if (response.Succeeded && response.Data is not null)
         {
-            _roleList = response.Data.ToList();
+            _roleList = response.Data.Where(t => t is not null).Cast<RoleDto>().ToList();
         }
         else if (response.Messages is not null)
         {
@@ -71,12 +75,12 @@ public partial class Roles
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var response = await _roleService.DeleteAsync(id);
+            var response = await RolesClient.DeleteAsync(id);
             if (response.Succeeded)
             {
                 if (response.Messages?.Count > 0)
                 {
-                    _snackBar.Add(response.Messages[0], Severity.Success);
+                    _snackBar.Add(response.Messages.First(), Severity.Success);
                 }
             }
             else if (response.Messages is not null)
