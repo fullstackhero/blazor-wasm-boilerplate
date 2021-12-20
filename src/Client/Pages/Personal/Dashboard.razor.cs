@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Personal.Stats;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Shared.Notifications.Personal;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -10,7 +9,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 public partial class Dashboard
 {
     [Inject]
-    private IStatsService StatsService { get; set; } = default!;
+    private IStatsClient StatsClient { get; set; } = default!;
 
     [Inject]
     private HubConnection HubConnection { get; set; } = default!;
@@ -42,7 +41,7 @@ public partial class Dashboard
 
     private async Task LoadDataAsync()
     {
-        var response = await StatsService.GetDataAsync();
+        var response = await StatsClient.GetAsync();
         if (response.Succeeded)
         {
             if (response.Data is not null)
