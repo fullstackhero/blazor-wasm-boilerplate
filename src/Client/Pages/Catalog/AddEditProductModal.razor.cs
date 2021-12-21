@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
-using FSH.BlazorWebAssembly.Shared.Wrapper;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -19,6 +18,12 @@ public partial class AddEditProductModal
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; } = default!;
 
+    [Inject]
+    public IBrandsClient _brandsClient { get; set; } = default!;
+
+    [Inject]
+    public IProductsClient _productsClient { get; set; } = default!;
+
     private List<BrandDto> _brands = new();
 
     public void Cancel()
@@ -28,21 +33,21 @@ public partial class AddEditProductModal
 
     private async Task SaveAsync()
     {
-        IResult<Guid> response;
+        ResultOfGuid response;
         if (IsCreate)
         {
             CreateProductRequest createBrandRequest = new() { Name = UpdateProductRequest.Name, Description = UpdateProductRequest.Description, BrandId = UpdateProductRequest.BrandId, Rate = UpdateProductRequest.Rate };
-            response = await _productService.CreateAsync(createBrandRequest);
+            response = await _productsClient.CreateAsync(createBrandRequest);
         }
         else
         {
-            response = await _productService.UpdateAsync(this.UpdateProductRequest, Id);
+            response = await _productsClient.UpdateAsync(Id, UpdateProductRequest);
         }
 
         if (response.Succeeded)
         {
             if (response.Messages?.Count > 0)
-                _snackBar.Add(response.Messages[0], Severity.Success);
+                _snackBar.Add(response.Messages.First(), Severity.Success);
             else
                 _snackBar.Add(_localizer["Success"], Severity.Success);
             MudDialog.Close();
@@ -55,10 +60,6 @@ public partial class AddEditProductModal
                 {
                     _snackBar.Add(message, Severity.Error);
                 }
-            }
-            else if (!string.IsNullOrEmpty(response.Exception))
-            {
-                _snackBar.Add(response.Exception, Severity.Error);
             }
         }
     }
@@ -75,7 +76,7 @@ public partial class AddEditProductModal
         string[] orderBy = { "id" };
         BrandListFilter filter = new() { PageNumber = 0, PageSize = 10, OrderBy = orderBy };
         if (string.IsNullOrEmpty(searchKeyword)) filter.Keyword = searchKeyword;
-        var response = await _brandService.SearchBrandAsync(filter);
+        var response = await _brandsClient.SearchAsync(filter);
         if (response.Succeeded && response.Data is not null)
         {
             _brands = response.Data.ToList();

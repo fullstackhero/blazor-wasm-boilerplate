@@ -1,5 +1,5 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity;
-using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
 
         if (principal.Identity?.IsAuthenticated is true)
         {
-            var profileResult = await _serviceProvider.GetRequiredService<IIdentityService>()
+            var profileResult = await _serviceProvider.GetRequiredService<IIdentityClient>()
                 .GetProfileDetailsAsync();
 
             if (profileResult.Succeeded && profileResult.Data is UserDetailsDto userDetails)
@@ -39,9 +39,9 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                     userIdentity.AddClaim(new Claim(ClaimTypes.MobilePhone, userDetails.PhoneNumber));
                 }
 
-                if (!userIdentity.HasClaim(c => c.Type == ClaimConstants.Fullname))
+                if (!userIdentity.HasClaim(c => c.Type == FSHClaims.Fullname))
                 {
-                    userIdentity.AddClaim(new Claim(ClaimConstants.Fullname, $"{userDetails.FirstName} {userDetails.LastName}"));
+                    userIdentity.AddClaim(new Claim(FSHClaims.Fullname, $"{userDetails.FirstName} {userDetails.LastName}"));
                 }
 
                 if (!userIdentity.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
@@ -49,19 +49,19 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                     userIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()));
                 }
 
-                if (!userIdentity.HasClaim(c => c.Type == ClaimConstants.ImageUrl) && userDetails.ImageUrl is not null)
+                if (!userIdentity.HasClaim(c => c.Type == FSHClaims.ImageUrl) && userDetails.ImageUrl is not null)
                 {
-                    userIdentity.AddClaim(new Claim(ClaimConstants.ImageUrl, userDetails.ImageUrl));
+                    userIdentity.AddClaim(new Claim(FSHClaims.ImageUrl, userDetails.ImageUrl));
                 }
 
-                var permissionsResult = await _serviceProvider.GetRequiredService<IUserService>()
+                var permissionsResult = await _serviceProvider.GetRequiredService<IUsersClient>()
                     .GetPermissionsAsync(profileResult.Data.Id.ToString());
 
                 if (permissionsResult.Succeeded && permissionsResult.Data is not null)
                 {
                     userIdentity.AddClaims(permissionsResult.Data
-                        .Where(p => !string.IsNullOrWhiteSpace(p.Permission))
-                        .Select(p => new Claim(ClaimConstants.Permission, p.Permission!)));
+                        .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
+                        .Select(p => new Claim(FSHClaims.Permission, p!.Permission!)));
                 }
             }
         }

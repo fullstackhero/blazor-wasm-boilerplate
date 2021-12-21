@@ -1,6 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -20,6 +20,9 @@ public partial class Login
     public IAuthenticationService AuthService { get; set; } = default!;
 
     public bool BusySubmitting { get; set; } = false;
+
+    private readonly TokenRequest _tokenRequest = new();
+    private string _tenantKey { get; set; } = string.Empty;
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -59,17 +62,15 @@ public partial class Login
     {
         _tokenRequest.Email = "admin@root.com";
         _tokenRequest.Password = "123Pa$$word!";
-        _tokenRequest.Tenant = "root";
+        _tenantKey = "root";
     }
-
-    private readonly TokenRequest _tokenRequest = new();
 
     private async Task SubmitAsync()
     {
         try
         {
             BusySubmitting = true;
-            var result = await AuthService.LoginAsync(_tokenRequest);
+            var result = await AuthService.LoginAsync(_tenantKey, _tokenRequest);
             if (!result.Succeeded && result.Messages is not null)
             {
                 Error?.ProcessError(result.Messages);

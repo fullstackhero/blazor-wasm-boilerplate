@@ -1,10 +1,14 @@
-﻿using FSH.BlazorWebAssembly.Shared.Catalog;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
 public partial class Products
 {
+    [Inject]
+    public IProductsClient _productsClient { get; set; } = default!;
+
     private IEnumerable<ProductDto>? _pagedData;
     private MudTable<ProductDto>? _table;
 
@@ -57,7 +61,7 @@ public partial class Products
         }
 
         var request = new ProductListFilter { PageSize = pageSize, PageNumber = pageNumber + 1, Keyword = _searchString, OrderBy = orderings ?? Array.Empty<string>() };
-        var response = await _productService.GetProductsAsync(request);
+        var response = await _productsClient.SearchAsync(request);
         if (response.Succeeded)
         {
             _totalItems = response.TotalCount;
@@ -118,10 +122,10 @@ public partial class Products
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var response = await _productService.DeleteAsync(id);
+            var response = await _productsClient.DeleteAsync(id);
             if (response.Succeeded)
             {
-                if (response.Messages?.First() is string message)
+                if (response.Messages?.FirstOrDefault() is string message)
                 {
                     _snackBar.Add(message, Severity.Success);
                 }

@@ -1,33 +1,31 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
-using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
+using Result = FSH.BlazorWebAssembly.Shared.Wrapper.Result;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
 public class JwtAuthenticationService : IAuthenticationService
 {
-    private readonly HttpClient _httpClient;
+    private readonly ITokensClient _tokensClient;
     private readonly JwtAuthenticationStateProvider _authStateProvider;
     private readonly NavigationManager _navigationManager;
 
     public JwtAuthenticationService(
-        HttpClient httpClient,
+        ITokensClient tokensClient,
         JwtAuthenticationStateProvider authStateProvider,
         NavigationManager navigationManager)
     {
-        _httpClient = httpClient;
+        _tokensClient = tokensClient;
         _authStateProvider = authStateProvider;
         _navigationManager = navigationManager;
     }
 
     public AuthProvider ProviderType => AuthProvider.Jwt;
 
-    public async Task<IResult> LoginAsync(TokenRequest model)
+    public async Task<IResult> LoginAsync(string tenantKey, TokenRequest request)
     {
-        _httpClient.DefaultRequestHeaders.Clear();
-        _httpClient.DefaultRequestHeaders.Add(HeaderConstants.Tenant, model.Tenant);
-        var response = await _httpClient.PostAsJsonAsync(TokenEndpoints.AuthenticationEndpoint, model);
-        var result = await response.ToResultAsync<TokenResponse>();
+        var result = await _tokensClient.GetTokenAsync(tenantKey, request);
         if (result.Succeeded)
         {
             string? token = result.Data?.Token;
@@ -44,7 +42,7 @@ public class JwtAuthenticationService : IAuthenticationService
         }
         else
         {
-            return await Result.FailAsync(result.Exception);
+            return await Result.FailAsync(result.Messages?.FirstOrDefault());
         }
     }
 
@@ -59,15 +57,19 @@ public class JwtAuthenticationService : IAuthenticationService
     public async Task<IResult<TokenResponse>> RefreshTokenAsync(RefreshTokenRequest request)
     {
         var authState = await _authStateProvider.GetAuthenticationStateAsync();
-        _httpClient.DefaultRequestHeaders.Clear();
-        _httpClient.DefaultRequestHeaders.Add(HeaderConstants.Tenant, authState.User.GetTenant());
-        var response = await _httpClient.PostAsJsonAsync(TokenEndpoints.Refresh, request);
-        var tokenResponse = await response.ToResultAsync<TokenResponse>();
+        string? tenantKey = authState.User.GetTenant();
+        if (string.IsNullOrWhiteSpace(tenantKey))
+        {
+            throw new InvalidOperationException("Can't refresh token when user is not logged in!");
+        }
+
+        var tokenResponse = await _tokensClient.RefreshAsync(tenantKey, request);
         if (tokenResponse.Succeeded && tokenResponse.Data is not null)
         {
             await _authStateProvider.SaveAuthTokens(tokenResponse.Data.Token, tokenResponse.Data.RefreshToken);
+            return await Result<TokenResponse>.SuccessAsync(tokenResponse.Data);
         }
 
-        return tokenResponse;
+        return await Result<TokenResponse>.FailAsync(tokenResponse.Messages?.ToList() ?? new ());
     }
 }

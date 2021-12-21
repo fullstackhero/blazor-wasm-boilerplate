@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy;
-using FSH.BlazorWebAssembly.Shared.Multitenancy;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -25,15 +24,15 @@ public partial class Tenants
     public List<TenantDto> Elements = new List<TenantDto>();
 
     [Inject]
-    private ITenantService TenantService { get; set; } = default!;
+    private ITenantsClient TenantsClient { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
         _loading = true;
-        var response = await TenantService.GetAllAsync();
+        var response = await TenantsClient.GetAllAsync();
         if (response.Succeeded && response.Data is not null)
         {
-            Elements = response.Data.ToList();
+            Elements = response.Data.Where(t => t is not null).Cast<TenantDto>().ToList();
         }
         else if (response.Messages is not null)
         {

@@ -26,15 +26,11 @@
 @using FSH.BlazorWebAssembly.Client.Components.ErrorHandler
 @using FSH.BlazorWebAssembly.Client.Components.Notifications
 @using FSH.BlazorWebAssembly.Client.Components.ThemeManager
+@using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Catalog
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Managers.Preferences
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Identity
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Services.Multitenancy
-@using FSH.BlazorWebAssembly.Shared.Catalog
-@using FSH.BlazorWebAssembly.Shared.Constants
-@using FSH.BlazorWebAssembly.Shared.Multitenancy;
+@using FSH.BlazorWebAssembly.Shared.Authorization
 
 @attribute [Authorize]
 @inject NavigationManager _navigationManager
@@ -43,8 +39,4 @@
 @inject IConfiguration _configurations;
 
 @inject IClientPreferenceManager _clientPreferenceManager
-@inject IBrandService _brandService;
-@inject IProductService _productService;
-@inject IRoleService _roleService;
 @inject ILocalStorageService _localStorage;
-@inject ITenantService _tenantService;

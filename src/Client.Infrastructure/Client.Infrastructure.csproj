@@ -1,28 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>FSH.BlazorWebAssembly.Client.Infrastructure</RootNamespace>
-    <AssemblyName>FSH.BlazorWebAssembly.Client.Infrastructure</AssemblyName>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>FSH.BlazorWebAssembly.Client.Infrastructure</RootNamespace>
+        <AssemblyName>FSH.BlazorWebAssembly.Client.Infrastructure</AssemblyName>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.1" />
-    <PackageReference Include="MudBlazor" Version="6.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.1" />
+        <PackageReference Include="MudBlazor" Version="6.0.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="NSwag.MSBuild" Version="13.15.5">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Shared\Shared.csproj" />
+    </ItemGroup>
 
+    <Target Name="NSwag">
+        <Exec WorkingDirectory="$(ProjectDir)\ApiClient" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration)" />
+    </Target>
+    
 </Project>

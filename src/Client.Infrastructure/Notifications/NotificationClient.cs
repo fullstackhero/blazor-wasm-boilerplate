@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -9,10 +8,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 
 public class NotificationClient : IAsyncDisposable
 {
+    private readonly IConfiguration _config;
     private readonly NavigationManager _navigation;
-    private readonly IConfiguration _configuration;
-    [Inject]
-    public IAuthenticationService AuthService { get; set; } = default!;
+    private readonly IAuthenticationService _authService;
     private CancellationTokenSource _cts = new();
 
     public HubConnection HubConnection { get; private set; }
@@ -27,12 +25,14 @@ public class NotificationClient : IAsyncDisposable
 
     public event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
 
-    public NotificationClient(IAccessTokenProvider tokenProvider, IConfiguration config, NavigationManager navigation)
+    public NotificationClient(IAccessTokenProvider tokenProvider, IConfiguration config, NavigationManager navigation, IAuthenticationService authService)
     {
+        _config = config;
         _navigation = navigation;
-        _configuration = config;
+        _authService = authService;
+
         HubConnection = new HubConnectionBuilder()
-            .WithUrl($"{config[ConfigConstants.ApiBaseUrl]}notifications", options =>
+            .WithUrl($"{config[ConfigNames.ApiBaseUrl]}notifications", options =>
                 options.AccessTokenProvider =
                     () => tokenProvider.GetAccessTokenAsync())
             .WithAutomaticReconnect()
@@ -84,14 +84,13 @@ public class NotificationClient : IAsyncDisposable
                 // If a 401 is thrown here, it means the user doesn't have access to the application, so we guide them to a "Not Found" page.
                 // Sending them back to /login would throw them in an endless loop.
                 // In the case of regular jwt auth, this shouldn't happen. If it does, there must be something else wrong...
-
-                switch (_configuration[nameof(AuthProvider)])
+                switch (_config[nameof(AuthProvider)])
                 {
                     case nameof(AuthProvider.AzureAd):
                         _navigation.NavigateTo("/notfound");
                         break;
                     default:
-                        await AuthService.LogoutAsync();
+                        await _authService.LogoutAsync();
                         break;
                 }
 

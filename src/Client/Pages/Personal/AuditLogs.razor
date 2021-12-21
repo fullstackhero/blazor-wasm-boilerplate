@@ -1,5 +1,5 @@
 @page "/audit-logs"
-@using System.Globalization
+
 @inject Microsoft.Extensions.Localization.IStringLocalizer<AuditLogs> _localizer
 
 <style>
@@ -54,10 +54,10 @@ else
             </MudTd>
             <MudTd DataLabel="Date">
                 <MudItem>
-                    <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Secondary" Label="true" Color="Color.Surface">@_localizer["Local"] : @context.LocalTime.ToString("G", CultureInfo.CurrentCulture)</MudChip>
+                    <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Secondary" Label="true" Color="Color.Surface">@_localizer["Local"] : @context.LocalTime.ToString("G")</MudChip>
                 </MudItem>
                 <MudItem>
-                    <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Secondary" Label="true" Color="Color.Surface">@_localizer["UTC"] : @context.DateTime.ToString("G", CultureInfo.CurrentCulture)</MudChip>
+                    <MudChip Icon="@Icons.Material.Filled.Watch" IconColor="Color.Secondary" Label="true" Color="Color.Surface">@_localizer["UTC"] : @context.DateTime.ToString("G")</MudChip>
                 </MudItem>
             </MudTd>
             <MudTd DataLabel="Tax">@context.Type</MudTd>

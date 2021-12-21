@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
+﻿using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 

@@ -23,7 +23,7 @@
         </MudItem>
         <MudItem xs="12">
             <MudTextField T="string" Label="Tenant" Variant="Variant.Outlined"
-                          @bind-Value="_tokenRequest.Tenant" For="@(() => _tokenRequest.Tenant)" />
+                          @bind-Value="_tenantKey" For="@(() => _tenantKey)" />
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-space-between align-center">
             <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1"></MudCheckBox> <MudLink Href="/account/forgot-password">Forgot password?</MudLink>

@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 

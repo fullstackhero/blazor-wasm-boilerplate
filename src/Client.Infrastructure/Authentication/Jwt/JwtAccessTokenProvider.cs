@@ -1,5 +1,5 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Extensions;
-using FSH.BlazorWebAssembly.Shared.Identity;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,7 +32,7 @@ internal class JwtAccessTokenProvider : IAccessTokenProvider
             {
                 string? refreshToken = await authStateProvider.GetRefreshTokenAsync();
                 var response = await _services.GetRequiredService<IAuthenticationService>()
-                    .RefreshTokenAsync(new RefreshTokenRequest(token, refreshToken));
+                    .RefreshTokenAsync(new RefreshTokenRequest { Token = token, RefreshToken = refreshToken });
                 if (response.Succeeded)
                 {
                     token = response.Data?.Token;
