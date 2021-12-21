@@ -12,12 +12,10 @@ public partial class Login
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = default!;
 
-    // Right now error is not used anywhere apparently, so it will always be null?
-    [CascadingParameter]
-    public Error? Error { get; set; }
-
     [Inject]
     public IAuthenticationService AuthService { get; set; } = default!;
+
+    private CustomValidation? _customValidation;
 
     public bool BusySubmitting { get; set; } = false;
 
@@ -67,18 +65,27 @@ public partial class Login
 
     private async Task SubmitAsync()
     {
+        BusySubmitting = true;
         try
         {
-            BusySubmitting = true;
+            _customValidation?.ClearErrors();
+
             var result = await AuthService.LoginAsync(_tenantKey, _tokenRequest);
             if (!result.Succeeded && result.Messages is not null)
             {
-                Error?.ProcessError(result.Messages);
+                foreach (string message in result.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
             }
         }
-        catch (Exception ex)
+        catch (ApiException<HttpValidationProblemDetails> ex)
         {
-            Error?.ProcessError(ex);
+            _customValidation?.DisplayErrors(ex.Result.Errors);
+        }
+        catch (ApiException<ErrorResultOfString> ex)
+        {
+            _snackBar.Add(ex.Result.Exception, Severity.Error);
         }
         finally
         {

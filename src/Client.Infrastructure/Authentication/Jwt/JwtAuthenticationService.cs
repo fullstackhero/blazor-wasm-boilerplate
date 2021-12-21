@@ -38,11 +38,11 @@ public class JwtAuthenticationService : IAuthenticationService
 
             await _authStateProvider.MarkUserAsLoggedInAsync(token, refreshToken);
 
-            return await Result.SuccessAsync();
+            return Result.Success();
         }
         else
         {
-            return await Result.FailAsync(result.Messages?.FirstOrDefault());
+            return Result.Fail(result.Messages?.FirstOrDefault());
         }
     }
 
