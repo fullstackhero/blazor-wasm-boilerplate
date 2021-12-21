@@ -12,12 +12,10 @@ public partial class Login
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = default!;
 
-    // Right now error is not used anywhere apparently, so it will always be null?
-    [CascadingParameter]
-    public Error? Error { get; set; }
-
     [Inject]
     public IAuthenticationService AuthService { get; set; } = default!;
+
+    private CustomValidation? _customValidation;
 
     public bool BusySubmitting { get; set; } = false;
 
@@ -67,22 +65,47 @@ public partial class Login
 
     private async Task SubmitAsync()
     {
+        BusySubmitting = true;
+
+        await ExecuteApiCallAsync(() => AuthService.LoginAsync(_tenantKey, _tokenRequest));
+
+        BusySubmitting = false;
+    }
+
+    private async Task<T?> ExecuteApiCallAsync<T>(Func<Task<T>> call)
+    where T : Result
+    {
+        _customValidation?.ClearErrors();
         try
         {
-            BusySubmitting = true;
-            var result = await AuthService.LoginAsync(_tenantKey, _tokenRequest);
-            if (!result.Succeeded && result.Messages is not null)
+            var result = await call();
+
+            if (result.Succeeded)
             {
-                Error?.ProcessError(result.Messages);
+                return result;
+            }
+
+            if (result.Messages is not null)
+            {
+                foreach (string message in result.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
+            }
+            else
+            {
+                _snackBar.Add("Something went wrong!", Severity.Error);
             }
         }
-        catch (Exception ex)
+        catch (ApiException<HttpValidationProblemDetails> ex)
         {
-            Error?.ProcessError(ex);
+            _customValidation?.DisplayErrors(ex.Result.Errors);
         }
-        finally
+        catch (ApiException<ErrorResultOfString> ex)
         {
-            BusySubmitting = false;
+            _snackBar.Add(ex.Result.Exception, Severity.Error);
         }
+
+        return default;
     }
 }
