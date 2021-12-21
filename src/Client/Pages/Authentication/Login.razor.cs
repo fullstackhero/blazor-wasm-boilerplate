@@ -66,17 +66,35 @@ public partial class Login
     private async Task SubmitAsync()
     {
         BusySubmitting = true;
+
+        await ExecuteApiCallAsync(() => AuthService.LoginAsync(_tenantKey, _tokenRequest));
+
+        BusySubmitting = false;
+    }
+
+    private async Task<T?> ExecuteApiCallAsync<T>(Func<Task<T>> call)
+    where T : Result
+    {
+        _customValidation?.ClearErrors();
         try
         {
-            _customValidation?.ClearErrors();
+            var result = await call();
 
-            var result = await AuthService.LoginAsync(_tenantKey, _tokenRequest);
-            if (!result.Succeeded && result.Messages is not null)
+            if (result.Succeeded)
+            {
+                return result;
+            }
+
+            if (result.Messages is not null)
             {
                 foreach (string message in result.Messages)
                 {
                     _snackBar.Add(message, Severity.Error);
                 }
+            }
+            else
+            {
+                _snackBar.Add("Something went wrong!", Severity.Error);
             }
         }
         catch (ApiException<HttpValidationProblemDetails> ex)
@@ -87,9 +105,7 @@ public partial class Login
         {
             _snackBar.Add(ex.Result.Exception, Severity.Error);
         }
-        finally
-        {
-            BusySubmitting = false;
-        }
+
+        return default;
     }
 }
