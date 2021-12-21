@@ -50,24 +50,16 @@ public class ClientPreferenceManager : IClientPreferenceManager
         return false;
     }
 
-    public async Task<IResult> ChangeLanguageAsync(string languageCode)
+    public async Task<bool> ChangeLanguageAsync(string languageCode)
     {
         if (await GetPreference() is ClientPreference preference)
         {
             // preference.LanguageCode = languageCode;
             await SetPreference(preference);
-            return new Result
-            {
-                Succeeded = true,
-                Messages = new List<string> { "Client Language has been changed" }
-            };
+            return true;
         }
 
-        return new Result
-        {
-            Succeeded = false,
-            Messages = new List<string> { "Failed to get client preferences" }
-        };
+        return false;
     }
 
     public async Task<MudTheme> GetCurrentThemeAsync()

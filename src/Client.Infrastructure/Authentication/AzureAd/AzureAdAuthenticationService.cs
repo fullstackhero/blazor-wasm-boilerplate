@@ -14,16 +14,15 @@ internal class AzureAdAuthenticationService : IAuthenticationService
 
     public AuthProvider ProviderType => AuthProvider.AzureAd;
 
-    public Task<IResult> LoginAsync(string tenantKey, TokenRequest request) =>
+    public Task<Result> LoginAsync(string tenantKey, TokenRequest request) =>
         throw new NotImplementedException();
 
-    public async Task<IResult> LogoutAsync()
+    public async Task LogoutAsync()
     {
         await _signOut.SetSignOutState();
         _navigation.NavigateTo("authentication/logout");
-        return await Shared.Wrapper.Result.SuccessAsync();
     }
 
-    public Task<IResult<TokenResponse>> RefreshTokenAsync(RefreshTokenRequest request) =>
+    public Task<ResultOfTokenResponse> RefreshTokenAsync(RefreshTokenRequest request) =>
         throw new NotImplementedException();
 }

@@ -1,7 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
-using Result = FSH.BlazorWebAssembly.Shared.Wrapper.Result;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 
@@ -23,7 +22,7 @@ public class JwtAuthenticationService : IAuthenticationService
 
     public AuthProvider ProviderType => AuthProvider.Jwt;
 
-    public async Task<IResult> LoginAsync(string tenantKey, TokenRequest request)
+    public async Task<Result> LoginAsync(string tenantKey, TokenRequest request)
     {
         var result = await _tokensClient.GetTokenAsync(tenantKey, request);
         if (result.Succeeded)
@@ -33,28 +32,23 @@ public class JwtAuthenticationService : IAuthenticationService
 
             if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(refreshToken))
             {
-                return Result.Fail("Invalid token received.");
+                return new Result { Succeeded = false, Messages = new List<string>() { "Invalid token received." } };
             }
 
             await _authStateProvider.MarkUserAsLoggedInAsync(token, refreshToken);
+        }
 
-            return Result.Success();
-        }
-        else
-        {
-            return Result.Fail(result.Messages?.FirstOrDefault());
-        }
+        return result;
     }
 
-    public async Task<IResult> LogoutAsync()
+    public async Task LogoutAsync()
     {
         await _authStateProvider.MarkUserAsLoggedOutAsync();
 
         _navigationManager.NavigateTo("/login");
-        return await Result.SuccessAsync();
     }
 
-    public async Task<IResult<TokenResponse>> RefreshTokenAsync(RefreshTokenRequest request)
+    public async Task<ResultOfTokenResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
         var authState = await _authStateProvider.GetAuthenticationStateAsync();
         string? tenantKey = authState.User.GetTenant();
@@ -67,9 +61,8 @@ public class JwtAuthenticationService : IAuthenticationService
         if (tokenResponse.Succeeded && tokenResponse.Data is not null)
         {
             await _authStateProvider.SaveAuthTokens(tokenResponse.Data.Token, tokenResponse.Data.RefreshToken);
-            return await Result<TokenResponse>.SuccessAsync(tokenResponse.Data);
         }
 
-        return await Result<TokenResponse>.FailAsync(tokenResponse.Messages?.ToList() ?? new ());
+        return tokenResponse;
     }
 }
