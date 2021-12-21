@@ -51,6 +51,8 @@ public partial class Brands
 
     private async Task GetBrandsAsync()
     {
+        if (_loading) return;
+
         _loading = true;
         string[] orderings = Array.Empty<string>();
         if (_state != null && !string.IsNullOrEmpty(_state.SortLabel))

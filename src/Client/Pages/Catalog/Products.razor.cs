@@ -47,6 +47,8 @@ public partial class Products
 
     private async Task LoadData(int pageNumber, int pageSize, TableState state)
     {
+        if (_loading) return;
+
         _loading = true;
         string[]? orderings = null;
         if (!string.IsNullOrEmpty(state.SortLabel))
