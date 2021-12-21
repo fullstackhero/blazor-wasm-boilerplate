@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
 
+// See https://docs.microsoft.com/en-us/aspnet/core/blazor/forms-validation?view=aspnetcore-6.0#server-validation-with-a-validator-component
 public class CustomValidation : ComponentBase
 {
     private ValidationMessageStore? _messageStore;
