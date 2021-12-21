@@ -43,8 +43,11 @@ public partial class Brands
             state.Page = 0;
         }
 
-        await LoadDataAsync(state);
-
+        if (!_loading)
+        {
+            await LoadDataAsync(state);
+        }
+        
         return new TableData<BrandDto> { TotalItems = _totalItems, Items = _pagedData };
     }
 
