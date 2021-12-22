@@ -36,5 +36,6 @@ public static class CustomColors
         public const string AppbarBackground = "#1b1f22";
         public const string DrawerBackground = "#121212";
         public const string Surface = "#202528";
+        public const string Disabled = "#545454";
     }
 }

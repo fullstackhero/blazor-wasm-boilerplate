@@ -1,6 +1,7 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
 
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Authorization
@@ -37,6 +38,7 @@
 @inject ISnackbar _snackBar
 @inject IDialogService _dialogService
 @inject IConfiguration _configurations;
+@inject JwtAuthenticationStateProvider _jwtStateProvider
 
 @inject IClientPreferenceManager _clientPreferenceManager
 @inject ILocalStorageService _localStorage;

@@ -32,7 +32,6 @@ public static class Startup
             .AddScoped<IClientPreferenceManager, ClientPreferenceManager>()
             .AutoRegisterInterfaces<IAppService>()
             .AutoRegisterInterfaces<IApiService>()
-
             .AddAuthentication(config)
             .AddAuthorizationCore(RegisterPermissionClaims)
 

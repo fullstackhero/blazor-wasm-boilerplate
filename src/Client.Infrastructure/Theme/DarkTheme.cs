@@ -28,7 +28,8 @@ public class DarkTheme : MudTheme
             TableLines = "#e0e0e036",
             Dark = CustomColors.Dark.DrawerBackground,
             Divider = "#e0e0e036",
-            OverlayDark = "hsl(0deg 0% 0% / 75%)"
+            OverlayDark = "hsl(0deg 0% 0% / 75%)",
+            TextDisabled = CustomColors.Dark.Disabled
         };
 
         LayoutProperties = new LayoutProperties()

@@ -1,4 +1,5 @@
-﻿using FSH.BlazorWebAssembly.Shared.Authorization;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
+using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -37,10 +38,11 @@ public partial class PersonCard
         {
             if (string.IsNullOrEmpty(UserId))
             {
-                FullName = user.GetName();
+                FullName = user.GetFullName();
                 UserId = user.GetUserId();
                 Email = user.GetEmail();
-                ImageUri = user.GetImageUrl();
+                string? userImage = user.GetImageUrl();
+                ImageUri = userImage.Replace("{server_url}/", _configurations[ConfigNames.ApiBaseUrl]);
                 StateHasChanged();
             }
         }

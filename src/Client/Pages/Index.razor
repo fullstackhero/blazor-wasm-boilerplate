@@ -1,17 +1,17 @@
 ﻿@page "/home"
 @page "/"
 @using System.Security.Claims
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Index> _localizer
 
-<PageTitle>Home</PageTitle>
+<FshTitle Title="@_localizer["Home"]" Description="@_localizer["Hello World!"]" />
 
-<MudText Typo="Typo.h4" GutterBottom="true">Hello World</MudText>
 
-Welcome to your new app.
-
-<MudItem xs="12" md="12">
-    <MudText Typo="Typo.h6" GutterBottom="true">Claims:</MudText>
-    <MudPaper>
-        <MudList Dense="true">
+<ErrorBoundary>
+    <ChildContent>
+<MudExpansionPanel
+            Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
+            Class="mud-elevation-25" Text="Claims">
+                  <MudList Dense="true">
             @if (Claims is not null)
             {
                 @foreach (var claim in Claims)
@@ -22,12 +22,12 @@ Welcome to your new app.
                         </MudChip>
                         @claim.Value
                     </MudListItem>
-                    <MudDivider DividerType="DividerType.Inset" />
                 }
             }
-        </MudList>
-    </MudPaper>
-</MudItem>
+        </MudList>   
+            </MudExpansionPanel>
+            </ChildContent>
+            </ErrorBoundary>
 
 @code {
     [CascadingParameter]
