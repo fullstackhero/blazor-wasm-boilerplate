@@ -50,6 +50,8 @@ public partial class Brands
 
     private async Task LoadDataAsync(TableState state)
     {
+        if (_loading) return;
+
         _loading = true;
 
         string[] orderings = string.IsNullOrEmpty(state?.SortLabel)
