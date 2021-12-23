@@ -1,5 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -17,6 +18,8 @@ public partial class Profile
     private IIdentityClient _identityClient { get; set; } = default!;
     [Inject]
     private IAuthenticationService _authService { get; set; } = default!;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = default!;
 
     public string UserId { get; set; }
 
@@ -45,16 +48,7 @@ public partial class Profile
 
     private async Task LoadDataAsync()
     {
-        AuthenticationState state;
-        if(_configurations["AuthProvider"] == "Jwt")
-        {
-            state = await _jwtStateProvider.GetAuthenticationStateAsync();
-        }
-        else
-        {
-            state = await _azureStateProvider.GetAuthenticationStateAsync();
-        }
-
+        var state = await AuthState;
         var user = state.User;
         _profileModel.Email = user.GetEmail();
         _profileModel.FirstName = user.GetFirstName();
