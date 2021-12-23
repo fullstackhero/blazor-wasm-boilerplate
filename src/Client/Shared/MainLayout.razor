@@ -15,6 +15,7 @@
             Link="https://opencollective.com/fullstackhero" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">
             @_localizer["Sponsor"]</MudButton>
         <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
+        <MudTooltip Text="Support">
         <MudMenu Icon="@Icons.Filled.SupportAgent" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
             OffsetY="true">
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
@@ -29,21 +30,23 @@
             <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
             <MudMenuItem Link="https://fullstackhero.net/" Target="_blank">@_localizer["Documentation"]</MudMenuItem>
         </MudMenu>
+        </MudTooltip>
+        <MudTooltip Text="Language">
         <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom"
             OffsetY="true" Dense="false">
             <MudMenuItem>English</MudMenuItem>
             <MudMenuItem>Swedish</MudMenuItem>
             <MudMenuItem>Old Norse</MudMenuItem>
         </MudMenu>
+        </MudTooltip>
         <MudTooltip Text="Fork Repository">
             <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
                 Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
         </MudTooltip>
         <NotificationConnectionStatus></NotificationConnectionStatus>
-        <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
     </MudHidden>
     <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
-        <MudTooltip Text="Sponsor Us!">
+        <MudTooltip Text="Sponsor">
             <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Inherit"
                 Link="https://opencollective.com/fullstackhero" Target="_blank" />
         </MudTooltip>
@@ -66,6 +69,7 @@
             <MudMenuItem Link="https://fullstackhero.net/getting-started/" Target="_blank">
                 @_localizer["Quick-Start Guide"]</MudMenuItem>
         </MudMenu>
+        <NotificationConnectionStatus></NotificationConnectionStatus>
     </MudHidden>
     <MudMenu AnchorOrigin="Origin.BottomRight" LockScroll="true" TransformOrigin="Origin.TopRight">
         <ActivatorContent>
@@ -77,13 +81,13 @@
                 <MudMenuItem OnClick="Profile">
                     <div class="d-flex">
                           <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Person" />
-                        <MudText>Profile</MudText>
+                        <MudText>Account</MudText>
                     </div>
                 </MudMenuItem>
-                <MudMenuItem>
+                <MudMenuItem Link="/dashboard">
                     <div class="d-flex">
-                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Settings" OnClick="Profile" />
-                        <MudText>Settings</MudText>
+                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Dashboard"/>
+                        <MudText>Dashboard</MudText>
                     </div>
                 </MudMenuItem>
                 <div class="mt-4 mx-4">

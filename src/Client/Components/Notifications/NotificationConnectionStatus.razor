@@ -21,7 +21,7 @@
         switch (state)
         {
             case ConnectionState.Connected:
-                TooltipText = $"Connection OK! (ConnectionId: {message}).";
+                TooltipText = $"Connected to Server with ConnectionId {message}";
                 Icon = @Icons.Filled.SignalWifiStatusbar4Bar;
                 IconColor = Color.Success;
                 break;
