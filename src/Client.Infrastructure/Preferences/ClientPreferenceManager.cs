@@ -54,7 +54,7 @@ public class ClientPreferenceManager : IClientPreferenceManager
     {
         if (await GetPreference() is ClientPreference preference)
         {
-            // preference.LanguageCode = languageCode;
+            preference.LanguageCode = languageCode;
             await SetPreference(preference);
             return true;
         }

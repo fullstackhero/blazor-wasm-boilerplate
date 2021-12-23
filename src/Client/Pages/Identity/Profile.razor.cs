@@ -3,6 +3,7 @@ using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
@@ -44,7 +45,16 @@ public partial class Profile
 
     private async Task LoadDataAsync()
     {
-        var state = await _jwtStateProvider.GetAuthenticationStateAsync();
+        AuthenticationState state;
+        if(_configurations["AuthProvider"] == "Jwt")
+        {
+            state = await _jwtStateProvider.GetAuthenticationStateAsync();
+        }
+        else
+        {
+            state = await _azureStateProvider.GetAuthenticationStateAsync();
+        }
+
         var user = state.User;
         _profileModel.Email = user.GetEmail();
         _profileModel.FirstName = user.GetFirstName();

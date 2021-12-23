@@ -1,4 +1,5 @@
-﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
+﻿@using FSH.BlazorWebAssembly.Client.Components.Localization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
 
 <MudAppBar Elevation="0">
     <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start"
@@ -31,14 +32,7 @@
             <MudMenuItem Link="https://fullstackhero.net/" Target="_blank">@_localizer["Documentation"]</MudMenuItem>
         </MudMenu>
         </MudTooltip>
-        <MudTooltip Text="Language">
-        <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom"
-            OffsetY="true" Dense="false">
-            <MudMenuItem>English</MudMenuItem>
-            <MudMenuItem>Swedish</MudMenuItem>
-            <MudMenuItem>Old Norse</MudMenuItem>
-        </MudMenu>
-        </MudTooltip>
+        <LanguageSelector/>
         <MudTooltip Text="Fork Repository">
             <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
                 Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />

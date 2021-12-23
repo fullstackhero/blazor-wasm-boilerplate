@@ -8,4 +8,5 @@ public class ClientPreference : IPreference
     public string PrimaryColor { get; set; } = "#3eaf7c";
     public string SecondaryColor { get; set; } = "#2196f3";
     public double BorderRadius { get; set; } = 5;
+    public string LanguageCode { get; set; } = LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US";
 }
