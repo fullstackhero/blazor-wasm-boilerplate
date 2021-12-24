@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using MudBlazor;
+using System.Text.RegularExpressions;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 

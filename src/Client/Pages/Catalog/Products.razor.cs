@@ -22,6 +22,7 @@ public partial class Products
 
     // private ClaimsPrincipal _currentUser;
     private bool _canCreateProducts;
+
     private bool _canEditProducts;
     private bool _canDeleteProducts;
     private bool _canSearchProducts;
@@ -77,7 +78,7 @@ public partial class Products
     private void OnSearch(string text)
     {
         _searchString = text;
-        if(_loading) return;
+        if (_loading) return;
         _table?.ReloadServerData();
     }
 

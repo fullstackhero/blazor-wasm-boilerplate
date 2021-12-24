@@ -1,6 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -14,14 +13,17 @@ public partial class Profile
 {
     private char _firstLetterOfName;
     private readonly UpdateProfileRequest _profileModel = new();
+
     [Inject]
     private IIdentityClient _identityClient { get; set; } = default!;
+
     [Inject]
     private IAuthenticationService _authService { get; set; } = default!;
+
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = default!;
 
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     private async Task UpdateProfileAsync()
     {
@@ -34,7 +36,7 @@ public partial class Profile
         }
         else
         {
-            foreach (var message in response.Messages)
+            foreach (string? message in response.Messages)
             {
                 _snackBar.Add(message, Severity.Error);
             }
@@ -54,8 +56,8 @@ public partial class Profile
         _profileModel.FirstName = user.GetFirstName();
         _profileModel.LastName = user.GetSurname();
         _profileModel.PhoneNumber = user.GetPhoneNumber();
-        ImageDataUrl = user.GetImageUrl().Replace("{server_url}/", _configurations[ConfigNames.ApiBaseUrl]);
-        UserId = user.GetUserId();
+        ImageDataUrl = user?.GetImageUrl()?.Replace("{server_url}/", _configurations[ConfigNames.ApiBaseUrl]);
+        UserId = user?.GetUserId();
 
         if (_profileModel.FirstName?.Length > 0)
         {
@@ -63,10 +65,10 @@ public partial class Profile
         }
     }
 
-    private IBrowserFile _file;
+    private IBrowserFile? _file;
 
     [Parameter]
-    public string ImageDataUrl { get; set; }
+    public string? ImageDataUrl { get; set; }
 
     private async Task UploadFiles(InputFileChangeEventArgs e)
     {
@@ -75,7 +77,7 @@ public partial class Profile
         {
             var supportedFormats = new List<string> { ".jpeg", ".jpg", ".png" };
             string? extension = Path.GetExtension(_file.Name);
-            if(!supportedFormats.Contains(extension.ToLower()))
+            if (!supportedFormats.Contains(extension.ToLower()))
             {
                 _snackBar.Add("File Format Not Supported.", Severity.Error);
                 return;
@@ -103,36 +105,6 @@ public partial class Profile
                     _snackBar.Add(message, Severity.Error);
                 }
             }
-        }
-    }
-
-    private async Task DeleteAsync()
-    {
-        var parameters = new DialogParameters
-            {
-                {nameof(Shared.Dialogs.DeleteConfirmation.ContentText), $"{string.Format(_localizer["Do you want to delete the profile picture of {0}"], _profileModel.Email)}?"}
-            };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<Shared.Dialogs.DeleteConfirmation>(_localizer["Delete"], parameters, options);
-        var result = await dialog.Result;
-        if (!result.Cancelled)
-        {
-            //var request = new UpdateProfilePictureRequest { Data = null, FileName = string.Empty, UploadType = Application.Enums.UploadType.ProfilePicture };
-            //var data = await _accountManager.UpdateProfilePictureAsync(request, UserId);
-            //if (data.Succeeded)
-            //{
-            //    await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageURL);
-            //    ImageDataUrl = string.Empty;
-            //    _snackBar.Add(_localizer["Profile picture deleted."], Severity.Success);
-            //    _navigationManager.NavigateTo("/account", true);
-            //}
-            //else
-            //{
-            //    foreach (var error in data.Messages)
-            //    {
-            //        _snackBar.Add(error, Severity.Error);
-            //    }
-            //}
         }
     }
 }

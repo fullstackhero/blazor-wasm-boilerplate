@@ -2,11 +2,12 @@
 
 public static class LocalizationConstants
 {
-    public static readonly LanguageCode[] SupportedLanguages = {
+    public static readonly LanguageCode[] SupportedLanguages =
+        {
             new LanguageCode
             {
                 Code = "en-US",
-                DisplayName= "English"
+                DisplayName = "English"
             },
             new LanguageCode
             {
@@ -16,7 +17,7 @@ public static class LocalizationConstants
             new LanguageCode
             {
                 Code = "km_KH",
-                DisplayName= "Khmer"
+                DisplayName = "Khmer"
             },
             new LanguageCode
             {
@@ -63,6 +64,6 @@ public static class LocalizationConstants
 
 public class LanguageCode
 {
-    public string DisplayName { get; set; }
-    public string Code { get; set; }
+    public string? DisplayName { get; set; }
+    public string? Code { get; set; }
 }

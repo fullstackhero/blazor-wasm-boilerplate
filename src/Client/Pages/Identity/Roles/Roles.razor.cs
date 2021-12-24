@@ -18,6 +18,7 @@ public partial class Roles
 
     // private ClaimsPrincipal _currentUser;
     private bool _canCreateRoles;
+
     private bool _canEditRoles;
     private bool _canDeleteRoles;
     private bool _canSearchRoles;

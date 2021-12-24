@@ -20,6 +20,7 @@ public partial class Brands
 
     // private ClaimsPrincipal _currentUser;
     private bool _canCreateBrands;
+
     private bool _canEditBrands;
     private bool _canDeleteBrands;
     private bool _canSearchBrands;
@@ -157,7 +158,7 @@ public partial class Brands
     private void OnSearch(string text)
     {
         _searchString = text;
-        if(_loading) return;
+        if (_loading) return;
         _table?.ReloadServerData();
     }
 }

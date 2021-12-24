@@ -19,6 +19,7 @@ public static class CustomColors
         Colors.LightBlue.Default,
         Colors.Cyan.Default,
     };
+
     public static class Light
     {
         public const string Primary = "#3eaf7c";

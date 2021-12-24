@@ -11,7 +11,7 @@ public partial class ErrorHandler
 
     public List<Exception> _receivedExceptions = new();
 
-    protected async override Task OnErrorAsync(Exception exception)
+    protected override async Task OnErrorAsync(Exception exception)
     {
         _receivedExceptions.Add(exception);
         switch (exception)

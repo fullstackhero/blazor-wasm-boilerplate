@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Reflection;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
@@ -9,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
+using System.Globalization;
+using System.Reflection;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure;
 
@@ -73,10 +73,10 @@ public static class Startup
             .GetExportedTypes()
             .Where(t => t.IsClass && !t.IsAbstract)
             .Select(t => new
-                {
-                    Service = t.GetInterface($"I{t.Name}"),
-                    Implementation = t
-                })
+            {
+                Service = t.GetInterface($"I{t.Name}"),
+                Implementation = t
+            })
             .Where(t => t.Service != null);
 
         foreach (var type in types)
