@@ -7,5 +7,4 @@ public interface IAuthenticationService
     AuthProvider ProviderType { get; }
     Task<Result> LoginAsync(string tenantKey, TokenRequest request);
     Task LogoutAsync();
-    Task<ResultOfTokenResponse> RefreshTokenAsync(RefreshTokenRequest request);
 }
