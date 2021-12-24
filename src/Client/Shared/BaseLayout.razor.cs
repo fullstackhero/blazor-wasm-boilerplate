@@ -11,12 +11,6 @@ public partial class BaseLayout
     private bool _themeDrawerOpen;
     private bool _rightToLeft = false;
 
-    private async Task RightToLeftToggle(bool value)
-    {
-        _rightToLeft = value;
-        await Task.CompletedTask;
-    }
-
     protected override async Task OnInitializedAsync()
     {
         _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
@@ -50,5 +44,6 @@ public partial class BaseLayout
         _currentTheme.Palette.Secondary = themePreference.SecondaryColor;
         _currentTheme.LayoutProperties.DefaultBorderRadius = $"{themePreference.BorderRadius}px";
         _currentTheme.LayoutProperties.DefaultBorderRadius = $"{themePreference.BorderRadius}px";
+        _rightToLeft = themePreference.IsRTL;
     }
 }

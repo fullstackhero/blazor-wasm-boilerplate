@@ -57,7 +57,8 @@ public static class LocalizationConstants
             new LanguageCode
             {
                 Code = "ar",
-                DisplayName = "عربي"
+                DisplayName = "عربي",
+                IsRTL = true
             }
         };
 }
@@ -66,4 +67,5 @@ public class LanguageCode
 {
     public string? DisplayName { get; set; }
     public string? Code { get; set; }
+    public bool IsRTL { get; set; } = false;
 }
