@@ -1,71 +1,21 @@
 ﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 
+public record LanguageCode(string Code, string DisplayName, bool IsRTL = false);
+
 public static class LocalizationConstants
 {
     public static readonly LanguageCode[] SupportedLanguages =
-        {
-            new LanguageCode
-            {
-                Code = "en-US",
-                DisplayName = "English"
-            },
-            new LanguageCode
-            {
-                Code = "fr-FR",
-                DisplayName = "French"
-            },
-            new LanguageCode
-            {
-                Code = "km_KH",
-                DisplayName = "Khmer"
-            },
-            new LanguageCode
-            {
-                Code = "de-DE",
-                DisplayName = "German"
-            },
-            new LanguageCode
-            {
-                Code = "nl-NL",
-                DisplayName = "Dutch - Netherlands"
-            },
-            new LanguageCode
-            {
-                Code = "es-ES",
-                DisplayName = "Spanish"
-            },
-            new LanguageCode
-            {
-                Code = "ru-RU",
-                DisplayName = "Russian"
-            },
-            new LanguageCode
-            {
-                Code = "sv-SE",
-                DisplayName = "Swedish"
-            },
-            new LanguageCode
-            {
-                Code = "id-ID",
-                DisplayName = "Indonesia"
-            },
-            new LanguageCode
-            {
-                Code = "it-IT",
-                DisplayName = "Italian"
-            },
-            new LanguageCode
-            {
-                Code = "ar",
-                DisplayName = "عربي",
-                IsRTL = true
-            }
-        };
-}
-
-public class LanguageCode
-{
-    public string? DisplayName { get; set; }
-    public string? Code { get; set; }
-    public bool IsRTL { get; set; } = false;
+    {
+        new("en-US", "English"),
+        new("fr-FR", "French"),
+        new("km_KH", "Khmer"),
+        new("de-DE", "German"),
+        new("nl-NL", "Dutch - Netherlands"),
+        new("es-ES", "Spanish"),
+        new("ru-RU", "Russian"),
+        new("sv-SE", "Swedish"),
+        new("id-ID", "Indonesia"),
+        new("it-IT", "Italian"),
+        new("ar", "عربي", true)
+    };
 }

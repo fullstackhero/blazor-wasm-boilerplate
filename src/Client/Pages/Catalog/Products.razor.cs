@@ -15,10 +15,10 @@ public partial class Products
     private int _totalItems;
     private int _currentPage;
     private string _searchString = string.Empty;
-    private bool _dense = false;
+    private bool _dense;
     private bool _striped = true;
-    private bool _bordered = false;
-    private bool _loading = true;
+    private bool _bordered;
+    private bool _loading;
 
     // private ClaimsPrincipal _currentUser;
     private bool _canCreateProducts;
@@ -47,6 +47,7 @@ public partial class Products
         }
 
         await LoadDataAsync(state.Page, state.PageSize, state);
+
         return new TableData<ProductDto> { TotalItems = _totalItems, Items = _pagedData };
     }
 
@@ -78,7 +79,6 @@ public partial class Products
     private void OnSearch(string text)
     {
         _searchString = text;
-        if (_loading) return;
         _table?.ReloadServerData();
     }
 
@@ -117,9 +117,9 @@ public partial class Products
     {
         string deleteContent = _localizer["Delete Content"];
         var parameters = new DialogParameters
-            {
-                { nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id)}
-            };
+        {
+            { nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, id)}
+        };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
         var dialog = _dialogService.Show<Shared.Dialogs.DeleteConfirmation>(_localizer["Delete"], parameters, options);
         var result = await dialog.Result;
