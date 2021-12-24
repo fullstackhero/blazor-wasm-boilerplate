@@ -1,0 +1,121 @@
+﻿@typeparam TEntity where TEntity : new()
+@typeparam TFilter
+
+@inject IStringLocalizer<AddEditModal<TEntity, TFilter>> L
+
+<EditForm Model="@EntityModel" OnValidSubmit="SaveAsync">
+    <MudDialog>
+        <TitleContent>
+            @if (Id == default)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                    @(L["Add "] + Context.EntityName)
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                    @(L["Update "] + Context.EntityName)
+                </MudText>
+            }
+        </TitleContent>
+        <DialogContent>
+            <MudGrid>
+                @if (Id != default)
+                {
+                    <MudItem xs="12" md="6">
+                        <MudTextField Disabled For="@(() => Id)" @bind-Value="Id" Label="@L["Id"]" />
+                    </MudItem>
+                }
+
+                @EditFormContent(EntityModel)
+
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@L["Cancel"]</MudButton>
+            @if (Id != default)
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Secondary">
+                    @L["Update"]
+                </MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">
+                    @L["Save"]
+                </MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code
+{
+    [Parameter, EditorRequired]
+    public EntityManagerContext<TEntity, TFilter> Context { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public RenderFragment<TEntity> EditFormContent { get; set; } = default!;
+
+    [Parameter]
+    public TEntity EntityModel { get; set; } = new();
+
+    [Parameter]
+    public bool IsCreate { get; set; }
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; } = default!;
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Context.OnModalInitializedFunc is not null)
+        {
+            return Context.OnModalInitializedFunc();
+        }
+        return Task.CompletedTask;
+    }
+
+    private async Task SaveAsync()
+    {
+        ResultOfGuid response;
+        if (IsCreate)
+        {
+            response = await Context.CreateFunc(EntityModel);
+        }
+        else
+        {
+            response = await Context.UpdateFunc(EntityModel);
+        }
+
+        if (response.Succeeded)
+        {
+            if (response.Messages?.Count > 0)
+            {
+                _snackBar.Add(response.Messages.First(), Severity.Success);
+            }
+            else
+            {
+                _snackBar.Add(L["Success"], Severity.Success);
+            }
+            MudDialog.Close();
+        }
+        else
+        {
+            if (response.Messages?.Count > 0)
+            {
+                foreach (string message in response.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
+            }
+        }
+    }
+
+    public void Cancel() => MudDialog.Cancel();
+}
