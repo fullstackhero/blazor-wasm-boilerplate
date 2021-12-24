@@ -1,10 +1,10 @@
+using System.Globalization;
 using FSH.BlazorWebAssembly.Client;
 using FSH.BlazorWebAssembly.Client.Infrastructure;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using System.Globalization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 

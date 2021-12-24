@@ -1,8 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿using System.Net;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
-using System.Net;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 

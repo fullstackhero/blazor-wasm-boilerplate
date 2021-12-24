@@ -5,7 +5,7 @@
 
 <RemoteAuthenticatorView Action="@Action">
     @* Override the different child items to adapt them to our own style
-       I've done this for LogOutSucceeded now, already added the rest but with the defaults (and localization). *@
+        I've done this for LogOutSucceeded now, already added the rest but with the defaults (and localization). *@
     <LogOutSucceeded>
         <MudItem Class="d-flex justify-center">
             <MudText Typo="Typo.h5" GutterBottom="true">
@@ -44,9 +44,9 @@
     </Registering>
 </RemoteAuthenticatorView>
 
-@code{
+@code {
     [Parameter] public string? Action { get; set; }
 
     public void GoHome() =>
-        _navigationManager.NavigateTo("/");
+    _navigationManager.NavigateTo("/");
 }

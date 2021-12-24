@@ -36,9 +36,12 @@ public partial class Profile
         }
         else
         {
-            foreach (string? message in response.Messages)
+            if (response.Messages != null)
             {
-                _snackBar.Add(message, Severity.Error);
+                foreach (string? message in response.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
             }
         }
     }
@@ -100,9 +103,12 @@ public partial class Profile
             }
             else
             {
-                foreach (string? message in response.Messages)
+                if (response.Messages != null)
                 {
-                    _snackBar.Add(message, Severity.Error);
+                    foreach (string? message in response.Messages)
+                    {
+                        _snackBar.Add(message, Severity.Error);
+                    }
                 }
             }
         }

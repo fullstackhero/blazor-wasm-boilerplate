@@ -1,7 +1,7 @@
 @inject NotificationClient Notifications
 
 <MudTooltip Text="@TooltipText">
-    <MudIconButton Icon="@Icon" Color="@IconColor"/>
+    <MudIconButton Icon="@Icon" Color="@IconColor" />
 </MudTooltip>
 
 @code {
@@ -13,7 +13,7 @@
     {
         SetConnectionState(Notifications.ConnectionState, Notifications.HubConnection.ConnectionId);
         Notifications.ConnectionStateChanged += (obj, arg) =>
-            SetConnectionState(arg.State, arg.Message);
+        SetConnectionState(arg.State, arg.Message);
     }
 
     private Task SetConnectionState(ConnectionState state, string? message)

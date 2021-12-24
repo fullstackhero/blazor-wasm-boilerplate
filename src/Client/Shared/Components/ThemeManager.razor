@@ -6,9 +6,9 @@
 
 @code {
 
-[Parameter] public EventCallback OnDarkModeToggle { get; set; }
-public async Task ToggleDarkMode()
-        {
-            await OnDarkModeToggle.InvokeAsync();
-        }
+    [Parameter] public EventCallback OnDarkModeToggle { get; set; }
+    public async Task ToggleDarkMode()
+    {
+        await OnDarkModeToggle.InvokeAsync();
+    }
 }

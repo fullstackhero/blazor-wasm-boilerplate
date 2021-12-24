@@ -1,6 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+﻿using System.Text.RegularExpressions;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
 using MudBlazor;
-using System.Text.RegularExpressions;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 
@@ -55,7 +55,7 @@ public class ClientPreferenceManager : IClientPreferenceManager
         if (await GetPreference() is ClientPreference preference)
         {
             var language = LocalizationConstants.SupportedLanguages.Where(a => a.Code == languageCode).FirstOrDefault();
-            if(language != null)
+            if (language != null)
             {
                 preference.LanguageCode = language.Code;
                 preference.IsRTL = language.IsRTL;

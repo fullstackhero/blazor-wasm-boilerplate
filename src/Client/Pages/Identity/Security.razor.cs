@@ -28,9 +28,12 @@ public partial class Security
         }
         else
         {
-            foreach (var error in response.Messages)
+            if (response.Messages != null)
             {
-                _snackBar.Add(error, Severity.Error);
+                foreach (string? message in response.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
             }
         }
     }

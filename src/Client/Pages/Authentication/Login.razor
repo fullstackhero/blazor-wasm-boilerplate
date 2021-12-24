@@ -6,7 +6,8 @@
 </div>
 <div class="fsh-center-text">
     <MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
-    <MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink></MudText>
+    <MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink>
+    </MudText>
 </div>
 <br />
 <EditForm Model="@_tokenRequest" OnValidSubmit="SubmitAsync">
@@ -14,23 +15,25 @@
         <DataAnnotationsValidator />
         <CustomValidation @ref="_customValidation" />
         <MudItem xs="12">
-            <MudTextField T="string" Label="E-mail" Variant="Variant.Outlined"
-                          @bind-Value="_tokenRequest.Email" For="@(() => _tokenRequest.Email)" />
+            <MudTextField T="string" Label="E-mail" Variant="Variant.Outlined" @bind-Value="_tokenRequest.Email"
+                For="@(() => _tokenRequest.Email)" />
         </MudItem>
         <MudItem xs="12">
-            <MudTextField Label="Password" Variant="Variant.Outlined"
-                          @bind-Value="_tokenRequest.Password" For="@(() => _tokenRequest.Password)"
-                          InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+            <MudTextField Label="Password" Variant="Variant.Outlined" @bind-Value="_tokenRequest.Password"
+                For="@(() => _tokenRequest.Password)" InputType="@_passwordInput" Adornment="Adornment.End"
+                AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
         </MudItem>
         <MudItem xs="12">
-            <MudTextField T="string" Label="Tenant" Variant="Variant.Outlined"
-                          @bind-Value="_tenantKey" For="@(() => _tenantKey)" />
+            <MudTextField T="string" Label="Tenant" Variant="Variant.Outlined" @bind-Value="_tenantKey"
+                For="@(() => _tenantKey)" />
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-space-between align-center">
-            <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1"></MudCheckBox> <MudLink Href="/account/forgot-password">Forgot password?</MudLink>
+            <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1"></MudCheckBox>
+            <MudLink Href="/account/forgot-password">Forgot password?</MudLink>
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-center">
-            <MudButton ButtonType="ButtonType.Submit" Disabled="BusySubmitting" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">Sign In</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Disabled="BusySubmitting" Variant="Variant.Filled"
+                Color="Color.Primary" Size="Size.Large" Style="width: 100%;">Sign In</MudButton>
         </MudItem>
         <MudItem xs="12">
             <MudButton OnClick="FillAdministratorCredentials">Fill Administrator Credentials</MudButton>

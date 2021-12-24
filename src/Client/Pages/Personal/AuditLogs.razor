@@ -31,12 +31,12 @@ else
                         <MudSwitch @bind-Checked="@_searchInOldValues" Color="Color.Primary" Style="margin-left: 5px;">@_localizer["Search in Old Values"]</MudSwitch>
                         <MudSwitch @bind-Checked="@_searchInNewValues" Color="Color.Primary" Style="margin-left: 5px;">@_localizer["Search in New Values"]</MudSwitch>
     </MudExpansionPanel>
-               
+
             }
     <MudTable Hover="false" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Elevation="25" Items="Trails" Filter="new Func<RelatedAuditTrail, bool>(Search)" @bind-trail="_trail" CustomHeader="true">
         <ToolBarContent>
             <MudSpacer />
-            
+
         </ToolBarContent>
         <HeaderContent>
             <MudTHeadRow IgnoreCheckbox="true">

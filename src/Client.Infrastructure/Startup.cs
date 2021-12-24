@@ -1,4 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using System.Globalization;
+using System.Reflection;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
@@ -7,8 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
-using System.Globalization;
-using System.Reflection;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure;
 

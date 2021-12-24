@@ -6,13 +6,13 @@
     {
         if(language.Code == CurrentLanguage)
             {
-               <MudMenuItem style="background:var(--mud-palette-primary); color:white" >@_localizer[language.DisplayName]</MudMenuItem> 
+               <MudMenuItem style="background:var(--mud-palette-primary); color:white" >@_localizer[language.DisplayName]</MudMenuItem>
             }
             else
             {
                 <MudMenuItem OnClick="(()=> ChangeLanguageAsync(language.Code))">@_localizer[language.DisplayName]</MudMenuItem>
             }
-            
+
     }
 </MudMenu>
 </MudTooltip>

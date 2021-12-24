@@ -8,26 +8,26 @@
 
 <ErrorBoundary>
     <ChildContent>
-<MudExpansionPanel
+        <MudExpansionPanel
             Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
             Class="mud-elevation-25" Text="Claims">
-                  <MudList Dense="true">
-            @if (Claims is not null)
-            {
-                @foreach (var claim in Claims)
+            <MudList Dense="true">
+                @if (Claims is not null)
                 {
-                    <MudListItem>
-                        <MudChip>
-                            @claim.Type
-                        </MudChip>
-                        @claim.Value
-                    </MudListItem>
+                    @foreach (var claim in Claims)
+                    {
+                        <MudListItem>
+                            <MudChip>
+                                @claim.Type
+                            </MudChip>
+                            @claim.Value
+                        </MudListItem>
+                    }
                 }
-            }
-        </MudList>   
-            </MudExpansionPanel>
-            </ChildContent>
-            </ErrorBoundary>
+            </MudList>
+        </MudExpansionPanel>
+    </ChildContent>
+</ErrorBoundary>
 
 @code {
     [CascadingParameter]
