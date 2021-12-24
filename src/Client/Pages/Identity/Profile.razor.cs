@@ -11,8 +11,8 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
 
 public partial class Profile
 {
-    private char _firstLetterOfName;
     private readonly UpdateProfileRequest _profileModel = new();
+    private char _firstLetterOfName;
 
     [Inject]
     private IIdentityClient _identityClient { get; set; } = default!;

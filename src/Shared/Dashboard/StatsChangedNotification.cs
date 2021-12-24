@@ -1,4 +1,4 @@
-﻿namespace FSH.BlazorWebAssembly.Shared.Notifications.Dashboard;
+﻿namespace FSH.BlazorWebAssembly.Shared.Dashboard;
 
 public class StatsChangedNotification
 {

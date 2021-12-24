@@ -13,10 +13,10 @@
     {
         SetConnectionState(Notifications.ConnectionState, Notifications.HubConnection.ConnectionId);
         Notifications.ConnectionStateChanged += (obj, arg) =>
-        SetConnectionState(arg.State, arg.Message);
+            SetConnectionState(arg.State, arg.Message);
     }
 
-    private Task SetConnectionState(ConnectionState state, string? message)
+    private void SetConnectionState(ConnectionState state, string? message)
     {
         switch (state)
         {
@@ -39,6 +39,5 @@
                 break;
         }
         StateHasChanged();
-        return Task.CompletedTask;
     }
 }
