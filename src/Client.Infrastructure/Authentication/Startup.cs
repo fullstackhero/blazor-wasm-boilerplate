@@ -1,6 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
@@ -12,7 +13,7 @@ internal static class Startup
         {
             // AzureAd
             nameof(AuthProvider.AzureAd) => services
-                .AddTransient<IAuthenticationService, AzureAdAuthenticationService>()
+                .AddScoped<IAuthenticationService, AzureAdAuthenticationService>()
                 .AddScoped<AzureAdAuthorizationMessageHandler>()
                 .AddMsalAuthentication(options =>
                     {
@@ -26,10 +27,10 @@ internal static class Startup
 
             // Jwt
             _ => services
-                .AddTransient<IAuthenticationService, JwtAuthenticationService>()
-                .AddTransient<IAccessTokenProvider, JwtAccessTokenProvider>()
-                .AddScoped<JwtAuthenticationStateProvider>()
-                .AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<JwtAuthenticationStateProvider>())
+                .AddScoped<AuthenticationStateProvider, JwtAuthenticationService>()
+                .AddScoped(sp => (IAuthenticationService)sp.GetRequiredService<AuthenticationStateProvider>())
+                .AddScoped(sp => (IAccessTokenProvider)sp.GetRequiredService<AuthenticationStateProvider>())
+                .AddScoped<IAccessTokenProviderAccessor, AccessTokenProviderAccessor>()
                 .AddScoped<JwtAuthenticationHeaderHandler>()
         };
 

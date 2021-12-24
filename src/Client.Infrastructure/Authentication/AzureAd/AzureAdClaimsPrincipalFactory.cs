@@ -8,13 +8,15 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
 
 internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount>
 {
-    // can't work with actual services in the constructor here, have to
-    // use IServiceProvider, otherwise the app hangs at startup
-    private readonly IServiceProvider _serviceProvider;
+    // Can't work with actual services in the constructor here, have to
+    // use IServiceProvider, otherwise the app hangs at startup.
+    // The culprit is probably HttpClient, as this class is instantiated
+    // at startup while the HttpClient is being (or not even) created.
+    private readonly IServiceProvider _services;
 
-    public AzureAdClaimsPrincipalFactory(IAccessTokenProviderAccessor accessor, IServiceProvider serviceProvider)
+    public AzureAdClaimsPrincipalFactory(IAccessTokenProviderAccessor accessor, IServiceProvider services)
         : base(accessor) =>
-        _serviceProvider = serviceProvider;
+        _services = services;
 
     public override async ValueTask<ClaimsPrincipal> CreateUserAsync(RemoteUserAccount account, RemoteAuthenticationUserOptions options)
     {
@@ -22,7 +24,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
 
         if (principal.Identity?.IsAuthenticated is true)
         {
-            var profileResult = await _serviceProvider.GetRequiredService<IIdentityClient>()
+            var profileResult = await _services.GetRequiredService<IIdentityClient>()
                 .GetProfileDetailsAsync();
 
             if (profileResult.Succeeded && profileResult.Data is UserDetailsDto userDetails)
@@ -54,7 +56,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                     userIdentity.AddClaim(new Claim(FSHClaims.ImageUrl, userDetails.ImageUrl));
                 }
 
-                var permissionsResult = await _serviceProvider.GetRequiredService<IUsersClient>()
+                var permissionsResult = await _services.GetRequiredService<IUsersClient>()
                     .GetPermissionsAsync(profileResult.Data.Id.ToString());
 
                 if (permissionsResult.Succeeded && permissionsResult.Data is not null)

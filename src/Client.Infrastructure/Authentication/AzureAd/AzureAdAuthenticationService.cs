@@ -22,7 +22,4 @@ internal class AzureAdAuthenticationService : IAuthenticationService
         await _signOut.SetSignOutState();
         _navigation.NavigateTo("authentication/logout");
     }
-
-    public Task<ResultOfTokenResponse> RefreshTokenAsync(RefreshTokenRequest request) =>
-        throw new NotImplementedException();
 }
