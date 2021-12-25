@@ -18,6 +18,18 @@ public class FSHPermissions
         public const string Register = "Permissions.Identity.Register";
     }
 
+    [DisplayName("Users")]
+    [Description("Users Permissions")]
+    public static class Users
+    {
+        public const string View = "Permissions.Users.View";
+        public const string Create = "Permissions.Users.Create";
+        public const string Edit = "Permissions.Users.Edit";
+        public const string Delete = "Permissions.Users.Delete";
+        public const string Export = "Permissions.Users.Export";
+        public const string Search = "Permissions.Users.Search";
+    }
+
     [DisplayName("Roles")]
     [Description("Roles Permissions")]
     public static class Roles
