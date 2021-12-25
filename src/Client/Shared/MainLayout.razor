@@ -2,8 +2,14 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
 
 <MudAppBar Elevation="0">
-    <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start"
+    <MudTooltip Text="Go Home">
+    <MudIconButton Icon="@Icons.Material.Filled.Home" Color="Color.Inherit" Edge="Edge.Start"
+        Link="/" />
+        </MudTooltip>
+        <MudTooltip Text="Toggle Drawer">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
         OnClick="@((e) => DrawerToggle())" />
+        </MudTooltip>
     <MudHidden Breakpoint="Breakpoint.Xs">
         <MudText Typo="Typo.subtitle1" Class="ml-4">Blazor WebAssembly Boilerplate</MudText>
     </MudHidden>
