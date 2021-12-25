@@ -1,28 +1,32 @@
 ﻿@page "/account"
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Account> localizer
 <FshTitle Title="@localizer["Account"]" Description="@localizer["Manage your account"]" />
-<MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
+ @if (AccountManagementDisabled)
+{
+    <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
     <MudTabPanel Text="@localizer["Profile"]">
         <Profile />
     </MudTabPanel>
-    @if (!SecurityTabDisabled)
-    {
         <MudTabPanel Text="@localizer["Security"]">
             <Security />
         </MudTabPanel>
-    }
-</MudTabs>
+    </MudTabs>
+}
+else
+{
+        <MudAlert Severity="Severity.Error">Account Managed by an External Service.</MudAlert>
+}
 
 @code
 {
     [Inject]
     public IAuthenticationService AuthService { get; set; } = default!;
-    public bool SecurityTabDisabled { get; set; } = false;
+    public bool AccountManagementDisabled { get; set; } = false;
     protected override void OnInitialized()
     {
         if (AuthService.ProviderType == AuthProvider.AzureAd)
         {
-            SecurityTabDisabled = true;
+            AccountManagementDisabled = true;
         }
     }
 }

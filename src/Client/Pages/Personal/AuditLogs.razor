@@ -34,10 +34,6 @@ else
 
             }
     <MudTable Hover="false" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Elevation="25" Items="Trails" Filter="new Func<RelatedAuditTrail, bool>(Search)" @bind-trail="_trail" CustomHeader="true">
-        <ToolBarContent>
-            <MudSpacer />
-
-        </ToolBarContent>
         <HeaderContent>
             <MudTHeadRow IgnoreCheckbox="true">
                 <MudTh><MudTableSortLabel SortBy="new Func<RelatedAuditTrail, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
