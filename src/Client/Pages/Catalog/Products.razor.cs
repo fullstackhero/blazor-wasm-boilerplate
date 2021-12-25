@@ -21,8 +21,7 @@ public partial class Products
     // Fields for EditForm
     private List<BrandDto> _brands = new();
 
-    protected override void OnInitialized()
-    {
+    protected override void OnInitialized() =>
         Context = new(
             fields: new()
             {
@@ -37,14 +36,13 @@ public partial class Products
             createFunc: prod => ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
             updateFunc: prod => ProductsClient.UpdateAsync(prod.Id, prod.Adapt<UpdateProductRequest>()),
             deleteFunc: id => ProductsClient.DeleteAsync(id),
-            onModalInitializedFunc: () => LoadBrandsAsync(),
+            editFormInitializedFunc: () => LoadBrandsAsync(),
             entityName: L["Product"],
             entityNamePlural: L["Products"],
             searchPermission: FSHPermissions.Products.Search,
             createPermission: FSHPermissions.Products.Register,
             updatePermission: FSHPermissions.Products.Update,
             deletePermission: FSHPermissions.Products.Remove);
-    }
 
     private async Task<PaginatedResult<ProductDto>> SearchFunc(ProductListFilter filter)
     {

@@ -1,4 +1,4 @@
-﻿@typeparam TEntity where TEntity : new()
+﻿@typeparam TEntity
 @typeparam TFilter
 
 @inject IStringLocalizer<AddEditModal<TEntity, TFilter>> L
@@ -22,6 +22,8 @@
             }
         </TitleContent>
         <DialogContent>
+            <DataAnnotationsValidator />
+            <CustomValidation @ref="_customValidation" />
             <MudGrid>
                 @if (Id != default)
                 {
@@ -51,71 +53,3 @@
         </DialogActions>
     </MudDialog>
 </EditForm>
-
-@code
-{
-    [Parameter, EditorRequired]
-    public EntityManagerContext<TEntity, TFilter> Context { get; set; } = default!;
-
-    [Parameter, EditorRequired]
-    public RenderFragment<TEntity> EditFormContent { get; set; } = default!;
-
-    [Parameter]
-    public TEntity EntityModel { get; set; } = new();
-
-    [Parameter]
-    public bool IsCreate { get; set; }
-
-    [Parameter]
-    public Guid Id { get; set; }
-
-    [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; } = default!;
-
-    protected override Task OnInitializedAsync()
-    {
-        if (Context.OnModalInitializedFunc is not null)
-        {
-            return Context.OnModalInitializedFunc();
-        }
-        return Task.CompletedTask;
-    }
-
-    private async Task SaveAsync()
-    {
-        ResultOfGuid response;
-        if (IsCreate)
-        {
-            response = await Context.CreateFunc(EntityModel);
-        }
-        else
-        {
-            response = await Context.UpdateFunc(EntityModel);
-        }
-
-        if (response.Succeeded)
-        {
-            if (response.Messages?.Count > 0)
-            {
-                _snackBar.Add(response.Messages.First(), Severity.Success);
-            }
-            else
-            {
-                _snackBar.Add(L["Success"], Severity.Success);
-            }
-            MudDialog.Close();
-        }
-        else
-        {
-            if (response.Messages?.Count > 0)
-            {
-                foreach (string message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
-        }
-    }
-
-    public void Cancel() => MudDialog.Cancel();
-}

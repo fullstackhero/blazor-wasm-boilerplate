@@ -38,7 +38,7 @@
             createFunc: brand => BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
             updateFunc: brand => BrandsClient.UpdateAsync(brand.Id, brand.Adapt<UpdateBrandRequest>()),
             deleteFunc: id => BrandsClient.DeleteAsync(id),
-            onModalInitializedFunc: null,
+            editFormInitializedFunc: null,
             entityName: L["Brand"],
             entityNamePlural: L["Brands"],
             searchPermission: FSHPermissions.Products.Search,
