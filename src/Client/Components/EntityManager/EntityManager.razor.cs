@@ -1,5 +1,5 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -142,21 +142,9 @@ public partial class EntityManager<TEntity, TFilter>
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            var response = await Context.DeleteFunc(id);
-            if (response.Succeeded)
-            {
-                if (response.Messages?.FirstOrDefault() is string message)
-                {
-                    _snackBar.Add(message, Severity.Success);
-                }
-            }
-            else if (response.Messages is not null)
-            {
-                foreach (string message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
+            await ApiHelper.ExecuteCallGuardedAsync(
+                () => Context.DeleteFunc(id),
+                _snackBar);
 
             OnSearch(string.Empty);
         }

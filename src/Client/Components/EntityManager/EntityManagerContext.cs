@@ -14,7 +14,7 @@ public class EntityManagerContext<TEntity, TFilter>
     public Func<TEntity, Task<ResultOfGuid>> CreateFunc { get; }
     public Func<TEntity, Task<ResultOfGuid>> UpdateFunc { get; }
     public Func<Guid, Task<ResultOfGuid>> DeleteFunc { get; }
-    public Func<Task>? OnModalInitializedFunc { get; }
+    public Func<Task>? EditFormInitializedFunc { get; }
     public string EntityName { get; }
     public string EntityNamePlural { get; }
     public string SearchPermission { get; }
@@ -29,7 +29,7 @@ public class EntityManagerContext<TEntity, TFilter>
         Func<TEntity, Task<ResultOfGuid>> createFunc,
         Func<TEntity, Task<ResultOfGuid>> updateFunc,
         Func<Guid, Task<ResultOfGuid>> deleteFunc,
-        Func<Task>? onModalInitializedFunc,
+        Func<Task>? editFormInitializedFunc,
         string entityName,
         string entityNamePlural,
         string searchPermission,
@@ -43,7 +43,7 @@ public class EntityManagerContext<TEntity, TFilter>
         CreateFunc = createFunc;
         UpdateFunc = updateFunc;
         DeleteFunc = deleteFunc;
-        OnModalInitializedFunc = onModalInitializedFunc;
+        EditFormInitializedFunc = editFormInitializedFunc;
         EntityName = entityName;
         EntityNamePlural = entityNamePlural;
         SearchPermission = searchPermission;
