@@ -16,14 +16,14 @@ public partial class Users
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
-    private IEnumerable<UserDetailsDto>? _userList;
+    private ICollection<UserDetailsDto?>? _userList;
     private UserDetailsDto _user = new();
     private string _searchString = string.Empty;
     private bool _dense = false;
     private bool _striped = true;
     private bool _bordered = false;
 
-    private ClaimsPrincipal _currentUser;
+    private ClaimsPrincipal _currentUser = new();
     private bool _canCreateUsers;
     private bool _canSearchUsers;
     private bool _canExportUsers;
@@ -52,9 +52,12 @@ public partial class Users
         }
         else
         {
-            foreach (var message in response.Messages)
+            if (response.Messages != null)
             {
-                _snackBar.Add(message, Severity.Error);
+                foreach (string message in response.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
             }
         }
     }
