@@ -1,7 +1,6 @@
 ﻿@typeparam TEntity where TEntity: class, new()
-@typeparam TFilter where TFilter: PaginationFilter, new()
 
-@inject IStringLocalizer<EntityManager<TEntity, TFilter>> L
+@inject IStringLocalizer<EntityManager<TEntity>> L
 
 <style>
     .mud-table-container {
@@ -27,9 +26,11 @@
             </MudExpansionPanel>
         }
 
-        <MudTable Elevation="25" ServerData="@(new Func<TableState, Task<TableData<TEntity>>>(ServerReload))"
-            Hover="true" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" @ref="_table" Loading="@_loading"
-            LoadingProgressColor="@Color.Secondary">
+        <MudTable Elevation="25" Hover="true" 
+            ServerData="@ServerReloadFunc"
+            Items="@_entityList" Filter="LocalSearch"
+            Dense="@_dense" Bordered="@_bordered" Striped="@_striped" @ref="_table"
+            Loading="@Loading" LoadingProgressColor="@Color.Secondary">
 
             <ToolBarContent>
                 <div class="justify-center mud-text-align-center">
@@ -52,7 +53,14 @@
                     foreach (var field in Context.Fields)
                     {
                         <MudTh>
-                            <MudTableSortLabel T="TEntity" SortLabel="@field.SortLabel">@field.DataLabel</MudTableSortLabel>
+                            @if (Context is ClientEntityManagerContext<TEntity>)
+                            {
+                                <MudTableSortLabel SortBy="@field.DataValue">@field.DataLabel</MudTableSortLabel>
+                            }
+                            else
+                            {
+                                <MudTableSortLabel T="TEntity" SortLabel="@field.SortLabel">@field.DataLabel</MudTableSortLabel>
+                            }
                         </MudTh>
                     }
                 }
@@ -70,7 +78,7 @@
                     }
                 }
                 <MudTd DataLabel="Actions" Style="text-align: right">
-                    @if (_canUpdate || _canDelete)
+                    @if (HasActions)
                     {
                         <MudMenu Label="@L["Actions"]" Variant="Variant.Filled" DisableElevation="true"
                             EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left"
@@ -82,6 +90,10 @@
                             @if (_canDelete)
                             {
                                 <MudMenuItem @onclick="@(() => Delete(@Context.IdFunc(context)))">@L["Delete"]</MudMenuItem>
+                            }
+                            @if (ExtraActions is not null)
+                            {
+                                @ExtraActions(context)
                             }
                         </MudMenu>
                     }

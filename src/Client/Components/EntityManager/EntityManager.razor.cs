@@ -7,16 +7,21 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
 
-public partial class EntityManager<TEntity, TFilter>
+public partial class EntityManager<TEntity>
     where TEntity : class, new()
-    where TFilter : PaginationFilter, new()
 {
     [Parameter]
     [EditorRequired]
-    public EntityManagerContext<TEntity, TFilter> Context { get; set; } = default!;
+    public EntityManagerContext<TEntity> Context { get; set; } = default!;
+
+    [Parameter]
+    public bool Loading { get; set; }
 
     [Parameter]
     public RenderFragment? AdvancedSearchContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<TEntity>? ExtraActions { get; set; }
 
     [Parameter]
     [EditorRequired]
@@ -35,11 +40,10 @@ public partial class EntityManager<TEntity, TFilter>
     private string? _searchString;
 
     private MudTable<TEntity>? _table;
-    private IEnumerable<TEntity>? _pagedData;
+    private IEnumerable<TEntity>? _entityList;
     private bool _dense;
     private bool _striped = true;
     private bool _bordered;
-    private bool _loading;
     private int _totalItems;
 
     protected override async Task OnInitializedAsync()
@@ -49,13 +53,56 @@ public partial class EntityManager<TEntity, TFilter>
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Context.CreatePermission)).Succeeded;
         _canUpdate = (await AuthService.AuthorizeAsync(state.User, Context.UpdatePermission)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Context.DeletePermission)).Succeeded;
+
+        await LoadDataAsync();
     }
 
+    private bool HasActions => _canUpdate || _canDelete || Context.HasExtraActionsFunc is null || Context.HasExtraActionsFunc();
+
+    // Client side paging/filtering
+    private bool LocalSearch(TEntity entity)
+    {
+        if (string.IsNullOrWhiteSpace(_searchString) ||
+            Context is not ClientEntityManagerContext<TEntity> clientContext ||
+            clientContext.LocalSearchFunc is null)
+        {
+            return true;
+        }
+
+        return clientContext.LocalSearchFunc(_searchString, entity);
+    }
+
+    private async Task LoadDataAsync()
+    {
+        if (Loading || Context is not ClientEntityManagerContext<TEntity> clientContext)
+        {
+            return;
+        }
+
+        Loading = true;
+
+        if (await ApiHelper.ExecuteCallGuardedAsync(() => clientContext.LoadDataFunc(), _snackBar) is ListResult<TEntity> result)
+        {
+            _entityList = result.Data;
+        }
+
+        Loading = false;
+    }
+
+    // Server Side paging/filtering
     private void OnSearch(string text)
     {
-        _searchString = text;
-        _table?.ReloadServerData();
+        if (Context is ServerEntityManagerContext<TEntity>)
+        {
+            _searchString = text;
+            _table?.ReloadServerData();
+        }
     }
+
+    private Func<TableState, Task<TableData<TEntity>>>? ServerReloadFunc =>
+        Context is ClientEntityManagerContext<TEntity>
+            ? null
+            : ServerReload;
 
     private async Task<TableData<TEntity>> ServerReload(TableState state)
     {
@@ -66,71 +113,73 @@ public partial class EntityManager<TEntity, TFilter>
 
         await LoadDataAsync(state);
 
-        return new TableData<TEntity> { TotalItems = _totalItems, Items = _pagedData };
+        return new TableData<TEntity> { TotalItems = _totalItems, Items = _entityList };
     }
 
     private async Task LoadDataAsync(TableState state)
     {
-        if (!_loading)
+        if (Loading || Context is not ServerEntityManagerContext<TEntity> serverContext)
         {
-            _loading = true;
-
-            string[]? orderings = null;
-            if (!string.IsNullOrEmpty(state.SortLabel))
-            {
-                orderings = state.SortDirection == SortDirection.None
-                    ? new[] { $"{state.SortLabel}" }
-                    : new[] { $"{state.SortLabel} {state.SortDirection}" };
-            }
-
-            var filter = new TFilter
-            {
-                PageSize = state.PageSize,
-                PageNumber = state.Page + 1,
-                Keyword = _searchString,
-                OrderBy = orderings ?? Array.Empty<string>()
-            };
-
-            var result = await Context.SearchFunc(filter);
-            if (result.Succeeded)
-            {
-                _totalItems = result.TotalCount;
-                _pagedData = result.Data;
-            }
-
-            _loading = false;
+            return;
         }
+
+        Loading = true;
+
+        string[]? orderings = null;
+        if (!string.IsNullOrEmpty(state.SortLabel))
+        {
+            orderings = state.SortDirection == SortDirection.None
+                ? new[] { $"{state.SortLabel}" }
+                : new[] { $"{state.SortLabel} {state.SortDirection}" };
+        }
+
+        var filter = new PaginationFilter
+        {
+            PageSize = state.PageSize,
+            PageNumber = state.Page + 1,
+            Keyword = _searchString,
+            OrderBy = orderings ?? Array.Empty<string>()
+        };
+
+        var result = await serverContext.SearchFunc(filter);
+        if (result.Succeeded)
+        {
+            _totalItems = result.TotalCount;
+            _entityList = result.Data;
+        }
+
+        Loading = false;
     }
 
-    private async Task InvokeModal(Guid id = default)
+    private async Task InvokeModal(object? id = default)
     {
         var parameters = new DialogParameters()
         {
-            { nameof(AddEditModal<TEntity, TFilter>.Context), Context },
-            { nameof(AddEditModal<TEntity, TFilter>.EditFormContent), EditFormContent },
-            { nameof(AddEditModal<TEntity, TFilter>.IsCreate), id == default },
-            { nameof(AddEditModal<TEntity, TFilter>.Id), id }
+            { nameof(AddEditModal<TEntity>.Context), Context },
+            { nameof(AddEditModal<TEntity>.EditFormContent), EditFormContent },
+            { nameof(AddEditModal<TEntity>.IsCreate), id == default },
+            { nameof(AddEditModal<TEntity>.Id), id }
         };
 
         if (id != default)
         {
-            var entity = _pagedData?.FirstOrDefault(c => Context.IdFunc(c) == id);
+            var entity = _entityList?.FirstOrDefault(c => Context.IdFunc(c) == id);
             if (entity is not null)
             {
-                parameters.Add(nameof(AddEditModal<TEntity, TFilter>.EntityModel), entity);
+                parameters.Add(nameof(AddEditModal<TEntity>.EntityModel), entity);
             }
         }
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<AddEditModal<TEntity, TFilter>>(id == default ? L["Create"] : L["Edit"], parameters, options);
+        var dialog = _dialogService.Show<AddEditModal<TEntity>>(id == default ? L["Create"] : L["Edit"], parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            OnSearch(string.Empty);
+            await ResetAsync();
         }
     }
 
-    private async Task Delete(Guid id)
+    private async Task Delete(object? id)
     {
         string deleteContent = L["You're sure you want to delete {0} with id '{1}'?"];
         var parameters = new DialogParameters
@@ -146,6 +195,18 @@ public partial class EntityManager<TEntity, TFilter>
                 () => Context.DeleteFunc(id),
                 _snackBar);
 
+            await ResetAsync();
+        }
+    }
+
+    private async Task ResetAsync()
+    {
+        if (Context is ClientEntityManagerContext<TEntity>)
+        {
+            await LoadDataAsync();
+        }
+        else
+        {
             OnSearch(string.Empty);
         }
     }

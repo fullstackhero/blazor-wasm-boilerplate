@@ -6,7 +6,7 @@
 
 <FshTitle Title="@L["Brands"]" Description="@L["Manage Brands."]" />
 
-<EntityManager TEntity="BrandDto" TFilter="BrandListFilter" Context="@Context">
+<EntityManager TEntity="BrandDto" Context="@Context">
 
     <EditFormContent>
         <MudItem xs="12" md="6">
@@ -23,7 +23,7 @@
 
 @code
 {
-    protected EntityManagerContext<BrandDto, BrandListFilter> Context { get; set; } = default!;
+    protected ServerEntityManagerContext<BrandDto> Context { get; set; } = default!;
 
     protected override void OnInitialized() =>
         Context = new(
@@ -34,11 +34,10 @@
                 new("Description", L["Description"], brand => brand.Description),
             },
             idFunc: brand => brand.Id,
-            searchFunc: async filter => (await BrandsClient.SearchAsync(filter)).Adapt<PaginatedResult<BrandDto>>(),
-            createFunc: brand => BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
-            updateFunc: brand => BrandsClient.UpdateAsync(brand.Id, brand.Adapt<UpdateBrandRequest>()),
-            deleteFunc: id => BrandsClient.DeleteAsync(id),
-            editFormInitializedFunc: null,
+            searchFunc: async filter => (await BrandsClient.SearchAsync(filter.Adapt<BrandListFilter>())).Adapt<PaginatedResult<BrandDto>>(),
+            createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
+            updateFunc: async brand => await BrandsClient.UpdateAsync(brand.Id, brand.Adapt<UpdateBrandRequest>()),
+            deleteFunc: async id => await BrandsClient.DeleteAsync(id is Guid guid ? guid : default),
             entityName: L["Brand"],
             entityNamePlural: L["Brands"],
             searchPermission: FSHPermissions.Products.Search,
