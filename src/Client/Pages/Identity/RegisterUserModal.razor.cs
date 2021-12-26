@@ -10,11 +10,11 @@ public partial class RegisterUserModal
     private IIdentityClient _identityClient { get; set; } = default!;
     private readonly RegisterRequest _registerUserModel = new();
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; }
+    private MudDialogInstance? MudDialog { get; set; }
 
     private void Cancel()
     {
-        MudDialog.Cancel();
+        MudDialog?.Cancel();
     }
 
     private async Task SubmitAsync()
@@ -22,13 +22,16 @@ public partial class RegisterUserModal
         var response = await _identityClient.RegisterAsync(_registerUserModel);
         if (response.Succeeded)
         {
-            MudDialog.Close();
+            MudDialog?.Close();
         }
         else
         {
-            foreach (var message in response.Messages)
+            if (response.Messages != null)
             {
-                _snackBar.Add(message, Severity.Error);
+                foreach (string message in response.Messages)
+                {
+                    _snackBar.Add(message, Severity.Error);
+                }
             }
         }
     }
