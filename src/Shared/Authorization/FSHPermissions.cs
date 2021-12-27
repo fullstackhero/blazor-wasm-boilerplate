@@ -11,6 +11,20 @@ public class FSHPermissions
         public const string View = "Permissions.Dashboard.View";
     }
 
+    [DisplayName("AuditLogs")]
+    [Description("AuditLogs Permissions")]
+    public static class AuditLogs
+    {
+        public const string View = "Permissions.AuditLogs.View";
+    }
+
+    [DisplayName("Hangfire")]
+    [Description("Hangfire Permissions")]
+    public static class Hangfire
+    {
+        public const string View = "Permissions.Hangfire.View";
+    }
+
     [DisplayName("Identity")]
     [Description("Identity Permissions")]
     public static class Identity
