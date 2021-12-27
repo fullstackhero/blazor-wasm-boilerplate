@@ -100,5 +100,7 @@ public partial class Users
             _passwordInputIcon = Icons.Material.Filled.Visibility;
             _passwordInput = InputType.Text;
         }
+
+        Context.AddEditModalForceRender();
     }
 }

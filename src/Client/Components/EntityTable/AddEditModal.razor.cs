@@ -31,6 +31,9 @@ public partial class AddEditModal<TEntity, TId>
             ? Context.EditFormInitializedFunc()
             : Task.CompletedTask;
 
+    public void ForceRender() =>
+        StateHasChanged();
+
     private async Task SaveAsync()
     {
         if (IsCreate)

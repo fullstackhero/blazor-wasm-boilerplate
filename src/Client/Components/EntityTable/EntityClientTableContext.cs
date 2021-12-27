@@ -9,6 +9,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 /// <typeparam name="TEntity">The type of the entity.</typeparam>
 /// <typeparam name="TId">The type of the id of the entity.</typeparam>
 public class EntityClientTableContext<TEntity, TId> : EntityTableContext<TEntity, TId>
+    where TEntity : new()
 {
     /// <summary>
     /// A function that loads all the data for the table from the api and returns a ListResult of TEntity.

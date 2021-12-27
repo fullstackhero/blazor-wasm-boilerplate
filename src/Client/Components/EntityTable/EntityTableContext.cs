@@ -1,4 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
@@ -8,6 +9,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 /// <typeparam name="TEntity">The type of the entity.</typeparam>
 /// <typeparam name="TId">The type of the id of the entity.</typeparam>
 public abstract class EntityTableContext<TEntity, TId>
+    where TEntity : new()
 {
     /// <summary>
     /// The columns you want to display on the table.
@@ -86,6 +88,8 @@ public abstract class EntityTableContext<TEntity, TId>
     /// </summary>
     public Func<bool>? HasExtraActionsFunc { get; set; }
 
+    public IDialogReference? AddEditModalRef { get; set; }
+
     public EntityTableContext(
         List<EntityField<TEntity>> fields,
         string searchPermission,
@@ -115,4 +119,7 @@ public abstract class EntityTableContext<TEntity, TId>
         EditFormInitializedFunc = editFormInitializedFunc;
         HasExtraActionsFunc = hasExtraActionsFunc;
     }
+
+    public void AddEditModalForceRender() =>
+        (AddEditModalRef?.Dialog as AddEditModal<TEntity, TId>)?.ForceRender();
 }

@@ -189,8 +189,8 @@ public partial class EntityTable<TEntity, TId>
         }
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<AddEditModal<TEntity, TId>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
-        var result = await dialog.Result;
+        Context.AddEditModalRef = _dialogService.Show<AddEditModal<TEntity, TId>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
+        var result = await Context.AddEditModalRef.Result;
         if (!result.Cancelled)
         {
             await ResetAsync();
