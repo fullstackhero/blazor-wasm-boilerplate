@@ -1,0 +1,33 @@
+﻿@page "/roles"
+
+@inject IStringLocalizer<Roles> L
+
+<FshTitle Title="@L["Roles"]" Description="@L["Manage Roles."]" />
+
+<EntityTable TEntity="RoleDto" TId="string" Context="@Context">
+
+    <AdvancedSearchContent>
+        <div style="margin-top:10px!important">
+            <MudCheckBox @bind-Checked="@CheckBox" Label="All Columns"></MudCheckBox>
+            <MudCheckBox @bind-Checked="@CheckBox" Label="Column1"></MudCheckBox>
+            <MudCheckBox @bind-Checked="@CheckBox" Label="Column2"></MudCheckBox>
+        </div>
+    </AdvancedSearchContent>
+
+    <ExtraActions>
+        @if (_canViewRoleClaims)
+        {
+            <MudMenuItem @onclick="@(() => ManagePermissions(context.Id))">@L["Manage Permission"]</MudMenuItem>
+        }
+    </ExtraActions>
+
+    <EditFormContent>
+        <MudItem xs="12" md="6">
+            <MudTextField For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Role Name"]" />
+        </MudItem>
+        <MudItem xs="12" md="6">
+            <MudTextField For="@(() => context.Description)" @bind-Value="context.Description" Label="@L["Description"]" />
+        </MudItem>
+    </EditFormContent>
+
+</EntityTable>

@@ -1,117 +1,106 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Shared.Authorization;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
 
 public partial class Users
 {
-    [Inject]
-    private IUsersClient _usersClient { get; set; } = default!;
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
-    private ICollection<UserDetailsDto?>? _userList;
-    private UserDetailsDto _user = new();
-    private string _searchString = string.Empty;
-    private bool _dense = false;
-    private bool _striped = true;
-    private bool _bordered = false;
 
-    private ClaimsPrincipal _currentUser = new();
-    private bool _canCreateUsers;
-    private bool _canSearchUsers;
+    [Inject]
+    protected IUsersClient UsersClient { get; set; } = default!;
+    [Inject]
+    protected IIdentityClient IdentityClient { get; set; } = default!;
+
+    protected EntityClientTableContext<UserDetailsDto, Guid> Context { get; set; } = default!;
+
     private bool _canExportUsers;
     private bool _canViewRoles;
-    private bool _loaded;
+
+    // Fields for editform
+    protected string Password { get; set; } = string.Empty;
+    protected string ConfirmPassword { get; set; } = string.Empty;
+
+    private bool _passwordVisibility;
+    private InputType _passwordInput = InputType.Password;
+    private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _currentUser = state.User;
-        _canCreateUsers = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Users.Create)).Succeeded;
-        _canSearchUsers = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Users.Search)).Succeeded;
-        _canExportUsers = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Users.Export)).Succeeded;
-        _canViewRoles = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Roles.View)).Succeeded;
+        _canExportUsers = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Export)).Succeeded;
+        _canViewRoles = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Roles.View)).Succeeded;
 
-        await GetUsersAsync();
-        _loaded = true;
+        Context = new(
+            fields: new()
+            {
+                new(user => user.FirstName, L["First Name"]),
+                new(user => user.LastName, L["Last Name"]),
+                new(user => user.UserName, L["UserName"]),
+                new(user => user.Email, L["Email"]),
+                new(user => user.PhoneNumber, L["PhoneNumber"]),
+                new(user => user.EmailConfirmed, L["Email Confirmation"], Type: typeof(bool)),
+                new(user => user.IsActive, L["Active"], Type: typeof(bool))
+            },
+            idFunc: user => user.Id,
+            loadDataFunc: async () => (await UsersClient.GetAllAsync()).Adapt<ListResult<UserDetailsDto>>(),
+            searchFunc: Search,
+            createFunc: async user => await CreateAsync(user),
+            entityName: L["User"],
+            entityNamePlural: L["Users"],
+            searchPermission: FSHPermissions.Users.Search,
+            createPermission: FSHPermissions.Users.Create,
+            hasExtraActionsFunc: () => true);
     }
 
-    private async Task GetUsersAsync()
+    private async Task<Result> CreateAsync(UserDetailsDto user)
     {
-        var response = await _usersClient.GetAllAsync();
-        if (response.Succeeded)
+        var request = user.Adapt<RegisterRequest>();
+
+        // Add fields which are not on UserDetailsDto
+        request.Password = Password;
+        request.ConfirmPassword = ConfirmPassword;
+        return await IdentityClient.RegisterAsync(request);
+    }
+
+    private bool Search(string? searchString, UserDetailsDto user) =>
+        string.IsNullOrWhiteSpace(searchString)
+            || user.FirstName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+            || user.LastName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+            || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+            || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+            || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
+
+    private void ViewProfile(Guid userId) =>
+        _navigationManager.NavigateTo($"/user-profile/{userId}");
+
+    private void ManageRoles(Guid userId) =>
+        _navigationManager.NavigateTo($"/identity/user-roles/{userId}");
+
+    private void TogglePasswordVisibility()
+    {
+        if (_passwordVisibility)
         {
-            _userList = response.Data;
+            _passwordVisibility = false;
+            _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+            _passwordInput = InputType.Password;
         }
         else
         {
-            if (response.Messages != null)
-            {
-                foreach (string message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
-        }
-    }
-
-    private bool Search(UserDetailsDto user)
-    {
-        if (string.IsNullOrWhiteSpace(_searchString)) return true;
-        if (user.FirstName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-        {
-            return true;
+            _passwordVisibility = true;
+            _passwordInputIcon = Icons.Material.Filled.Visibility;
+            _passwordInput = InputType.Text;
         }
 
-        if (user.LastName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-        {
-            return true;
-        }
-
-        if (user.Email?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-        {
-            return true;
-        }
-
-        if (user.PhoneNumber?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-        {
-            return true;
-        }
-
-        if (user.UserName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private async Task InvokeModal()
-    {
-        var parameters = new DialogParameters();
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<RegisterUserModal>(_localizer["Register"], parameters, options);
-        var result = await dialog.Result;
-        if (!result.Cancelled)
-        {
-            await GetUsersAsync();
-        }
-    }
-
-    private void ViewProfile(Guid userId)
-    {
-        _navigationManager.NavigateTo($"/user-profile/{userId}");
-    }
-
-    private void ManageRoles(Guid userId, string email)
-    {
-        _navigationManager.NavigateTo($"/identity/user-roles/{userId}");
+        Context.AddEditModalForceRender();
     }
 }
