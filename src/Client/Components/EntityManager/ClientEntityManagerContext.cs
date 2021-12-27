@@ -5,40 +5,40 @@ namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
 public class ClientEntityManagerContext<TEntity> : EntityManagerContext<TEntity>
 {
     public Func<Task<ListResult<TEntity>>> LoadDataFunc { get; }
-    public Func<string, TEntity, bool> LocalSearchFunc { get; }
+    public Func<string?, TEntity, bool> SearchFunc { get; }
 
     public ClientEntityManagerContext(
         List<EntityField<TEntity>> fields,
-        Func<TEntity, object?> idFunc,
         Func<Task<ListResult<TEntity>>> loadDataFunc,
-        Func<string, TEntity, bool> localSearchFunc,
-        Func<TEntity, Task<Result>> createFunc,
-        Func<TEntity, Task<Result>> updateFunc,
-        Func<object?, Task<Result>> deleteFunc,
-        string entityName,
-        string entityNamePlural,
+        Func<string?, TEntity, bool> searchFunc,
         string searchPermission,
-        string createPermission,
-        string updatePermission,
-        string deletePermission,
+        Func<TEntity, object?>? idFunc = null,
+        Func<TEntity, Task<Result>>? createFunc = null,
+        Func<TEntity, Task<Result>>? updateFunc = null,
+        Func<object?, Task<Result>>? deleteFunc = null,
+        string? createPermission = null,
+        string? updatePermission = null,
+        string? deletePermission = null,
+        string? entityName = null,
+        string? entityNamePlural = null,
         Func<Task>? editFormInitializedFunc = null,
         Func<bool>? hasExtraActionsFunc = null)
         : base(
             fields,
+            searchPermission,
             idFunc,
             createFunc,
             updateFunc,
             deleteFunc,
-            entityName,
-            entityNamePlural,
-            searchPermission,
             createPermission,
             updatePermission,
             deletePermission,
+            entityName,
+            entityNamePlural,
             editFormInitializedFunc,
             hasExtraActionsFunc)
     {
         LoadDataFunc = loadDataFunc;
-        LocalSearchFunc = localSearchFunc;
+        SearchFunc = searchFunc;
     }
 }

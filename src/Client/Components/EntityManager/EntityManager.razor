@@ -16,9 +16,9 @@
             <MudExpansionPanel
                 Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
                 Class="mud-elevation-25" Text="@L["Search"]">
-                <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@(L["Search for "] + Context.EntityNamePlural)"
+                <MudTextField @bind-Value="SearchString" Immediate="true" Placeholder="@(L["Search for "] + Context.EntityNamePlural)"
                     Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-                    Style="flex:none!important;margin:0px!important" TextChanged="@((e) => OnSearch(e))">
+                    Style="flex:none!important;margin:0px!important" TextChanged="OnSearch">
                 </MudTextField>
 
                 @AdvancedSearchContent
@@ -26,23 +26,25 @@
             </MudExpansionPanel>
         }
 
-        <MudTable Elevation="25" Hover="true" 
+        <MudTable @ref="_table"
+            Elevation="25" Hover="true" 
             ServerData="@ServerReloadFunc"
             Items="@_entityList" Filter="LocalSearch"
-            Dense="@_dense" Bordered="@_bordered" Striped="@_striped" @ref="_table"
-            Loading="@Loading" LoadingProgressColor="@Color.Secondary">
+            Dense="@Dense" Bordered="@Bordered" Striped="@Striped"
+            Loading="@Loading" LoadingProgressColor="@Color.Secondary"
+            ChildRowContent="@ChildRowContent">
 
             <ToolBarContent>
                 <div class="justify-center mud-text-align-center">
                     @if (_canCreate)
                     {
                         <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary"
-                        OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
-                        IconColor="Color.Surface">@L["Create"]</MudButton>
+                            OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
+                            IconColor="Color.Surface">@L["Create"]</MudButton>
                     }
-                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="@(() => OnSearch(""))"
-                    StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary"
-                    Style="margin-left: 5px;">@L["Reload"]</MudButton>
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="ResetAsync"
+                        StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary"
+                        Style="margin-left: 5px;">@L["Reload"]</MudButton>
                 </div>
                 <MudSpacer />
             </ToolBarContent>
@@ -68,28 +70,36 @@
             </HeaderContent>
 
             <RowTemplate>
-                @if (Context.Fields is not null)
+                @foreach (var field in Context.Fields)
                 {
-                    foreach (var field in Context.Fields)
-                    {
-                        <MudTd DataLabel="@field.DataLabel">
-                            <MudHighlighter Text="@field.DataValue(context)?.ToString()" HighlightedText="@_searchString" />
-                        </MudTd>
-                    }
+                    <MudTd DataLabel="@field.DataLabel">
+                        @if (field.Template is not null)
+                        {
+                            @field.Template(context);
+                        }
+                        else
+                        {
+                            <MudHighlighter Text="@field.DataValue(context)?.ToString()" HighlightedText="@SearchString" />
+                        }
+                    </MudTd>
                 }
                 <MudTd DataLabel="Actions" Style="text-align: right">
-                    @if (HasActions)
+                    @if (ActionsContent is not null)
+                    {
+                        @ActionsContent(context)
+                    }
+                    else if (HasActions)
                     {
                         <MudMenu Label="@L["Actions"]" Variant="Variant.Filled" DisableElevation="true"
                             EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left"
                             OffsetX="true">
                             @if (_canUpdate)
                             {
-                                <MudMenuItem @onclick="@(() => InvokeModal(@Context.IdFunc(context)))">@L["Edit"]</MudMenuItem>
+                                <MudMenuItem @onclick="@(() => InvokeModal(@Context.IdFunc!(context)))">@L["Edit"]</MudMenuItem>
                             }
                             @if (_canDelete)
                             {
-                                <MudMenuItem @onclick="@(() => Delete(@Context.IdFunc(context)))">@L["Delete"]</MudMenuItem>
+                                <MudMenuItem @onclick="@(() => Delete(@Context.IdFunc!(context)))">@L["Delete"]</MudMenuItem>
                             }
                             @if (ExtraActions is not null)
                             {
@@ -109,13 +119,13 @@
             </RowTemplate>
 
             <FooterContent>
-                <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">
+                <MudSwitch @bind-Checked="@Dense" Color="Color.Secondary" Style="margin-left: 5px;">
                     @L["Dense"]
                 </MudSwitch>
-                <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">
+                <MudSwitch @bind-Checked="@Striped" Color="Color.Tertiary" Style="margin-left: 5px;">
                     @L["Striped"]
                 </MudSwitch>
-                <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">
+                <MudSwitch @bind-Checked="@Bordered" Color="Color.Warning" Style="margin-left: 5px;">
                     @L["Bordered"]
                 </MudSwitch>
             </FooterContent>

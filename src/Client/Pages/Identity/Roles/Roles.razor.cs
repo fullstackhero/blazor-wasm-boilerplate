@@ -38,7 +38,7 @@ public partial class Roles
             },
             idFunc: role => role.Id,
             loadDataFunc: async () => (await RolesClient.GetListAsync()).Adapt<ListResult<RoleDto>>(),
-            localSearchFunc: Search,
+            searchFunc: Search,
             createFunc: async role => await RolesClient.RegisterRoleAsync(role.Adapt<RoleRequest>()),
             updateFunc: async role => await RolesClient.RegisterRoleAsync(role.Adapt<RoleRequest>()),
             deleteFunc: async id => await RolesClient.DeleteAsync((string?)id),
@@ -51,7 +51,7 @@ public partial class Roles
             hasExtraActionsFunc: () => _canViewRoleClaims);
     }
 
-    private bool Search(string searchString, RoleDto role) =>
+    private bool Search(string? searchString, RoleDto role) =>
         string.IsNullOrWhiteSpace(searchString)
         || role.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
         || role.Description?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
@@ -59,7 +59,6 @@ public partial class Roles
     private void ManagePermissions(string? roleId)
     {
         ArgumentNullException.ThrowIfNull(roleId, nameof(roleId));
-
         _navigationManager.NavigateTo($"/identity/role-permissions/{roleId}");
     }
 }

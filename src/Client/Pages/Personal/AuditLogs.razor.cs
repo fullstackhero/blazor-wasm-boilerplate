@@ -1,4 +1,6 @@
+using FSH.BlazorWebAssembly.Client.Components.EntityManager;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using Mapster;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -9,124 +11,73 @@ public partial class AuditLogs
     [Inject]
     private IAuditLogsClient AuditLogsClient { get; set; } = default!;
 
-    public List<RelatedAuditTrail> Trails = new();
+    protected ClientEntityManagerContext<RelatedAuditTrail> Context { get; set; } = default!;
 
-    private RelatedAuditTrail _trail = new();
-    private string _searchString = string.Empty;
-    private bool _dense = true;
-    private bool _striped = true;
-    private bool _bordered = false;
-    private bool _searchInOldValues = false;
-    private bool _searchInNewValues = false;
+    private string? _searchString;
     private MudDateRangePicker _dateRangePicker = default!;
     private DateRange? _dateRange;
+    private bool _searchInOldValues;
+    private bool _searchInNewValues;
+    private List<RelatedAuditTrail> _trails = new();
 
-    // private ClaimsPrincipal _currentUser;
+    // Configure Automapper
+    static AuditLogs() =>
+        TypeAdapterConfig<AuditResponse, RelatedAuditTrail>.NewConfig().Map(
+            dest => dest.LocalTime,
+            src => DateTime.SpecifyKind(src.DateTime, DateTimeKind.Utc).ToLocalTime());
 
-    // private bool _canExportAuditTrails;
-    private bool _canSearchAuditTrails;
-
-    private bool _loaded;
-
-    private bool Search(AuditResponse response)
+    protected override void OnInitialized()
     {
-        bool result = false;
-
-        // check Search String
-        if (string.IsNullOrWhiteSpace(_searchString)) result = true;
-        if (!result)
-        {
-            if (response.TableName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        Context = new(
+            fields: new()
             {
-                result = true;
-            }
+                new("Id", L["Id"], audit => audit.Id),
+                new("Name", L["Table Name"], audit => audit.TableName),
+                new("Date", L["Date"], audit => audit.DateTime, DateFieldTemplate),
+                new("Type", L["Type"], audit => audit.Type)
+            },
+            loadDataFunc: LoadDataAsync,
+            searchFunc: Search,
+            searchPermission: true.ToString(),
+            hasExtraActionsFunc: () => true);
+    }
 
-            if (_searchInOldValues &&
-                response.OldValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-            {
-                result = true;
-            }
-
-            if (_searchInNewValues &&
-                response.NewValues?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-            {
-                result = true;
-            }
-        }
-
-        // check Date Range
-        if (_dateRange?.Start == null && _dateRange?.End == null) return result;
-        if (_dateRange?.Start != null && response.DateTime < _dateRange.Start)
+    private async Task<ListResult<RelatedAuditTrail>> LoadDataAsync()
+    {
+        var result = (await AuditLogsClient.GetMyLogsAsync()).Adapt<ListResult<RelatedAuditTrail>>();
+        if (result.Data is not null)
         {
-            result = false;
-        }
-
-        if (_dateRange?.End != null && response.DateTime > _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))
-        {
-            result = false;
+            _trails = result.Data;
         }
 
         return result;
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        // _currentUser = await _authService.CurrentUser();
-
-        // _canExportAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
-        _canSearchAuditTrails = true; // (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Search)).Succeeded;
-
-        await GetDataAsync();
-        _loaded = true;
-    }
-
-    private async Task GetDataAsync()
-    {
-        var response = await AuditLogsClient.GetMyLogsAsync();
-        if (response.Succeeded)
-        {
-            if (response.Data is not null)
-            {
-                Trails = response.Data
-                    .Where(x => x is not null)
-                    .Select(x => new RelatedAuditTrail
-                    {
-                        AffectedColumns = x!.AffectedColumns,
-                        DateTime = x.DateTime,
-                        Id = x.Id,
-                        NewValues = x.NewValues,
-                        OldValues = x.OldValues,
-                        PrimaryKey = x.PrimaryKey,
-                        TableName = x.TableName,
-                        Type = x.Type,
-                        UserId = x.UserId,
-                        LocalTime = DateTime.SpecifyKind(x.DateTime, DateTimeKind.Utc).ToLocalTime()
-                    }).ToList();
-            }
-        }
-        else if (response.Messages is not null)
-        {
-            foreach (string message in response.Messages)
-            {
-                _snackBar.Add(message, Severity.Error);
-            }
-        }
-    }
+    private bool Search(string? searchString, RelatedAuditTrail trail) =>
+        (string.IsNullOrWhiteSpace(searchString) // check Search String
+            || trail.TableName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+            || (_searchInOldValues &&
+                trail.OldValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true)
+            || (_searchInNewValues &&
+                trail.NewValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true))
+        && ((_dateRange?.Start is null && _dateRange?.End is null) // check Date Range
+            || (_dateRange?.Start is not null && _dateRange.End is null && trail.DateTime >= _dateRange.Start)
+            || (_dateRange?.Start is null && _dateRange?.End is not null && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))
+            || (trail.DateTime >= _dateRange!.Start && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999)));
 
     private void ShowBtnPress(Guid id)
     {
-        _trail = Trails.First(f => f.Id == id);
-        foreach (var trial in Trails.Where(a => a.Id != id))
+        var trail = _trails.First(f => f.Id == id);
+        trail.ShowDetails = !trail.ShowDetails;
+        foreach (var otherTrail in _trails.Except(new[] { trail }))
         {
-            trial.ShowDetails = false;
+            otherTrail.ShowDetails = false;
         }
-
-        _trail.ShowDetails = !_trail.ShowDetails;
     }
 
     public class RelatedAuditTrail : AuditResponse
     {
-        public bool ShowDetails { get; set; } = false;
+        public bool ShowDetails { get; set; }
         public DateTime LocalTime { get; set; }
     }
 }

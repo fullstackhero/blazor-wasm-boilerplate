@@ -15,17 +15,31 @@ public partial class EntityManager<TEntity>
     public EntityManagerContext<TEntity> Context { get; set; } = default!;
 
     [Parameter]
+    public bool Dense { get; set; }
+    [Parameter]
+    public bool Striped { get; set; } = true;
+    [Parameter]
+    public bool Bordered { get; set; }
+    [Parameter]
     public bool Loading { get; set; }
+
+    [Parameter]
+    public string? SearchString { get; set; }
+    [Parameter]
+    public EventCallback<string> SearchStringChanged { get; set; }
 
     [Parameter]
     public RenderFragment? AdvancedSearchContent { get; set; }
 
     [Parameter]
+    public RenderFragment<TEntity>? ActionsContent { get; set; }
+    [Parameter]
     public RenderFragment<TEntity>? ExtraActions { get; set; }
+    [Parameter]
+    public RenderFragment<TEntity>? ChildRowContent { get; set; }
 
     [Parameter]
-    [EditorRequired]
-    public RenderFragment<TEntity> EditFormContent { get; set; } = default!;
+    public RenderFragment<TEntity>? EditFormContent { get; set; }
 
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
@@ -37,39 +51,38 @@ public partial class EntityManager<TEntity>
     private bool _canUpdate;
     private bool _canDelete;
 
-    private string? _searchString;
-
     private MudTable<TEntity>? _table;
     private IEnumerable<TEntity>? _entityList;
-    private bool _dense;
-    private bool _striped = true;
-    private bool _bordered;
     private int _totalItems;
 
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Context.SearchPermission)).Succeeded;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Context.CreatePermission)).Succeeded;
-        _canUpdate = (await AuthService.AuthorizeAsync(state.User, Context.UpdatePermission)).Succeeded;
-        _canDelete = (await AuthService.AuthorizeAsync(state.User, Context.DeletePermission)).Succeeded;
+        _canSearch = await CanDoPermission(Context.SearchPermission, state);
+        _canCreate = await CanDoPermission(Context.CreatePermission, state);
+        _canUpdate = await CanDoPermission(Context.UpdatePermission, state);
+        _canDelete = await CanDoPermission(Context.DeletePermission, state);
 
         await LoadDataAsync();
     }
+
+    private async Task<bool> CanDoPermission(string? permission, AuthenticationState state) =>
+        !string.IsNullOrWhiteSpace(permission) &&
+            ((bool.TryParse(permission, out bool can) && can) || // check if permmission equals "True", then it's allowed
+            (await AuthService.AuthorizeAsync(state.User, permission)).Succeeded);
 
     private bool HasActions => _canUpdate || _canDelete || Context.HasExtraActionsFunc is null || Context.HasExtraActionsFunc();
 
     // Client side paging/filtering
     private bool LocalSearch(TEntity entity)
     {
-        if (string.IsNullOrWhiteSpace(_searchString) ||
-            Context is not ClientEntityManagerContext<TEntity> clientContext ||
-            clientContext.LocalSearchFunc is null)
+        if (Context is not ClientEntityManagerContext<TEntity> clientContext ||
+            clientContext.SearchFunc is null)
         {
-            return true;
+            return string.IsNullOrWhiteSpace(SearchString);
         }
 
-        return clientContext.LocalSearchFunc(_searchString, entity);
+        return clientContext.SearchFunc(SearchString, entity);
     }
 
     private async Task LoadDataAsync()
@@ -90,23 +103,22 @@ public partial class EntityManager<TEntity>
     }
 
     // Server Side paging/filtering
-    private void OnSearch(string text)
+    private async Task OnSearch(string? text = null)
     {
+        await SearchStringChanged.InvokeAsync(SearchString);
+
         if (Context is ServerEntityManagerContext<TEntity>)
         {
-            _searchString = text;
             _table?.ReloadServerData();
         }
     }
 
     private Func<TableState, Task<TableData<TEntity>>>? ServerReloadFunc =>
-        Context is ClientEntityManagerContext<TEntity>
-            ? null
-            : ServerReload;
+        Context is ServerEntityManagerContext<TEntity> ? ServerReload : null;
 
     private async Task<TableData<TEntity>> ServerReload(TableState state)
     {
-        if (!string.IsNullOrWhiteSpace(_searchString))
+        if (!string.IsNullOrWhiteSpace(SearchString))
         {
             state.Page = 0;
         }
@@ -137,7 +149,7 @@ public partial class EntityManager<TEntity>
         {
             PageSize = state.PageSize,
             PageNumber = state.Page + 1,
-            Keyword = _searchString,
+            Keyword = SearchString,
             OrderBy = orderings ?? Array.Empty<string>()
         };
 
@@ -153,6 +165,8 @@ public partial class EntityManager<TEntity>
 
     private async Task InvokeModal(object? id = default)
     {
+        _ = Context.IdFunc ?? throw new InvalidOperationException("IdFunc can't be null!");
+
         var parameters = new DialogParameters()
         {
             { nameof(AddEditModal<TEntity>.Context), Context },
@@ -181,6 +195,8 @@ public partial class EntityManager<TEntity>
 
     private async Task Delete(object? id)
     {
+        _ = Context.DeleteFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
+
         string deleteContent = L["You're sure you want to delete {0} with id '{1}'?"];
         var parameters = new DialogParameters
         {
@@ -199,15 +215,16 @@ public partial class EntityManager<TEntity>
         }
     }
 
-    private async Task ResetAsync()
+    private Task ResetAsync()
     {
         if (Context is ClientEntityManagerContext<TEntity>)
         {
-            await LoadDataAsync();
+            return LoadDataAsync();
         }
         else
         {
-            OnSearch(string.Empty);
+            SearchString = string.Empty;
+            return OnSearch();
         }
     }
 }
