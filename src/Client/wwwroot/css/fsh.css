@@ -33,3 +33,7 @@
     color: var(--mud-palette-drawer-text);
     background: var(--mud-palette-drawer-background);
 }
+
+.mud-overlay {
+    backdrop-filter: blur(2px);
+}
