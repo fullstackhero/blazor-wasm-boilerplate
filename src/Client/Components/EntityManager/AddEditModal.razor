@@ -1,6 +1,7 @@
 ﻿@typeparam TEntity
+@typeparam TId
 
-@inject IStringLocalizer<AddEditModal<TEntity>> L
+@inject IStringLocalizer<AddEditModal<TEntity, TId>> L
 
 <EditForm Model="@EntityModel" OnValidSubmit="SaveAsync">
     <MudDialog>

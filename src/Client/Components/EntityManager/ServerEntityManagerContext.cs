@@ -22,7 +22,7 @@ public class PaginationFilter
     public string[]? OrderBy { get; set; }
 }
 
-public class ServerEntityManagerContext<TEntity> : EntityManagerContext<TEntity>
+public class ServerEntityManagerContext<TEntity, TId> : EntityManagerContext<TEntity, TId>
 {
     public Func<PaginationFilter, Task<PaginatedResult<TEntity>>> SearchFunc { get; }
 
@@ -30,10 +30,10 @@ public class ServerEntityManagerContext<TEntity> : EntityManagerContext<TEntity>
         List<EntityField<TEntity>> fields,
         Func<PaginationFilter, Task<PaginatedResult<TEntity>>> searchFunc,
         string searchPermission,
-        Func<TEntity, object?>? idFunc,
+        Func<TEntity, TId>? idFunc,
         Func<TEntity, Task<Result>>? createFunc,
         Func<TEntity, Task<Result>>? updateFunc,
-        Func<object?, Task<Result>>? deleteFunc,
+        Func<TId, Task<Result>>? deleteFunc,
         string? entityName,
         string? entityNamePlural,
         string? createPermission,

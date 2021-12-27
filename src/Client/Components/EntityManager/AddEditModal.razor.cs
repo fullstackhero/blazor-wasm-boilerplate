@@ -4,12 +4,12 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
 
-public partial class AddEditModal<TEntity>
+public partial class AddEditModal<TEntity, TId>
     where TEntity : new()
 {
     [Parameter]
     [EditorRequired]
-    public EntityManagerContext<TEntity> Context { get; set; } = default!;
+    public EntityManagerContext<TEntity, TId> Context { get; set; } = default!;
     [Parameter]
     [EditorRequired]
     public RenderFragment<TEntity> EditFormContent { get; set; } = default!;

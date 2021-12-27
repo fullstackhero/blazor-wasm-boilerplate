@@ -18,7 +18,7 @@ public partial class Roles
     [Inject]
     private IRolesClient RolesClient { get; set; } = default!;
 
-    protected ClientEntityManagerContext<RoleDto> Context { get; set; } = default!;
+    protected ClientEntityManagerContext<RoleDto, string?> Context { get; set; } = default!;
 
     private bool _canViewRoleClaims;
 
@@ -41,7 +41,7 @@ public partial class Roles
             searchFunc: Search,
             createFunc: async role => await RolesClient.RegisterRoleAsync(role.Adapt<RoleRequest>()),
             updateFunc: async role => await RolesClient.RegisterRoleAsync(role.Adapt<RoleRequest>()),
-            deleteFunc: async id => await RolesClient.DeleteAsync((string?)id),
+            deleteFunc: async id => await RolesClient.DeleteAsync(id),
             entityName: L["Role"],
             entityNamePlural: L["Roles"],
             searchPermission: FSHPermissions.Roles.ListAll,

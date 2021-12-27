@@ -1,4 +1,3 @@
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -7,12 +6,13 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
 
-public partial class EntityManager<TEntity>
+public partial class EntityManager<TEntity, TId>
     where TEntity : class, new()
+    where TId : IEquatable<TId>
 {
     [Parameter]
     [EditorRequired]
-    public EntityManagerContext<TEntity> Context { get; set; } = default!;
+    public EntityManagerContext<TEntity, TId> Context { get; set; } = default!;
 
     [Parameter]
     public bool Dense { get; set; }
@@ -51,6 +51,8 @@ public partial class EntityManager<TEntity>
     private bool _canUpdate;
     private bool _canDelete;
 
+    private bool _advancedSearchExpanded;
+
     private MudTable<TEntity>? _table;
     private IEnumerable<TEntity>? _entityList;
     private int _totalItems;
@@ -76,7 +78,7 @@ public partial class EntityManager<TEntity>
     // Client side paging/filtering
     private bool LocalSearch(TEntity entity)
     {
-        if (Context is not ClientEntityManagerContext<TEntity> clientContext ||
+        if (Context is not ClientEntityManagerContext<TEntity, TId> clientContext ||
             clientContext.SearchFunc is null)
         {
             return string.IsNullOrWhiteSpace(SearchString);
@@ -87,7 +89,7 @@ public partial class EntityManager<TEntity>
 
     private async Task LoadDataAsync()
     {
-        if (Loading || Context is not ClientEntityManagerContext<TEntity> clientContext)
+        if (Loading || Context is not ClientEntityManagerContext<TEntity, TId> clientContext)
         {
             return;
         }
@@ -107,14 +109,14 @@ public partial class EntityManager<TEntity>
     {
         await SearchStringChanged.InvokeAsync(SearchString);
 
-        if (Context is ServerEntityManagerContext<TEntity>)
+        if (Context is ServerEntityManagerContext<TEntity, TId>)
         {
             _table?.ReloadServerData();
         }
     }
 
     private Func<TableState, Task<TableData<TEntity>>>? ServerReloadFunc =>
-        Context is ServerEntityManagerContext<TEntity> ? ServerReload : null;
+        Context is ServerEntityManagerContext<TEntity, TId> ? ServerReload : null;
 
     private async Task<TableData<TEntity>> ServerReload(TableState state)
     {
@@ -130,7 +132,7 @@ public partial class EntityManager<TEntity>
 
     private async Task LoadDataAsync(TableState state)
     {
-        if (Loading || Context is not ServerEntityManagerContext<TEntity> serverContext)
+        if (Loading || Context is not ServerEntityManagerContext<TEntity, TId> serverContext)
         {
             return;
         }
@@ -163,29 +165,31 @@ public partial class EntityManager<TEntity>
         Loading = false;
     }
 
-    private async Task InvokeModal(object? id = default)
+    private async Task InvokeModal(TId? id = default)
     {
         _ = Context.IdFunc ?? throw new InvalidOperationException("IdFunc can't be null!");
 
+        bool isCreate = id is null || id.Equals(default);
+
         var parameters = new DialogParameters()
         {
-            { nameof(AddEditModal<TEntity>.Context), Context },
-            { nameof(AddEditModal<TEntity>.EditFormContent), EditFormContent },
-            { nameof(AddEditModal<TEntity>.IsCreate), id == default },
-            { nameof(AddEditModal<TEntity>.Id), id }
+            { nameof(AddEditModal<TEntity, TId>.Context), Context },
+            { nameof(AddEditModal<TEntity, TId>.EditFormContent), EditFormContent },
+            { nameof(AddEditModal<TEntity, TId>.IsCreate), isCreate },
+            { nameof(AddEditModal<TEntity, TId>.Id), id }
         };
 
-        if (id != default)
+        if (!isCreate)
         {
-            var entity = _entityList?.FirstOrDefault(c => Context.IdFunc(c) == id);
+            var entity = _entityList?.FirstOrDefault(e => Context.IdFunc(e).Equals(id));
             if (entity is not null)
             {
-                parameters.Add(nameof(AddEditModal<TEntity>.EntityModel), entity);
+                parameters.Add(nameof(AddEditModal<TEntity, TId>.EntityModel), entity);
             }
         }
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<AddEditModal<TEntity>>(id == default ? L["Create"] : L["Edit"], parameters, options);
+        var dialog = _dialogService.Show<AddEditModal<TEntity, TId>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -193,7 +197,7 @@ public partial class EntityManager<TEntity>
         }
     }
 
-    private async Task Delete(object? id)
+    private async Task Delete(TId id)
     {
         _ = Context.DeleteFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
 
@@ -217,7 +221,7 @@ public partial class EntityManager<TEntity>
 
     private Task ResetAsync()
     {
-        if (Context is ClientEntityManagerContext<TEntity>)
+        if (Context is ClientEntityManagerContext<TEntity, TId>)
         {
             return LoadDataAsync();
         }

@@ -5,14 +5,14 @@ namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
 
 public record EntityField<T>(string SortLabel, string DataLabel, Func<T, object?> DataValue, RenderFragment<T>? Template = null);
 
-public abstract class EntityManagerContext<TEntity>
+public abstract class EntityManagerContext<TEntity, TId>
 {
     public List<EntityField<TEntity>> Fields { get; }
     public string SearchPermission { get; }
-    public Func<TEntity, object?>? IdFunc { get; }
+    public Func<TEntity, TId>? IdFunc { get; }
     public Func<TEntity, Task<Result>>? CreateFunc { get; }
     public Func<TEntity, Task<Result>>? UpdateFunc { get; }
-    public Func<object?, Task<Result>>? DeleteFunc { get; }
+    public Func<TId, Task<Result>>? DeleteFunc { get; }
     public string? CreatePermission { get; }
     public string? UpdatePermission { get; }
     public string? DeletePermission { get; }
@@ -24,10 +24,10 @@ public abstract class EntityManagerContext<TEntity>
     public EntityManagerContext(
         List<EntityField<TEntity>> fields,
         string searchPermission,
-        Func<TEntity, object?>? idFunc,
+        Func<TEntity, TId>? idFunc,
         Func<TEntity, Task<Result>>? createFunc,
         Func<TEntity, Task<Result>>? updateFunc,
-        Func<object?, Task<Result>>? deleteFunc,
+        Func<TId, Task<Result>>? deleteFunc,
         string? createPermission,
         string? updatePermission,
         string? deletePermission,

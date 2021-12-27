@@ -13,7 +13,7 @@ public partial class Products
     [Inject]
     protected IBrandsClient BrandsClient { get; set; } = default!;
 
-    protected ServerEntityManagerContext<ProductDto> Context { get; set; } = default!;
+    protected ServerEntityManagerContext<ProductDto, Guid> Context { get; set; } = default!;
 
     // Fields for advanced search/filter
     protected bool CheckBox { get; set; } = true;
@@ -35,7 +35,7 @@ public partial class Products
             searchFunc: SearchFunc,
             createFunc: async prod => await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
             updateFunc: async prod => await ProductsClient.UpdateAsync(prod.Id, prod.Adapt<UpdateProductRequest>()),
-            deleteFunc: async id => await ProductsClient.DeleteAsync(id is Guid guid ? guid : default),
+            deleteFunc: async id => await ProductsClient.DeleteAsync(id),
             editFormInitializedFunc: () => LoadBrandsAsync(),
             entityName: L["Product"],
             entityNamePlural: L["Products"],

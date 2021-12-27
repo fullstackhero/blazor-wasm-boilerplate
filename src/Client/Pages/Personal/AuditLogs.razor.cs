@@ -11,7 +11,7 @@ public partial class AuditLogs
     [Inject]
     private IAuditLogsClient AuditLogsClient { get; set; } = default!;
 
-    protected ClientEntityManagerContext<RelatedAuditTrail> Context { get; set; } = default!;
+    protected ClientEntityManagerContext<RelatedAuditTrail, Guid> Context { get; set; } = default!;
 
     private string? _searchString;
     private MudDateRangePicker _dateRangePicker = default!;
@@ -39,6 +39,7 @@ public partial class AuditLogs
             loadDataFunc: LoadDataAsync,
             searchFunc: Search,
             searchPermission: true.ToString(),
+            entityNamePlural: L["Trails"],
             hasExtraActionsFunc: () => true);
     }
 

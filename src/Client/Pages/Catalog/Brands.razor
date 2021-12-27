@@ -6,7 +6,7 @@
 
 <FshTitle Title="@L["Brands"]" Description="@L["Manage Brands."]" />
 
-<EntityManager TEntity="BrandDto" Context="@Context">
+<EntityManager TEntity="BrandDto" TId="Guid" Context="@Context">
 
     <EditFormContent>
         <MudItem xs="12" md="6">
@@ -23,7 +23,7 @@
 
 @code
 {
-    protected ServerEntityManagerContext<BrandDto> Context { get; set; } = default!;
+    protected ServerEntityManagerContext<BrandDto, Guid> Context { get; set; } = default!;
 
     protected override void OnInitialized() =>
         Context = new(
@@ -37,7 +37,7 @@
             searchFunc: async filter => (await BrandsClient.SearchAsync(filter.Adapt<BrandListFilter>())).Adapt<PaginatedResult<BrandDto>>(),
             createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
             updateFunc: async brand => await BrandsClient.UpdateAsync(brand.Id, brand.Adapt<UpdateBrandRequest>()),
-            deleteFunc: async id => await BrandsClient.DeleteAsync(id is Guid guid ? guid : default),
+            deleteFunc: async id => await BrandsClient.DeleteAsync(id),
             entityName: L["Brand"],
             entityNamePlural: L["Brands"],
             searchPermission: FSHPermissions.Products.Search,

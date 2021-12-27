@@ -2,7 +2,7 @@
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
 
-public class ClientEntityManagerContext<TEntity> : EntityManagerContext<TEntity>
+public class ClientEntityManagerContext<TEntity, TId> : EntityManagerContext<TEntity, TId>
 {
     public Func<Task<ListResult<TEntity>>> LoadDataFunc { get; }
     public Func<string?, TEntity, bool> SearchFunc { get; }
@@ -12,10 +12,10 @@ public class ClientEntityManagerContext<TEntity> : EntityManagerContext<TEntity>
         Func<Task<ListResult<TEntity>>> loadDataFunc,
         Func<string?, TEntity, bool> searchFunc,
         string searchPermission,
-        Func<TEntity, object?>? idFunc = null,
+        Func<TEntity, TId>? idFunc = null,
         Func<TEntity, Task<Result>>? createFunc = null,
         Func<TEntity, Task<Result>>? updateFunc = null,
-        Func<object?, Task<Result>>? deleteFunc = null,
+        Func<TId, Task<Result>>? deleteFunc = null,
         string? createPermission = null,
         string? updatePermission = null,
         string? deletePermission = null,
