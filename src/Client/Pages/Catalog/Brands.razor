@@ -29,9 +29,9 @@
         Context = new(
             fields: new()
             {
-                new("Id", L["Id"], brand => brand.Id),
-                new("Name", L["Name"], brand => brand.Name),
-                new("Description", L["Description"], brand => brand.Description),
+                new(brand => brand.Id, L["Id"], "Id"),
+                new(brand => brand.Name, L["Name"], "Name"),
+                new(brand => brand.Description, L["Description"], "Description"),
             },
             idFunc: brand => brand.Id,
             searchFunc: async filter => (await BrandsClient.SearchAsync(filter.Adapt<BrandListFilter>())).Adapt<PaginatedResult<BrandDto>>(),

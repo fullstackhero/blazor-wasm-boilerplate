@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
+namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
 
 public partial class Roles
 {
@@ -32,9 +32,9 @@ public partial class Roles
         Context = new(
             fields: new()
             {
-                new("Id", L["Id"], role => role.Id),
-                new("Name", L["Name"], role => role.Name),
-                new("Description", L["Description"], role => role.Description),
+                new(role => role.Id, L["Id"]),
+                new(role => role.Name, L["Name"]),
+                new(role => role.Description, L["Description"]),
             },
             idFunc: role => role.Id,
             loadDataFunc: async () => (await RolesClient.GetListAsync()).Adapt<ListResult<RoleDto>>(),

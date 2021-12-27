@@ -2,26 +2,32 @@
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
-public record EntityField<TEntity>(string SortLabel, string DataLabel, Func<TEntity, object?> DataValue, RenderFragment<TEntity>? Template = null)
+public record EntityField<TEntity>(Func<TEntity, object?> ValueFunc, string DisplayName, string SortLabel = "", Type? Type = null, RenderFragment<TEntity>? Template = null)
 {
     /// <summary>
-    /// The string that's sent to the api as property to sort on for this field.
+    /// A function that returns the actual value of this field from the supplied entity.
     /// </summary>
-    public string SortLabel { get; set; } = SortLabel;
+    public Func<TEntity, object?> ValueFunc { get; init; } = ValueFunc;
 
     /// <summary>
     /// The string that's shown on the UI for this field.
     /// </summary>
-    public string DataLabel { get; set; } = DataLabel;
+    public string DisplayName { get; init; } = DisplayName;
 
     /// <summary>
-    /// A function that returns the actual value of this field from the supplied entity.
+    /// The string that's sent to the api as property to sort on for this field.
+    /// This is only relevant when using server side sorting.
     /// </summary>
-    public Func<TEntity, object?> DataValue { get; set; } = DataValue;
+    public string SortLabel { get; init; } = SortLabel;
+
+    /// <summary>
+    /// The type of the field. Default is string, but when boolean, it shows as a checkbox.
+    /// </summary>
+    public Type? Type { get; init; } = Type;
 
     /// <summary>
     /// When supplied this template will be used for this field in stead of the default template.
     /// For an example on how to do this, see <see cref="Pages.Personal.AuditLogs"/>.
     /// </summary>
-    public RenderFragment<TEntity>? Template { get; set; } = Template;
+    public RenderFragment<TEntity>? Template { get; init; } = Template;
 }

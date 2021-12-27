@@ -64,11 +64,11 @@
                         <MudTh>
                             @if (Context is EntityClientTableContext<TEntity, TId>)
                             {
-                                <MudTableSortLabel SortBy="@field.DataValue">@field.DataLabel</MudTableSortLabel>
+                                <MudTableSortLabel SortBy="@field.ValueFunc">@field.DisplayName</MudTableSortLabel>
                             }
                             else
                             {
-                                <MudTableSortLabel T="TEntity" SortLabel="@field.SortLabel">@field.DataLabel</MudTableSortLabel>
+                                <MudTableSortLabel T="TEntity" SortLabel="@field.SortLabel">@field.DisplayName</MudTableSortLabel>
                             }
                         </MudTh>
                     }
@@ -79,14 +79,21 @@
             <RowTemplate>
                 @foreach (var field in Context.Fields)
                 {
-                    <MudTd DataLabel="@field.DataLabel">
+                    <MudTd DataLabel="@field.DisplayName">
                         @if (field.Template is not null)
                         {
-                            @field.Template(context);
+                            @field.Template(context)
                         }
                         else
                         {
-                            <MudHighlighter Text="@field.DataValue(context)?.ToString()" HighlightedText="@SearchString" />
+                            if (field.Type == typeof(bool))
+                            {
+                                <MudCheckBox Checked="@field.ValueFunc(context)" ReadOnly Color="Color.Secondary"></MudCheckBox>
+                            }
+                            else
+                            {
+                                <MudHighlighter Text="@field.ValueFunc(context)?.ToString()" HighlightedText="@SearchString" />
+                            }
                         }
                     </MudTd>
                 }

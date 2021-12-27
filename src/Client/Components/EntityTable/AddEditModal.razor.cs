@@ -33,13 +33,19 @@ public partial class AddEditModal<TEntity, TId>
 
     private async Task SaveAsync()
     {
-        _ = Context.CreateFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
-        _ = Context.UpdateFunc ?? throw new InvalidOperationException("UpdateFunc can't be null!");
+        if (IsCreate)
+        {
+            _ = Context.CreateFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
+        }
+        else
+        {
+            _ = Context.UpdateFunc ?? throw new InvalidOperationException("UpdateFunc can't be null!");
+        }
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
             () => IsCreate
-                ? Context.CreateFunc(EntityModel)
-                : Context.UpdateFunc(EntityModel),
+                ? Context.CreateFunc!(EntityModel)
+                : Context.UpdateFunc!(EntityModel),
             _snackBar,
             _customValidation,
             L["Success"]) is not null)

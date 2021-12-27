@@ -25,11 +25,11 @@ public partial class Products
         Context = new(
             fields: new()
             {
-                new("Id", L["Id"], prod => prod.Id),
-                new("Name", L["Name"], prod => prod.Name),
-                new("Brand.Name", L["Brand"], prod => prod.BrandName),
-                new("Description", L["Description"], prod => prod.Description),
-                new("Rate", L["Rate"], prod => prod.Rate)
+                new(prod => prod.Id, L["Id"], "Id"),
+                new(prod => prod.Name, L["Name"], "Name"),
+                new(prod => prod.BrandName, L["Brand"], "Brand.Name"),
+                new(prod => prod.Description, L["Description"], "Description"),
+                new(prod => prod.Rate, L["Rate"], "Rate")
             },
             idFunc: prod => prod.Id,
             searchFunc: SearchFunc,

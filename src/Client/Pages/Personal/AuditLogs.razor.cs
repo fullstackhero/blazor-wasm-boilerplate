@@ -31,10 +31,10 @@ public partial class AuditLogs
         Context = new(
             fields: new()
             {
-                new("Id", L["Id"], audit => audit.Id),
-                new("Name", L["Table Name"], audit => audit.TableName),
-                new("Date", L["Date"], audit => audit.DateTime, DateFieldTemplate),
-                new("Type", L["Type"], audit => audit.Type)
+                new(audit => audit.Id, L["Id"]),
+                new(audit => audit.TableName, L["Table Name"]),
+                new(audit => audit.DateTime, L["Date"], Template: DateFieldTemplate),
+                new(audit => audit.Type, L["Type"])
             },
             loadDataFunc: LoadDataAsync,
             searchFunc: Search,

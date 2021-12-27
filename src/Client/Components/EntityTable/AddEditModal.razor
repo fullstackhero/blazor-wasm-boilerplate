@@ -6,7 +6,7 @@
 <EditForm Model="@EntityModel" OnValidSubmit="SaveAsync">
     <MudDialog>
         <TitleContent>
-            @if (Id == default)
+            @if (IsCreate)
             {
                 <MudText Typo="Typo.h6">
                     <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
@@ -25,7 +25,7 @@
             <DataAnnotationsValidator />
             <CustomValidation @ref="_customValidation" />
             <MudGrid>
-                @if (Id != default)
+                @if (!IsCreate)
                 {
                     <MudItem xs="12" md="6">
                         <MudTextField Disabled For="@(() => Id)" @bind-Value="Id" Label="@L["Id"]" />
@@ -38,16 +38,16 @@
         </DialogContent>
         <DialogActions>
             <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@L["Cancel"]</MudButton>
-            @if (Id != default)
+            @if (IsCreate)
             {
-                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Secondary">
-                    @L["Update"]
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">
+                    @L["Save"]
                 </MudButton>
             }
             else
             {
-                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">
-                    @L["Save"]
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Secondary">
+                    @L["Update"]
                 </MudButton>
             }
         </DialogActions>
