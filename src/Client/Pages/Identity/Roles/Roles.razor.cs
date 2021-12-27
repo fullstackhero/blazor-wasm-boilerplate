@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityManager;
+﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
@@ -18,7 +18,7 @@ public partial class Roles
     [Inject]
     private IRolesClient RolesClient { get; set; } = default!;
 
-    protected ClientEntityManagerContext<RoleDto, string?> Context { get; set; } = default!;
+    protected EntityClientTableContext<RoleDto, string?> Context { get; set; } = default!;
 
     private bool _canViewRoleClaims;
 

@@ -4,7 +4,7 @@
 
 <FshTitle Title="@L["Audit Logs"]" Description="@L["Your Recent Activities."]" />
 
-<EntityManager TEntity="RelatedAuditTrail" TId="Guid" Context="@Context" @bind-SearchString="_searchString" Dense="true">
+<EntityTable TEntity="RelatedAuditTrail" TId="Guid" Context="@Context" @bind-SearchString="_searchString" Dense="true">
 
     <AdvancedSearchContent>
         <MudSwitch @bind-Checked="@_searchInOldValues" Color="Color.Primary" Style="margin-left: 5px;">@L["Search in Old Values"]</MudSwitch>
@@ -116,7 +116,7 @@
         }
     </ChildRowContent>
 
-</EntityManager>
+</EntityTable>
 
 @code {
     private RenderFragment<RelatedAuditTrail> DateFieldTemplate => trail => __builder =>

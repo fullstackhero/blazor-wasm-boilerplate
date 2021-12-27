@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityManager;
+﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
@@ -13,7 +13,7 @@ public partial class Products
     [Inject]
     protected IBrandsClient BrandsClient { get; set; } = default!;
 
-    protected ServerEntityManagerContext<ProductDto, Guid> Context { get; set; } = default!;
+    protected EntityServerTableContext<ProductDto, Guid> Context { get; set; } = default!;
 
     // Fields for advanced search/filter
     protected bool CheckBox { get; set; } = true;
@@ -44,7 +44,7 @@ public partial class Products
             updatePermission: FSHPermissions.Products.Update,
             deletePermission: FSHPermissions.Products.Remove);
 
-    private async Task<PaginatedResult<ProductDto>> SearchFunc(Components.EntityManager.PaginationFilter filter)
+    private async Task<PaginatedResult<ProductDto>> SearchFunc(Components.EntityTable.PaginationFilter filter)
     {
         var productFilter = filter.Adapt<ProductListFilter>();
 

@@ -1,32 +1,22 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 
-namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
+namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
-public class ListResult<T> : Result
+/// <summary>
+/// Initialization Context for the EntityTable Component.
+/// Use this one if you want to use Server Paging, Sorting and Filtering.
+/// </summary>
+/// <typeparam name="TEntity">The type of the entity.</typeparam>
+/// <typeparam name="TId">The type of the id of the entity.</typeparam>
+public class EntityServerTableContext<TEntity, TId> : EntityTableContext<TEntity, TId>
 {
-    public List<T>? Data { get; set; }
-}
-
-public class PaginatedResult<T> : ListResult<T>
-{
-    public int TotalCount { get; set; }
-    public int CurrentPage { get; set; } = 1;
-    public int PageSize { get; set; } = 10;
-}
-
-public class PaginationFilter
-{
-    public int PageSize { get; set; }
-    public int PageNumber { get; set; }
-    public string? Keyword { get; set; }
-    public string[]? OrderBy { get; set; }
-}
-
-public class ServerEntityManagerContext<TEntity, TId> : EntityManagerContext<TEntity, TId>
-{
+    /// <summary>
+    /// A function that loads the specified page from the api with the specified search criteria
+    /// and returns a PaginatedResult of TEntity.
+    /// </summary>
     public Func<PaginationFilter, Task<PaginatedResult<TEntity>>> SearchFunc { get; }
 
-    public ServerEntityManagerContext(
+    public EntityServerTableContext(
         List<EntityField<TEntity>> fields,
         Func<PaginationFilter, Task<PaginatedResult<TEntity>>> searchFunc,
         string searchPermission,

@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
+namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
-public partial class EntityManager<TEntity, TId>
+public partial class EntityTable<TEntity, TId>
     where TEntity : class, new()
     where TId : IEquatable<TId>
 {
     [Parameter]
     [EditorRequired]
-    public EntityManagerContext<TEntity, TId> Context { get; set; } = default!;
+    public EntityTableContext<TEntity, TId> Context { get; set; } = default!;
 
     [Parameter]
     public bool Dense { get; set; }
@@ -78,7 +78,7 @@ public partial class EntityManager<TEntity, TId>
     // Client side paging/filtering
     private bool LocalSearch(TEntity entity)
     {
-        if (Context is not ClientEntityManagerContext<TEntity, TId> clientContext ||
+        if (Context is not EntityClientTableContext<TEntity, TId> clientContext ||
             clientContext.SearchFunc is null)
         {
             return string.IsNullOrWhiteSpace(SearchString);
@@ -89,7 +89,7 @@ public partial class EntityManager<TEntity, TId>
 
     private async Task LoadDataAsync()
     {
-        if (Loading || Context is not ClientEntityManagerContext<TEntity, TId> clientContext)
+        if (Loading || Context is not EntityClientTableContext<TEntity, TId> clientContext)
         {
             return;
         }
@@ -109,14 +109,14 @@ public partial class EntityManager<TEntity, TId>
     {
         await SearchStringChanged.InvokeAsync(SearchString);
 
-        if (Context is ServerEntityManagerContext<TEntity, TId>)
+        if (Context is EntityServerTableContext<TEntity, TId>)
         {
             _table?.ReloadServerData();
         }
     }
 
     private Func<TableState, Task<TableData<TEntity>>>? ServerReloadFunc =>
-        Context is ServerEntityManagerContext<TEntity, TId> ? ServerReload : null;
+        Context is EntityServerTableContext<TEntity, TId> ? ServerReload : null;
 
     private async Task<TableData<TEntity>> ServerReload(TableState state)
     {
@@ -132,7 +132,7 @@ public partial class EntityManager<TEntity, TId>
 
     private async Task LoadDataAsync(TableState state)
     {
-        if (Loading || Context is not ServerEntityManagerContext<TEntity, TId> serverContext)
+        if (Loading || Context is not EntityServerTableContext<TEntity, TId> serverContext)
         {
             return;
         }
@@ -221,7 +221,7 @@ public partial class EntityManager<TEntity, TId>
 
     private Task ResetAsync()
     {
-        if (Context is ClientEntityManagerContext<TEntity, TId>)
+        if (Context is EntityClientTableContext<TEntity, TId>)
         {
             return LoadDataAsync();
         }

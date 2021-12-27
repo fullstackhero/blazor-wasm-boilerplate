@@ -1,4 +1,4 @@
-using FSH.BlazorWebAssembly.Client.Components.EntityManager;
+using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using Mapster;
 using Microsoft.AspNetCore.Components;
@@ -11,7 +11,7 @@ public partial class AuditLogs
     [Inject]
     private IAuditLogsClient AuditLogsClient { get; set; } = default!;
 
-    protected ClientEntityManagerContext<RelatedAuditTrail, Guid> Context { get; set; } = default!;
+    protected EntityClientTableContext<RelatedAuditTrail, Guid> Context { get; set; } = default!;
 
     private string? _searchString;
     private MudDateRangePicker _dateRangePicker = default!;

@@ -2,14 +2,14 @@ using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.EntityManager;
+namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
 public partial class AddEditModal<TEntity, TId>
     where TEntity : new()
 {
     [Parameter]
     [EditorRequired]
-    public EntityManagerContext<TEntity, TId> Context { get; set; } = default!;
+    public EntityTableContext<TEntity, TId> Context { get; set; } = default!;
     [Parameter]
     [EditorRequired]
     public RenderFragment<TEntity> EditFormContent { get; set; } = default!;

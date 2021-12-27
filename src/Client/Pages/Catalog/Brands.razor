@@ -6,7 +6,7 @@
 
 <FshTitle Title="@L["Brands"]" Description="@L["Manage Brands."]" />
 
-<EntityManager TEntity="BrandDto" TId="Guid" Context="@Context">
+<EntityTable TEntity="BrandDto" TId="Guid" Context="@Context">
 
     <EditFormContent>
         <MudItem xs="12" md="6">
@@ -19,11 +19,11 @@
         </MudItem>
     </EditFormContent>
 
-</EntityManager>
+</EntityTable>
 
 @code
 {
-    protected ServerEntityManagerContext<BrandDto, Guid> Context { get; set; } = default!;
+    protected EntityServerTableContext<BrandDto, Guid> Context { get; set; } = default!;
 
     protected override void OnInitialized() =>
         Context = new(
