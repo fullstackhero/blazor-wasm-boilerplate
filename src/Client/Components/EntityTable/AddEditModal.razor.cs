@@ -1,6 +1,8 @@
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.ComponentModel.DataAnnotations;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
@@ -33,6 +35,38 @@ public partial class AddEditModal<TEntity, TId>
 
     public void ForceRender() =>
         StateHasChanged();
+
+    // This is temporary... we should probably use another type parameter here for the request type.
+    public Result Validate(object request)
+    {
+        var results = new List<ValidationResult>();
+        if (!Validator.TryValidateObject(request, new ValidationContext(request), results, true))
+        {
+            // Convert results to errors
+            var errors = new Dictionary<string, ICollection<string>>();
+            foreach (var result in results
+                .Where(r => !string.IsNullOrWhiteSpace(r.ErrorMessage)))
+            {
+                foreach (string field in result.MemberNames)
+                {
+                    if (errors.ContainsKey(field))
+                    {
+                        errors[field].Add(result.ErrorMessage!);
+                    }
+                    else
+                    {
+                        errors.Add(field, new List<string>() { result.ErrorMessage! });
+                    }
+                }
+            }
+
+            _customValidation?.DisplayErrors(errors);
+
+            return new Result { Succeeded = false, Messages = new List<string>() { "Validation failed." } };
+        }
+
+        return new Result { Succeeded = true };
+    }
 
     private async Task SaveAsync()
     {

@@ -88,8 +88,6 @@ public abstract class EntityTableContext<TEntity, TId>
     /// </summary>
     public Func<bool>? HasExtraActionsFunc { get; set; }
 
-    public IDialogReference? AddEditModalRef { get; set; }
-
     public EntityTableContext(
         List<EntityField<TEntity>> fields,
         string searchPermission,
@@ -120,6 +118,11 @@ public abstract class EntityTableContext<TEntity, TId>
         HasExtraActionsFunc = hasExtraActionsFunc;
     }
 
-    public void AddEditModalForceRender() =>
-        (AddEditModalRef?.Dialog as AddEditModal<TEntity, TId>)?.ForceRender();
+    private IDialogReference? _addEditModalRef;
+
+    internal void SetAddEditModalRef(IDialogReference dialog) =>
+        _addEditModalRef = dialog;
+
+    public AddEditModal<TEntity, TId>? AddEditModal =>
+        _addEditModalRef?.Dialog as AddEditModal<TEntity, TId>;
 }

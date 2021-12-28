@@ -69,6 +69,13 @@ public partial class Users
         // Add fields which are not on UserDetailsDto
         request.Password = Password;
         request.ConfirmPassword = ConfirmPassword;
+
+        // This is temporary... we should probably use another type parameter (or 2) on the AddEditModal for the request type.
+        if (Context.AddEditModal?.Validate(request) is Result result && !result.Succeeded)
+        {
+            return result;
+        }
+
         return await IdentityClient.RegisterAsync(request);
     }
 
@@ -101,6 +108,6 @@ public partial class Users
             _passwordInput = InputType.Text;
         }
 
-        Context.AddEditModalForceRender();
+        Context.AddEditModal?.ForceRender();
     }
 }
