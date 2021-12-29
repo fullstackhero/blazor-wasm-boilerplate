@@ -5,11 +5,11 @@
     <MudTabPanel Text="@localizer["Profile"]">
         <Profile />
     </MudTabPanel>
-    if(!SecurityTabHidden)
+    @if (!SecurityTabHidden)
     {
-    <MudTabPanel Text="@localizer["Security"]">
-        <Security />
-    </MudTabPanel>
+        <MudTabPanel Text="@localizer["Security"]">
+            <Security />
+        </MudTabPanel>
     }
 </MudTabs>
 
