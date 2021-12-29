@@ -13,7 +13,7 @@ public partial class Products
     [Inject]
     protected IBrandsClient BrandsClient { get; set; } = default!;
 
-    protected EntityServerTableContext<ProductDto, Guid> Context { get; set; } = default!;
+    protected EntityServerTableContext<ProductDto, Guid, CreateProductRequest> Context { get; set; } = default!;
 
     // Fields for advanced search/filter
     protected bool CheckBox { get; set; } = true;
@@ -21,7 +21,8 @@ public partial class Products
     // Fields for EditForm
     private List<BrandDto> _brands = new();
 
-    protected override void OnInitialized() =>
+    protected override void OnInitialized()
+    {
         Context = new(
             fields: new()
             {
@@ -33,8 +34,8 @@ public partial class Products
             },
             idFunc: prod => prod.Id,
             searchFunc: SearchFunc,
-            createFunc: async prod => await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
-            updateFunc: async prod => await ProductsClient.UpdateAsync(prod.Id, prod.Adapt<UpdateProductRequest>()),
+            createFunc: async prod => await ProductsClient.CreateAsync(prod),
+            updateFunc: async (id, prod) => await ProductsClient.UpdateAsync(id, prod.Adapt<UpdateProductRequest>()),
             deleteFunc: async id => await ProductsClient.DeleteAsync(id),
             editFormInitializedFunc: () => LoadBrandsAsync(),
             entityName: L["Product"],
@@ -43,6 +44,7 @@ public partial class Products
             createPermission: FSHPermissions.Products.Register,
             updatePermission: FSHPermissions.Products.Update,
             deletePermission: FSHPermissions.Products.Remove);
+    }
 
     private async Task<PaginatedResult<ProductDto>> SearchFunc(Components.EntityTable.PaginationFilter filter)
     {
