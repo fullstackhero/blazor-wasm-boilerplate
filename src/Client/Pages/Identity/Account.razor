@@ -4,11 +4,14 @@
  @if (!AccountManagementDisabled)
 {
     <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
-    <MudTabPanel Text="@localizer["Profile"]">
-        <Profile />
-    </MudTabPanel>
+        <MudTabPanel Text="@localizer["Profile"]">
+            <Profile />
+        </MudTabPanel>
         <MudTabPanel Text="@localizer["Security"]">
             <Security />
+        </MudTabPanel>
+        <MudTabPanel Text="@localizer["Forgot Password"]">
+            <ForgotPassword />
         </MudTabPanel>
     </MudTabs>
 }
