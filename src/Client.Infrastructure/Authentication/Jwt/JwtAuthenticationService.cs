@@ -148,7 +148,7 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
 
             return tokenResponse;
         }
-        catch (ApiException<ErrorResultOfString>)
+        catch (ApiException<ErrorResult>)
         {
             return new ResultOfTokenResponse { Succeeded = false };
         }

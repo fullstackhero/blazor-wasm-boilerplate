@@ -1,4 +1,7 @@
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -6,13 +9,12 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
-public partial class EntityTable<TEntity, TId>
-    where TEntity : class, new()
-    where TId : IEquatable<TId>
+public partial class EntityTable<TEntity, TId, TRequest>
+    where TRequest : new()
 {
     [Parameter]
     [EditorRequired]
-    public EntityTableContext<TEntity, TId> Context { get; set; } = default!;
+    public EntityTableContext<TEntity, TId, TRequest> Context { get; set; } = default!;
 
     [Parameter]
     public bool Dense { get; set; }
@@ -39,7 +41,7 @@ public partial class EntityTable<TEntity, TId>
     public RenderFragment<TEntity>? ChildRowContent { get; set; }
 
     [Parameter]
-    public RenderFragment<TEntity>? EditFormContent { get; set; }
+    public RenderFragment<TRequest>? EditFormContent { get; set; }
 
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
@@ -78,8 +80,8 @@ public partial class EntityTable<TEntity, TId>
     // Client side paging/filtering
     private bool LocalSearch(TEntity entity)
     {
-        if (Context is not EntityClientTableContext<TEntity, TId> clientContext ||
-            clientContext.SearchFunc is null)
+        if (Context is not EntityClientTableContext<TEntity, TId, TRequest> clientContext
+            || clientContext.SearchFunc is null)
         {
             return string.IsNullOrWhiteSpace(SearchString);
         }
@@ -89,7 +91,7 @@ public partial class EntityTable<TEntity, TId>
 
     private async Task LoadDataAsync()
     {
-        if (Loading || Context is not EntityClientTableContext<TEntity, TId> clientContext)
+        if (Loading || Context is not EntityClientTableContext<TEntity, TId, TRequest> clientContext)
         {
             return;
         }
@@ -109,14 +111,15 @@ public partial class EntityTable<TEntity, TId>
     {
         await SearchStringChanged.InvokeAsync(SearchString);
 
-        if (Context is EntityServerTableContext<TEntity, TId>)
+        if (Context is EntityServerTableContext<TEntity, TId, TRequest>)
         {
             _table?.ReloadServerData();
         }
     }
 
     private Func<TableState, Task<TableData<TEntity>>>? ServerReloadFunc =>
-        Context is EntityServerTableContext<TEntity, TId> ? ServerReload : null;
+        Context is EntityServerTableContext<TEntity, TId, TRequest>
+            ? ServerReload : null;
 
     private async Task<TableData<TEntity>> ServerReload(TableState state)
     {
@@ -132,7 +135,7 @@ public partial class EntityTable<TEntity, TId>
 
     private async Task LoadDataAsync(TableState state)
     {
-        if (Loading || Context is not EntityServerTableContext<TEntity, TId> serverContext)
+        if (Loading || Context is not EntityServerTableContext<TEntity, TId, TRequest> serverContext)
         {
             return;
         }
@@ -155,8 +158,9 @@ public partial class EntityTable<TEntity, TId>
             OrderBy = orderings ?? Array.Empty<string>()
         };
 
-        var result = await serverContext.SearchFunc(filter);
-        if (result.Succeeded)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => serverContext.SearchFunc(filter), _snackBar)
+            is PaginatedResult<TEntity> result && result.Succeeded)
         {
             _totalItems = result.TotalCount;
             _entityList = result.Data;
@@ -165,32 +169,64 @@ public partial class EntityTable<TEntity, TId>
         Loading = false;
     }
 
-    private async Task InvokeModal(TId? id = default)
+    private async Task InvokeModal(TEntity? entity = default)
     {
-        _ = Context.IdFunc ?? throw new InvalidOperationException("IdFunc can't be null!");
+        bool isCreate = entity is null;
 
-        bool isCreate = id is null || id.Equals(default);
+        string title = isCreate
+            ? L["Create "] + Context.EntityName
+            : L["Update "] + Context.EntityName;
 
         var parameters = new DialogParameters()
         {
-            { nameof(AddEditModal<TEntity, TId>.Context), Context },
-            { nameof(AddEditModal<TEntity, TId>.EditFormContent), EditFormContent },
-            { nameof(AddEditModal<TEntity, TId>.IsCreate), isCreate },
-            { nameof(AddEditModal<TEntity, TId>.Id), id }
+            { nameof(AddEditModal<TRequest>.EditFormContent), EditFormContent },
+            { nameof(AddEditModal<TRequest>.OnInitializedFunc), Context.EditFormInitializedFunc },
+            { nameof(AddEditModal<TRequest>.IsCreate), isCreate },
+            { nameof(AddEditModal<TRequest>.Title), title }
         };
 
-        if (!isCreate)
+        if (isCreate)
         {
-            var entity = _entityList?.FirstOrDefault(e => Context.IdFunc(e).Equals(id));
-            if (entity is not null)
-            {
-                parameters.Add(nameof(AddEditModal<TEntity, TId>.EntityModel), entity);
-            }
+            _ = Context.CreateFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
+            parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), Context.CreateFunc);
+
+            var requestModel =
+                Context.GetDefaultsFunc is not null
+                    && await ApiHelper.ExecuteCallGuardedAsync(
+                            () => Context.GetDefaultsFunc(), _snackBar)
+                        is Result<TRequest> defaultsResult
+                    && defaultsResult?.Succeeded is true
+                    && defaultsResult.Data is not null
+                ? defaultsResult.Data
+                : new TRequest();
+            parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
+        }
+        else
+        {
+            _ = Context.IdFunc ?? throw new InvalidOperationException("IdFunc can't be null!");
+            var id = Context.IdFunc(entity!);
+            parameters.Add(nameof(AddEditModal<TRequest>.Id), id);
+
+            _ = Context.UpdateFunc ?? throw new InvalidOperationException("UpdateFunc can't be null!");
+            Func<TRequest, Task<Result>> saveFunc = entity => Context.UpdateFunc(id, entity);
+            parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), saveFunc);
+
+            var requestModel =
+                Context.GetDetailsFunc is not null
+                    && await ApiHelper.ExecuteCallGuardedAsync(
+                            () => Context.GetDetailsFunc(id!),
+                            _snackBar)
+                        is Result<TRequest> detailsResult
+                    && detailsResult?.Succeeded is true
+                    && detailsResult.Data is not null
+                ? detailsResult.Data
+                : entity!.Adapt<TRequest>();
+            parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
         }
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
 
-        var dialog = _dialogService.Show<AddEditModal<TEntity, TId>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
+        var dialog = _dialogService.Show<AddEditModal<TRequest>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
 
         Context.SetAddEditModalRef(dialog);
 
@@ -202,20 +238,23 @@ public partial class EntityTable<TEntity, TId>
         }
     }
 
-    private async Task Delete(TId id)
+    private async Task Delete(TEntity entity)
     {
-        _ = Context.DeleteFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
+        _ = Context.IdFunc ?? throw new InvalidOperationException("IdFunc can't be null!");
+        TId id = Context.IdFunc(entity);
 
         string deleteContent = L["You're sure you want to delete {0} with id '{1}'?"];
         var parameters = new DialogParameters
         {
-            { nameof(Shared.Dialogs.DeleteConfirmation.ContentText), string.Format(deleteContent, Context.EntityName, id) }
+            { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, Context.EntityName, id) }
         };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<Shared.Dialogs.DeleteConfirmation>(L["Delete"], parameters, options);
+        var dialog = _dialogService.Show<DeleteConfirmation>(L["Delete"], parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
+            _ = Context.DeleteFunc ?? throw new InvalidOperationException("DeleteFunc can't be null!");
+
             await ApiHelper.ExecuteCallGuardedAsync(
                 () => Context.DeleteFunc(id),
                 _snackBar);
@@ -226,7 +265,7 @@ public partial class EntityTable<TEntity, TId>
 
     private Task ResetAsync()
     {
-        if (Context is EntityClientTableContext<TEntity, TId>)
+        if (Context is EntityClientTableContext<TEntity, TId, TRequest>)
         {
             return LoadDataAsync();
         }

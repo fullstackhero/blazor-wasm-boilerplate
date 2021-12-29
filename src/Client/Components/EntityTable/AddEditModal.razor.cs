@@ -6,37 +6,45 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
-public partial class AddEditModal<TEntity, TId>
-    where TEntity : new()
+public partial class AddEditModal<TRequest> : IAddEditModal
 {
     [Parameter]
     [EditorRequired]
-    public EntityTableContext<TEntity, TId> Context { get; set; } = default!;
+    public RenderFragment<TRequest> EditFormContent { get; set; } = default!;
     [Parameter]
     [EditorRequired]
-    public RenderFragment<TEntity> EditFormContent { get; set; } = default!;
+    public TRequest RequestModel { get; set; } = default!;
+    [Parameter]
+    [EditorRequired]
+    public Func<TRequest, Task<Result>> SaveFunc { get; set; } = default!;
 
     [Parameter]
-    public TEntity EntityModel { get; set; } = new();
+    public Func<Task>? OnInitializedFunc { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public string Title { get; set; } = default!;
     [Parameter]
     public bool IsCreate { get; set; }
     [Parameter]
     public object? Id { get; set; }
 
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; } = default!;
+    private MudDialogInstance _mudDialog { get; set; } = default!;
 
     private CustomValidation? _customValidation;
 
     protected override Task OnInitializedAsync() =>
-        Context.EditFormInitializedFunc is not null
-            ? Context.EditFormInitializedFunc()
+        OnInitializedFunc is not null
+            ? OnInitializedFunc()
             : Task.CompletedTask;
 
     public void ForceRender() =>
         StateHasChanged();
 
-    // This is temporary... we should probably use another type parameter here for the request type.
+    // This should not be necessary anymore, except maybe in the case when the
+    // UpdateEntityRequest has different validation rules than the CreateEntityRequest.
+    // If that would happen a lot we can still change the design so this method doesn't need to be called manually.
     public Result Validate(object request)
     {
         var results = new List<ValidationResult>();
@@ -70,27 +78,17 @@ public partial class AddEditModal<TEntity, TId>
 
     private async Task SaveAsync()
     {
-        if (IsCreate)
-        {
-            _ = Context.CreateFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
-        }
-        else
-        {
-            _ = Context.UpdateFunc ?? throw new InvalidOperationException("UpdateFunc can't be null!");
-        }
-
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => IsCreate
-                ? Context.CreateFunc!(EntityModel)
-                : Context.UpdateFunc!(EntityModel),
-            _snackBar,
-            _customValidation,
-            L["Success"]) is not null)
+                () => SaveFunc(RequestModel),
+                _snackBar,
+                _customValidation,
+                L["Success"])
+            is not null)
         {
-            MudDialog.Close();
+            _mudDialog.Close();
         }
     }
 
     private void Cancel() =>
-        MudDialog.Cancel();
+        _mudDialog.Cancel();
 }

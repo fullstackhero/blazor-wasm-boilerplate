@@ -55,12 +55,15 @@ public partial class Profile
     {
         var state = await AuthState;
         var user = state.User;
-        _profileModel.Email = user.GetEmail();
-        _profileModel.FirstName = user.GetFirstName();
-        _profileModel.LastName = user.GetSurname();
-        _profileModel.PhoneNumber = user.GetPhoneNumber();
-        ImageDataUrl = user?.GetImageUrl()?.Replace("{server_url}/", _configurations[ConfigNames.ApiBaseUrl]);
-        UserId = user?.GetUserId();
+        if (user != null)
+        {
+            _profileModel.Email = user.GetEmail() ?? string.Empty;
+            _profileModel.FirstName = user.GetFirstName() ?? string.Empty;
+            _profileModel.LastName = user.GetSurname() ?? string.Empty;
+            _profileModel.PhoneNumber = user.GetPhoneNumber();
+            ImageDataUrl = user?.GetImageUrl()?.Replace("{server_url}/", _configurations[ConfigNames.ApiBaseUrl]);
+            UserId = user?.GetUserId();
+        }
 
         if (_profileModel.FirstName?.Length > 0)
         {

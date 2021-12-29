@@ -6,7 +6,7 @@
 
 <FshTitle Title="@L["Brands"]" Description="@L["Manage Brands."]" />
 
-<EntityTable TEntity="BrandDto" TId="Guid" Context="@Context">
+<EntityTable TEntity="BrandDto" TId="Guid" TRequest="CreateBrandRequest" Context="@Context">
 
     <EditFormContent>
         <MudItem xs="12" md="6">
@@ -23,7 +23,7 @@
 
 @code
 {
-    protected EntityServerTableContext<BrandDto, Guid> Context { get; set; } = default!;
+    protected EntityServerTableContext<BrandDto, Guid, CreateBrandRequest> Context { get; set; } = default!;
 
     protected override void OnInitialized() =>
         Context = new(
@@ -35,8 +35,8 @@
             },
             idFunc: brand => brand.Id,
             searchFunc: async filter => (await BrandsClient.SearchAsync(filter.Adapt<BrandListFilter>())).Adapt<PaginatedResult<BrandDto>>(),
-            createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
-            updateFunc: async brand => await BrandsClient.UpdateAsync(brand.Id, brand.Adapt<UpdateBrandRequest>()),
+            createFunc: async brand => await BrandsClient.CreateAsync(brand),
+            updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand.Adapt<UpdateBrandRequest>()),
             deleteFunc: async id => await BrandsClient.DeleteAsync(id),
             entityName: L["Brand"],
             entityNamePlural: L["Brands"],
