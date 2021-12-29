@@ -9,6 +9,8 @@
         </MudCardHeader>
         <MudCardContent>
             <MudGrid>
+                <DataAnnotationsValidator />
+                <CustomValidation @ref="_customValidation" />
                 <MudItem xs="12" md="6">
                     <MudTextField T="string" @bind-Value="_passwordModel.NewPassword"
                         For="@(() => _passwordModel.NewPassword)" Label="@_localizer["Password"]"

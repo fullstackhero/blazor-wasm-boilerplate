@@ -1,4 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -14,27 +15,19 @@ public partial class Security
     public IIdentityClient IdentityClient { get; set; } = default!;
 
     private readonly ChangePasswordRequest _passwordModel = new();
-    private string? ConfirmationPassword { get; set; }
+
+    private CustomValidation? _customValidation;
 
     private async Task ChangePasswordAsync()
     {
-        var response = await IdentityClient.ChangePasswordAsync(_passwordModel);
-        if (response.Succeeded)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => IdentityClient.ChangePasswordAsync(_passwordModel), _snackBar, _customValidation)
+            is Result result && result.Succeeded)
         {
             _snackBar.Add(_localizer["Password Changed!"], Severity.Success);
             _passwordModel.Password = string.Empty;
             _passwordModel.NewPassword = string.Empty;
             _passwordModel.ConfirmNewPassword = string.Empty;
-        }
-        else
-        {
-            if (response.Messages != null)
-            {
-                foreach (string? message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
         }
     }
 
