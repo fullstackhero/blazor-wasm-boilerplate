@@ -64,7 +64,7 @@ public partial class Users
 
     private async Task<Result> CreateAsync(UserDetailsDto user)
     {
-        var request = user.Adapt<RegisterRequest>();
+        var request = user.Adapt<RegisterUserRequest>();
 
         // Add fields which are not on UserDetailsDto
         request.Password = Password;
