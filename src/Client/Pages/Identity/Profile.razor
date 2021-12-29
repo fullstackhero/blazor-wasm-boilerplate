@@ -7,12 +7,11 @@
                 <div class="d-flex justify-center mb-4">
                     @if (!string.IsNullOrEmpty(@ImageDataUrl))
                     {
-                        <MudAvatar Image="@ImageDataUrl" Style="height: auto; width: auto; max-width: 100%;"> </MudAvatar>
+                        <MudAvatar Image="@ImageDataUrl" Style="height: auto; width: fit-content; max-width: 250px;"> </MudAvatar>
                     }
                     else
                     {
-                        <MudAvatar Color="Color.Primary" Style="height: auto; width: auto; max-width: 100%;">@_firstLetterOfName</MudAvatar>
-                        @*<MudAvatar Color="Color.Primary" Style="height:250px; width:250px;">@_firstLetterOfName</MudAvatar>*@
+                        <MudAvatar Color="Color.Primary" Style="height:250px; width:250px;">@_firstLetterOfName</MudAvatar>
                     }
                 </div>
                 <MudText Typo="Typo.h6" Align="Align.Center">@_profileModel.FirstName @_profileModel.LastName</MudText>
