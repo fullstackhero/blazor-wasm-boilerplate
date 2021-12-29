@@ -50,9 +50,13 @@ public static class ApiHelper
         {
             customValidation?.DisplayErrors(ex.Result.Errors);
         }
-        catch (ApiException<ErrorResultOfString> ex)
+        catch (ApiException<ErrorResult> ex)
         {
             snackbar.Add(ex.Result.Exception, Severity.Error);
+            if (ex.Result.ValidationErrors is not null)
+            {
+                customValidation?.DisplayErrors(ex.Result.ValidationErrors);
+            }
         }
 
         return default;
