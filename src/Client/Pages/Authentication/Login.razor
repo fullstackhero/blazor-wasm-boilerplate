@@ -13,7 +13,7 @@
 <EditForm Model="@_tokenRequest" OnValidSubmit="SubmitAsync">
     <MudGrid>
         <DataAnnotationsValidator />
-        <CustomValidation @ref="_customValidation" />
+        <CustomValidation @ref="_customValidation"/>
         <MudItem xs="12">
             <MudTextField T="string" Label="E-mail" Variant="Variant.Outlined" @bind-Value="_tokenRequest.Email"
                 For="@(() => _tokenRequest.Email)" />
@@ -25,7 +25,7 @@
         </MudItem>
         <MudItem xs="12">
             <MudTextField T="string" Label="Tenant" Variant="Variant.Outlined" @bind-Value="_tenantKey"
-                For="@(() => _tenantKey)" />
+                For="@(() => _tenantKey)" Required />
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-space-between align-center">
             <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1"></MudCheckBox>
