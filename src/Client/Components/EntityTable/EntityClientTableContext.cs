@@ -6,10 +6,8 @@ namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 /// Initialization Context for the EntityTable Component.
 /// Use this one if you want to use Client Paging, Sorting and Filtering.
 /// </summary>
-/// <typeparam name="TEntity">The type of the entity.</typeparam>
-/// <typeparam name="TId">The type of the id of the entity.</typeparam>
-public class EntityClientTableContext<TEntity, TId> : EntityTableContext<TEntity, TId>
-    where TEntity : new()
+public class EntityClientTableContext<TEntity, TId, TRequest>
+    : EntityTableContext<TEntity, TId, TRequest>
 {
     /// <summary>
     /// A function that loads all the data for the table from the api and returns a ListResult of TEntity.
@@ -28,8 +26,10 @@ public class EntityClientTableContext<TEntity, TId> : EntityTableContext<TEntity
         Func<string?, TEntity, bool> searchFunc,
         string searchPermission,
         Func<TEntity, TId>? idFunc = null,
-        Func<TEntity, Task<Result>>? createFunc = null,
-        Func<TEntity, Task<Result>>? updateFunc = null,
+        Func<Task<Result<TRequest>>>? getDefaultsFunc = null,
+        Func<TRequest, Task<Result>>? createFunc = null,
+        Func<TId, Task<Result<TRequest>>>? getDetailsFunc = null,
+        Func<TId, TRequest, Task<Result>>? updateFunc = null,
         Func<TId, Task<Result>>? deleteFunc = null,
         string? createPermission = null,
         string? updatePermission = null,
@@ -42,7 +42,9 @@ public class EntityClientTableContext<TEntity, TId> : EntityTableContext<TEntity
             fields,
             searchPermission,
             idFunc,
+            getDefaultsFunc,
             createFunc,
+            getDetailsFunc,
             updateFunc,
             deleteFunc,
             createPermission,

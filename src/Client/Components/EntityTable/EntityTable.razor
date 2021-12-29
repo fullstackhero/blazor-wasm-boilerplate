@@ -1,7 +1,8 @@
-﻿@typeparam TEntity where TEntity: class, new()
-@typeparam TId where TId : IEquatable<TId>
+﻿@typeparam TEntity
+@typeparam TId
+@typeparam TRequest
 
-@inject IStringLocalizer<EntityTable<TEntity, TId>> L
+@inject IStringLocalizer<EntityTable<TEntity, TId, TRequest>> L
 
 <style>
     .mud-table-container {
@@ -62,7 +63,7 @@
                     foreach (var field in Context.Fields)
                     {
                         <MudTh>
-                            @if (Context is EntityClientTableContext<TEntity, TId>)
+                            @if (Context is EntityClientTableContext<TEntity, TId, TRequest>)
                             {
                                 <MudTableSortLabel SortBy="@field.ValueFunc">@field.DisplayName</MudTableSortLabel>
                             }
@@ -109,11 +110,11 @@
                             OffsetX="true">
                             @if (_canUpdate)
                             {
-                                <MudMenuItem @onclick="@(() => InvokeModal(@Context.IdFunc!(context)))">@L["Edit"]</MudMenuItem>
+                                <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>
                             }
                             @if (_canDelete)
                             {
-                                <MudMenuItem @onclick="@(() => Delete(@Context.IdFunc!(context)))">@L["Delete"]</MudMenuItem>
+                                <MudMenuItem @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
                             }
                             @if (ExtraActions is not null)
                             {

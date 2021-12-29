@@ -2,7 +2,11 @@
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
-public class ListResult<T> : Result
+public class Result<T> : Result
 {
-    public List<T>? Data { get; set; }
+    public T? Data { get; set; }
+}
+
+public class ListResult<T> : Result<List<T>>
+{
 }

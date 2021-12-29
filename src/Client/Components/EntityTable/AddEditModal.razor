@@ -1,26 +1,24 @@
-﻿@typeparam TEntity
-@typeparam TId
+﻿@typeparam TRequest
 
-@inject IStringLocalizer<AddEditModal<TEntity, TId>> L
+@inject IStringLocalizer<AddEditModal<TRequest>> L
 
-<EditForm Model="@EntityModel" OnValidSubmit="SaveAsync">
+<EditForm Model="@RequestModel" OnValidSubmit="SaveAsync">
     <MudDialog>
+
         <TitleContent>
-            @if (IsCreate)
-            {
-                <MudText Typo="Typo.h6">
+            <MudText Typo="Typo.h6">
+                @if (IsCreate)
+                {
                     <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
-                    @(L["Add "] + Context.EntityName)
-                </MudText>
-            }
-            else
-            {
-                <MudText Typo="Typo.h6">
+                }
+                else
+                {
                     <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
-                    @(L["Update "] + Context.EntityName)
-                </MudText>
-            }
+                }
+                @Title
+            </MudText>
         </TitleContent>
+
         <DialogContent>
             <DataAnnotationsValidator />
             <CustomValidation @ref="_customValidation" />
@@ -32,10 +30,11 @@
                     </MudItem>
                 }
 
-                @EditFormContent(EntityModel)
+                @EditFormContent(RequestModel!)
 
             </MudGrid>
         </DialogContent>
+
         <DialogActions>
             <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@L["Cancel"]</MudButton>
             @if (IsCreate)
@@ -51,5 +50,6 @@
                 </MudButton>
             }
         </DialogActions>
+
     </MudDialog>
 </EditForm>

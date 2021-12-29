@@ -21,7 +21,7 @@ public partial class Users
     [Inject]
     protected IIdentityClient IdentityClient { get; set; } = default!;
 
-    protected EntityClientTableContext<UserDetailsDto, Guid> Context { get; set; } = default!;
+    protected EntityClientTableContext<UserDetailsDto, Guid, RegisterRequest> Context { get; set; } = default!;
 
     private bool _canExportUsers;
     private bool _canViewRoles;
@@ -54,29 +54,12 @@ public partial class Users
             idFunc: user => user.Id,
             loadDataFunc: async () => (await UsersClient.GetAllAsync()).Adapt<ListResult<UserDetailsDto>>(),
             searchFunc: Search,
-            createFunc: async user => await CreateAsync(user),
+            createFunc: async user => await IdentityClient.RegisterAsync(user),
             entityName: L["User"],
             entityNamePlural: L["Users"],
             searchPermission: FSHPermissions.Users.Search,
             createPermission: FSHPermissions.Users.Create,
             hasExtraActionsFunc: () => true);
-    }
-
-    private async Task<Result> CreateAsync(UserDetailsDto user)
-    {
-        var request = user.Adapt<RegisterUserRequest>();
-
-        // Add fields which are not on UserDetailsDto
-        request.Password = Password;
-        request.ConfirmPassword = ConfirmPassword;
-
-        // This is temporary... we should probably use another type parameter (or 2) on the AddEditModal for the request type.
-        if (Context.AddEditModal?.Validate(request) is Result result && !result.Succeeded)
-        {
-            return result;
-        }
-
-        return await IdentityClient.RegisterAsync(request);
     }
 
     private bool Search(string? searchString, UserDetailsDto user) =>
