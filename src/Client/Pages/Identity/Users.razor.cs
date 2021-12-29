@@ -21,7 +21,7 @@ public partial class Users
     [Inject]
     protected IIdentityClient IdentityClient { get; set; } = default!;
 
-    protected EntityClientTableContext<UserDetailsDto, Guid, RegisterRequest> Context { get; set; } = default!;
+    protected EntityClientTableContext<UserDetailsDto, Guid, RegisterUserRequest> Context { get; set; } = default!;
 
     private bool _canExportUsers;
     private bool _canViewRoles;
