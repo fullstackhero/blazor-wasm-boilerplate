@@ -1,6 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared;
 using FSH.BlazorWebAssembly.Shared.MultiTenancy;
 using Microsoft.AspNetCore.Components;
 
