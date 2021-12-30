@@ -1,19 +1,19 @@
-﻿using Microsoft.AspNetCore.Components;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
+using Microsoft.AspNetCore.Components;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
+
 public partial class ForgotPassword
 {
-    private ForgotPasswordRequest _forgotPasswordRequest = new ForgotPasswordRequest();
-    public bool BusySubmitting { get; set; } = false;
-
+    private readonly ForgotPasswordRequest _forgotPasswordRequest = new();
     private CustomValidation? _customValidation;
+    public bool BusySubmitting { get; set; }
 
-    [Inject]
-    public IIdentityClient _identityClient { get; set; } = default!;
+    [Inject] public IIdentityClient _identityClient { get; set; } = default!;
 
-    public string _tenant { get; set; } = "root";
+    public string _tenant { get; set; }
+
     private async Task SubmitAsync()
     {
         BusySubmitting = true;
