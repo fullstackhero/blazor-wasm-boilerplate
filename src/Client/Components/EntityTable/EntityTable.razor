@@ -108,11 +108,11 @@
                         <MudMenu Label="@L["Actions"]" Variant="Variant.Filled" DisableElevation="true"
                             EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left"
                             OffsetX="true">
-                            @if (_canUpdate)
+                            @if (CanUpdateEntity(context))
                             {
                                 <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>
                             }
-                            @if (_canDelete)
+                            @if (CanDeleteEntity(context))
                             {
                                 <MudMenuItem @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
                             }

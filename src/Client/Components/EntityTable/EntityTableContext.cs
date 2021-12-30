@@ -103,6 +103,16 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     /// </summary>
     public Func<bool>? HasExtraActionsFunc { get; set; }
 
+    /// <summary>
+    /// Use this if you want to disable the update functionality for specific entities in the table.
+    /// </summary>
+    public Func<TEntity, bool>? CanUpdateEntityFunc { get; set; }
+
+    /// <summary>
+    /// Use this if you want to disable the delete functionality for specific entities in the table.
+    /// </summary>
+    public Func<TEntity, bool>? CanDeleteEntityFunc { get; set; }
+
     public EntityTableContext(
         List<EntityField<TEntity>> fields,
         string searchPermission,
@@ -118,7 +128,9 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         string? entityName,
         string? entityNamePlural,
         Func<Task>? editFormInitializedFunc,
-        Func<bool>? hasExtraActionsFunc)
+        Func<bool>? hasExtraActionsFunc,
+        Func<TEntity, bool>? canUpdateEntityFunc,
+        Func<TEntity, bool>? canDeleteEntityFunc)
     {
         Fields = fields;
         SearchPermission = searchPermission;
@@ -135,6 +147,8 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         EntityNamePlural = entityNamePlural;
         EditFormInitializedFunc = editFormInitializedFunc;
         HasExtraActionsFunc = hasExtraActionsFunc;
+        CanUpdateEntityFunc = canUpdateEntityFunc;
+        CanDeleteEntityFunc = canDeleteEntityFunc;
     }
 
     private IDialogReference? _addEditModalRef;

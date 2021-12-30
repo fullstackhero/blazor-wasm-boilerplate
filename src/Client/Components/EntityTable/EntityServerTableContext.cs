@@ -31,7 +31,9 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
         string? updatePermission = null,
         string? deletePermission = null,
         Func<Task>? editFormInitializedFunc = null,
-        Func<bool>? hasExtraActionsFunc = null)
+        Func<bool>? hasExtraActionsFunc = null,
+        Func<TEntity, bool>? canUpdateEntityFunc = null,
+        Func<TEntity, bool>? canDeleteEntityFunc = null)
         : base(
             fields,
             searchPermission,
@@ -47,6 +49,8 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
             entityName,
             entityNamePlural,
             editFormInitializedFunc,
-            hasExtraActionsFunc) =>
+            hasExtraActionsFunc,
+            canUpdateEntityFunc,
+            canDeleteEntityFunc) =>
         SearchFunc = searchFunc;
 }
