@@ -12,7 +12,7 @@ public partial class ForgotPassword
 
     [Inject] public IIdentityClient _identityClient { get; set; } = default!;
 
-    public string _tenant { get; set; }
+    public string _tenant { get; set; } = string.Empty;
 
     private async Task SubmitAsync()
     {
