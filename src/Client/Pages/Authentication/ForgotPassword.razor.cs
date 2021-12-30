@@ -12,7 +12,7 @@ public partial class ForgotPassword
 
     [Inject] private IIdentityClient _identityClient { get; set; } = default!;
 
-    private string _tenant { get; set; } = string.Empty;
+    private string _tenant { get; set; } = MultitenancyConstants.DefaultTenant.Key;
 
     private async Task SubmitAsync()
     {

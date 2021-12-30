@@ -57,9 +57,9 @@ public partial class Login
 
     private void FillAdministratorCredentials()
     {
-        _tokenRequest.Email = "admin@root.com";
-        _tokenRequest.Password = "123Pa$$word!";
-        _tenantKey = "root";
+        _tokenRequest.Email = MultitenancyConstants.DefaultTenant.EmailAddress; 
+        _tokenRequest.Password = MultitenancyConstants.DefaultPassword;
+        _tenantKey = MultitenancyConstants.DefaultTenant.Key;
     }
 
     private async Task SubmitAsync()
