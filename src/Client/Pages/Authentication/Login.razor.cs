@@ -28,7 +28,7 @@ public partial class Login
     {
         if (AuthService.ProviderType == AuthProvider.AzureAd)
         {
-            _navigationManager.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(_navigationManager.Uri)}");
+            AuthService.NavigateToExternalLogin(_navigationManager.Uri);
             return;
         }
 

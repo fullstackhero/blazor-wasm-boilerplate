@@ -5,9 +5,9 @@
         <MudCard Elevation="25">
             <MudCardContent>
                 <div class="d-flex justify-center mb-4">
-                    @if (!string.IsNullOrEmpty(@ImageDataUrl))
+                    @if (!string.IsNullOrEmpty(@_imageDataUrl))
                     {
-                        <MudAvatar Image="@ImageDataUrl" Style="height:250px; width:250px;"> </MudAvatar>
+                        <MudAvatar Image="@_imageDataUrl" Style="height:250px; width:250px;"> </MudAvatar>
                     }
                     else
                     {
@@ -36,6 +36,8 @@
                 </MudCardHeader>
                 <MudCardContent>
                     <MudGrid>
+                        <DataAnnotationsValidator />
+                        <CustomValidation @ref="_customValidation"/>
                         <MudItem xs="12" md="6">
                             <MudTextField @bind-Value="@_profileModel.FirstName" For="@(() => _profileModel.FirstName)"
                                 Label="@_localizer["First Name"]" Variant="Variant.Outlined" />
