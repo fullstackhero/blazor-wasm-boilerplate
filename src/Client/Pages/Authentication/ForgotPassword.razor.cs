@@ -1,21 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
-
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
 public partial class ForgotPassword
 {
-    public ForgotPassword()
-    {
-
-    }
-
     private ForgotPasswordRequest _forgotPasswordRequest = new ForgotPasswordRequest();
     public bool BusySubmitting { get; set; } = false;
 
@@ -28,12 +17,11 @@ public partial class ForgotPassword
     private async Task SubmitAsync()
     {
         BusySubmitting = true;
-        // _tenant = "root";
+
         await ApiHelper.ExecuteCallGuardedAsync(
             () => _identityClient.ForgotPasswordAsync(_tenant, _forgotPasswordRequest),
             _snackBar,
             _customValidation);
-
 
         BusySubmitting = false;
     }
