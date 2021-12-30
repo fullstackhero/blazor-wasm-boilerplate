@@ -34,7 +34,7 @@ public partial class Roles
             {
                 new(role => role.Id, L["Id"]),
                 new(role => role.Name, L["Name"]),
-                new(role => role.Description, L["Description"]),
+                new(role => role.Description, L["Description"])
             },
             idFunc: role => role.Id,
             loadDataFunc: async () => (await RolesClient.GetListAsync()).Adapt<ListResult<RoleDto>>(),
@@ -48,7 +48,9 @@ public partial class Roles
             createPermission: FSHPermissions.Roles.Register,
             updatePermission: FSHPermissions.Roles.Update,
             deletePermission: FSHPermissions.Roles.Remove,
-            hasExtraActionsFunc: () => _canViewRoleClaims);
+            hasExtraActionsFunc: () => _canViewRoleClaims,
+            canUpdateEntityFunc: e => !e.IsDefault,
+            canDeleteEntityFunc: e => !e.IsDefault);
     }
 
     private bool Search(string? searchString, RoleDto role) =>

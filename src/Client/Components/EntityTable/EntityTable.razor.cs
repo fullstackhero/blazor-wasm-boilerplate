@@ -76,6 +76,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
             (await AuthService.AuthorizeAsync(state.User, permission)).Succeeded);
 
     private bool HasActions => _canUpdate || _canDelete || Context.HasExtraActionsFunc is null || Context.HasExtraActionsFunc();
+    private bool CanUpdateEntity(TEntity entity) => _canUpdate && (Context.CanUpdateEntityFunc is null || Context.CanUpdateEntityFunc(entity));
+    private bool CanDeleteEntity(TEntity entity) => _canDelete && (Context.CanDeleteEntityFunc is null || Context.CanDeleteEntityFunc(entity));
 
     // Client side paging/filtering
     private bool LocalSearch(TEntity entity)
