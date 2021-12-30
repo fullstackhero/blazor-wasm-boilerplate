@@ -8,11 +8,11 @@ public partial class ForgotPassword
 {
     private readonly ForgotPasswordRequest _forgotPasswordRequest = new();
     private CustomValidation? _customValidation;
-    public bool BusySubmitting { get; set; }
+    private bool BusySubmitting { get; set; }
 
-    [Inject] public IIdentityClient _identityClient { get; set; } = default!;
+    [Inject] private IIdentityClient _identityClient { get; set; } = default!;
 
-    public string _tenant { get; set; } = string.Empty;
+    private string _tenant { get; set; } = string.Empty;
 
     private async Task SubmitAsync()
     {
