@@ -1,5 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Shared;
 using Microsoft.AspNetCore.Components;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;

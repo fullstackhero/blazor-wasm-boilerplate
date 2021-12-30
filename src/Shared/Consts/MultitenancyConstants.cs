@@ -1,4 +1,4 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Shared;
+﻿namespace FSH.BlazorWebAssembly.Shared;
 
 public class MultitenancyConstants
 {
