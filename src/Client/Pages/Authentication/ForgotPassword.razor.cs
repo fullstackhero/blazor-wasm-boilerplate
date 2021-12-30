@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CityHunter.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using CityHunter.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Shared;
 
 
-namespace CityHunter.BlazorWebAssembly.Client.Pages.Authentication;
+namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
 public partial class ForgotPassword
 {
     public ForgotPassword()
