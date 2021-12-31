@@ -24,7 +24,7 @@ public partial class Security
                 () => IdentityClient.ChangePasswordAsync(_passwordModel), _snackBar, _customValidation)
             is Result result && result.Succeeded)
         {
-            _snackBar.Add(_localizer["Password Changed!"], Severity.Success);
+            _snackBar.Add(L["Password Changed!"], Severity.Success);
             _passwordModel.Password = string.Empty;
             _passwordModel.NewPassword = string.Empty;
             _passwordModel.ConfirmNewPassword = string.Empty;

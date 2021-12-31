@@ -1,5 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using System.Security.Claims
 
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components
@@ -27,12 +28,14 @@
 @using FSH.BlazorWebAssembly.Client.Shared.Components
 @using FSH.BlazorWebAssembly.Client.Components.EntityTable
 @using FSH.BlazorWebAssembly.Client.Components.ErrorHandler
+@using FSH.BlazorWebAssembly.Client.Components.Localization
 @using FSH.BlazorWebAssembly.Client.Components.Notifications
 @using FSH.BlazorWebAssembly.Client.Components.ThemeManager
 @using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Common
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications
+@using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences
 @using FSH.BlazorWebAssembly.Shared.Authorization
 
 @attribute [Authorize]

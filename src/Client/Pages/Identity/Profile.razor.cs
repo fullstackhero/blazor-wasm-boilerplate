@@ -53,7 +53,7 @@ public partial class Profile
                 () => IdentityClient.UpdateProfileAsync(_profileModel), _snackBar, _customValidation)
             is Result result && result.Succeeded)
         {
-            _snackBar.Add(_localizer["Your Profile has been updated. Please Login again to Continue."], Severity.Success);
+            _snackBar.Add(L["Your Profile has been updated. Please Login again to Continue."], Severity.Success);
             await AuthService.ReLoginAsync(_navigationManager.Uri);
         }
     }

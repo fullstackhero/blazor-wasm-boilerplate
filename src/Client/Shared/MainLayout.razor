@@ -1,5 +1,4 @@
-﻿@using FSH.BlazorWebAssembly.Client.Components.Localization
-@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
+﻿@inject IStringLocalizer<MainLayout> L
 
 <MudAppBar Elevation="0">
     <MudTooltip Text="Go Home">
@@ -20,22 +19,22 @@
     <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
         <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Secondary"
             Link="https://opencollective.com/fullstackhero" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">
-            @_localizer["Sponsor"]</MudButton>
+            @L["Sponsor"]</MudButton>
         <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
         <MudTooltip Text="Support">
             <MudMenu Icon="@Icons.Filled.SupportAgent" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
                 OffsetY="true">
-                <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
-                <MudMenuItem Link="https://discord.gg/yQWpShsKrf" Target="_blank">@_localizer["Discord"]</MudMenuItem>
-                <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook"]
+                <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@L["Community"]</b></MudText>
+                <MudMenuItem Link="https://discord.gg/yQWpShsKrf" Target="_blank">@L["Discord"]</MudMenuItem>
+                <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@L["Facebook"]
                 </MudMenuItem>
                 <MudMenuItem Link="https://www.linkedin.com/in/iammukeshm/" Target="_blank">LinkedIn</MudMenuItem>
                 <MudMenuItem Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank">Buy Me a Coffee!
                 </MudMenuItem>
                 <MudMenuItem Link="https://opencollective.com/fullstackhero" Target="_blank">Open Collective
                 </MudMenuItem>
-                <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
-                <MudMenuItem Link="https://fullstackhero.net/" Target="_blank">@_localizer["Documentation"]
+                <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@L["Resources"]</b></MudText>
+                <MudMenuItem Link="https://fullstackhero.net/" Target="_blank">@L["Documentation"]
                 </MudMenuItem>
             </MudMenu>
         </MudTooltip>
@@ -59,16 +58,16 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Coffee" Color="Color.Inherit"
                     Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank" />
             </div>
-            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Community"]</b></MudText>
-            <MudMenuItem Link="https://discord.gg/yQWpShsKrf" Target="_blank">@_localizer["Discord"]</MudMenuItem>
-            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@_localizer["Facebook"]
+            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@L["Community"]</b></MudText>
+            <MudMenuItem Link="https://discord.gg/yQWpShsKrf" Target="_blank">@L["Discord"]</MudMenuItem>
+            <MudMenuItem Link="https://www.facebook.com/codewithmukesh" Target="_blank">@L["Facebook"]
             </MudMenuItem>
             <MudMenuItem Link="https://www.linkedin.com/in/iammukeshm/" Target="_blank">LinkedIn</MudMenuItem>
-            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@_localizer["Resources"]</b></MudText>
+            <MudText Typo="Typo.body2" Class="px-4 py-2"><b>@L["Resources"]</b></MudText>
             <MudMenuItem Link="https://mudblazor.com/getting-started/installation" Target="_blank">
-                @_localizer["MudBlazor Documentation"]</MudMenuItem>
+                @L["MudBlazor Documentation"]</MudMenuItem>
             <MudMenuItem Link="https://fullstackhero.net/getting-started/" Target="_blank">
-                @_localizer["Quick-Start Guide"]</MudMenuItem>
+                @L["Quick-Start Guide"]</MudMenuItem>
         </MudMenu>
         <NotificationConnectionStatus></NotificationConnectionStatus>
     </MudHidden>
@@ -101,9 +100,11 @@
         </ChildContent>
     </MudMenu>
 </MudAppBar>
+
 <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never">
     <NavMenu />
 </MudDrawer>
+
 <MudMainContent>
     <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
         @ChildContent
