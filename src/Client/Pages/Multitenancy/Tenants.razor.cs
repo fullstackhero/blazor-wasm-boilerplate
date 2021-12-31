@@ -38,7 +38,7 @@ public partial class Tenants
         {
             foreach (string message in response.Messages)
             {
-                _snackBar.Add(message, Severity.Error);
+                Snackbar.Add(message, Severity.Error);
             }
         }
 

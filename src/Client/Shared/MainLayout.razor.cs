@@ -30,7 +30,7 @@ public partial class MainLayout
         Notifications.TryConnectAsync();
 #pragma warning restore CS4014
 
-        if (await _clientPreferenceManager.GetPreference() is ClientPreference preference)
+        if (await ClientPreferences.GetPreference() is ClientPreference preference)
         {
             _rightToLeft = preference.IsRTL;
             _drawerOpen = preference.IsDrawerOpen;
@@ -39,7 +39,7 @@ public partial class MainLayout
 
     private async Task RightToLeftToggle()
     {
-        bool isRtl = await _clientPreferenceManager.ToggleLayoutDirectionAsync();
+        bool isRtl = await ClientPreferences.ToggleLayoutDirectionAsync();
         _rightToLeft = isRtl;
 
         await OnRightToLeftToggle.InvokeAsync(isRtl);
@@ -52,7 +52,7 @@ public partial class MainLayout
 
     private async Task DrawerToggle()
     {
-        _drawerOpen = await _clientPreferenceManager.ToggleDrawerAsync();
+        _drawerOpen = await ClientPreferences.ToggleDrawerAsync();
     }
 
     private void Logout()
@@ -65,11 +65,11 @@ public partial class MainLayout
             };
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
-        _dialogService.Show<Dialogs.Logout>(L["Logout"], parameters, options);
+        DialogService.Show<Dialogs.Logout>(L["Logout"], parameters, options);
     }
 
     private void Profile()
     {
-        _navigationManager.NavigateTo("/account");
+        Navigation.NavigateTo("/account");
     }
 }

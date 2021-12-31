@@ -16,7 +16,7 @@ public partial class RadiusPanel
 
     protected override async Task OnInitializedAsync()
     {
-        if (await _clientPreferenceManager.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
+        if (await ClientPreferences.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
         Radius = themePreference.BorderRadius;
     }
 

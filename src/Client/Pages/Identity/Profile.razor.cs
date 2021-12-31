@@ -37,7 +37,7 @@ public partial class Profile
             _profileModel.FirstName = user.GetFirstName() ?? string.Empty;
             _profileModel.LastName = user.GetSurname() ?? string.Empty;
             _profileModel.PhoneNumber = user.GetPhoneNumber();
-            _imageDataUrl = user?.GetImageUrl()?.Replace("{server_url}/", _configurations[ConfigNames.ApiBaseUrl]);
+            _imageDataUrl = user?.GetImageUrl()?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
             _userId = user?.GetUserId();
         }
 
@@ -50,11 +50,11 @@ public partial class Profile
     private async Task UpdateProfileAsync()
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => IdentityClient.UpdateProfileAsync(_profileModel), _snackBar, _customValidation)
+                () => IdentityClient.UpdateProfileAsync(_profileModel), Snackbar, _customValidation)
             is Result result && result.Succeeded)
         {
-            _snackBar.Add(L["Your Profile has been updated. Please Login again to Continue."], Severity.Success);
-            await AuthService.ReLoginAsync(_navigationManager.Uri);
+            Snackbar.Add(L["Your Profile has been updated. Please Login again to Continue."], Severity.Success);
+            await AuthService.ReLoginAsync(Navigation.Uri);
         }
     }
 
@@ -67,7 +67,7 @@ public partial class Profile
             string? extension = Path.GetExtension(file.Name);
             if (!supportedFormats.Contains(extension.ToLower()))
             {
-                _snackBar.Add("File Format Not Supported.", Severity.Error);
+                Snackbar.Add("File Format Not Supported.", Severity.Error);
                 return;
             }
 

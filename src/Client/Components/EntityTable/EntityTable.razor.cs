@@ -100,7 +100,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         Loading = true;
 
-        if (await ApiHelper.ExecuteCallGuardedAsync(() => clientContext.LoadDataFunc(), _snackBar) is ListResult<TEntity> result)
+        if (await ApiHelper.ExecuteCallGuardedAsync(() => clientContext.LoadDataFunc(), Snackbar) is ListResult<TEntity> result)
         {
             _entityList = result.Data;
         }
@@ -161,7 +161,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => serverContext.SearchFunc(filter), _snackBar)
+                () => serverContext.SearchFunc(filter), Snackbar)
             is PaginatedResult<TEntity> result && result.Succeeded)
         {
             _totalItems = result.TotalCount;
@@ -195,7 +195,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
             var requestModel =
                 Context.GetDefaultsFunc is not null
                     && await ApiHelper.ExecuteCallGuardedAsync(
-                            () => Context.GetDefaultsFunc(), _snackBar)
+                            () => Context.GetDefaultsFunc(), Snackbar)
                         is Result<TRequest> defaultsResult
                     && defaultsResult?.Succeeded is true
                     && defaultsResult.Data is not null
@@ -217,7 +217,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
                 Context.GetDetailsFunc is not null
                     && await ApiHelper.ExecuteCallGuardedAsync(
                             () => Context.GetDetailsFunc(id!),
-                            _snackBar)
+                            Snackbar)
                         is Result<TRequest> detailsResult
                     && detailsResult?.Succeeded is true
                     && detailsResult.Data is not null
@@ -228,7 +228,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
 
-        var dialog = _dialogService.Show<AddEditModal<TRequest>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
+        var dialog = DialogService.Show<AddEditModal<TRequest>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
 
         Context.SetAddEditModalRef(dialog);
 
@@ -251,7 +251,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
             { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, Context.EntityName, id) }
         };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<DeleteConfirmation>(L["Delete"], parameters, options);
+        var dialog = DialogService.Show<DeleteConfirmation>(L["Delete"], parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
@@ -259,7 +259,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
             await ApiHelper.ExecuteCallGuardedAsync(
                 () => Context.DeleteFunc(id),
-                _snackBar);
+                Snackbar);
 
             await ResetAsync();
         }

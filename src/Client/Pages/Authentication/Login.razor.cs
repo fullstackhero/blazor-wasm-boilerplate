@@ -28,14 +28,14 @@ public partial class Login
     {
         if (AuthService.ProviderType == AuthProvider.AzureAd)
         {
-            AuthService.NavigateToExternalLogin(_navigationManager.Uri);
+            AuthService.NavigateToExternalLogin(Navigation.Uri);
             return;
         }
 
         var authState = await AuthState;
         if (authState.User.Identity?.IsAuthenticated is true)
         {
-            _navigationManager.NavigateTo("/");
+            Navigation.NavigateTo("/");
         }
     }
 
@@ -68,7 +68,7 @@ public partial class Login
 
         await ApiHelper.ExecuteCallGuardedAsync(
             () => AuthService.LoginAsync(_tenantKey, _tokenRequest),
-            _snackBar,
+            Snackbar,
             _customValidation);
 
         BusySubmitting = false;

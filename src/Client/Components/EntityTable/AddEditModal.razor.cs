@@ -80,7 +80,7 @@ public partial class AddEditModal<TRequest> : IAddEditModal
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => SaveFunc(RequestModel),
-                _snackBar,
+                Snackbar,
                 _customValidation,
                 L["Success"])
             is not null)
