@@ -1,13 +1,16 @@
 ﻿@page "/account"
-@inject Microsoft.Extensions.Localization.IStringLocalizer<Account> localizer
-<FshTitle Title="@localizer["Account"]" Description="@localizer["Manage your account"]" />
+
+@inject IStringLocalizer<Account> L
+
+<FshTitle Title="@L["Account"]" Description="@L["Manage your account"]" />
+
 <MudTabs Elevation="25" Color="Color.Transparent" Rounded="true" PanelClass="mt-6">
-    <MudTabPanel Text="@localizer["Profile"]">
+    <MudTabPanel Text="@L["Profile"]">
         <Profile />
     </MudTabPanel>
     @if (!SecurityTabHidden)
     {
-        <MudTabPanel Text="@localizer["Security"]">
+        <MudTabPanel Text="@L["Security"]">
             <Security />
         </MudTabPanel>
     }
@@ -17,7 +20,9 @@
 {
     [Inject]
     public IAuthenticationService AuthService { get; set; } = default!;
+
     public bool SecurityTabHidden { get; set; } = false;
+
     protected override void OnInitialized()
     {
         if (AuthService.ProviderType == AuthProvider.AzureAd)

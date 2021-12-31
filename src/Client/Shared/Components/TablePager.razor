@@ -1,3 +1,3 @@
-﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<TablePager> localizer
+﻿@inject IStringLocalizer<TablePager> L
 
-<MudTablePager RowsPerPageString="@localizer["RowsPerPageString"]" InfoFormat="@localizer["InfoFormat"]" />
+<MudTablePager RowsPerPageString="@L["RowsPerPageString"]" InfoFormat="@L["InfoFormat"]" />

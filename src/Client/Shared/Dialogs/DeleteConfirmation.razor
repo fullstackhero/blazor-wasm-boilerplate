@@ -1,20 +1,21 @@
-﻿@namespace FSH.BlazorWebAssembly.Client.Shared.Dialogs
-@inject Microsoft.Extensions.Localization.IStringLocalizer<DeleteConfirmation> localizer
+﻿@inject IStringLocalizer<DeleteConfirmation> L
+
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Filled.Delete" Class="mr-3 mb-n1" />
-            @localizer["Delete Confirmation"]
+            @L["Delete Confirmation"]
         </MudText>
     </TitleContent>
     <DialogContent>
         <MudText>@ContentText</MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@localizer["Cancel"]</MudButton>
-        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="Submit">@localizer["Confirm"]</MudButton>
+        <MudButton OnClick="Cancel">@L["Cancel"]</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="Submit">@L["Confirm"]</MudButton>
     </DialogActions>
 </MudDialog>
+
 @code {
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; } = default!;

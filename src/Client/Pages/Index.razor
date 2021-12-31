@@ -1,7 +1,7 @@
 ﻿@page "/home"
 @page "/"
-@using System.Security.Claims
-@inject Microsoft.Extensions.Localization.IStringLocalizer<Index> _localizer
+
+@inject IStringLocalizer<Index> L
 
 <MudContainer>
     <MudGrid>
@@ -11,50 +11,50 @@
             </div>
         </MudItem>
         <MudItem xs="12" sm="12" md="12">            
-            <MudText Align="Align.Center" Typo="Typo.h5" Class="smaller">@_localizer["fullstackhero's"]</MudText>
-         <MudText Align="Align.Center" Typo="Typo.h2">@_localizer["Blazor WASM Boilerplate"] v1</MudText>
+            <MudText Align="Align.Center" Typo="Typo.h5" Class="smaller">@L["fullstackhero's"]</MudText>
+         <MudText Align="Align.Center" Typo="Typo.h2">@L["Blazor WASM Boilerplate"] v1</MudText>
         </MudItem>
         <MudItem xs="12" sm="12" md="12">
             <MudText Align="Align.Center">
-                @_localizer["Built with the goodness of"] <MudLink Href="https://www.mudblazor.com" Target="_blank">MudBlazor</MudLink> @_localizer["Component Library"].
+                @L["Built with the goodness of"] <MudLink Href="https://www.mudblazor.com" Target="_blank">MudBlazor</MudLink> @L["Component Library"].
             </MudText>
             <MudText Align="Align.Center">
-                @_localizer["Compatible with"] <MudLink Href="https://github.com/fullstackhero/dotnet-webapi-boilerplate" Target="_blank">fullstackhero .NET WebAPI Boilerplate v1.</MudLink>
+                @L["Compatible with"] <MudLink Href="https://github.com/fullstackhero/dotnet-webapi-boilerplate" Target="_blank">fullstackhero .NET WebAPI Boilerplate v1.</MudLink>
             </MudText>
         </MudItem>
         <MudItem xs="12" sm="12" md="12">
             <div class="pa-4 justify-center my-4 mud-text-align-center">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Link="https://fullstackhero.net/blazor-wasm-boilerplate/general/getting-started" Target="_blank" StartIcon="@Icons.Material.Filled.Apps">@_localizer["Project Page"]</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">@_localizer["Sponsor"]</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Link="https://fullstackhero.net/blazor-wasm-boilerplate/general/getting-started" Target="_blank" StartIcon="@Icons.Material.Filled.Apps">@L["Project Page"]</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="https://www.buymeacoffee.com/codewithmukesh" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">@L["Sponsor"]</MudButton>
                 </div>
         </MudItem>
 
         <MudItem xs="12" sm="12" md="12">
             <MudExpansionPanels>
-                <MudExpansionPanel Class="mud-elevation-25" Text="@_localizer["Getting Started"]" MaxHeight="150">
-                    @_localizer["In case you are stuck anywhere or have any queries regarding this implementation, I have compiled a Quick Start Guide for you reference."]
-                    <MudButton Variant="Variant.Text" DisableElevation="true" Color="Color.Secondary" Link="https://fullstackhero.net/blazor-wasm-boilerplate/general/getting-started" Target="_blank">@_localizer["Read The Guide"]</MudButton>
+                <MudExpansionPanel Class="mud-elevation-25" Text="@L["Getting Started"]" MaxHeight="150">
+                    @L["In case you are stuck anywhere or have any queries regarding this implementation, I have compiled a Quick Start Guide for you reference."]
+                    <MudButton Variant="Variant.Text" DisableElevation="true" Color="Color.Secondary" Link="https://fullstackhero.net/blazor-wasm-boilerplate/general/getting-started" Target="_blank">@L["Read The Guide"]</MudButton>
                 </MudExpansionPanel>
-                <MudExpansionPanel Class="mud-elevation-25" Text="@_localizer["Important Links"]" MaxHeight="500">
+                <MudExpansionPanel Class="mud-elevation-25" Text="@L["Important Links"]" MaxHeight="500">
                     <MudList Clickable="true">
-                        <MudListItem Text="@_localizer["Github Repository : Do Not Forget to Leave a Star ;)"]" Href="https://github.com/fullstackhero/blazor-wasm-boilerplate" />
-                        <MudListItem Text="@_localizer["Quick Start Guide"]" Href="https://fullstackhero.net/blazor-wasm-boilerplate/general/getting-started" />
+                        <MudListItem Text="@L["Github Repository : Do Not Forget to Leave a Star ;)"]" Href="https://github.com/fullstackhero/blazor-wasm-boilerplate" />
+                        <MudListItem Text="@L["Quick Start Guide"]" Href="https://fullstackhero.net/blazor-wasm-boilerplate/general/getting-started" />
                     </MudList>
                 </MudExpansionPanel>
-                <MudExpansionPanel Class="mud-elevation-25" Text="@_localizer["Learning Resources"]" MaxHeight="1000">
-                    @_localizer["Here are few articles that should help you get started with Blazor."]
+                <MudExpansionPanel Class="mud-elevation-25" Text="@L["Learning Resources"]" MaxHeight="1000">
+                    @L["Here are few articles that should help you get started with Blazor."]
                     <MudList Clickable="true">
-                        <MudListItem Text="@_localizer["Blazor For Beginners – Getting Started With Blazor"]" Href="https://codewithmukesh.com/blog/getting-started-with-blazor/" />
-                        <MudListItem Text="@_localizer["Exploring Blazor Project Structure"]" Href="https://codewithmukesh.com/blog/exploring-blazor-project-structure/" />
-                        <MudListItem Text="@_localizer["Onion Architecture In ASP.NET Core With CQRS – Detailed"]" Href="https://codewithmukesh.com/blog/onion-architecture-in-aspnet-core/" />
-                        <MudListItem Text="@_localizer["How To Implement Blazor CRUD Using Entity Framework Core?"]" Href="https://codewithmukesh.com/blog/blazor-crud-with-entity-framework-core/" />
-                        <MudListItem Text="@_localizer["Custom Authentication In Blazor WebAssembly – Detailed"]" Href="https://codewithmukesh.com/blog/authentication-in-blazor-webassembly/" />
-                        <MudListItem Text="@_localizer["Implementing Blazor CRUD Using Mudblazor Component Library In .NET 5"]" Href="https://codewithmukesh.com/blog/blazor-crud-using-mudblazor/" />
-                        <MudListItem Text="@_localizer["Building A Chat Application With Blazor, Identity, And SignalR"]" Href="https://codewithmukesh.com/blog/realtime-chat-application-with-blazor/" />
+                        <MudListItem Text="@L["Blazor For Beginners – Getting Started With Blazor"]" Href="https://codewithmukesh.com/blog/getting-started-with-blazor/" />
+                        <MudListItem Text="@L["Exploring Blazor Project Structure"]" Href="https://codewithmukesh.com/blog/exploring-blazor-project-structure/" />
+                        <MudListItem Text="@L["Onion Architecture In ASP.NET Core With CQRS – Detailed"]" Href="https://codewithmukesh.com/blog/onion-architecture-in-aspnet-core/" />
+                        <MudListItem Text="@L["How To Implement Blazor CRUD Using Entity Framework Core?"]" Href="https://codewithmukesh.com/blog/blazor-crud-with-entity-framework-core/" />
+                        <MudListItem Text="@L["Custom Authentication In Blazor WebAssembly – Detailed"]" Href="https://codewithmukesh.com/blog/authentication-in-blazor-webassembly/" />
+                        <MudListItem Text="@L["Implementing Blazor CRUD Using Mudblazor Component Library In .NET 5"]" Href="https://codewithmukesh.com/blog/blazor-crud-using-mudblazor/" />
+                        <MudListItem Text="@L["Building A Chat Application With Blazor, Identity, And SignalR"]" Href="https://codewithmukesh.com/blog/realtime-chat-application-with-blazor/" />
                     </MudList>
                 </MudExpansionPanel>
-                 <MudExpansionPanel Class="mud-elevation-25" Text="@_localizer["User Claims"]">
-                    @_localizer["Application Claims of the currently logged in user."]
+                 <MudExpansionPanel Class="mud-elevation-25" Text="@L["User Claims"]">
+                    @L["Application Claims of the currently logged in user."]
                      <MudList Dense="true">
                 @if (Claims is not null)
                 {
@@ -73,7 +73,7 @@
             </MudExpansionPanels>
         </MudItem>        
         <MudItem  xs="12" sm="12" md="12">
-            <MudAlert Style="margin-top:10px;justify-content:center" Severity="Severity.Info"><MudLink Href="https://github.com/fullstackhero/blazor-wasm-boilerplate">@_localizer["Liked this Boilerplate? Star us on Github!"]</MudLink></MudAlert>
+            <MudAlert Style="margin-top:10px;justify-content:center" Severity="Severity.Info"><MudLink Href="https://github.com/fullstackhero/blazor-wasm-boilerplate">@L["Liked this Boilerplate? Star us on Github!"]</MudLink></MudAlert>
         </MudItem>
     </MudGrid>
 </MudContainer>

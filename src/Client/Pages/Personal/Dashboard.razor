@@ -1,9 +1,9 @@
 ﻿@page "/dashboard"
 @attribute [Authorize(Policy = FSHPermissions.Dashboard.View)]
 
-@inject Microsoft.Extensions.Localization.IStringLocalizer<Dashboard> _localizer
+@inject IStringLocalizer<Dashboard> L
 
-<FshTitle Title="@_localizer["Dashboard"]" Description="@_localizer["Realtime Updates & Insights with SignalR."]" />
+<FshTitle Title="@L["Dashboard"]" Description="@L["Realtime Updates & Insights with SignalR."]" />
 
 @if (!_loaded)
 {
@@ -17,7 +17,7 @@ else
                 <MudIcon Icon="@Icons.Material.Filled.ViewCarousel" Color="Color.Primary" Class="mx-4"
                 Style="width:54px; height:54px;"></MudIcon>
                 <div>
-                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@_localizer["Products"]</MudText>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Products"]</MudText>
                     <MudText Typo="Typo.h5">@ProductCount</MudText>
                 </div>
             </MudPaper>
@@ -27,7 +27,7 @@ else
                 <MudIcon Icon="@Icons.Material.Filled.PanoramaPhotosphereSelect" Color="Color.Secondary" Class="mx-4"
                 Style="width:54px; height:54px;"></MudIcon>
                 <div>
-                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@_localizer["Brands"]</MudText>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Brands"]</MudText>
                     <MudText @bind-Value="@BrandCount" Typo="Typo.h5">@BrandCount</MudText>
                 </div>
             </MudPaper>
@@ -37,7 +37,7 @@ else
                 <MudIcon Icon="@Icons.Material.Filled.Face" Color="Color.Success" Class="mx-4"
                 Style="width:54px; height:54px;"></MudIcon>
                 <div>
-                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@_localizer["Registered Users"]
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Registered Users"]
                     </MudText>
                     <MudText Typo="Typo.h5">@UserCount</MudText>
                 </div>
@@ -48,7 +48,7 @@ else
                 <MudIcon Icon="@Icons.Material.Filled.Groups" Color="Color.Warning" Class="mx-4"
                 Style="width:54px; height:54px;"></MudIcon>
                 <div>
-                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@_localizer["Registered Roles"]
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Registered Roles"]
                     </MudText>
                     <MudText Typo="Typo.h5">@RoleCount</MudText>
                 </div>
