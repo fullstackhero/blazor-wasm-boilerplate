@@ -20,7 +20,7 @@
 
 <MudTable Loading="@_loading" Items="@Elements" Dense="@Dense" Hover="@Hover" ReadOnly="@Ronly" CanCancelEdit="true"
     Filter="new Func<TenantDto,bool>(FilterFunc)" @bind-SelectedItem="SelectedItem1" SortLabel="Sort By"
-    CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => _snackBar.Add("Commit Edit Handler Invoked"))"
+    CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
     RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
     <ToolBarContent>
         <div class="justify-center mud-text-align-center">

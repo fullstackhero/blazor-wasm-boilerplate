@@ -45,14 +45,12 @@
     </div>
 </MudContainer>
 
-
-@code
-{
+@code {
     private MudTheme _currentTheme = new LightTheme();
 
     protected override async Task OnInitializedAsync()
     {
         _currentTheme = new LightTheme();
-        _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
+        _currentTheme = await ClientPreferences.GetCurrentThemeAsync();
     }
 }

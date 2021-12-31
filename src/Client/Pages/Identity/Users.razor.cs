@@ -71,10 +71,10 @@ public partial class Users
             || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
 
     private void ViewProfile(Guid userId) =>
-        _navigationManager.NavigateTo($"/user-profile/{userId}");
+        Navigation.NavigateTo($"/user-profile/{userId}");
 
     private void ManageRoles(Guid userId) =>
-        _navigationManager.NavigateTo($"/identity/user-roles/{userId}");
+        Navigation.NavigateTo($"/identity/user-roles/{userId}");
 
     private void TogglePasswordVisibility()
     {

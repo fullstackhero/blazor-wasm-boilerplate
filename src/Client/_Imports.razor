@@ -1,7 +1,4 @@
-﻿@using System.Net.Http
-@using System.Net.Http.Json
-@using System.Security.Claims
-
+﻿@using System.Security.Claims
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Authorization
@@ -15,12 +12,6 @@
 @using Microsoft.Extensions.DependencyInjection
 @using Microsoft.Extensions.Localization
 @using Microsoft.JSInterop
-
-@using MudBlazor
-@using Blazored.LocalStorage
-
-@using Mapster
-
 @using FSH.BlazorWebAssembly.Client
 @using FSH.BlazorWebAssembly.Client.Shared
 @using FSH.BlazorWebAssembly.Client.Pages.Authentication
@@ -37,12 +28,14 @@
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications
 @using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences
 @using FSH.BlazorWebAssembly.Shared.Authorization
+@using Blazored.LocalStorage
+@using Mapster
+@using MudBlazor
 
 @attribute [Authorize]
-@inject NavigationManager _navigationManager
-@inject ISnackbar _snackBar
-@inject IDialogService _dialogService
-@inject IConfiguration _configurations;
 
-@inject IClientPreferenceManager _clientPreferenceManager
-@inject ILocalStorageService _localStorage;
+@inject NavigationManager Navigation
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IConfiguration Config
+@inject IClientPreferenceManager ClientPreferences

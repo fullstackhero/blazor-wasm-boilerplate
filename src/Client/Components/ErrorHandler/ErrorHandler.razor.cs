@@ -18,7 +18,7 @@ public partial class ErrorHandler
         {
             case UnauthorizedAccessException:
                 await AuthService.LogoutAsync();
-                _snackBar.Add("Authentication Failed", Severity.Error);
+                Snackbar.Add("Authentication Failed", Severity.Error);
                 break;
         }
     }

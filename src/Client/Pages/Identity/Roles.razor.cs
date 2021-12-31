@@ -61,6 +61,6 @@ public partial class Roles
     private void ManagePermissions(string? roleId)
     {
         ArgumentNullException.ThrowIfNull(roleId, nameof(roleId));
-        _navigationManager.NavigateTo($"/identity/role-permissions/{roleId}");
+        Navigation.NavigateTo($"/identity/role-permissions/{roleId}");
     }
 }

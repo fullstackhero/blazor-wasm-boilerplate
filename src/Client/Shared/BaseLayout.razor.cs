@@ -13,11 +13,11 @@ public partial class BaseLayout
 
     protected override async Task OnInitializedAsync()
     {
-        _themePreference = await _clientPreferenceManager.GetPreference() as ClientPreference;
+        _themePreference = await ClientPreferences.GetPreference() as ClientPreference;
         if (_themePreference == null) _themePreference = new ClientPreference();
         SetCurrentTheme(_themePreference);
 
-        _snackBar.Add("Like this boilerplate? ", Severity.Normal, config =>
+        Snackbar.Add("Like this boilerplate? ", Severity.Normal, config =>
         {
             config.BackgroundBlurred = true;
             config.Icon = Icons.Custom.Brands.GitHub;
@@ -25,7 +25,7 @@ public partial class BaseLayout
             config.ActionColor = Color.Primary;
             config.Onclick = snackbar =>
             {
-                _navigationManager.NavigateTo("https://github.com/fullstackhero/blazor-wasm-boilerplate");
+                Navigation.NavigateTo("https://github.com/fullstackhero/blazor-wasm-boilerplate");
                 return Task.CompletedTask;
             };
         });
@@ -34,7 +34,7 @@ public partial class BaseLayout
     private async Task ThemePreferenceChanged(ClientPreference themePreference)
     {
         SetCurrentTheme(themePreference);
-        await _clientPreferenceManager.SetPreference(themePreference);
+        await ClientPreferences.SetPreference(themePreference);
     }
 
     private void SetCurrentTheme(ClientPreference themePreference)
