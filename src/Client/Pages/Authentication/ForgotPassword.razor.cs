@@ -11,7 +11,8 @@ public partial class ForgotPassword
     private CustomValidation? _customValidation;
     private bool BusySubmitting { get; set; }
 
-    [Inject] private IIdentityClient _identityClient { get; set; } = default!;
+    [Inject]
+    private IIdentityClient _identityClient { get; set; } = default!;
 
     private string _tenant { get; set; } = MultitenancyConstants.DefaultTenant.Key;
 
