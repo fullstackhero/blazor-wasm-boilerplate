@@ -86,7 +86,7 @@ public partial class AddEditModal<TRequest> : IAddEditModal
         if (result is not null)
         {
             if(result.Succeeded)
-                _snackBar.Add(L["Operation Completed."], Severity.Success);
+                Snackbar.Add(L["Operation Completed."], Severity.Success);
             _mudDialog.Close();
         }
     }
