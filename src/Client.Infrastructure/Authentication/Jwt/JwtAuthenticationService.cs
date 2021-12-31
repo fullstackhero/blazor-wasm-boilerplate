@@ -44,6 +44,9 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
         return new AuthenticationState(new ClaimsPrincipal(claimsIdentity));
     }
 
+    public void NavigateToExternalLogin(string returnUrl) =>
+        throw new NotImplementedException();
+
     public async Task<Result> LoginAsync(string tenantKey, TokenRequest request)
     {
         var result = await _tokensClient.GetTokenAsync(tenantKey, request);
@@ -87,6 +90,12 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
         _navigation.NavigateTo("/login");
+    }
+
+    public async Task ReLoginAsync(string returnUrl)
+    {
+        await LogoutAsync();
+        _navigation.NavigateTo(returnUrl);
     }
 
     public async ValueTask<AccessTokenResult> RequestAccessToken()
