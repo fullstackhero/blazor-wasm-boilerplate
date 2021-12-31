@@ -1,6 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Shared.MultiTenancy;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -57,9 +58,9 @@ public partial class Login
 
     private void FillAdministratorCredentials()
     {
-        _tokenRequest.Email = "admin@root.com";
-        _tokenRequest.Password = "123Pa$$word!";
-        _tenantKey = "root";
+        _tokenRequest.Email = MultitenancyConstants.DefaultTenant.EmailAddress;
+        _tokenRequest.Password = MultitenancyConstants.DefaultPassword;
+        _tenantKey = MultitenancyConstants.DefaultTenant.Key;
     }
 
     private async Task SubmitAsync()

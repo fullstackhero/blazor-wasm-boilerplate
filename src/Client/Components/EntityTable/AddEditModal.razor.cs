@@ -1,8 +1,8 @@
+using System.ComponentModel.DataAnnotations;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.ComponentModel.DataAnnotations;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
@@ -78,13 +78,15 @@ public partial class AddEditModal<TRequest> : IAddEditModal
 
     private async Task SaveAsync()
     {
-        if (await ApiHelper.ExecuteCallGuardedAsync(
+        var result = await ApiHelper.ExecuteCallGuardedAsync(
                 () => SaveFunc(RequestModel),
                 Snackbar,
                 _customValidation,
-                L["Success"])
-            is not null)
+                L["Success"]);
+        if (result is not null)
         {
+            if(result.Succeeded)
+                _snackBar.Add(L["Operation Completed."], Severity.Success);
             _mudDialog.Close();
         }
     }
