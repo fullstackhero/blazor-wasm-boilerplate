@@ -21,7 +21,8 @@ public partial class NavMenu
     private bool _canViewUsers;
     private bool _canViewProducts;
     private bool _canViewBrands;
-
+    private bool _canViewTenants;
+    private bool CanViewAdministrationGroup => _canViewUsers || _canViewRoles || _canViewTenants;
     protected override async Task OnParametersSetAsync()
     {
         var state = await AuthState;
@@ -33,5 +34,6 @@ public partial class NavMenu
         _canViewUsers = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Users.View)).Succeeded;
         _canViewProducts = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Products.View)).Succeeded;
         _canViewBrands = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Brands.View)).Succeeded;
+        _canViewTenants = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Tenants.View)).Succeeded;
     }
 }
