@@ -1024,12 +1024,12 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Result> ForgotPasswordAsync(object tenant, ForgotPasswordRequest request);
+        System.Threading.Tasks.Task<Result> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Result> ForgotPasswordAsync(object tenant, ForgotPasswordRequest request, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Result> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
@@ -1356,7 +1356,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Result> ForgotPasswordAsync(object tenant, ForgotPasswordRequest request)
+        public virtual System.Threading.Tasks.Task<Result> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request)
         {
             return ForgotPasswordAsync(tenant, request, System.Threading.CancellationToken.None);
         }
@@ -1364,7 +1364,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Result> ForgotPasswordAsync(object tenant, ForgotPasswordRequest request, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Result> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request, System.Threading.CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new System.ArgumentNullException("request");
@@ -3142,7 +3142,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(object tenant, TokenRequest request);
+        System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(string tenant, TokenRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -3150,16 +3150,16 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(object tenant, TokenRequest request, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(string tenant, TokenRequest request, System.Threading.CancellationToken cancellationToken);
 
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(object tenant, RefreshTokenRequest request);
+        System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(object tenant, RefreshTokenRequest request, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -3195,7 +3195,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(object tenant, TokenRequest request)
+        public virtual System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(string tenant, TokenRequest request)
         {
             return GetTokenAsync(tenant, request, System.Threading.CancellationToken.None);
         }
@@ -3206,7 +3206,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(object tenant, TokenRequest request, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ResultOfTokenResponse> GetTokenAsync(string tenant, TokenRequest request, System.Threading.CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new System.ArgumentNullException("request");
@@ -3296,7 +3296,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(object tenant, RefreshTokenRequest request)
+        public virtual System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request)
         {
             return RefreshAsync(tenant, request, System.Threading.CancellationToken.None);
         }
@@ -3304,7 +3304,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(object tenant, RefreshTokenRequest request, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ResultOfTokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request, System.Threading.CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new System.ArgumentNullException("request");
