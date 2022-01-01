@@ -15,27 +15,27 @@
     </ExtraActions>
 
     <EditFormContent>
-        <MudItem xs="12" md="12">
+        <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.UserName)" @bind-Value="context.UserName" Label="@L["User Name"]" />
         </MudItem>
-        <MudItem xs="12" md="12">
+        <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.FirstName)" @bind-Value="context.FirstName" Label="@L["First Name"]" />
         </MudItem>
-        <MudItem xs="12" md="12">
+        <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.LastName)" @bind-Value="context.LastName" Label="@L["Last Name"]" />
         </MudItem>
-        <MudItem xs="12" md="12">
+        <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.Email)" InputType="InputType.Email" @bind-Value="context.Email" Label="@L["Email"]" />
         </MudItem>
         <MudItem xs="12" md="12">
             <MudTextField For="@(() => context.PhoneNumber)" @bind-Value="context.PhoneNumber" Label="@L["Phone Number"]" />
         </MudItem>
-        <MudItem xs="12" md="12">
-            <MudTextField For="@(() => Password)" @bind-Value="Password" Label="@L["Password"]"
+        <MudItem xs="12" md="6">
+            <MudTextField For="@(() => context.Password)" @bind-Value="context.Password" Label="@L["Password"]"
                 InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
         </MudItem>
-        <MudItem xs="12" md="12">
-            <MudTextField For="@(() => ConfirmPassword)"@bind-Value="ConfirmPassword" Label="@L["Confirm Password"]"
+        <MudItem xs="12" md="6">
+            <MudTextField For="@(() => context.ConfirmPassword)"@bind-Value="context.ConfirmPassword" Label="@L["Confirm Password"]"
                 InputType="InputType.Password" />
         </MudItem>
     </EditFormContent>
