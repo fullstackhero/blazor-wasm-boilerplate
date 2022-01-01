@@ -1,4 +1,4 @@
-[![GitHub](https://img.shields.io/github/license/fullstackhero/blazor-wasm-boilerplate?color=2da44e&style=flat-square)](https://github.com/fullstackhero/blazor-wasm-boilerplate/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/fullstackhero/blazor-wasm-boilerplate?color=2da44e&style=flat-square)](https://github.com/fullstackhero/blazor-wasm-boilerplate/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/878181478972928011?color=%237289da&label=Discord&logo=discord&logoColor=%237289da&style=flat-square)](https://discord.gg/yQWpShsKrf)
 [![Twitter](https://img.shields.io/twitter/follow/codewithmukesh?color=1DA1F2&label=Twitter&logo=Twitter&style=flat-square)](https://twitter.com/codewithmukesh)
 
