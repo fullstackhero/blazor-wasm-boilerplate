@@ -28,6 +28,10 @@ public partial class Dashboard
 
     private bool _loaded = false;
 
+    private readonly string[] _dataEnterBarChartXAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+    private readonly List<MudBlazor.ChartSeries> _dataEnterBarChartSeries = new();
+
     protected override async Task OnInitializedAsync()
     {
         await LoadDataAsync();
@@ -50,6 +54,12 @@ public partial class Dashboard
                 BrandCount = response.Data.BrandCount;
                 UserCount = response.Data.UserCount;
                 RoleCount = response.Data.RoleCount;
+                foreach (var item in response.Data.DataEnterBarChart)
+                {
+                    _dataEnterBarChartSeries
+                        .RemoveAll(x => x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase));
+                    _dataEnterBarChartSeries.Add(new MudBlazor.ChartSeries { Name = item.Name, Data = item.Data?.ToArray() });
+                }
             }
         }
         else if (response.Messages is not null)
