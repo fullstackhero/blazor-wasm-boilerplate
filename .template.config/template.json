@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Mukesh Murugan",
+  "classifications": [
+    "Blazor",
+    "WASM",
+    "WebAssembly",
+    "Clean Architecture",
+    "Boilerplate",
+    "macOS",
+    "Windows",
+    "Cloud",
+    "Web"
+  ],
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "identity": "FullStackHero.BlazorWebAssembly.Boilerplate",
+  "name": "FullStackHero Blazor WebAssembly Boilerplate",
+  "description": "Clean Architecture Boilerplate Template for .NET 6.0 Blazor WebAssembly built for FSH WebAPI with the goodness of MudBlazor Components.",
+  "shortName": "fsh-blazor",
+  "sourceName": "FSH.BlazorWebAssembly",
+  "preferNameDirectory": true,
+  "sources": [
+    {
+      "source": "./",
+      "target": "./",
+      "exclude": [
+        ".template.config/**"
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    {
+      "path": "./"
+    }
+  ],
+  "postActions": [
+    {
+      "description": "Restore NuGet packages required by this project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet restore'"
+        }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ]
+}
