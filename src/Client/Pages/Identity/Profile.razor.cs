@@ -21,7 +21,7 @@ public partial class Profile
 
     private readonly UpdateProfileRequest _profileModel = new();
 
-    private string? _imageDataUrl;
+    private string? _imageUrl;
     private string? _userId;
     private char _firstLetterOfName;
 
@@ -37,7 +37,7 @@ public partial class Profile
             _profileModel.FirstName = user.GetFirstName() ?? string.Empty;
             _profileModel.LastName = user.GetSurname() ?? string.Empty;
             _profileModel.PhoneNumber = user.GetPhoneNumber();
-            _imageDataUrl = user?.GetImageUrl()?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
+            _imageUrl = user?.GetImageUrl()?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
             _userId = user?.GetUserId();
         }
 
