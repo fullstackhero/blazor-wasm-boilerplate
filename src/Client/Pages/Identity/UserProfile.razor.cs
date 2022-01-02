@@ -20,9 +20,12 @@ public partial class UserProfile
     [Inject]
     protected IUsersClient UsersClient { get; set; } = default!;
 
-    [Parameter] public string? Id { get; set; }
-    [Parameter] public string? Title { get; set; }
-    [Parameter] public string? Description { get; set; }
+    [Parameter]
+    public string? Id { get; set; }
+    [Parameter]
+    public string? Title { get; set; }
+    [Parameter]
+    public string? Description { get; set; }
 
     private bool _active;
     private char _firstLetterOfName;
