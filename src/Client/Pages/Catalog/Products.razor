@@ -27,7 +27,7 @@
                 @bind-Value="context.BrandId" ResetValueOnEmptyText="true"
                 SearchFunc="@SearchBrands" Variant="Variant.Filled"
                 ToStringFunc="@(i => _brands.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)"
-                OffsetY="true" />
+                Dense="true" Margin="Margin.Dense" />
         </MudItem>
         <MudItem xs="12" md="6">
             <MudTextField Label="@L["Rate"]" For="@(() => context.Rate)" @bind-Value="context.Rate" />
