@@ -8,6 +8,10 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 
 public partial class Dashboard
 {
+    private readonly string[] _dataEnterBarChartXAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+    private readonly List<MudBlazor.ChartSeries> _dataEnterBarChartSeries = new();
+
     [Inject]
     private IStatsClient StatsClient { get; set; } = default!;
 
@@ -27,10 +31,6 @@ public partial class Dashboard
     public int RoleCount { get; set; }
 
     private bool _loaded = false;
-
-    private readonly string[] _dataEnterBarChartXAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-
-    private readonly List<MudBlazor.ChartSeries> _dataEnterBarChartSeries = new();
 
     protected override async Task OnInitializedAsync()
     {

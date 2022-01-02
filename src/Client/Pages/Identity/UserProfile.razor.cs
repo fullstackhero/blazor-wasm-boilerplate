@@ -45,7 +45,8 @@ public partial class UserProfile
         Navigation.NavigateTo("/users");
     }
 
-    [Parameter] public string? ImageUrl { get; set; }
+    [Parameter]
+    public string? ImageUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
