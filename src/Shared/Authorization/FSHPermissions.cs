@@ -87,4 +87,16 @@ public class FSHPermissions
         public const string Delete = "Permissions.RoleClaims.Delete";
         public const string Search = "Permissions.RoleClaims.Search";
     }
+
+    [DisplayName("Tenants")]
+    [Description("Tenants Permissions")]
+    public static class Tenants
+    {
+        public const string View = "Permissions.Tenants.View";
+        public const string ListAll = "Permissions.Tenants.ViewAll";
+        public const string Create = "Permissions.Tenants.Register";
+        public const string Update = "Permissions.Tenants.Update";
+        public const string UpgradeSubscription = "Permissions.Tenants.UpgradeSubscription";
+        public const string Remove = "Permissions.Tenants.Remove";
+    }
 }
