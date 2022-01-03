@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using System.Security.Claims;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
+namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 
 public partial class UserRoles
 {

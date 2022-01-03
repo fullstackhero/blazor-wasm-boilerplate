@@ -1,4 +1,4 @@
-﻿@page "/identity/user-roles/{Id}"
+﻿@page "/users/{Id}/roles"
 @attribute [Authorize(Policy = FSHPermissions.Roles.View)]
 @inject Microsoft.Extensions.Localization.IStringLocalizer<UserRoles> _localizer
 @using Microsoft.AspNetCore.Components
