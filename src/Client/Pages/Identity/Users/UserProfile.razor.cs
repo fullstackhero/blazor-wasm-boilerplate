@@ -8,7 +8,7 @@ using MudBlazor;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
+namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 
 public partial class UserProfile
 {

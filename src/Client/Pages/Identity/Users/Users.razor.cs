@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
+namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 
 public partial class Users
 {
@@ -71,10 +71,10 @@ public partial class Users
             || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
 
     private void ViewProfile(Guid userId) =>
-        Navigation.NavigateTo($"/user-profile/{userId}");
+        Navigation.NavigateTo($"/users/{userId}/profile");
 
     private void ManageRoles(Guid userId) =>
-        Navigation.NavigateTo($"/identity/user-roles/{userId}");
+        Navigation.NavigateTo($"/users/{userId}/roles");
 
     private void TogglePasswordVisibility()
     {

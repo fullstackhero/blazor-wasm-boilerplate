@@ -3,7 +3,7 @@ using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
+namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Account;
 
 public partial class Security
 {
