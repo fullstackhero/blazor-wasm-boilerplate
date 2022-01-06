@@ -52,7 +52,7 @@ public partial class Users
                 new(user => user.IsActive, L["Active"], Type: typeof(bool))
             },
             idFunc: user => user.Id,
-            loadDataFunc: async () => (await UsersClient.GetAllAsync()).Adapt<ListResult<UserDetailsDto>>(),
+            loadDataFunc: async () => (await UsersClient.GetAllAsync())?.Data!.Adapt<List<UserDetailsDto>>(),
             searchFunc: Search,
             createFunc: async user => await IdentityClient.RegisterAsync(user),
             entityName: L["User"],

@@ -1,4 +1,3 @@
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
 using Mapster;
@@ -100,9 +99,10 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         Loading = true;
 
-        if (await ApiHelper.ExecuteCallGuardedAsync(() => clientContext.LoadDataFunc(), Snackbar) is ListResult<TEntity> result)
+        if (await ApiHelper.ExecuteCallGuardedAsync(() => clientContext.LoadDataFunc(), Snackbar)
+            is List<TEntity> result)
         {
-            _entityList = result.Data;
+            _entityList = result;
         }
 
         Loading = false;
@@ -162,7 +162,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => serverContext.SearchFunc(filter), Snackbar)
-            is PaginatedResult<TEntity> result && result.Succeeded)
+            is PaginatedResult<TEntity> result)
         {
             _totalItems = result.TotalCount;
             _entityList = result.Data;
@@ -196,10 +196,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
                 Context.GetDefaultsFunc is not null
                     && await ApiHelper.ExecuteCallGuardedAsync(
                             () => Context.GetDefaultsFunc(), Snackbar)
-                        is Result<TRequest> defaultsResult
-                    && defaultsResult?.Succeeded is true
-                    && defaultsResult.Data is not null
-                ? defaultsResult.Data
+                        is TRequest defaultsResult
+                ? defaultsResult
                 : new TRequest();
             parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
         }
@@ -210,7 +208,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
             parameters.Add(nameof(AddEditModal<TRequest>.Id), id);
 
             _ = Context.UpdateFunc ?? throw new InvalidOperationException("UpdateFunc can't be null!");
-            Func<TRequest, Task<Result>> saveFunc = entity => Context.UpdateFunc(id, entity);
+            Func<TRequest, Task> saveFunc = entity => Context.UpdateFunc(id, entity);
             parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), saveFunc);
 
             var requestModel =
@@ -218,10 +216,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
                     && await ApiHelper.ExecuteCallGuardedAsync(
                             () => Context.GetDetailsFunc(id!),
                             Snackbar)
-                        is Result<TRequest> detailsResult
-                    && detailsResult?.Succeeded is true
-                    && detailsResult.Data is not null
-                ? detailsResult.Data
+                        is TRequest detailsResult
+                ? detailsResult
                 : entity!.Adapt<TRequest>();
             parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
         }

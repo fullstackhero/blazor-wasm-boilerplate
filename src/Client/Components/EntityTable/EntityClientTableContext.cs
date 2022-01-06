@@ -1,6 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-
-namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
 /// <summary>
 /// Initialization Context for the EntityTable Component.
@@ -12,7 +10,7 @@ public class EntityClientTableContext<TEntity, TId, TRequest>
     /// <summary>
     /// A function that loads all the data for the table from the api and returns a ListResult of TEntity.
     /// </summary>
-    public Func<Task<ListResult<TEntity>>> LoadDataFunc { get; }
+    public Func<Task<List<TEntity>?>> LoadDataFunc { get; }
 
     /// <summary>
     /// A function that returns a boolean which indicates whether the supplied entity meets the search criteria
@@ -22,15 +20,15 @@ public class EntityClientTableContext<TEntity, TId, TRequest>
 
     public EntityClientTableContext(
         List<EntityField<TEntity>> fields,
-        Func<Task<ListResult<TEntity>>> loadDataFunc,
+        Func<Task<List<TEntity>?>> loadDataFunc,
         Func<string?, TEntity, bool> searchFunc,
         string searchPermission,
         Func<TEntity, TId>? idFunc = null,
-        Func<Task<Result<TRequest>>>? getDefaultsFunc = null,
-        Func<TRequest, Task<Result>>? createFunc = null,
-        Func<TId, Task<Result<TRequest>>>? getDetailsFunc = null,
-        Func<TId, TRequest, Task<Result>>? updateFunc = null,
-        Func<TId, Task<Result>>? deleteFunc = null,
+        Func<Task<TRequest>>? getDefaultsFunc = null,
+        Func<TRequest, Task>? createFunc = null,
+        Func<TId, Task<TRequest>>? getDetailsFunc = null,
+        Func<TId, TRequest, Task>? updateFunc = null,
+        Func<TId, Task>? deleteFunc = null,
         string? createPermission = null,
         string? updatePermission = null,
         string? deletePermission = null,

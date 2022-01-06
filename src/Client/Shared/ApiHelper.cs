@@ -10,45 +10,29 @@ public static class ApiHelper
         ISnackbar snackbar,
         CustomValidation? customValidation = null,
         string? successMessage = null)
-    where T : Result
     {
         customValidation?.ClearErrors();
         try
         {
             var result = await call();
 
-            if (result.Succeeded)
+            if (!string.IsNullOrWhiteSpace(successMessage))
             {
-                if (result.Messages is not null)
-                {
-                    foreach (string message in result.Messages)
-                    {
-                        snackbar.Add(message, Severity.Success);
-                    }
-                }
-                else if (!string.IsNullOrWhiteSpace(successMessage))
-                {
-                    snackbar.Add(successMessage, Severity.Success);
-                }
-
-                return result;
+                snackbar.Add(successMessage, Severity.Success);
             }
 
-            if (result.Messages is not null)
+            return result;
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
             {
-                foreach (string message in result.Messages)
-                {
-                    snackbar.Add(message, Severity.Error);
-                }
+                customValidation?.DisplayErrors(ex.Result.Errors);
             }
             else
             {
                 snackbar.Add("Something went wrong!", Severity.Error);
             }
-        }
-        catch (ApiException<HttpValidationProblemDetails> ex)
-        {
-            customValidation?.DisplayErrors(ex.Result.Errors);
         }
         catch (ApiException<ErrorResult> ex)
         {
@@ -56,5 +40,42 @@ public static class ApiHelper
         }
 
         return default;
+    }
+
+    public static async Task<bool> ExecuteCallGuardedAsync(
+        Func<Task> call,
+        ISnackbar snackbar,
+        CustomValidation? customValidation = null,
+        string? successMessage = null)
+    {
+        customValidation?.ClearErrors();
+        try
+        {
+            await call();
+
+            if (!string.IsNullOrWhiteSpace(successMessage))
+            {
+                snackbar.Add(successMessage, Severity.Success);
+            }
+
+            return true;
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                customValidation?.DisplayErrors(ex.Result.Errors);
+            }
+            else
+            {
+                snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+
+        return false;
     }
 }

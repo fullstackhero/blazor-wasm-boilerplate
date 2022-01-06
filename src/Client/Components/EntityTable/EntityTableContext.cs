@@ -1,5 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using MudBlazor;
+﻿using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
@@ -33,33 +32,33 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     /// a Task of Result of TRequest. When not supplied, a TRequest is simply newed up.
     /// No need to check for error messages or api exceptions. These are automatically handled by the component.
     /// </summary>
-    public Func<Task<Result<TRequest>>>? GetDefaultsFunc { get; }
+    public Func<Task<TRequest>>? GetDefaultsFunc { get; }
 
     /// <summary>
     /// A function that executes the Create method on the api with the supplied entity and returns a Task of Result.
     /// No need to check for error messages or api exceptions. These are automatically handled by the component.
     /// </summary>
-    public Func<TRequest, Task<Result>>? CreateFunc { get; }
+    public Func<TRequest, Task>? CreateFunc { get; }
 
     /// <summary>
     /// A function that executes the GetDetails method on the api with the supplied Id and returns a Task of Result of TRequest.
     /// No need to check for error messages or api exceptions. These are automatically handled by the component.
     /// When not supplied, the TEntity out of the _entityList is supplied using the IdFunc and converted using mapster.
     /// </summary>
-    public Func<TId, Task<Result<TRequest>>>? GetDetailsFunc { get; }
+    public Func<TId, Task<TRequest>>? GetDetailsFunc { get; }
 
     /// <summary>
     /// A function that executes the Update method on the api with the supplied entity and returns a Task of Result.
     /// When not supplied, the TEntity from the list is mapped to TCreateRequest using mapster.
     /// No need to check for error messages or api exceptions. These are automatically handled by the component.
     /// </summary>
-    public Func<TId, TRequest, Task<Result>>? UpdateFunc { get; }
+    public Func<TId, TRequest, Task>? UpdateFunc { get; }
 
     /// <summary>
     /// A function that executes the Delete method on the api with the supplied entity id and returns a Task of Result.
     /// No need to check for error messages or api exceptions. These are automatically handled by the component.
     /// </summary>
-    public Func<TId, Task<Result>>? DeleteFunc { get; }
+    public Func<TId, Task>? DeleteFunc { get; }
 
     /// <summary>
     /// The permission name of the create permission. When empty, no create functionality will be available.
@@ -117,11 +116,11 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         List<EntityField<TEntity>> fields,
         string searchPermission,
         Func<TEntity, TId>? idFunc,
-        Func<Task<Result<TRequest>>>? getDefaultsFunc,
-        Func<TRequest, Task<Result>>? createFunc,
-        Func<TId, Task<Result<TRequest>>>? getDetailsFunc,
-        Func<TId, TRequest, Task<Result>>? updateFunc,
-        Func<TId, Task<Result>>? deleteFunc,
+        Func<Task<TRequest>>? getDefaultsFunc,
+        Func<TRequest, Task>? createFunc,
+        Func<TId, Task<TRequest>>? getDetailsFunc,
+        Func<TId, TRequest, Task>? updateFunc,
+        Func<TId, Task>? deleteFunc,
         string? createPermission,
         string? updatePermission,
         string? deletePermission,
