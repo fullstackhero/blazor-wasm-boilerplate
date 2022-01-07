@@ -1,6 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-
-namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
 /// <summary>
 /// Initialization Context for the EntityTable Component.
@@ -20,11 +18,11 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
         Func<PaginationFilter, Task<PaginatedResult<TEntity>>> searchFunc,
         string searchPermission,
         Func<TEntity, TId>? idFunc = null,
-        Func<Task<Result<TRequest>>>? getDefaultsFunc = null,
-        Func<TRequest, Task<Result>>? createFunc = null,
-        Func<TId, Task<Result<TRequest>>>? getDetailsFunc = null,
-        Func<TId, TRequest, Task<Result>>? updateFunc = null,
-        Func<TId, Task<Result>>? deleteFunc = null,
+        Func<Task<TRequest>>? getDefaultsFunc = null,
+        Func<TRequest, Task>? createFunc = null,
+        Func<TId, Task<TRequest>>? getDetailsFunc = null,
+        Func<TId, TRequest, Task>? updateFunc = null,
+        Func<TId, Task>? deleteFunc = null,
         string? entityName = null,
         string? entityNamePlural = null,
         string? createPermission = null,

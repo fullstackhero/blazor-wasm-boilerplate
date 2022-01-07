@@ -32,7 +32,7 @@ public class CustomValidation : ComponentBase
 
     public void DisplayErrors(IDictionary<string, ICollection<string>> errors)
     {
-        if (CurrentEditContext is not null)
+        if (CurrentEditContext is not null && errors is not null)
         {
             foreach (var err in errors)
             {

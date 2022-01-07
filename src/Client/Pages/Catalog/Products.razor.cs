@@ -13,7 +13,7 @@ public partial class Products
     [Inject]
     protected IBrandsClient BrandsClient { get; set; } = default!;
 
-    protected EntityServerTableContext<ProductDto, Guid, CreateProductRequest> Context { get; set; } = default!;
+    protected EntityServerTableContext<ProductDto, Guid, UpdateProductRequest> Context { get; set; } = default!;
 
     // Fields for advanced search/filter
     protected bool CheckBox { get; set; } = true;
@@ -34,8 +34,8 @@ public partial class Products
             },
             idFunc: prod => prod.Id,
             searchFunc: SearchFunc,
-            createFunc: async prod => await ProductsClient.CreateAsync(prod),
-            updateFunc: async (id, prod) => await ProductsClient.UpdateAsync(id, prod.Adapt<UpdateProductRequest>()),
+            createFunc: async prod => await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
+            updateFunc: async (id, prod) => await ProductsClient.UpdateAsync(id, prod),
             deleteFunc: async id => await ProductsClient.DeleteAsync(id),
             editFormInitializedFunc: () => LoadBrandsAsync(),
             entityName: L["Product"],
@@ -48,7 +48,7 @@ public partial class Products
 
     private async Task<PaginatedResult<ProductDto>> SearchFunc(Components.EntityTable.PaginationFilter filter)
     {
-        var productFilter = filter.Adapt<ProductListFilter>();
+        var productFilter = filter.Adapt<SearchProductsRequest>();
 
         // TODO: add advanced search and filter
         // filter.BrandId =
@@ -77,7 +77,7 @@ public partial class Products
     private async Task LoadBrandsAsync(string? searchKeyword = default)
     {
         string[] orderBy = { "id" };
-        var filter = new BrandListFilter { PageNumber = 0, PageSize = 10, OrderBy = orderBy };
+        var filter = new SearchBrandsRequest { PageNumber = 0, PageSize = 10, OrderBy = orderBy };
         if (!string.IsNullOrEmpty(searchKeyword))
         {
             filter.Keyword = searchKeyword;

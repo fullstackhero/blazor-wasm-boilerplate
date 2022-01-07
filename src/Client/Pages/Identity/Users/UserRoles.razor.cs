@@ -4,7 +4,6 @@ using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor;
 using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
@@ -78,7 +77,7 @@ public partial class UserRoles
             {
                 Navigation.NavigateTo($"/users");
             }
-        }       
+        }
     }
 
     private bool Search(UserRoleDto userRole)

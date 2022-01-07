@@ -37,7 +37,7 @@ public partial class Roles
                 new(role => role.Description, L["Description"])
             },
             idFunc: role => role.Id,
-            loadDataFunc: async () => (await RolesClient.GetListAsync()).Adapt<ListResult<RoleDto>>(),
+            loadDataFunc: async () => (await RolesClient.GetListAsync())?.Data!.Adapt<List<RoleDto>>(),
             searchFunc: Search,
             createFunc: async role => await RolesClient.RegisterRoleAsync(role),
             updateFunc: async (_, role) => await RolesClient.RegisterRoleAsync(role),

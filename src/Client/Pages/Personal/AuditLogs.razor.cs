@@ -36,22 +36,11 @@ public partial class AuditLogs
                 new(audit => audit.DateTime, L["Date"], Template: DateFieldTemplate),
                 new(audit => audit.Type, L["Type"])
             },
-            loadDataFunc: LoadDataAsync,
+            loadDataFunc: async () => (await AuditLogsClient.GetMyLogsAsync())?.Data!.Adapt<List<RelatedAuditTrail>>(),
             searchFunc: Search,
             searchPermission: true.ToString(),
             entityNamePlural: L["Trails"],
             hasExtraActionsFunc: () => true);
-    }
-
-    private async Task<ListResult<RelatedAuditTrail>> LoadDataAsync()
-    {
-        var result = (await AuditLogsClient.GetMyLogsAsync()).Adapt<ListResult<RelatedAuditTrail>>();
-        if (result.Data is not null)
-        {
-            _trails = result.Data;
-        }
-
-        return result;
     }
 
     private bool Search(string? searchString, RelatedAuditTrail trail) =>
