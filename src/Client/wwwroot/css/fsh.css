@@ -34,6 +34,6 @@
     background: var(--mud-palette-drawer-background);
 }
 
-.mud-overlay {
+.mud-overlay-dark {
     backdrop-filter: blur(2px);
 }
