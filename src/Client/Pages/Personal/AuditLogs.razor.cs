@@ -22,7 +22,7 @@ public partial class AuditLogs
 
     // Configure Automapper
     static AuditLogs() =>
-        TypeAdapterConfig<AuditResponse, RelatedAuditTrail>.NewConfig().Map(
+        TypeAdapterConfig<AuditDto, RelatedAuditTrail>.NewConfig().Map(
             dest => dest.LocalTime,
             src => DateTime.SpecifyKind(src.DateTime, DateTimeKind.Utc).ToLocalTime());
 
@@ -36,7 +36,7 @@ public partial class AuditLogs
                 new(audit => audit.DateTime, L["Date"], Template: DateFieldTemplate),
                 new(audit => audit.Type, L["Type"])
             },
-            loadDataFunc: async () => _trails = (await AuditLogsClient.GetMyLogsAsync())?.Data!.Adapt<List<RelatedAuditTrail>>() ?? new List<RelatedAuditTrail>(),
+            loadDataFunc: async () => _trails = (await AuditLogsClient.GetMyLogsAsync()).Adapt<List<RelatedAuditTrail>>() ?? new List<RelatedAuditTrail>(),
             searchFunc: Search,
             searchPermission: true.ToString(),
             entityNamePlural: L["Trails"],
@@ -65,7 +65,7 @@ public partial class AuditLogs
         }
     }
 
-    public class RelatedAuditTrail : AuditResponse
+    public class RelatedAuditTrail : AuditDto
     {
         public bool ShowDetails { get; set; }
         public DateTime LocalTime { get; set; }
