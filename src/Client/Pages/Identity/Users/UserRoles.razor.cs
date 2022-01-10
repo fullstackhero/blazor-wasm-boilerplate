@@ -4,7 +4,6 @@ using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 
@@ -30,7 +29,6 @@ public partial class UserRoles
     private bool _striped = true;
     private bool _bordered = false;
 
-    private ClaimsPrincipal? _currentUser;
     private bool _canEditUsers;
     private bool _canSearchRoles;
     private bool _loaded;
@@ -38,21 +36,21 @@ public partial class UserRoles
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _currentUser = state.User;
-        _canEditUsers = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Users.Edit)).Succeeded;
-        _canSearchRoles = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Roles.View)).Succeeded;
+        _canEditUsers = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Edit)).Succeeded;
+        _canSearchRoles = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Roles.View)).Succeeded;
 
-        string? userId = Id;
-        var result = await UsersClient.GetByIdAsync(userId);
-        if (result.Succeeded)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => UsersClient.GetByIdAsync(Id), Snackbar)
+            is UserDetailsDto user)
         {
-            var user = result.Data;
-            if (user != null)
+            Title = $"{user.FirstName} {user.LastName}";
+            Description = string.Format(_localizer["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
+
+            if (await ApiHelper.ExecuteCallGuardedAsync(
+                    () => UsersClient.GetRolesAsync(user.Id.ToString()), Snackbar)
+                is ICollection<UserRoleDto> response)
             {
-                Title = $"{user.FirstName} {user.LastName}";
-                Description = string.Format(_localizer["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
-                var response = await UsersClient.GetRolesAsync(user.Id.ToString());
-                UserRolesList = response.Data.UserRoles.ToList();
+                UserRolesList = response.ToList();
             }
         }
 
@@ -66,17 +64,13 @@ public partial class UserRoles
             UserRoles = UserRolesList
         };
 
-        var result = await ApiHelper.ExecuteCallGuardedAsync(
-                () => UsersClient.AssignRolesAsync(Id, request),
-                Snackbar,
-                new CustomValidation(),
-                _localizer["Success"]);
-        if(result is not null)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+            () => UsersClient.AssignRolesAsync(Id, request),
+            Snackbar,
+            new CustomValidation(),
+            _localizer["Success"]) is not null)
         {
-            if (result.Succeeded)
-            {
-                Navigation.NavigateTo($"/users");
-            }
+            Navigation.NavigateTo($"/users");
         }
     }
 

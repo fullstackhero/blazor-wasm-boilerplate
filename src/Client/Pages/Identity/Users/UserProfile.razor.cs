@@ -1,11 +1,11 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
+using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 
@@ -15,7 +15,6 @@ public partial class UserProfile
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
-    private ClaimsPrincipal? _currentUser;
     [Inject]
     protected IUsersClient UsersClient { get; set; } = default!;
 
@@ -49,20 +48,16 @@ public partial class UserProfile
 
     protected override async Task OnInitializedAsync()
     {
-        string? userId = Id;
-        var result = await UsersClient.GetByIdAsync(userId);
-        if (result.Succeeded)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => UsersClient.GetByIdAsync(Id), Snackbar)
+            is UserDetailsDto user)
         {
-            var user = result.Data;
-            if (user != null)
-            {
-                _firstName = user.FirstName;
-                _lastName = user.LastName;
-                _email = user.Email;
-                _phoneNumber = user.PhoneNumber;
-                _active = user.IsActive;
-                _imageUrl = user.ImageUrl?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
-            }
+            _firstName = user.FirstName;
+            _lastName = user.LastName;
+            _email = user.Email;
+            _phoneNumber = user.PhoneNumber;
+            _active = user.IsActive;
+            _imageUrl = user.ImageUrl?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
 
             Title = $"{_firstName} {_lastName}'s {_localizer["Profile"]}";
             Description = _email;
@@ -73,8 +68,7 @@ public partial class UserProfile
         }
 
         var state = await AuthState;
-        _currentUser = state.User;
-        _canToggleUserStatus = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Users.Edit)).Succeeded;
+        _canToggleUserStatus = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Edit)).Succeeded;
         _loaded = true;
     }
 }

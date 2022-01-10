@@ -1,7 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Shared.Authorization;
-using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -37,7 +36,7 @@ public partial class Roles
                 new(role => role.Description, L["Description"])
             },
             idFunc: role => role.Id,
-            loadDataFunc: async () => (await RolesClient.GetListAsync())?.Data!.Adapt<List<RoleDto>>(),
+            loadDataFunc: async () => (await RolesClient.GetListAsync()).ToList(),
             searchFunc: Search,
             createFunc: async role => await RolesClient.RegisterRoleAsync(role),
             updateFunc: async (_, role) => await RolesClient.RegisterRoleAsync(role),

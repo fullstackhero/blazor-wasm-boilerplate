@@ -99,7 +99,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         Loading = true;
 
-        if (await ApiHelper.ExecuteCallGuardedAsync(() => clientContext.LoadDataFunc(), Snackbar)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => clientContext.LoadDataFunc(), Snackbar)
             is List<TEntity> result)
         {
             _entityList = result;

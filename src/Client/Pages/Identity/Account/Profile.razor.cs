@@ -50,8 +50,7 @@ public partial class Profile
     private async Task UpdateProfileAsync()
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => IdentityClient.UpdateProfileAsync(_profileModel), Snackbar, _customValidation)
-            is Result result && result.Succeeded)
+            () => IdentityClient.UpdateProfileAsync(_profileModel), Snackbar, _customValidation))
         {
             Snackbar.Add(L["Your Profile has been updated. Please Login again to Continue."], Severity.Success);
             await AuthService.ReLoginAsync(Navigation.Uri);
