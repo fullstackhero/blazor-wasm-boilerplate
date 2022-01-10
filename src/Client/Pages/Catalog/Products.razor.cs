@@ -1,5 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
@@ -83,8 +84,9 @@ public partial class Products
             filter.Keyword = searchKeyword;
         }
 
-        var response = await BrandsClient.SearchAsync(filter);
-        if (response.Succeeded && response.Data is not null)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => BrandsClient.SearchAsync(filter), Snackbar)
+            is PaginationResponseOfBrandDto response)
         {
             _brands = response.Data.ToList();
         }

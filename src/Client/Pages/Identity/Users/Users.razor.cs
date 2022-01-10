@@ -1,7 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Shared.Authorization;
-using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -52,7 +51,7 @@ public partial class Users
                 new(user => user.IsActive, L["Active"], Type: typeof(bool))
             },
             idFunc: user => user.Id,
-            loadDataFunc: async () => (await UsersClient.GetAllAsync())?.Data!.Adapt<List<UserDetailsDto>>(),
+            loadDataFunc: async () => (await UsersClient.GetAllAsync()).ToList(),
             searchFunc: Search,
             createFunc: async user => await IdentityClient.RegisterAsync(user),
             entityName: L["User"],

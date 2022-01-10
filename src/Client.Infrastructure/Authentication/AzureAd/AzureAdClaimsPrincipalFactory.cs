@@ -24,58 +24,52 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
 
         if (principal.Identity?.IsAuthenticated is true)
         {
-            var profileResult = await _services.GetRequiredService<IIdentityClient>()
+            var userDetails = await _services.GetRequiredService<IIdentityClient>()
                 .GetProfileDetailsAsync();
 
-            if (profileResult.Succeeded && profileResult.Data is UserDetailsDto userDetails)
+            var userIdentity = (ClaimsIdentity)principal.Identity;
+
+            if (!string.IsNullOrWhiteSpace(userDetails.Email) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.Email))
             {
-                var userIdentity = (ClaimsIdentity)principal.Identity;
-
-                if (!string.IsNullOrWhiteSpace(userDetails.Email) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.Email))
-                {
-                    userIdentity.AddClaim(new Claim(ClaimTypes.Email, userDetails.Email));
-                }
-
-                if (!string.IsNullOrWhiteSpace(userDetails.PhoneNumber) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.MobilePhone))
-                {
-                    userIdentity.AddClaim(new Claim(ClaimTypes.MobilePhone, userDetails.PhoneNumber));
-                }
-
-                if (!string.IsNullOrWhiteSpace(userDetails.FirstName) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.Name))
-                {
-                    userIdentity.AddClaim(new Claim(ClaimTypes.Name, userDetails.FirstName));
-                }
-
-                if (!string.IsNullOrWhiteSpace(userDetails.LastName) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.Surname))
-                {
-                    userIdentity.AddClaim(new Claim(ClaimTypes.Surname, userDetails.LastName));
-                }
-
-                if (!userIdentity.HasClaim(c => c.Type == FSHClaims.Fullname))
-                {
-                    userIdentity.AddClaim(new Claim(FSHClaims.Fullname, $"{userDetails.FirstName} {userDetails.LastName}"));
-                }
-
-                if (!userIdentity.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
-                {
-                    userIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()));
-                }
-
-                if (!string.IsNullOrWhiteSpace(userDetails.ImageUrl) && !userIdentity.HasClaim(c => c.Type == FSHClaims.ImageUrl) && userDetails.ImageUrl is not null)
-                {
-                    userIdentity.AddClaim(new Claim(FSHClaims.ImageUrl, userDetails.ImageUrl));
-                }
-
-                var permissionsResult = await _services.GetRequiredService<IUsersClient>()
-                    .GetPermissionsAsync(profileResult.Data.Id.ToString());
-
-                if (permissionsResult.Succeeded && permissionsResult.Data is not null)
-                {
-                    userIdentity.AddClaims(permissionsResult.Data
-                        .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
-                        .Select(p => new Claim(FSHClaims.Permission, p!.Permission!)));
-                }
+                userIdentity.AddClaim(new Claim(ClaimTypes.Email, userDetails.Email));
             }
+
+            if (!string.IsNullOrWhiteSpace(userDetails.PhoneNumber) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.MobilePhone))
+            {
+                userIdentity.AddClaim(new Claim(ClaimTypes.MobilePhone, userDetails.PhoneNumber));
+            }
+
+            if (!string.IsNullOrWhiteSpace(userDetails.FirstName) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.Name))
+            {
+                userIdentity.AddClaim(new Claim(ClaimTypes.Name, userDetails.FirstName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(userDetails.LastName) && !userIdentity.HasClaim(c => c.Type == ClaimTypes.Surname))
+            {
+                userIdentity.AddClaim(new Claim(ClaimTypes.Surname, userDetails.LastName));
+            }
+
+            if (!userIdentity.HasClaim(c => c.Type == FSHClaims.Fullname))
+            {
+                userIdentity.AddClaim(new Claim(FSHClaims.Fullname, $"{userDetails.FirstName} {userDetails.LastName}"));
+            }
+
+            if (!userIdentity.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
+            {
+                userIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(userDetails.ImageUrl) && !userIdentity.HasClaim(c => c.Type == FSHClaims.ImageUrl) && userDetails.ImageUrl is not null)
+            {
+                userIdentity.AddClaim(new Claim(FSHClaims.ImageUrl, userDetails.ImageUrl));
+            }
+
+            var permissions = await _services.GetRequiredService<IUsersClient>()
+                .GetPermissionsAsync(userDetails.Id.ToString());
+
+            userIdentity.AddClaims(permissions
+                .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
+                .Select(p => new Claim(FSHClaims.Permission, p!.Permission!)));
         }
 
         return principal;

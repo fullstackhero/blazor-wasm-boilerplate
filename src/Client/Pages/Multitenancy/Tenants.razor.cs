@@ -31,13 +31,12 @@ public partial class Tenants
     {
         _loading = true;
 
-        var tenantList = await ApiHelper.ExecuteCallGuardedAsync(
-            () => TenantsClient.GetAllAsync(),
-            Snackbar);
-
-        if (tenantList is not null)
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => TenantsClient.GetAllAsync(),
+                Snackbar)
+            is ICollection<TenantDto> tenants)
         {
-            Elements = tenantList.ToList();
+            Elements = tenants.ToList();
         }
 
         _loading = false;

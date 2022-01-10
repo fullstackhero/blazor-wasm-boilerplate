@@ -47,40 +47,36 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
     public void NavigateToExternalLogin(string returnUrl) =>
         throw new NotImplementedException();
 
-    public async Task<Result> LoginAsync(string tenantKey, TokenRequest request)
+    public async Task<bool> LoginAsync(string tenantKey, TokenRequest request)
     {
-        var result = await _tokensClient.GetTokenAsync(tenantKey, request);
-        if (result.Succeeded)
+        var tokenResponse = await _tokensClient.GetTokenAsync(tenantKey, request);
+
+        string? token = tokenResponse.Token;
+        string? refreshToken = tokenResponse.RefreshToken;
+
+        if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(refreshToken))
         {
-            string? token = result.Data?.Token;
-            string? refreshToken = result.Data?.RefreshToken;
-
-            if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(refreshToken))
-            {
-                return new Result { Succeeded = false, Messages = new List<string>() { "Invalid token received." } };
-            }
-
-            await CacheAuthTokens(token, refreshToken);
-
-            // Get permissions for this user and add them to the cache
-            var claims = GetClaimsFromJwt(token);
-            string? userId = claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrWhiteSpace(userId))
-            {
-                var permissionResult = await _usersClient.GetPermissionsAsync(userId);
-                if (permissionResult.Succeeded && permissionResult.Data is not null)
-                {
-                    await CachePermissions(permissionResult.Data
-                        .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
-                        .Select(p => p!.Permission!)
-                        .ToList());
-                }
-            }
-
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            return false;
         }
 
-        return result;
+        await CacheAuthTokens(token, refreshToken);
+
+        // Get permissions for this user and add them to the cache
+        var claims = GetClaimsFromJwt(token);
+        string? userId = claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (!string.IsNullOrWhiteSpace(userId))
+        {
+            var permissions = await _usersClient.GetPermissionsAsync(userId);
+
+            await CachePermissions(permissions
+                .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
+                .Select(p => p!.Permission!)
+                .ToList());
+        }
+
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+
+        return true;
     }
 
     public async Task LogoutAsync()
@@ -118,13 +114,13 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
             if (diff.TotalMinutes <= 1)
             {
                 string? refreshToken = await GetCachedRefreshTokenAsync();
-                var response = await RefreshTokenAsync(new RefreshTokenRequest { Token = token, RefreshToken = refreshToken });
-                if (!response.Succeeded)
+                (bool succeeded, var response) = await TryRefreshTokenAsync(new RefreshTokenRequest { Token = token, RefreshToken = refreshToken });
+                if (!succeeded)
                 {
                     return new AccessTokenResult(AccessTokenResultStatus.RequiresRedirect, null, "/login");
                 }
 
-                token = response.Data?.Token;
+                token = response?.Token;
             }
 
             return new AccessTokenResult(AccessTokenResultStatus.Success, new AccessToken() { Value = token }, string.Empty);
@@ -138,7 +134,7 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
     public ValueTask<AccessTokenResult> RequestAccessToken(AccessTokenRequestOptions options) =>
         RequestAccessToken();
 
-    private async Task<ResultOfTokenResponse> RefreshTokenAsync(RefreshTokenRequest request)
+    private async Task<(bool Succeeded, TokenResponse? Token)> TryRefreshTokenAsync(RefreshTokenRequest request)
     {
         var authState = await GetAuthenticationStateAsync();
         string? tenantKey = authState.User.GetTenant();
@@ -150,16 +146,14 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
         try
         {
             var tokenResponse = await _tokensClient.RefreshAsync(tenantKey, request);
-            if (tokenResponse.Succeeded && tokenResponse.Data is not null)
-            {
-                await CacheAuthTokens(tokenResponse.Data.Token, tokenResponse.Data.RefreshToken);
-            }
 
-            return tokenResponse;
+            await CacheAuthTokens(tokenResponse.Token, tokenResponse.RefreshToken);
+
+            return (true, tokenResponse);
         }
         catch (ApiException<ErrorResult>)
         {
-            return new ResultOfTokenResponse { Succeeded = false };
+            return (false, null);
         }
     }
 
