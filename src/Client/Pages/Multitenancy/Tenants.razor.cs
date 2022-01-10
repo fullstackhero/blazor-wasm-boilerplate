@@ -1,4 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -29,17 +30,14 @@ public partial class Tenants
     protected override async Task OnInitializedAsync()
     {
         _loading = true;
-        var response = await TenantsClient.GetAllAsync();
-        if (response.Succeeded && response.Data is not null)
+
+        var tenantList = await ApiHelper.ExecuteCallGuardedAsync(
+            () => TenantsClient.GetAllAsync(),
+            Snackbar);
+
+        if (tenantList is not null)
         {
-            Elements = response.Data.Where(t => t is not null).Cast<TenantDto>().ToList();
-        }
-        else if (response.Messages is not null)
-        {
-            foreach (string message in response.Messages)
-            {
-                Snackbar.Add(message, Severity.Error);
-            }
+            Elements = tenantList.ToList();
         }
 
         _loading = false;
