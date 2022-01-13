@@ -19,8 +19,7 @@ var storageService = host.Services.GetRequiredService<IClientPreferenceManager>(
 if (storageService != null)
 {
     CultureInfo culture;
-    var preference = await storageService.GetPreference() as ClientPreference;
-    if (preference != null)
+    if (await storageService.GetPreference() is ClientPreference preference)
         culture = new CultureInfo(preference.LanguageCode);
     else
         culture = new CultureInfo(LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US");

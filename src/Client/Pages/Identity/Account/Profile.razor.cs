@@ -70,9 +70,9 @@ public partial class Profile
                 return;
             }
 
-            string? fileName = $"{_userId}-{Guid.NewGuid().ToString("N")}";
-            fileName = fileName.Substring(0, Math.Min(fileName.Length, 90));
-            string? format = "image/png";
+            string? fileName = $"{_userId}-{Guid.NewGuid():N}";
+            fileName = fileName[..Math.Min(fileName.Length, 90)];
+            const string? format = "image/png";
             var imageFile = await file.RequestImageFileAsync(format, 400, 400);
             byte[]? buffer = new byte[imageFile.Size];
             await imageFile.OpenReadStream().ReadAsync(buffer);

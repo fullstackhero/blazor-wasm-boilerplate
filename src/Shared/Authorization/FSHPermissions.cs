@@ -82,9 +82,9 @@ public class FSHPermissions
     public static class RoleClaims
     {
         public const string View = "Permissions.RoleClaims.View";
-        public const string Create = "Permissions.RoleClaims.Create";
+        public const string Register = "Permissions.RoleClaims.Register";
         public const string Edit = "Permissions.RoleClaims.Edit";
-        public const string Delete = "Permissions.RoleClaims.Delete";
+        public const string Update = "Permissions.RoleClaims.Update";
         public const string Search = "Permissions.RoleClaims.Search";
     }
 
@@ -94,7 +94,7 @@ public class FSHPermissions
     {
         public const string View = "Permissions.Tenants.View";
         public const string ListAll = "Permissions.Tenants.ViewAll";
-        public const string Create = "Permissions.Tenants.Register";
+        public const string Register = "Permissions.Tenants.Register";
         public const string Update = "Permissions.Tenants.Update";
         public const string UpgradeSubscription = "Permissions.Tenants.UpgradeSubscription";
         public const string Remove = "Permissions.Tenants.Remove";

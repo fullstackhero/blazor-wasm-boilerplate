@@ -29,7 +29,7 @@ public partial class AddEditModal<TRequest> : IAddEditModal
     public object? Id { get; set; }
 
     [CascadingParameter]
-    private MudDialogInstance _mudDialog { get; set; } = default!;
+    private MudDialogInstance MudDialog { get; set; } = default!;
 
     private CustomValidation? _customValidation;
 
@@ -83,10 +83,10 @@ public partial class AddEditModal<TRequest> : IAddEditModal
             _customValidation,
             L["Operation Completed."]))
         {
-            _mudDialog.Close();
+            MudDialog.Close();
         }
     }
 
     private void Cancel() =>
-        _mudDialog.Cancel();
+        MudDialog.Cancel();
 }

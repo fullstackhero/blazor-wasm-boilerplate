@@ -70,7 +70,7 @@ public partial class UserRoles
             new CustomValidation(),
             _localizer["Success"]) is not null)
         {
-            Navigation.NavigateTo($"/users");
+            Navigation.NavigateTo("/users");
         }
     }
 
