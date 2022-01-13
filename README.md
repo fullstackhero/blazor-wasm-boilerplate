@@ -12,3 +12,8 @@ Built with .NET 6.0 and the goodness of MudBlazor Component Library. Incorporate
 ## About
 
 *Documentation coming soon*
+
+## Development Enviroment
+
+- Make sure you have the API Running. Here is FSH Backend - https://github.com/fullstackhero/dotnet-webapi-boilerplate
+- Once the API is up and running, this Blazor Project would consume it's services.
