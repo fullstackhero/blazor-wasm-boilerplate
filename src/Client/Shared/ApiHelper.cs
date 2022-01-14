@@ -1,4 +1,5 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using System.Net;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
@@ -37,6 +38,13 @@ public static class ApiHelper
         catch (ApiException<ErrorResult> ex)
         {
             snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode == (int)HttpStatusCode.Unauthorized)
+            {
+                snackbar.Add("Unauthorized!!!", Severity.Error);
+            }
         }
 
         return default;
