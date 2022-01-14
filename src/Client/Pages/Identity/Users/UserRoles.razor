@@ -26,8 +26,8 @@ else
             }
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<UserRoleDto, object>(x => x.RoleName)">@_localizer["Role Name"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<UserRoleDto, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserRoleDto, object?>(x => x.RoleName)">@_localizer["Role Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserRoleDto, object?>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<UserRoleDto, object>(x => x.Enabled)">@_localizer["Status"]</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>

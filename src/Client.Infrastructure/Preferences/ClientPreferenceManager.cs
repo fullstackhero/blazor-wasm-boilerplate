@@ -54,7 +54,7 @@ public class ClientPreferenceManager : IClientPreferenceManager
     {
         if (await GetPreference() is ClientPreference preference)
         {
-            var language = LocalizationConstants.SupportedLanguages.Where(a => a.Code == languageCode).FirstOrDefault();
+            var language = Array.Find(LocalizationConstants.SupportedLanguages, a => a.Code == languageCode);
             if (language?.Code is not null)
             {
                 preference.LanguageCode = language.Code;

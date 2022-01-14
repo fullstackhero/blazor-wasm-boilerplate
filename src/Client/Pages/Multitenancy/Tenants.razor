@@ -2,102 +2,64 @@
 
 @inject IStringLocalizer<Tenants> L
 
-<style>
-    .mud-table-container {
-        overflow: auto;
-    }
-</style>
-
 <FshTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
 
-<MudExpansionPanel
-    Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
-    Class="mud-elevation-25" Text="@L["Search"]">
-    <MudTextField @bind-Value="@_searchString" Immediate="true" Placeholder="@L["Search for Tenants"]"
-        Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-        TextChanged="@((e) => OnSearch(e))" Style="flex:none!important;margin:0px!important"></MudTextField>
-</MudExpansionPanel>
+<EntityTable TEntity="TenantDetail" TId="Guid" TRequest="CreateTenantRequest" Context="@Context"
+    @bind-SearchString="_searchString" Dense="false" Striped="true">
+    <EditFormContent>
+        <MudItem xs="12" md="6">
+            <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
+        </MudItem>
+        <MudItem xs="12" md="6">
+            <MudTextField T="string" For="@(() => context.Key)" @bind-Value="context.Key" Label="@L["Key"]" />
+        </MudItem>
+        <MudItem xs="12" md="6">
+            <MudTextField T="string" For="@(() => context.ConnectionString)" @bind-Value="context.ConnectionString"
+                Label="@L["Connection String"]" />
+        </MudItem>
+        <MudItem xs="12" md="6">
+            <MudTextField T="string" For="@(() => context.AdminEmail)" @bind-Value="context.AdminEmail"
+                Label="@L["Admin Email"]" />
+        </MudItem>
+    </EditFormContent>
+    <ActionsContent>
+        <MudButton Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown"
+            IconColor="Color.Secondary" OnClick="@(() => ShowBtnPress(context.Id))">@((context.ShowDetails == true) ?
+            L["Hide"] : L["Show"]) @L["Tenant Details"]</MudButton>
+    </ActionsContent>
 
-<MudTable Loading="@_loading" Items="@Elements" Dense="@Dense" Hover="@Hover" ReadOnly="@Ronly" CanCancelEdit="true"
-    Filter="new Func<TenantDto,bool>(FilterFunc)" @bind-SelectedItem="SelectedItem1" SortLabel="Sort By"
-    CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
-    RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
-    <ToolBarContent>
-        <div class="justify-center mud-text-align-center">
-            <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())"
-                StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@L["Create"]</MudButton>
-            <MudButton DisableElevation Variant="Variant.Filled" OnClick="@(() => OnSearch(""))"
-                StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary"
-                Style="margin-left: 5px;">@L["Reload"]</MudButton>
-        </div>
-        <MudSpacer />
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.Id)">Id</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel InitialDirection="SortDirection.Ascending"
-                SortBy="new Func<TenantDto, object?>(x=>x.Name)">Name</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<TenantDto, object?>(x=>x.Key)">Key</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<TenantDto, object?>(x=>x.AdminEmail)">AdminEmail</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<TenantDto, object?>(x=>x.ConnectionString)">ConnectionString
-            </MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.IsActive)">IsActive</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<TenantDto, object>(x=>x.ValidUpto)">ValidUpto</MudTableSortLabel>
-        </MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Key">@context.Key</MudTd>
-        <MudTd DataLabel="AdminEmail">@context.AdminEmail</MudTd>
-        <MudTd DataLabel="ConnectionString">@context.ConnectionString</MudTd>
-        <MudTd DataLabel="IsActive">@context.IsActive</MudTd>
-        <MudTd DataLabel="ValidUpto">@context.ValidUpto</MudTd>
-    </RowTemplate>
-    <RowEditingTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Name">
-            <MudTextField @bind-Value="@context.Name" Required />
-        </MudTd>
-        <MudTd DataLabel="Key">
-            <MudTextField @bind-Value="@context.Key" Required />
-        </MudTd>
-        <MudTd DataLabel="AdminEmail">
-            <MudTextField @bind-Value="@context.AdminEmail" Required />
-        </MudTd>
-        <MudTd DataLabel="ConnectionString">
-            <MudTextField @bind-Value="@context.ConnectionString" />
-        </MudTd>
-        <MudTd DataLabel="IsActive">
-            <MudCheckBox @bind-Checked="@context.IsActive" Color="Color.Secondary"></MudCheckBox>
-        </MudTd>
-        <MudTd DataLabel="ValidUpto">
-            <MudDatePicker @ref="_picker" @bind-Date="@Date">
-                <PickerActions>
-                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
-                    <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
-                    <MudButton Color="Color.Primary" OnClick="@(() => _picker.Close())">Ok</MudButton>
-                </PickerActions>
-            </MudDatePicker>
-        </MudTd>
-    </RowEditingTemplate>
-    <PagerContent>
-        <MudTablePager />
-    </PagerContent>
-</MudTable>
+    <ChildRowContent>
+        @if (context.ShowDetails)
+        {
+            <MudTr>
+                <td colspan="5">
+                    <MudCard Elevation="25" style="margin: 10px !important;">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudAlert Severity="Severity.Info" Typo="Typo.body1">@L["Details for Tenant"] :
+                                    <strong>@context.Id</strong>
+                                </MudAlert>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <table class="mud-table-root">
+                                <tbody class="mud-table-body">
+                                    <tr class="mud-table-row">
+                                        <td>@L["Connection String"]</td>
+                                        <td>
+                                            <MudItem>
+                                                <MudChip Label="true" Color="Color.Primary">
+                                                    @context.ConnectionString?.Trim()</MudChip>
+                                            </MudItem>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </MudCardContent>
+                    </MudCard>
+                </td>
+            </MudTr>
+        }
+    </ChildRowContent>
 
-<MudSwitch @bind-Checked="@Hover" Color="Color.Primary">Hover</MudSwitch>
-<MudSwitch @bind-Checked="@Dense" Color="Color.Secondary">Dense</MudSwitch>
-<MudSwitch @bind-Checked="@Ronly" Color="Color.Tertiary">Read Only</MudSwitch>
+</EntityTable>

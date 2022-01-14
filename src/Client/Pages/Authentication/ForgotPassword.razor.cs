@@ -12,16 +12,16 @@ public partial class ForgotPassword
     private bool BusySubmitting { get; set; }
 
     [Inject]
-    private IIdentityClient _identityClient { get; set; } = default!;
+    private IIdentityClient IdentityClient { get; set; } = default!;
 
-    private string _tenant { get; set; } = MultitenancyConstants.DefaultTenant.Key;
+    private string Tenant { get; set; } = MultitenancyConstants.DefaultTenant.Key;
 
     private async Task SubmitAsync()
     {
         BusySubmitting = true;
 
         await ApiHelper.ExecuteCallGuardedAsync(
-            () => _identityClient.ForgotPasswordAsync(_tenant, _forgotPasswordRequest),
+            () => IdentityClient.ForgotPasswordAsync(Tenant, _forgotPasswordRequest),
             Snackbar,
             _customValidation);
 
