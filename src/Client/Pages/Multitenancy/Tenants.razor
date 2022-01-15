@@ -1,6 +1,7 @@
 ﻿@page "/tenants"
 
 @inject IStringLocalizer<Tenants> L
+@inject IAuthenticationService AuthService
 
 <FshTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
 
@@ -21,6 +22,13 @@
             <MudTextField T="string" For="@(() => context.AdminEmail)" @bind-Value="context.AdminEmail"
                 Label="@L["Admin Email"]" />
         </MudItem>
+        @if (AuthService.ProviderType == AuthProvider.AzureAd)
+        {
+            <MudItem xs="12" md="6">
+                <MudTextField T="string" For="@(() => context.Identifier)" @bind-Value="context.Identifier"
+                Label="@L["Issuer"]" />
+            </MudItem>
+        }
     </EditFormContent>
     <ActionsContent>
         <MudButton Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown"
@@ -53,7 +61,7 @@
                                             </MudItem>
                                         </td>
                                     </tr>
-                                    @if (!string.IsNullOrWhiteSpace(@context.Identifier))
+                                    @if (AuthService.ProviderType == AuthProvider.AzureAd)
                                     {
                                         <tr class="mud-table-row">
                                             <td>@L["Issuer"]</td>
