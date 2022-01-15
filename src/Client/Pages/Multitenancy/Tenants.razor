@@ -11,7 +11,7 @@
             <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudTextField T="string" For="@(() => context.Key)" @bind-Value="context.Key" Label="@L["Key"]" />
+            <MudTextField T="string" For="@(() => context.TenantId)" @bind-Value="context.TenantId" Label="@L["Key"]" />
         </MudItem>
         <MudItem xs="12" md="6">
             <MudTextField T="string" For="@(() => context.ConnectionString)" @bind-Value="context.ConnectionString"
@@ -53,6 +53,18 @@
                                             </MudItem>
                                         </td>
                                     </tr>
+                                    @if (!string.IsNullOrWhiteSpace(@context.Identifier))
+                                    {
+                                        <tr class="mud-table-row">
+                                            <td>@L["Issuer"]</td>
+                                            <td>
+                                                <MudItem>
+                                                    <MudChip Label="true" Color="Color.Primary">
+                                                        @context.Identifier?.Trim()</MudChip>
+                                                </MudItem>
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </MudCardContent>
