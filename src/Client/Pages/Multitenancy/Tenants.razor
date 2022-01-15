@@ -1,6 +1,7 @@
 ﻿@page "/tenants"
 
 @inject IStringLocalizer<Tenants> L
+@inject IAuthenticationService AuthService
 
 <FshTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
 
@@ -8,10 +9,10 @@
     @bind-SearchString="_searchString" Dense="false" Striped="true">
     <EditFormContent>
         <MudItem xs="12" md="6">
-            <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
+            <MudTextField T="string" For="@(() => context.Id)" @bind-Value="context.Id" Label="@L["Key"]" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudTextField T="string" For="@(() => context.Key)" @bind-Value="context.Key" Label="@L["Key"]" />
+            <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
         </MudItem>
         <MudItem xs="12" md="6">
             <MudTextField T="string" For="@(() => context.ConnectionString)" @bind-Value="context.ConnectionString"
@@ -21,6 +22,13 @@
             <MudTextField T="string" For="@(() => context.AdminEmail)" @bind-Value="context.AdminEmail"
                 Label="@L["Admin Email"]" />
         </MudItem>
+        @if (AuthService.ProviderType == AuthProvider.AzureAd)
+        {
+            <MudItem xs="12" md="6">
+                <MudTextField T="string" For="@(() => context.Issuer)" @bind-Value="context.Issuer"
+                Label="@L["Issuer"]" />
+            </MudItem>
+        }
     </EditFormContent>
     <ActionsContent>
         <MudButton Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown"
@@ -53,6 +61,18 @@
                                             </MudItem>
                                         </td>
                                     </tr>
+                                    @if (AuthService.ProviderType == AuthProvider.AzureAd)
+                                    {
+                                        <tr class="mud-table-row">
+                                            <td>@L["Issuer"]</td>
+                                            <td>
+                                                <MudItem>
+                                                    <MudChip Label="true" Color="Color.Primary">
+                                                        @context.Issuer?.Trim()</MudChip>
+                                                </MudItem>
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </MudCardContent>

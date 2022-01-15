@@ -25,14 +25,14 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Get Tenant Details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantKey);
+        System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Get Tenant Details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantKey, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Get all the available Tenants.
@@ -51,14 +51,14 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Create a new Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> CreateAsync(CreateTenantRequest request);
+        System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Create a new Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> CreateAsync(CreateTenantRequest request, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Upgrade Subscription of Tenant.
@@ -77,27 +77,27 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Deactivate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantKey);
+        System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Deactivate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantKey, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantId, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
         /// Activate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantKey);
+        System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Activate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantKey, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantId, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -132,9 +132,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Get Tenant Details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantKey)
+        public virtual System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId)
         {
-            return GetAsync(tenantKey, System.Threading.CancellationToken.None);
+            return GetAsync(tenantId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -142,11 +142,11 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Get Tenant Details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantKey, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/tenants/{tenantKey}");
-            urlBuilder_.Replace("{tenantKey}", System.Uri.EscapeDataString(ConvertToString(tenantKey, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/tenants/{tenantId}");
+            urlBuilder_.Replace("{tenantId}", System.Uri.EscapeDataString(ConvertToString(tenantId, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -317,7 +317,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Create a new Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Guid> CreateAsync(CreateTenantRequest request)
+        public virtual System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request)
         {
             return CreateAsync(request, System.Threading.CancellationToken.None);
         }
@@ -327,7 +327,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Create a new Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Guid> CreateAsync(CreateTenantRequest request, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request, System.Threading.CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new System.ArgumentNullException("request");
@@ -370,7 +370,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Guid>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -513,9 +513,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Deactivate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantKey)
+        public virtual System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantId)
         {
-            return DeactivateTenantAsync(tenantKey, System.Threading.CancellationToken.None);
+            return DeactivateTenantAsync(tenantId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -523,11 +523,11 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Deactivate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantKey, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<string> DeactivateTenantAsync(string? tenantId, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/tenants/{tenantKey}/deactivate");
-            urlBuilder_.Replace("{tenantKey}", System.Uri.EscapeDataString(ConvertToString(tenantKey, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/tenants/{tenantId}/deactivate");
+            urlBuilder_.Replace("{tenantId}", System.Uri.EscapeDataString(ConvertToString(tenantId, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -607,9 +607,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Activate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantKey)
+        public virtual System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantId)
         {
-            return ActivateTenantAsync(tenantKey, System.Threading.CancellationToken.None);
+            return ActivateTenantAsync(tenantId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -617,11 +617,11 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Activate Tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantKey, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<string> ActivateTenantAsync(string? tenantId, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/tenants/{tenantKey}/activate");
-            urlBuilder_.Replace("{tenantKey}", System.Uri.EscapeDataString(ConvertToString(tenantKey, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/tenants/{tenantId}/activate");
+            urlBuilder_.Replace("{tenantId}", System.Uri.EscapeDataString(ConvertToString(tenantId, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4881,7 +4881,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     public partial interface ITokensClient : IApiService
     {
         /// <summary>
-        /// Submit Credentials with Tenant Key to generate valid Access Token.
+        /// Submit Credentials with Tenant Id to generate valid Access Token.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4889,7 +4889,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Submit Credentials with Tenant Key to generate valid Access Token.
+        /// Submit Credentials with Tenant Id to generate valid Access Token.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4934,7 +4934,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <summary>
-        /// Submit Credentials with Tenant Key to generate valid Access Token.
+        /// Submit Credentials with Tenant Id to generate valid Access Token.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4945,7 +4945,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Submit Credentials with Tenant Key to generate valid Access Token.
+        /// Submit Credentials with Tenant Id to generate valid Access Token.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -5889,25 +5889,25 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     public partial class TenantDto
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; } = default!;
+        public string Id { get; set; } = default!;
 
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string? Name { get; set; } = default!;
-
-        [Newtonsoft.Json.JsonProperty("key", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string? Key { get; set; } = default!;
-
-        [Newtonsoft.Json.JsonProperty("adminEmail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string? AdminEmail { get; set; } = default!;
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("connectionString", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? ConnectionString { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("adminEmail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string AdminEmail { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("isActive", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsActive { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("validUpto", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTime ValidUpto { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Issuer { get; set; } = default!;
 
     }
 
@@ -5974,31 +5974,33 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CreateTenantRequest
     {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Id { get; set; } = default!;
+
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
         public string Name { get; set; } = default!;
 
-        [Newtonsoft.Json.JsonProperty("key", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        public string Key { get; set; } = default!;
+        [Newtonsoft.Json.JsonProperty("connectionString", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? ConnectionString { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("adminEmail", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"^[^@]+@[^@]+$")]
         public string AdminEmail { get; set; } = default!;
 
-        [Newtonsoft.Json.JsonProperty("connectionString", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        public string ConnectionString { get; set; } = default!;
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Issuer { get; set; } = default!;
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UpgradeSubscriptionRequest
     {
-        [Newtonsoft.Json.JsonProperty("tenantKey", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("tenantId", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
-        public string TenantKey { get; set; } = default!;
+        public string TenantId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("extendedExpiryDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTime ExtendedExpiryDate { get; set; } = default!;
@@ -6554,9 +6556,6 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? Description { get; set; } = default!;
-
-        [Newtonsoft.Json.JsonProperty("tenant", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string? Tenant { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("isDefault", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsDefault { get; set; } = default!;
