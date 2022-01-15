@@ -33,12 +33,13 @@ public partial class Profile
         var user = state.User;
         if (user is not null)
         {
+            _userId = user.GetUserId();
             _profileModel.Email = user.GetEmail() ?? string.Empty;
             _profileModel.FirstName = user.GetFirstName() ?? string.Empty;
             _profileModel.LastName = user.GetSurname() ?? string.Empty;
             _profileModel.PhoneNumber = user.GetPhoneNumber();
             _imageUrl = user?.GetImageUrl()?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
-            _userId = user?.GetUserId();
+            if (_userId != null) _profileModel.Id = _userId;
         }
 
         if (_profileModel.FirstName?.Length > 0)
