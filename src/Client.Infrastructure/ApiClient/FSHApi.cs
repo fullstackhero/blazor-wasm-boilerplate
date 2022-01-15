@@ -5891,9 +5891,6 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Id { get; set; } = default!;
 
-        [Newtonsoft.Json.JsonProperty("identifier", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Identifier { get; set; } = default!;
-
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Name { get; set; } = default!;
 
@@ -5908,6 +5905,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         [Newtonsoft.Json.JsonProperty("validUpto", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTime ValidUpto { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Issuer { get; set; } = default!;
 
     }
 
@@ -5974,9 +5974,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CreateTenantRequest
     {
-        [Newtonsoft.Json.JsonProperty("tenantId", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
-        public string TenantId { get; set; } = default!;
+        public string Id { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
@@ -5990,8 +5990,8 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         [System.ComponentModel.DataAnnotations.RegularExpression(@"^[^@]+@[^@]+$")]
         public string AdminEmail { get; set; } = default!;
 
-        [Newtonsoft.Json.JsonProperty("identifier", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string? Identifier { get; set; } = default!;
+        [Newtonsoft.Json.JsonProperty("issuer", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? Issuer { get; set; } = default!;
 
     }
 
