@@ -4263,11 +4263,11 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         System.Threading.Tasks.Task<string> DeleteAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id, bool retrieveOnlyFromRole);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id, bool retrieveOnlyFromRole, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, System.Collections.Generic.IEnumerable<UpdatePermissionsRequest> request);
@@ -4573,18 +4573,22 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id, bool retrieveOnlyFromRole)
         {
-            return GetPermissionsAsync(id, System.Threading.CancellationToken.None);
+            return GetPermissionsAsync(id, retrieveOnlyFromRole, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<PermissionDto>> GetPermissionsAsync(string? id, bool retrieveOnlyFromRole, System.Threading.CancellationToken cancellationToken)
         {
+            if (retrieveOnlyFromRole == null)
+                throw new System.ArgumentNullException("retrieveOnlyFromRole");
+
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/roles/{id}/permissions");
+            urlBuilder_.Append("api/roles/{id}/permissions/{retrieveOnlyFromRole}");
             urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{retrieveOnlyFromRole}", System.Uri.EscapeDataString(ConvertToString(retrieveOnlyFromRole, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4626,23 +4630,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
                             return objectResponse_.Object;
                         }
                         else
-                        if (status_ == 400)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<HttpValidationProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<HttpValidationProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ErrorResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ErrorResult>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -6696,6 +6686,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? Description { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("enabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Enabled { get; set; } = default!;
 
     }
 
