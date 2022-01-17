@@ -40,6 +40,8 @@ public partial class RolePermissions
         _canEditRoleClaims = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.RoleClaims.Edit)).Succeeded;
         _canSearchRoleClaims = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.RoleClaims.View)).Succeeded;
 
+        var rolePermissions = new List<PermissionDto>();
+
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => RolesClient.GetByIdAsync(Id), Snackbar)
             is RoleDto role)
@@ -48,20 +50,34 @@ public partial class RolePermissions
             Description = string.Format(_localizer["Manage {0}'s Permissions"], role.Name);
 
             if (await ApiHelper.ExecuteCallGuardedAsync(
-                    () => RolesClient.GetPermissionsAsync(role.Id, false), Snackbar)
+                    () => RolesClient.GetPermissionsAsync(role.Id), Snackbar)
                 is ICollection<PermissionDto> response)
             {
-                RolePermissionsList = response.ToList();
+                rolePermissions = response.ToList();
             }
         }
+
+        var allPermissions = DefaultPermissions.Admin;
+        allPermissions.AddRange(DefaultPermissions.Root);
+        var result = allPermissions.Select(x => new PermissionDto()
+        {
+            Permission = x
+        }).ToList();
+
+        foreach (var permission in result)
+        {
+            if (rolePermissions.Select(z => z.Permission).Contains(permission.Permission))
+                permission.Enabled = true;
+        }
+
+        RolePermissionsList = result;
 
         _loaded = true;
     }
 
     private async Task SaveAsync()
     {
-        List<UpdatePermissionsRequest> request = new List<UpdatePermissionsRequest>();
-        request = RolePermissionsList.Adapt<List<UpdatePermissionsRequest>>();
+        var request = RolePermissionsList.Where(x => x.Enabled).Adapt<List<UpdatePermissionsRequest>>();
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
             () => RolesClient.UpdatePermissionsAsync(Id, request),
