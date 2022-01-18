@@ -16,8 +16,7 @@ public partial class Products
 
     protected EntityServerTableContext<ProductDto, Guid, UpdateProductRequest> Context { get; set; } = default!;
 
-    // Fields for EditForm
-    private List<BrandDto> _brands = new();
+    private EntityTable<ProductDto, Guid, UpdateProductRequest> _table = default!;
 
     protected override void OnInitialized()
     {
@@ -30,6 +29,7 @@ public partial class Products
                 new(prod => prod.Description, L["Description"], "Description"),
                 new(prod => prod.Rate, L["Rate"], "Rate")
             },
+            enableAdvancedSearch: true,
             idFunc: prod => prod.Id,
             searchFunc: SearchFunc,
             createFunc: async prod => await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
@@ -43,38 +43,60 @@ public partial class Products
             deletePermission: FSHPermissions.Products.Remove);
     }
 
-    private async Task<PaginatedResult<ProductDto>> SearchFunc(Components.EntityTable.PaginationFilter filter)
+    // Advanced Search
+    private Guid _searchBrandId;
+    private Guid SearchBrandId
+    {
+        get => _searchBrandId;
+        set
+        {
+            _searchBrandId = value;
+            _ = _table.ServerLoadDataAsync();
+        }
+    }
+
+    private decimal _searchMinimumRate;
+    private decimal SearchMinimumRate
+    {
+        get => _searchMinimumRate;
+        set
+        {
+            _searchMinimumRate = value;
+            _ = _table.ServerLoadDataAsync();
+        }
+    }
+
+    private decimal _searchMaximumRate = 100;
+    private decimal SearchMaximumRate
+    {
+        get => _searchMaximumRate;
+        set
+        {
+            _searchMaximumRate = value;
+            _ = _table.ServerLoadDataAsync();
+        }
+    }
+
+    private async Task<PaginationResponse<ProductDto>> SearchFunc(PaginationFilter filter)
     {
         var productFilter = filter.Adapt<SearchProductsRequest>();
 
-        if (!AllColumnsChecked)
+        if (_searchBrandId != default)
         {
-            productFilter.AdvancedSearch = new()
-            {
-                Fields = Context.Fields.Where(f => f.CheckedForSearch).Select(f => f.SortLabel).ToList(),
-                Keyword = filter.Keyword
-            };
-            productFilter.Keyword = null;
+            productFilter.BrandId = _searchBrandId;
         }
 
-        // TODO: add advanced search and filter
-        // filter.BrandId =
-        // filter.MaximumRate =
-        // filter.MinimumRate =
+        productFilter.MinimumRate = _searchMinimumRate;
+        productFilter.MaximumRate = _searchMaximumRate;
 
         var result = await ProductsClient.SearchAsync(productFilter);
 
-        return result.Adapt<PaginatedResult<ProductDto>>();
+        return result.Adapt<PaginationResponse<ProductDto>>();
     }
 
-    // Advanced Search
+    // Brands Autocomplete
 
-    private bool AllColumnsChecked => Context.Fields.All(f => f.CheckedForSearch);
-
-    private void AllColumnsCheckChanged(bool checkAll) =>
-        Context.Fields.ForEach(field => field.CheckedForSearch = checkAll);
-
-    // Functions for EditForm
+    private List<BrandDto> _brands = new();
 
     private async Task<IEnumerable<Guid>> SearchBrands(string value)
     {
@@ -95,5 +117,5 @@ public partial class Products
     }
 
     private string GetBrandName(Guid id) =>
-        _brands.FirstOrDefault(b => b.Id == id)?.Name ?? string.Empty;
+        _brands.Find(b => b.Id == id)?.Name ?? string.Empty;
 }

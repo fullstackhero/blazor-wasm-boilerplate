@@ -5,16 +5,16 @@
 
 <FshTitle Title="@L["Products"]" Description="@L["Manage Products."]" />
 
-<EntityTable TEntity="ProductDto" TId="Guid" TRequest="UpdateProductRequest" Context="@Context">
+<EntityTable @ref="_table" TEntity="ProductDto" TId="Guid" TRequest="UpdateProductRequest" Context="@Context">
 
     <AdvancedSearchContent>
-        <div style="margin-top:10px!important">
-            <MudCheckBox Label="All Columns" T="bool" Checked="AllColumnsChecked" CheckedChanged="AllColumnsCheckChanged"></MudCheckBox>
-            @foreach (var field in Context.Fields)
-            {
-                <MudCheckBox @bind-Checked="@field.CheckedForSearch" Label="@(field.DisplayName)"></MudCheckBox>
-            }
-        </div>
+        <MudAutocomplete Label="@L["Brand"]"
+            @bind-Value="SearchBrandId" ResetValueOnEmptyText="true"
+            SearchFunc="SearchBrands" Variant="Variant.Filled"
+            ToStringFunc="GetBrandName"
+            Dense="true" Margin="Margin.Dense" />
+        <MudSlider T="decimal" @bind-value="SearchMinimumRate">@L["MinimumRate"]: @_searchMinimumRate.ToString()</MudSlider>
+        <MudSlider T="decimal" @bind-value="SearchMaximumRate">@L["MaximumRate"]: @_searchMaximumRate.ToString()</MudSlider>
     </AdvancedSearchContent>
 
     <EditFormContent>

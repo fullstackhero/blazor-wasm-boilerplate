@@ -34,7 +34,7 @@
                 new(brand => brand.Description, L["Description"], "Description"),
             },
             idFunc: brand => brand.Id,
-            searchFunc: async filter => (await BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginatedResult<BrandDto>>(),
+            searchFunc: async filter => (await BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
             createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
             updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
             deleteFunc: async id => await BrandsClient.DeleteAsync(id),
