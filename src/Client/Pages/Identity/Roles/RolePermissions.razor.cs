@@ -22,9 +22,9 @@ public partial class RolePermissions
     public string? Description { get; set; }
     [Inject]
     protected IRolesClient RolesClient { get; set; } = default!;
-    public List<PermissionDto> RolePermissionsList { get; set; } = new();
+    public List<PermissionUpdateDto> RolePermissionsList { get; set; } = new();
 
-    private PermissionDto _permission = new();
+    private PermissionUpdateDto _permission = new();
     private string _searchString = string.Empty;
     private bool _dense = false;
     private bool _striped = true;
@@ -40,7 +40,7 @@ public partial class RolePermissions
         _canEditRoleClaims = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.RoleClaims.Edit)).Succeeded;
         _canSearchRoleClaims = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.RoleClaims.View)).Succeeded;
 
-        var rolePermissions = new List<PermissionDto>();
+        var rolePermissions = new List<PermissionUpdateDto>();
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => RolesClient.GetByIdWithPermissionsAsync(Id), Snackbar)
@@ -49,12 +49,12 @@ public partial class RolePermissions
             Title = role.Name;
             Description = string.Format(_localizer["Manage {0}'s Permissions"], role.Name);
 
-            rolePermissions = role.Permissions?.ToList();
+            rolePermissions = role.Permissions?.Adapt<List<PermissionUpdateDto>>();
         }
 
         var allPermissions = DefaultPermissions.Admin;
         allPermissions.AddRange(DefaultPermissions.Root);
-        var result = allPermissions.Select(x => new PermissionDto()
+        var result = allPermissions.Select(x => new PermissionUpdateDto()
         {
             Permission = x
         }).ToList();
@@ -93,5 +93,10 @@ public partial class RolePermissions
         }
 
         return false;
+    }
+
+    public class PermissionUpdateDto : PermissionDto
+    {
+        public bool Enabled { get; set; }
     }
 }

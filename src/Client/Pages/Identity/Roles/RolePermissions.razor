@@ -10,7 +10,7 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="RolePermissionsList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<PermissionDto, bool>(Search)" @bind-permission="_permission">
+    <MudTable Hover="true" Elevation="25" Items="RolePermissionsList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<PermissionUpdateDto, bool>(Search)" @bind-permission="_permission">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 @if (_canEditRoleClaims)
@@ -25,9 +25,9 @@ else
             }
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<PermissionDto, object?>(x => x.Permission)">@_localizer["Permission Name"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<PermissionDto, object?>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<PermissionDto, object>(x => x.Enabled)">@_localizer["Status"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PermissionUpdateDto, object?>(x => x.Permission)">@_localizer["Permission Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PermissionUpdateDto, object?>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PermissionUpdateDto, object>(x => x.Enabled)">@_localizer["Status"]</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="@_localizer["Permission Name"]">
