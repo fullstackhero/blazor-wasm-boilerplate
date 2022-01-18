@@ -16,7 +16,7 @@
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.1" />
-        <PackageReference Include="MudBlazor" Version="6.0.4" />
+        <PackageReference Include="MudBlazor" Version="6.0.5" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="NSwag.MSBuild" Version="13.15.5">
           <PrivateAssets>all</PrivateAssets>
