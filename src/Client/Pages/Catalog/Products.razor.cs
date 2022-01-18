@@ -67,7 +67,6 @@ public partial class Products
         var filter = new SearchBrandsRequest
         {
             PageSize = 10,
-            OrderBy = new[] { "id" },
             AdvancedSearch = new() { Fields = new[] { "name" }, Keyword = value }
         };
 
