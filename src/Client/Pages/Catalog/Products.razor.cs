@@ -16,9 +16,6 @@ public partial class Products
 
     protected EntityServerTableContext<ProductDto, Guid, UpdateProductRequest> Context { get; set; } = default!;
 
-    // Fields for advanced search/filter
-    protected bool CheckBox { get; set; } = true;
-
     // Fields for EditForm
     private List<BrandDto> _brands = new();
 
@@ -50,6 +47,16 @@ public partial class Products
     {
         var productFilter = filter.Adapt<SearchProductsRequest>();
 
+        if (!AllColumnsChecked)
+        {
+            productFilter.AdvancedSearch = new()
+            {
+                Fields = Context.Fields.Where(f => f.CheckedForSearch).Select(f => f.SortLabel).ToList(),
+                Keyword = filter.Keyword
+            };
+            productFilter.Keyword = null;
+        }
+
         // TODO: add advanced search and filter
         // filter.BrandId =
         // filter.MaximumRate =
@@ -59,6 +66,13 @@ public partial class Products
 
         return result.Adapt<PaginatedResult<ProductDto>>();
     }
+
+    // Advanced Search
+
+    private bool AllColumnsChecked => Context.Fields.All(f => f.CheckedForSearch);
+
+    private void AllColumnsCheckChanged(bool checkAll) =>
+        Context.Fields.ForEach(field => field.CheckedForSearch = checkAll);
 
     // Functions for EditForm
 

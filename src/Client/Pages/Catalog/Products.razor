@@ -9,9 +9,11 @@
 
     <AdvancedSearchContent>
         <div style="margin-top:10px!important">
-            <MudCheckBox @bind-Checked="@CheckBox" Label="All Columns"></MudCheckBox>
-            <MudCheckBox @bind-Checked="@CheckBox" Label="Column1"></MudCheckBox>
-            <MudCheckBox @bind-Checked="@CheckBox" Label="Column2"></MudCheckBox>
+            <MudCheckBox Label="All Columns" T="bool" Checked="AllColumnsChecked" CheckedChanged="AllColumnsCheckChanged"></MudCheckBox>
+            @foreach (var field in Context.Fields)
+            {
+                <MudCheckBox @bind-Checked="@field.CheckedForSearch" Label="@(field.DisplayName)"></MudCheckBox>
+            }
         </div>
     </AdvancedSearchContent>
 
