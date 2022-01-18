@@ -43,18 +43,13 @@ public partial class RolePermissions
         var rolePermissions = new List<PermissionDto>();
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => RolesClient.GetByIdAsync(Id), Snackbar)
+                () => RolesClient.GetByIdWithPermissionsAsync(Id), Snackbar)
             is RoleDto role)
         {
             Title = role.Name;
             Description = string.Format(_localizer["Manage {0}'s Permissions"], role.Name);
 
-            if (await ApiHelper.ExecuteCallGuardedAsync(
-                    () => RolesClient.GetPermissionsAsync(role.Id), Snackbar)
-                is ICollection<PermissionDto> response)
-            {
-                rolePermissions = response.ToList();
-            }
+            rolePermissions = role.Permissions?.ToList();
         }
 
         var allPermissions = DefaultPermissions.Admin;
@@ -82,7 +77,7 @@ public partial class RolePermissions
         if (await ApiHelper.ExecuteCallGuardedAsync(
             () => RolesClient.UpdatePermissionsAsync(Id, request),
             Snackbar,
-            new CustomValidation(),
+            null,
             _localizer["Success"]) is not null)
         {
             Navigation.NavigateTo("/roles");

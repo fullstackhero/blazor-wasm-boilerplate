@@ -1,7 +1,6 @@
 ﻿@page "/role/{Id}/permissions"
 @attribute [Authorize(Policy = FSHPermissions.Roles.View)]
-@inject Microsoft.Extensions.Localization.IStringLocalizer<RolePermissions> _localizer
-@using Microsoft.AspNetCore.Components
+@inject IStringLocalizer<RolePermissions> _localizer
 
 <FshTitle Title="@Title" Description="@Description" />
 

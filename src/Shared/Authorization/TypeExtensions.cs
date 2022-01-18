@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FSH.BlazorWebAssembly.Shared.Extensions;
+namespace FSH.BlazorWebAssembly.Shared.Authorization;
 public static class TypeExtensions
 {
     public static List<string> GetNestedClassesStaticStringValues(this Type type)
