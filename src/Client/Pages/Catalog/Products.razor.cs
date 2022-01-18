@@ -38,7 +38,6 @@ public partial class Products
             createFunc: async prod => await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
             updateFunc: async (id, prod) => await ProductsClient.UpdateAsync(id, prod),
             deleteFunc: async id => await ProductsClient.DeleteAsync(id),
-            editFormInitializedFunc: () => LoadBrandsAsync(),
             entityName: L["Product"],
             entityNamePlural: L["Products"],
             searchPermission: FSHPermissions.Products.Search,
@@ -65,24 +64,11 @@ public partial class Products
 
     private async Task<IEnumerable<Guid>> SearchBrands(string value)
     {
-        if (string.IsNullOrEmpty(value))
-            return _brands.Select(x => x.Id);
-
-        await LoadBrandsAsync(value);
-
-        return _brands
-            .Where(x => x.Name?.Contains(value, StringComparison.InvariantCultureIgnoreCase) ?? false)
-            .Select(x => x.Id);
-    }
-
-    private async Task LoadBrandsAsync(string? searchKeyword = default)
-    {
-        string[] orderBy = { "id" };
-        var filter = new SearchBrandsRequest { PageNumber = 0, PageSize = 10, OrderBy = orderBy };
-        if (!string.IsNullOrEmpty(searchKeyword))
+        var filter = new SearchBrandsRequest
         {
-            filter.Keyword = searchKeyword;
-        }
+            PageSize = 10,
+            AdvancedSearch = new() { Fields = new[] { "name" }, Keyword = value }
+        };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => BrandsClient.SearchAsync(filter), Snackbar)
@@ -90,5 +76,10 @@ public partial class Products
         {
             _brands = response.Data.ToList();
         }
+
+        return _brands.Select(x => x.Id);
     }
+
+    private string GetBrandName(Guid id) =>
+        _brands.FirstOrDefault(b => b.Id == id)?.Name ?? string.Empty;
 }
