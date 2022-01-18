@@ -68,7 +68,7 @@ public partial class Products
         {
             PageSize = 10,
             OrderBy = new[] { "id" },
-            Keyword = value
+            AdvancedSearch = new Search { Fields = new[] { "name" }, Keyword = value }
         };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
