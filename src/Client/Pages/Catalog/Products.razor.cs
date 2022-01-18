@@ -68,7 +68,7 @@ public partial class Products
         {
             PageSize = 10,
             OrderBy = new[] { "id" },
-            AdvancedSearch = new Search { Fields = new[] { "name" }, Keyword = value }
+            AdvancedSearch = new() { Fields = new[] { "name" }, Keyword = value }
         };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
@@ -81,6 +81,6 @@ public partial class Products
         return _brands.Select(x => x.Id);
     }
 
-    private string GetBrandString(Guid id) =>
+    private string GetBrandName(Guid id) =>
         _brands.FirstOrDefault(b => b.Id == id)?.Name ?? string.Empty;
 }
