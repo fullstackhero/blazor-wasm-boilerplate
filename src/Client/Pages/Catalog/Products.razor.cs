@@ -18,8 +18,7 @@ public partial class Products
 
     private EntityTable<ProductDto, Guid, UpdateProductRequest> _table = default!;
 
-    protected override void OnInitialized()
-    {
+    protected override void OnInitialized() =>
         Context = new(
             fields: new()
             {
@@ -41,9 +40,9 @@ public partial class Products
             createPermission: FSHPermissions.Products.Register,
             updatePermission: FSHPermissions.Products.Update,
             deletePermission: FSHPermissions.Products.Remove);
-    }
 
     // Advanced Search
+
     private Guid _searchBrandId;
     private Guid SearchBrandId
     {
@@ -81,13 +80,9 @@ public partial class Products
     {
         var productFilter = filter.Adapt<SearchProductsRequest>();
 
-        if (_searchBrandId != default)
-        {
-            productFilter.BrandId = _searchBrandId;
-        }
-
-        productFilter.MinimumRate = _searchMinimumRate;
-        productFilter.MaximumRate = _searchMaximumRate;
+        productFilter.BrandId = SearchBrandId == default ? null : SearchBrandId;
+        productFilter.MinimumRate = SearchMinimumRate;
+        productFilter.MaximumRate = SearchMaximumRate;
 
         var result = await ProductsClient.SearchAsync(productFilter);
 
