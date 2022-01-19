@@ -4270,11 +4270,11 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         System.Threading.Tasks.Task<RoleDto> GetByIdWithPermissionsAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, System.Collections.Generic.IEnumerable<UpdatePermissionsRequest> request);
+        System.Threading.Tasks.Task<string> UpdatePermissionsAsync(UpdatePermissionsRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, System.Collections.Generic.IEnumerable<UpdatePermissionsRequest> request, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<string> UpdatePermissionsAsync(UpdatePermissionsRequest request, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> RegisterRoleAsync(RoleRequest request);
@@ -4660,21 +4660,20 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, System.Collections.Generic.IEnumerable<UpdatePermissionsRequest> request)
+        public virtual System.Threading.Tasks.Task<string> UpdatePermissionsAsync(UpdatePermissionsRequest request)
         {
-            return UpdatePermissionsAsync(id, request, System.Threading.CancellationToken.None);
+            return UpdatePermissionsAsync(request, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, System.Collections.Generic.IEnumerable<UpdatePermissionsRequest> request, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<string> UpdatePermissionsAsync(UpdatePermissionsRequest request, System.Threading.CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new System.ArgumentNullException("request");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/roles/{id}/permissions");
-            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/roles/permissions");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -6705,8 +6704,11 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UpdatePermissionsRequest
     {
-        [Newtonsoft.Json.JsonProperty("permission", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string? Permission { get; set; } = default!;
+        [Newtonsoft.Json.JsonProperty("permissions", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Permissions { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("roleId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RoleId { get; set; } = default!;
 
     }
 

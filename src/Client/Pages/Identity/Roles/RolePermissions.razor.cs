@@ -71,10 +71,14 @@ public partial class RolePermissions
 
     private async Task SaveAsync()
     {
-        var request = RolePermissionsList.Where(x => x.Enabled).Adapt<List<UpdatePermissionsRequest>>();
+        var request = new UpdatePermissionsRequest()
+        {
+            Permissions = RolePermissionsList.Where(x => x.Enabled).Select(x => x.Permission).ToList(),
+            RoleId = Id
+        };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => RolesClient.UpdatePermissionsAsync(Id, request),
+            () => RolesClient.UpdatePermissionsAsync(request),
             Snackbar,
             null,
             _localizer["Success"]) is not null)
