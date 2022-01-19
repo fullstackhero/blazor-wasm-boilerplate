@@ -10,7 +10,7 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="RolePermissionsList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<PermissionUpdateDto, bool>(Search)" @bind-permission="_permission">
+    <MudTable Hover="true" Elevation="25" Items="RolePermissionsList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<PermissionUpdateDto, bool>(Search)">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 @if (_canEditRoleClaims)

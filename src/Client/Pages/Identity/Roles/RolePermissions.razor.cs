@@ -24,7 +24,6 @@ public partial class RolePermissions
     protected IRolesClient RolesClient { get; set; } = default!;
     public List<PermissionUpdateDto> RolePermissionsList { get; set; } = new();
 
-    private PermissionUpdateDto _permission = new();
     private string _searchString = string.Empty;
     private bool _dense = false;
     private bool _striped = true;
