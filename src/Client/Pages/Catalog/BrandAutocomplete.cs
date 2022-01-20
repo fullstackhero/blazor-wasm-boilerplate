@@ -35,6 +35,8 @@ public class BrandAutocomplete : MudAutocomplete<Guid>
             SearchFunc = SearchBrands;
         if (!dict.ContainsKey(nameof(ToStringFunc)))
             ToStringFunc = GetBrandName;
+        if (!dict.ContainsKey(nameof(Clearable)))
+            Clearable = true;
         return base.SetParametersAsync(parameters);
     }
 
