@@ -1,4 +1,6 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+
+namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
 /// <summary>
 /// Initialization Context for the EntityTable Component.
@@ -11,12 +13,14 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
     /// A function that loads the specified page from the api with the specified search criteria
     /// and returns a PaginatedResult of TEntity.
     /// </summary>
-    public Func<PaginationFilter, Task<PaginatedResult<TEntity>>> SearchFunc { get; }
+    public Func<PaginationFilter, Task<PaginationResponse<TEntity>>> SearchFunc { get; }
+    public bool EnableAdvancedSearch { get; }
 
     public EntityServerTableContext(
         List<EntityField<TEntity>> fields,
-        Func<PaginationFilter, Task<PaginatedResult<TEntity>>> searchFunc,
+        Func<PaginationFilter, Task<PaginationResponse<TEntity>>> searchFunc,
         string searchPermission,
+        bool enableAdvancedSearch = false,
         Func<TEntity, TId>? idFunc = null,
         Func<Task<TRequest>>? getDefaultsFunc = null,
         Func<TRequest, Task>? createFunc = null,
@@ -49,6 +53,9 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
             editFormInitializedFunc,
             hasExtraActionsFunc,
             canUpdateEntityFunc,
-            canDeleteEntityFunc) =>
+            canDeleteEntityFunc)
+    {
         SearchFunc = searchFunc;
+        EnableAdvancedSearch = enableAdvancedSearch;
+    }
 }

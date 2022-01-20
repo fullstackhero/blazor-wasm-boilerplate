@@ -1,3 +1,4 @@
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
 using Mapster;
@@ -54,7 +55,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
     private bool _advancedSearchExpanded;
 
-    private MudTable<TEntity>? _table;
+    private MudTable<TEntity> _table = default!;
     private IEnumerable<TEntity>? _entityList;
     private int _totalItems;
 
@@ -66,7 +67,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canUpdate = await CanDoPermission(Context.UpdatePermission, state);
         _canDelete = await CanDoPermission(Context.DeletePermission, state);
 
-        await LoadDataAsync();
+        await LocalLoadDataAsync();
     }
 
     private async Task<bool> CanDoPermission(string? permission, AuthenticationState state) =>
@@ -81,18 +82,17 @@ public partial class EntityTable<TEntity, TId, TRequest>
     // Client side paging/filtering
     private bool LocalSearch(TEntity entity)
     {
-        if (Context is not EntityClientTableContext<TEntity, TId, TRequest> clientContext
-            || clientContext.SearchFunc is null)
+        if (Context.ClientContext?.SearchFunc is null)
         {
             return string.IsNullOrWhiteSpace(SearchString);
         }
 
-        return clientContext.SearchFunc(SearchString, entity);
+        return Context.ClientContext.SearchFunc(SearchString, entity);
     }
 
-    private async Task LoadDataAsync()
+    private async Task LocalLoadDataAsync()
     {
-        if (Loading || Context is not EntityClientTableContext<TEntity, TId, TRequest> clientContext)
+        if (Loading || Context.ClientContext is null)
         {
             return;
         }
@@ -100,7 +100,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         Loading = true;
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => clientContext.LoadDataFunc(), Snackbar)
+                () => Context.ClientContext.LoadDataFunc(), Snackbar)
             is List<TEntity> result)
         {
             _entityList = result;
@@ -109,42 +109,49 @@ public partial class EntityTable<TEntity, TId, TRequest>
         Loading = false;
     }
 
-    // Server Side paging/filtering
-    private async Task OnSearch(string? text = null)
+    private async Task OnSearchStringChanged(string? text = null)
     {
         await SearchStringChanged.InvokeAsync(SearchString);
 
-        if (Context is EntityServerTableContext<TEntity, TId, TRequest>)
+        await ServerLoadDataAsync();
+    }
+
+    // Server Side paging/filtering
+    public async Task ServerLoadDataAsync()
+    {
+        if (Context.IsServerContext)
         {
-            _table?.ReloadServerData();
+            await _table.ReloadServerData();
         }
     }
 
     private Func<TableState, Task<TableData<TEntity>>>? ServerReloadFunc =>
-        Context is EntityServerTableContext<TEntity, TId, TRequest>
-            ? ServerReload : null;
+        Context.IsServerContext ? ServerReload : null;
 
     private async Task<TableData<TEntity>> ServerReload(TableState state)
     {
-        if (!string.IsNullOrWhiteSpace(SearchString))
+        if (!Loading && Context.ServerContext is not null)
         {
-            state.Page = 0;
-        }
+            Loading = true;
 
-        await LoadDataAsync(state);
+            var filter = GetPaginationFilter(state);
+
+            if (await ApiHelper.ExecuteCallGuardedAsync(
+                    () => Context.ServerContext.SearchFunc(filter), Snackbar)
+                is PaginationResponse<TEntity> result)
+            {
+                _totalItems = result.TotalCount;
+                _entityList = result.Data;
+            }
+
+            Loading = false;
+        }
 
         return new TableData<TEntity> { TotalItems = _totalItems, Items = _entityList };
     }
 
-    private async Task LoadDataAsync(TableState state)
+    private PaginationFilter GetPaginationFilter(TableState state)
     {
-        if (Loading || Context is not EntityServerTableContext<TEntity, TId, TRequest> serverContext)
-        {
-            return;
-        }
-
-        Loading = true;
-
         string[]? orderings = null;
         if (!string.IsNullOrEmpty(state.SortLabel))
         {
@@ -161,15 +168,17 @@ public partial class EntityTable<TEntity, TId, TRequest>
             OrderBy = orderings ?? Array.Empty<string>()
         };
 
-        if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => serverContext.SearchFunc(filter), Snackbar)
-            is PaginatedResult<TEntity> result)
+        if (!Context.AllColumnsChecked)
         {
-            _totalItems = result.TotalCount;
-            _entityList = result.Data;
+            filter.AdvancedSearch = new()
+            {
+                Fields = Context.SearchFields,
+                Keyword = filter.Keyword
+            };
+            filter.Keyword = null;
         }
 
-        Loading = false;
+        return filter;
     }
 
     private async Task InvokeModal(TEntity? entity = default)
@@ -264,14 +273,14 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
     private Task ResetAsync()
     {
-        if (Context is EntityClientTableContext<TEntity, TId, TRequest>)
+        if (Context.IsClientContext)
         {
-            return LoadDataAsync();
+            return LocalLoadDataAsync();
         }
         else
         {
             SearchString = string.Empty;
-            return OnSearch();
+            return ServerLoadDataAsync();
         }
     }
 }
