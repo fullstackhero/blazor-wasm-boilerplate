@@ -11,7 +11,7 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="UserRolesList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<UserRoleDto, bool>(Search)" @bind-userRole="_userRole">
+    <MudTable Hover="true" Elevation="25" Items="UserRolesList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" Filter="new Func<UserRoleDto, bool>(Search)">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 @if (_canEditUsers)
