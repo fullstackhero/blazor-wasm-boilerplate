@@ -1,10 +1,10 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Mapster;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 
@@ -53,14 +53,14 @@ public partial class RolePermissions
 
         var allPermissions = DefaultPermissions.Admin;
         allPermissions.AddRange(DefaultPermissions.Root);
-        var result = allPermissions.Select(x => new PermissionUpdateDto()
+        var result = allPermissions.ConvertAll(x => new PermissionUpdateDto()
         {
             Permission = x
-        }).ToList();
+        });
 
         foreach (var permission in result)
         {
-            if (rolePermissions.Select(z => z.Permission).Contains(permission.Permission))
+            if (rolePermissions?.Select(z => z.Permission).Contains(permission.Permission) == true)
                 permission.Enabled = true;
         }
 

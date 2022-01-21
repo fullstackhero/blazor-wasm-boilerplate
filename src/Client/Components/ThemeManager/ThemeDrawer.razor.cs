@@ -57,4 +57,40 @@ public partial class ThemeDrawer
             await ThemePreferenceChanged.InvokeAsync(ThemePreference);
         }
     }
+
+    private async Task ToggleEntityTableDense(bool isDense)
+    {
+        if (ThemePreference is not null)
+        {
+            ThemePreference.EntityTablePreference.IsDense = isDense;
+            await ThemePreferenceChanged.InvokeAsync(ThemePreference);
+        }
+    }
+
+    private async Task ToggleEntityTableStriped(bool isStriped)
+    {
+        if (ThemePreference is not null)
+        {
+            ThemePreference.EntityTablePreference.IsStriped = isStriped;
+            await ThemePreferenceChanged.InvokeAsync(ThemePreference);
+        }
+    }
+
+    private async Task ToggleEntityTableBorder(bool hasBorder)
+    {
+        if (ThemePreference is not null)
+        {
+            ThemePreference.EntityTablePreference.HasBorder = hasBorder;
+            await ThemePreferenceChanged.InvokeAsync(ThemePreference);
+        }
+    }
+
+    private async Task ToggleEntityTableHoverable(bool isHoverable)
+    {
+        if (ThemePreference is not null)
+        {
+            ThemePreference.EntityTablePreference.IsHoverable = isHoverable;
+            await ThemePreferenceChanged.InvokeAsync(ThemePreference);
+        }
+    }
 }
