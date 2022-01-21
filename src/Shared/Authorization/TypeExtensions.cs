@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace FSH.BlazorWebAssembly.Shared.Authorization;
+
 public static class TypeExtensions
 {
     public static List<string> GetNestedClassesStaticStringValues(this Type type)
