@@ -10,24 +10,24 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 
 public partial class RolePermissions
 {
+    [Parameter]
+    public string Id { get; set; } = default!; // from route
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
-    [Parameter]
-    public string? Id { get; set; }
-    [Parameter]
-    public string? Title { get; set; }
-    [Parameter]
-    public string? Description { get; set; }
     [Inject]
     protected IRolesClient RolesClient { get; set; } = default!;
-    public List<PermissionUpdateDto> RolePermissionsList { get; set; } = new();
+
+    protected List<PermissionUpdateDto> RolePermissionsList { get; set; } = new();
+
+    public string _title = string.Empty;
+    public string _description = string.Empty;
 
     private string _searchString = string.Empty;
-    private bool _dense = false;
+    private bool _dense;
     private bool _striped = true;
-    private bool _bordered = false;
+    private bool _bordered;
 
     private bool _canEditRoleClaims;
     private bool _canSearchRoleClaims;
@@ -39,32 +39,20 @@ public partial class RolePermissions
         _canEditRoleClaims = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.RoleClaims.Edit)).Succeeded;
         _canSearchRoleClaims = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.RoleClaims.View)).Succeeded;
 
-        var rolePermissions = new List<PermissionUpdateDto>();
-
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => RolesClient.GetByIdWithPermissionsAsync(Id), Snackbar)
             is RoleDto role)
         {
-            Title = role.Name;
-            Description = string.Format(_localizer["Manage {0}'s Permissions"], role.Name);
+            _title = string.Format(_localizer["{0} Permissions"], role.Name);
+            _description = string.Format(_localizer["Manage {0} Role Permissions"], role.Name);
 
-            rolePermissions = role.Permissions?.Adapt<List<PermissionUpdateDto>>();
+            RolePermissionsList = DefaultPermissions.Admin
+                .Union(DefaultPermissions.Root)
+                .Select(permission => new PermissionUpdateDto(
+                    permission,
+                    role.Permissions?.Any(p => p.Permission == permission) is true))
+                .ToList();
         }
-
-        var allPermissions = DefaultPermissions.Admin;
-        allPermissions.AddRange(DefaultPermissions.Root);
-        var result = allPermissions.ConvertAll(x => new PermissionUpdateDto()
-        {
-            Permission = x
-        });
-
-        foreach (var permission in result)
-        {
-            if (rolePermissions?.Select(z => z.Permission).Contains(permission.Permission) == true)
-                permission.Enabled = true;
-        }
-
-        RolePermissionsList = result;
 
         _loaded = true;
     }
@@ -73,8 +61,8 @@ public partial class RolePermissions
     {
         var request = new UpdatePermissionsRequest()
         {
+            RoleId = Id,
             Permissions = RolePermissionsList.Where(x => x.Enabled).Select(x => x.Permission).ToList(),
-            RoleId = Id
         };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
@@ -87,19 +75,15 @@ public partial class RolePermissions
         }
     }
 
-    private bool Search(PermissionDto permission)
-    {
-        if (string.IsNullOrWhiteSpace(_searchString)) return true;
-        if (permission.Permission?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-        {
-            return true;
-        }
-
-        return false;
-    }
+    private bool Search(PermissionDto permission) =>
+        string.IsNullOrWhiteSpace(_searchString)
+            || permission.Permission?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) is true;
 
     public class PermissionUpdateDto : PermissionDto
     {
         public bool Enabled { get; set; }
+
+        public PermissionUpdateDto(string permission, bool enabled) =>
+            (Permission, Enabled) = (permission, enabled);
     }
 }

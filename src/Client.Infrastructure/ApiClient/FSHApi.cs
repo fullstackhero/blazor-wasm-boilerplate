@@ -6862,8 +6862,8 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class PermissionDto
     {
-        [Newtonsoft.Json.JsonProperty("permission", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string? Permission { get; set; } = default!;
+        [Newtonsoft.Json.JsonProperty("permission", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Permission { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? Description { get; set; } = default!;
@@ -6873,11 +6873,13 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UpdatePermissionsRequest
     {
-        [Newtonsoft.Json.JsonProperty("permissions", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> Permissions { get; set; } = default!;
-
-        [Newtonsoft.Json.JsonProperty("roleId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("roleId", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
         public string RoleId { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("permissions", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Permissions { get; set; } = new System.Collections.ObjectModel.Collection<string>();
 
     }
 

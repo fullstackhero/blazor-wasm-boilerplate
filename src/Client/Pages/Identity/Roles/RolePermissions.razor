@@ -1,8 +1,8 @@
-﻿@page "/role/{Id}/permissions"
+﻿@page "/roles/{Id}/permissions"
 @attribute [Authorize(Policy = FSHPermissions.Roles.View)]
 @inject IStringLocalizer<RolePermissions> _localizer
 
-<FshTitle Title="@Title" Description="@Description" />
+<FshTitle Title="@_title" Description="@_description" />
 
 @if (!_loaded)
 {
