@@ -1,4 +1,7 @@
+using AKSoftware.Blazor.Utilities;
+using FSH.BlazorWebAssembly.Client.Components.ThemeManager;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
 using Mapster;
@@ -19,9 +22,11 @@ public partial class EntityTable<TEntity, TId, TRequest>
     [Parameter]
     public bool Dense { get; set; }
     [Parameter]
-    public bool Striped { get; set; } = true;
+    public bool Striped { get; set; }
     [Parameter]
     public bool Bordered { get; set; }
+    [Parameter]
+    public bool Hoverable { get; set; }
     [Parameter]
     public bool Loading { get; set; }
 
@@ -68,6 +73,24 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canDelete = await CanDoPermission(Context.DeletePermission, state);
 
         await LocalLoadDataAsync();
+        await SubscribeToTableCustomizationPanel();
+    }
+
+    private async Task SubscribeToTableCustomizationPanel()
+    {
+        if (await ClientPreferences.GetPreference() is not ClientPreference currentPreference) return;
+        Dense = currentPreference.EntityTablePreference.IsDense;
+        Striped = currentPreference.EntityTablePreference.IsStriped;
+        Bordered = currentPreference.EntityTablePreference.HasBorder;
+        Hoverable = currentPreference.EntityTablePreference.IsHoverable;
+        MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(currentPreference.EntityTablePreference), (_, value) =>
+        {
+            Dense = value.IsDense;
+            Striped = value.IsStriped;
+            Bordered = value.HasBorder;
+            Hoverable = value.IsHoverable;
+            StateHasChanged();
+        });
     }
 
     private async Task<bool> CanDoPermission(string? permission, AuthenticationState state) =>

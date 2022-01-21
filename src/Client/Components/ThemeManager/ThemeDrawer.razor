@@ -18,6 +18,9 @@
                 CurrentColor="Color.Secondary" />
             <RadiusPanel Radius="ThemePreference==null ? 0 : ThemePreference.BorderRadius"
                 OnSliderChanged="UpdateBorderRadius" />
+            <TableCustomizationPanel OnDenseSwitchToggled="ToggleEntityTableDense"
+                OnStripedSwitchToggled="ToggleEntityTableStriped" OnBorderdedSwitchToggled="ToggleEntityTableBorder"
+                OnHoverableSwitchToggled="ToggleEntityTableHoverable" />
         </MudExpansionPanels>
     </div>
 </MudDrawer>
