@@ -1,6 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
@@ -88,29 +87,4 @@ public partial class Products
 
         return result.Adapt<PaginationResponse<ProductDto>>();
     }
-
-    // Brands Autocomplete
-
-    private List<BrandDto> _brands = new();
-
-    private async Task<IEnumerable<Guid>> SearchBrands(string value)
-    {
-        var filter = new SearchBrandsRequest
-        {
-            PageSize = 10,
-            AdvancedSearch = new() { Fields = new[] { "name" }, Keyword = value }
-        };
-
-        if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => BrandsClient.SearchAsync(filter), Snackbar)
-            is PaginationResponseOfBrandDto response)
-        {
-            _brands = response.Data.ToList();
-        }
-
-        return _brands.Select(x => x.Id);
-    }
-
-    private string GetBrandName(Guid id) =>
-        _brands.Find(b => b.Id == id)?.Name ?? string.Empty;
 }

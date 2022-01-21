@@ -8,11 +8,7 @@
 <EntityTable @ref="_table" TEntity="ProductDto" TId="Guid" TRequest="UpdateProductRequest" Context="@Context">
 
     <AdvancedSearchContent>
-        <MudAutocomplete Label="@L["Brand"]"
-            @bind-Value="SearchBrandId" ResetValueOnEmptyText="true"
-            SearchFunc="SearchBrands" Variant="Variant.Filled"
-            ToStringFunc="GetBrandName"
-            Dense="true" Margin="Margin.Dense" />
+        <BrandAutocomplete @bind-Value="SearchBrandId" />
         <MudSlider T="decimal" @bind-value="SearchMinimumRate">@L["MinimumRate"]: @_searchMinimumRate.ToString()</MudSlider>
         <MudSlider T="decimal" @bind-value="SearchMaximumRate">@L["MaximumRate"]: @_searchMaximumRate.ToString()</MudSlider>
     </AdvancedSearchContent>
@@ -25,11 +21,7 @@
             <MudTextField Label="@L["Description"]" For="@(() => context.Description)" @bind-Value="context.Description" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudAutocomplete Label="@L["Brand"]" For="@(() => context.BrandId)"
-                @bind-Value="context.BrandId" ResetValueOnEmptyText="true"
-                SearchFunc="SearchBrands" Variant="Variant.Filled"
-                ToStringFunc="GetBrandName"
-                Dense="true" Margin="Margin.Dense" />
+            <BrandAutocomplete For="@(() => context.BrandId)" @bind-Value="context.BrandId" />
         </MudItem>
         <MudItem xs="12" md="6">
             <MudTextField Label="@L["Rate"]" For="@(() => context.Rate)" @bind-Value="context.Rate" />
