@@ -76,7 +76,7 @@ public partial class RolePermissions
 
     private bool Search(PermissionDto permission) =>
         string.IsNullOrWhiteSpace(_searchString)
-            && permission.Permission?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) is true;
+            || permission.Permission?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) is true;
 
     public class PermissionUpdateDto : PermissionDto
     {
