@@ -30,4 +30,6 @@ public record EntityField<TEntity>(Func<TEntity, object?> ValueFunc, string Disp
     /// For an example on how to do this, see <see cref="Pages.Personal.AuditLogs"/>.
     /// </summary>
     public RenderFragment<TEntity>? Template { get; init; } = Template;
+
+    public bool CheckedForSearch { get; set; } = true;
 }

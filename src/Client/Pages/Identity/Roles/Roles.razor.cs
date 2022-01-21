@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity;
+namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 
 public partial class Roles
 {
@@ -60,6 +60,6 @@ public partial class Roles
     private void ManagePermissions(string? roleId)
     {
         ArgumentNullException.ThrowIfNull(roleId, nameof(roleId));
-        Navigation.NavigateTo($"/identity/role-permissions/{roleId}");
+        Navigation.NavigateTo($"/roles/{roleId}/permissions");
     }
 }

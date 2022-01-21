@@ -157,4 +157,20 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
 
     public IAddEditModal? AddEditModal =>
         _addEditModalRef?.Dialog as IAddEditModal;
+
+    // Shortcuts
+    public EntityClientTableContext<TEntity, TId, TRequest>? ClientContext => this as EntityClientTableContext<TEntity, TId, TRequest>;
+    public EntityServerTableContext<TEntity, TId, TRequest>? ServerContext => this as EntityServerTableContext<TEntity, TId, TRequest>;
+    public bool IsClientContext => ClientContext is not null;
+    public bool IsServerContext => ServerContext is not null;
+
+    // Advanced Search
+    public bool AllColumnsChecked =>
+        Fields.All(f => f.CheckedForSearch);
+    public void AllColumnsCheckChanged(bool checkAll) =>
+        Fields.ForEach(f => f.CheckedForSearch = checkAll);
+    public bool AdvancedSearchEnabled =>
+        ServerContext?.EnableAdvancedSearch is true;
+    public List<string> SearchFields =>
+        Fields.Where(f => f.CheckedForSearch).Select(f => f.SortLabel).ToList();
 }

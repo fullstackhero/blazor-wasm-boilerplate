@@ -13,36 +13,43 @@
 <ErrorBoundary>
     <ChildContent>
 
-        @if (_canSearch && AdvancedSearchContent is not null)
+        @if (_canSearch && (Context.AdvancedSearchEnabled || AdvancedSearchContent is not null))
         {
             <MudExpansionPanel @bind-IsExpanded="_advancedSearchExpanded"
-                Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
-                Class="mud-elevation-25" Text="@L["Advanced Search"]">
-                <MudTextField @bind-Value="SearchString" Immediate="true" Placeholder="@(L["Search for "] + Context.EntityNamePlural)"
-                    Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-                    Style="flex:none!important;margin:0px!important" TextChanged="OnSearch">
+            Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
+            Class="mud-elevation-25" Text="@L["Advanced Search"]">
+                <MudTextField @bind-Value="SearchString" Immediate="true"
+                Placeholder="@(L["Search for "] + Context.EntityNamePlural)" Adornment="Adornment.Start"
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                Style="flex:none!important;margin:0px!important" TextChanged="OnSearchStringChanged">
                 </MudTextField>
-
+                @if (Context.AdvancedSearchEnabled)
+                {
+                    <div style="margin-top:10px!important">
+                        <MudCheckBox Label="All Columns" T="bool" Checked="Context.AllColumnsChecked"
+                    CheckedChanged="Context.AllColumnsCheckChanged"></MudCheckBox>
+                        @foreach (var field in Context.Fields)
+                        {
+                            <MudCheckBox @bind-Checked="@field.CheckedForSearch" Label="@(field.DisplayName)"></MudCheckBox>
+                        }
+                    </div>
+                }
                 @AdvancedSearchContent
 
             </MudExpansionPanel>
         }
 
-        <MudTable @ref="_table"
-            Elevation="25" Hover="true" 
-            ServerData="@ServerReloadFunc"
-            Items="@_entityList" Filter="LocalSearch"
-            Dense="@Dense" Bordered="@Bordered" Striped="@Striped"
-            Loading="@Loading" LoadingProgressColor="@Color.Secondary"
-            ChildRowContent="@ChildRowContent">
+        <MudTable @ref="_table" Elevation="25" ServerData="@ServerReloadFunc" Items="@_entityList" Filter="LocalSearch"
+            Dense="@Dense" Bordered="@Bordered" Striped="@Striped" Hover="@Hoverable" Loading="@Loading"
+            LoadingProgressColor="@Color.Secondary" ChildRowContent="@ChildRowContent">
 
             <ToolBarContent>
                 <div class="justify-center mud-text-align-center">
                     @if (_canCreate)
                     {
                         <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary"
-                            OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
-                            IconColor="Color.Surface">@L["Create"]</MudButton>
+                        OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
+                        IconColor="Color.Surface">@L["Create"]</MudButton>
                     }
                     <MudButton DisableElevation Variant="Variant.Filled" OnClick="ResetAsync"
                         StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary"
@@ -51,8 +58,10 @@
                 <MudSpacer />
                 @if (_canSearch && !_advancedSearchExpanded)
                 {
-                    <MudTextField @bind-Value="SearchString" Immediate="true" FullWidth="false" Placeholder="@(L["Search for "] + Context.EntityNamePlural)"
-                        Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3" TextChanged="OnSearch">
+                    <MudTextField @bind-Value="SearchString" Immediate="true" FullWidth="false"
+                    Placeholder="@(L["Search for "] + Context.EntityNamePlural)" Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"
+                    TextChanged="OnSearchStringChanged">
                     </MudTextField>
                 }
             </ToolBarContent>
@@ -63,7 +72,7 @@
                     foreach (var field in Context.Fields)
                     {
                         <MudTh>
-                            @if (Context is EntityClientTableContext<TEntity, TId, TRequest>)
+                            @if (Context.IsClientContext)
                             {
                                 <MudTableSortLabel SortBy="@field.ValueFunc">@field.DisplayName</MudTableSortLabel>
                             }
@@ -106,8 +115,8 @@
                     else if (HasActions)
                     {
                         <MudMenu Label="@L["Actions"]" Variant="Variant.Filled" DisableElevation="true"
-                            EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left"
-                            OffsetX="true">
+                        EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left"
+                        OffsetX="true">
                             @if (CanUpdateEntity(context))
                             {
                                 <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>
@@ -132,18 +141,6 @@
                     }
                 </MudTd>
             </RowTemplate>
-
-            <FooterContent>
-                <MudSwitch @bind-Checked="@Dense" Color="Color.Secondary" Style="margin-left: 5px;">
-                    @L["Dense"]
-                </MudSwitch>
-                <MudSwitch @bind-Checked="@Striped" Color="Color.Tertiary" Style="margin-left: 5px;">
-                    @L["Striped"]
-                </MudSwitch>
-                <MudSwitch @bind-Checked="@Bordered" Color="Color.Warning" Style="margin-left: 5px;">
-                    @L["Bordered"]
-                </MudSwitch>
-            </FooterContent>
 
             <PagerContent>
                 <TablePager />

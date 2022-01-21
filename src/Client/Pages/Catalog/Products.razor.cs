@@ -1,6 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
@@ -16,14 +15,9 @@ public partial class Products
 
     protected EntityServerTableContext<ProductDto, Guid, UpdateProductRequest> Context { get; set; } = default!;
 
-    // Fields for advanced search/filter
-    protected bool CheckBox { get; set; } = true;
+    private EntityTable<ProductDto, Guid, UpdateProductRequest> _table = default!;
 
-    // Fields for EditForm
-    private List<BrandDto> _brands = new();
-
-    protected override void OnInitialized()
-    {
+    protected override void OnInitialized() =>
         Context = new(
             fields: new()
             {
@@ -33,6 +27,7 @@ public partial class Products
                 new(prod => prod.Description, L["Description"], "Description"),
                 new(prod => prod.Rate, L["Rate"], "Rate")
             },
+            enableAdvancedSearch: true,
             idFunc: prod => prod.Id,
             searchFunc: SearchFunc,
             createFunc: async prod => await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
@@ -44,42 +39,52 @@ public partial class Products
             createPermission: FSHPermissions.Products.Register,
             updatePermission: FSHPermissions.Products.Update,
             deletePermission: FSHPermissions.Products.Remove);
+
+    // Advanced Search
+
+    private Guid _searchBrandId;
+    private Guid SearchBrandId
+    {
+        get => _searchBrandId;
+        set
+        {
+            _searchBrandId = value;
+            _ = _table.ServerLoadDataAsync();
+        }
     }
 
-    private async Task<PaginatedResult<ProductDto>> SearchFunc(Components.EntityTable.PaginationFilter filter)
+    private decimal _searchMinimumRate;
+    private decimal SearchMinimumRate
+    {
+        get => _searchMinimumRate;
+        set
+        {
+            _searchMinimumRate = value;
+            _ = _table.ServerLoadDataAsync();
+        }
+    }
+
+    private decimal _searchMaximumRate = 100;
+    private decimal SearchMaximumRate
+    {
+        get => _searchMaximumRate;
+        set
+        {
+            _searchMaximumRate = value;
+            _ = _table.ServerLoadDataAsync();
+        }
+    }
+
+    private async Task<PaginationResponse<ProductDto>> SearchFunc(PaginationFilter filter)
     {
         var productFilter = filter.Adapt<SearchProductsRequest>();
 
-        // TODO: add advanced search and filter
-        // filter.BrandId =
-        // filter.MaximumRate =
-        // filter.MinimumRate =
+        productFilter.BrandId = SearchBrandId == default ? null : SearchBrandId;
+        productFilter.MinimumRate = SearchMinimumRate;
+        productFilter.MaximumRate = SearchMaximumRate;
 
         var result = await ProductsClient.SearchAsync(productFilter);
 
-        return result.Adapt<PaginatedResult<ProductDto>>();
+        return result.Adapt<PaginationResponse<ProductDto>>();
     }
-
-    // Functions for EditForm
-
-    private async Task<IEnumerable<Guid>> SearchBrands(string value)
-    {
-        var filter = new SearchBrandsRequest
-        {
-            PageSize = 10,
-            AdvancedSearch = new() { Fields = new[] { "name" }, Keyword = value }
-        };
-
-        if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => BrandsClient.SearchAsync(filter), Snackbar)
-            is PaginationResponseOfBrandDto response)
-        {
-            _brands = response.Data.ToList();
-        }
-
-        return _brands.Select(x => x.Id);
-    }
-
-    private string GetBrandName(Guid id) =>
-        _brands.FirstOrDefault(b => b.Id == id)?.Name ?? string.Empty;
 }

@@ -23,7 +23,6 @@ public partial class UserRoles
     protected IUsersClient UsersClient { get; set; } = default!;
     public List<UserRoleDto> UserRolesList { get; set; } = new();
 
-    private UserRoleDto _userRole = new();
     private string _searchString = string.Empty;
     private bool _dense = false;
     private bool _striped = true;
