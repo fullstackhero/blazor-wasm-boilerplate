@@ -1,19 +1,17 @@
 ﻿@inject IStringLocalizer<MainLayout> L
 
 <MudAppBar Elevation="0">
-    <MudTooltip Text="Go Home">
-    <MudIconButton Icon="@Icons.Material.Filled.Home" Color="Color.Inherit" Edge="Edge.Start"
-        Link="/" />
-        </MudTooltip>
-        <MudTooltip Text="Toggle Drawer">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-        OnClick="@((e) => DrawerToggle())" />
-        </MudTooltip>
+    <MudTooltip Text="Toggle Drawer">
+        <MudIconButton Icon="@Icons.Rounded.Notes" Color="Color.Inherit" Edge="Edge.Start"
+            OnClick="@((e) => DrawerToggle())" />
+    </MudTooltip>
     <MudHidden Breakpoint="Breakpoint.Xs">
-        <MudText Typo="Typo.subtitle1" Class="ml-4">Blazor WebAssembly Boilerplate</MudText>
+         <MudButton Variant="Variant.Text" DisableElevation="true"
+            Link="/">
+            @L["fullstackhero"]</MudButton>
     </MudHidden>
     <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-        <MudText Typo="Typo.subtitle2">Blazor WebAssembly Boilerplate</MudText>
+        <MudText Typo="Typo.subtitle2">fullstackhero</MudText>
     </MudHidden>
     <MudSpacer />
     <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
