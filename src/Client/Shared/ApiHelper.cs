@@ -38,6 +38,10 @@ public static class ApiHelper
         {
             snackbar.Add(ex.Result.Exception, Severity.Error);
         }
+        catch (Exception ex)
+        {
+            snackbar.Add(ex.Message, Severity.Error);
+        }
 
         return default;
     }
