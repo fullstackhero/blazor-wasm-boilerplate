@@ -41,3 +41,7 @@
 .mud-card-header .mud-card-header-avatar {
     margin-inline-end: 2px !important;
 }
+
+.mud-nav-link {
+    padding: 12px 16px 12px 15px !important;
+}
