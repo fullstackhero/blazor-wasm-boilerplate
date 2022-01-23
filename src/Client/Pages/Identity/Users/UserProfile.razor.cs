@@ -38,8 +38,7 @@ public partial class UserProfile
     private async Task ToggleUserStatus()
     {
         var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
-        await UsersClient.ToggleUserStatusAsync(request);
-        Snackbar.Add(_localizer["Updated User Status."], Severity.Success);
+        await ApiHelper.ExecuteCallGuardedAsync(() => UsersClient.ToggleUserStatusAsync(request), Snackbar);
         Navigation.NavigateTo("/users");
     }
 

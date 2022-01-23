@@ -81,7 +81,7 @@ public partial class AddEditModal<TRequest> : IAddEditModal
             () => SaveFunc(RequestModel),
             Snackbar,
             _customValidation,
-            L["Operation Completed."]))
+            L["Entity Saved."]))
         {
             MudDialog.Close();
         }

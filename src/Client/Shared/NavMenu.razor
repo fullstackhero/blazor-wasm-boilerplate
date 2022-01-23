@@ -23,13 +23,13 @@
         <MudNavGroup Title="Catalog" Icon="@Icons.Filled.AddBox">
             @if (_canViewProducts)
             {
-                <MudNavLink Href="/catalog/products" Icon="@Icons.Filled.ShoppingBag">
+                        <MudNavLink Href="/catalog/products" style="margin-left:20px" Icon="@Icons.Filled.ShoppingBag">
                     Products
                 </MudNavLink>
             }
             @if (_canViewBrands)
             {
-                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.BrandingWatermark">
+                <MudNavLink Href="/catalog/brands" style="margin-left:20px" Icon="@Icons.Filled.BrandingWatermark">
                     Brands
                 </MudNavLink>
             }
