@@ -10,12 +10,11 @@
 
     <EditFormContent>
         <MudItem xs="12" md="6">
-            <MudTextField T="string" For="@(() => context.Name)"
-                @bind-Value="context.Name" Label="@L["Name"]" />
+            <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudTextField For="@(() => context.Description)"
-                @bind-Value="context.Description" Label="@L["Description"]" />
+            <MudTextField For="@(() => context.Description)" @bind-Value="context.Description"
+                Label="@L["Description"]" />
         </MudItem>
     </EditFormContent>
 
@@ -26,22 +25,23 @@
     protected EntityServerTableContext<BrandDto, Guid, UpdateBrandRequest> Context { get; set; } = default!;
 
     protected override void OnInitialized() =>
-        Context = new(
-            fields: new()
-            {
-                new(brand => brand.Id, L["Id"], "Id"),
-                new(brand => brand.Name, L["Name"], "Name"),
-                new(brand => brand.Description, L["Description"], "Description"),
-            },
-            idFunc: brand => brand.Id,
-            searchFunc: async filter => (await BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
-            createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
-            updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
-            deleteFunc: async id => await BrandsClient.DeleteAsync(id),
-            entityName: L["Brand"],
-            entityNamePlural: L["Brands"],
-            searchPermission: FSHPermissions.Products.Search,
-            createPermission: FSHPermissions.Products.Register,
-            updatePermission: FSHPermissions.Products.Update,
-            deletePermission: FSHPermissions.Products.Remove);
+    Context = new(
+    fields: new()
+    {
+        new(brand => brand.Id, L["Id"], "Id"),
+        new(brand => brand.Name, L["Name"], "Name"),
+        new(brand => brand.Description, L["Description"], "Description"),
+    },
+    idFunc: brand => brand.Id,
+    searchFunc: async filter => (await
+    BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
+    createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
+    updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
+    deleteFunc: async id => await BrandsClient.DeleteAsync(id),
+    entityName: L["Brand"],
+    entityNamePlural: L["Brands"],
+    searchPermission: FSHPermissions.Products.Search,
+    createPermission: FSHPermissions.Products.Register,
+    updatePermission: FSHPermissions.Products.Update,
+    deletePermission: FSHPermissions.Products.Remove);
 }

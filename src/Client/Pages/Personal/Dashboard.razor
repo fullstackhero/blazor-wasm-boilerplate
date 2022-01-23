@@ -56,7 +56,9 @@ else
         </MudItem>
         <MudItem xs="12" sm="12">
             <MudPaper Elevation="25" Class="pa-4" Style="height:500px;">
-                <MudChart ChartType="ChartType.Bar" ChartSeries="@_dataEnterBarChartSeries" XAxisLabels="@_dataEnterBarChartXAxisLabels.Select(a => L[a].Value).ToArray()" Width="100%" Height="400px"></MudChart>
+                <MudChart ChartType="ChartType.Bar" ChartSeries="@_dataEnterBarChartSeries"
+                XAxisLabels="@_dataEnterBarChartXAxisLabels.Select(a => L[a].Value).ToArray()" Width="100%"
+                Height="400px"></MudChart>
             </MudPaper>
         </MudItem>
     </MudGrid>

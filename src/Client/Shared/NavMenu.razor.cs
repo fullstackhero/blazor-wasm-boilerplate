@@ -1,8 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Shared.Authorization;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Shared;
 
