@@ -13,9 +13,8 @@
                 <CustomValidation @ref="_customValidation" />
                 <MudItem xs="12" md="6">
                     <MudTextField T="string" @bind-Value="_passwordModel.NewPassword"
-                        For="@(() => _passwordModel.NewPassword)" Label="@L["Password"]"
-                        Variant="Variant.Outlined" InputType="_newPasswordInput" Adornment="Adornment.End"
-                        AdornmentIcon="@_newPasswordInputIcon"
+                        For="@(() => _passwordModel.NewPassword)" Label="@L["Password"]" Variant="Variant.Outlined"
+                        InputType="_newPasswordInput" Adornment="Adornment.End" AdornmentIcon="@_newPasswordInputIcon"
                         OnAdornmentClick="@(() => TogglePasswordVisibility(true))" />
                 </MudItem>
                 <MudItem xs="12" md="6">
@@ -27,8 +26,8 @@
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField T="string" @bind-Value="_passwordModel.Password"
-                        For="@(() => _passwordModel.Password)" Label="@L["Current Password"]"
-                        Variant="Variant.Outlined" InputType="_currentPasswordInput" Adornment="Adornment.End"
+                        For="@(() => _passwordModel.Password)" Label="@L["Current Password"]" Variant="Variant.Outlined"
+                        InputType="_currentPasswordInput" Adornment="Adornment.End"
                         AdornmentIcon="@_currentPasswordInputIcon"
                         OnAdornmentClick="@(() => TogglePasswordVisibility(false))" />
                 </MudItem>

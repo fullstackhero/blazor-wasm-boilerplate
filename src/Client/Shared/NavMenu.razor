@@ -8,42 +8,59 @@
         Icon="@Icons.Material.Outlined.Stars">Getting Started</MudNavLink>
     <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">Personal</MudText>
     @if (_canViewDashboard)
+
     {
         <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Dashboard">Dashboard
         </MudNavLink>
+
     }
     <MudNavLink Href="/account" Icon="@Icons.Material.Outlined.Person">Account</MudNavLink>
     @if (_canViewAuditLogs)
+
     {
         <MudNavLink Href="/audit-logs" Icon="@Icons.Material.Outlined.SecurityUpdateGood">Logs</MudNavLink>
+
     }
     @if (_canViewProducts || _canViewBrands)
+
     {
         <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">Management</MudText>
         <MudNavGroup Title="Catalog" Icon="@Icons.Filled.AddBox">
             @if (_canViewProducts)
+
             {
-                <MudNavLink Href="/catalog/products" Icon="@Icons.Filled.ShoppingBag">
+                <MudNavLink Href="/catalog/products" style="margin-left:20px" Icon="@Icons.Filled.ShoppingBag">
                     Products
                 </MudNavLink>
+
             }
             @if (_canViewBrands)
+
             {
-                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.BrandingWatermark">
+                <MudNavLink Href="/catalog/brands" style="margin-left:20px" Icon="@Icons.Filled.BrandingWatermark">
                     Brands
                 </MudNavLink>
+
             }
         </MudNavGroup>
+
     }
     @if (CanViewAdministrationGroup)
+
     {
         <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">Administration</MudText>
-        @if(_canViewUsers){
+        @if (_canViewUsers)
+        {
             <MudNavLink Match="NavLinkMatch.Prefix" Href="/users" Icon="@Icons.Material.Outlined.PeopleAlt">Users</MudNavLink>
+
         }
-        @if(_canViewRoles){
+        @if (_canViewRoles)
+        {
             <MudNavLink Href="/roles" Icon="@Icons.Material.Outlined.EmojiPeople">Roles</MudNavLink>
+
         }
-        <MudNavLink Href="/tenants" Icon="@Icons.Material.Outlined.LocalMall" Disabled="!_canViewTenants">Tenants</MudNavLink>
+        <MudNavLink Href="/tenants" Icon="@Icons.Material.Outlined.LocalMall" Disabled="!_canViewTenants">Tenants
+        </MudNavLink>
+
     }
 </MudNavMenu>

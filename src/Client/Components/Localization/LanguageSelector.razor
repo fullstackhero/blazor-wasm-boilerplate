@@ -1,12 +1,13 @@
 ﻿@inject IStringLocalizer<LanguageSelector> L
 
 <MudTooltip Text="@CurrentLanguage">
-    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+    <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true"
+        Dense="true">
         @foreach (var language in LocalizationConstants.SupportedLanguages)
         {
-            if(language.Code == CurrentLanguage)
+            if (language.Code == CurrentLanguage)
             {
-                <MudMenuItem style="background:var(--mud-palette-primary); color:white" >@L[language.DisplayName]</MudMenuItem>
+                <MudMenuItem style="background:var(--mud-palette-primary); color:white">@L[language.DisplayName]</MudMenuItem>
             }
             else
             {
@@ -22,7 +23,7 @@
     protected override async Task OnInitializedAsync()
     {
         var currentPreference = await ClientPreferences.GetPreference() as ClientPreference;
-        if(currentPreference!=null)
+        if (currentPreference != null)
         {
             CurrentLanguage = currentPreference.LanguageCode;
         }

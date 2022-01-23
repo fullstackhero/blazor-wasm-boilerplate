@@ -9,8 +9,10 @@
 
     <AdvancedSearchContent>
         <BrandAutocomplete @bind-Value="SearchBrandId" />
-        <MudSlider T="decimal" @bind-value="SearchMinimumRate">@L["MinimumRate"]: @_searchMinimumRate.ToString()</MudSlider>
-        <MudSlider T="decimal" @bind-value="SearchMaximumRate">@L["MaximumRate"]: @_searchMaximumRate.ToString()</MudSlider>
+        <MudSlider T="decimal" @bind-value="SearchMinimumRate">@L["MinimumRate"]: @_searchMinimumRate.ToString()
+        </MudSlider>
+        <MudSlider T="decimal" @bind-value="SearchMaximumRate">@L["MaximumRate"]: @_searchMaximumRate.ToString()
+        </MudSlider>
     </AdvancedSearchContent>
 
     <EditFormContent>
@@ -18,7 +20,8 @@
             <MudTextField Label="@L["Name"]" For="@(() => context.Name)" @bind-Value="context.Name" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudTextField Label="@L["Description"]" For="@(() => context.Description)" @bind-Value="context.Description" />
+            <MudTextField Label="@L["Description"]" For="@(() => context.Description)"
+                @bind-Value="context.Description" />
         </MudItem>
         <MudItem xs="12" md="6">
             <BrandAutocomplete For="@(() => context.BrandId)" @bind-Value="context.BrandId" />

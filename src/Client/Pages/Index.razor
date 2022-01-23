@@ -7,12 +7,13 @@
     <MudGrid>
         <MudItem xs="12" sm="12" md="12">
             <div class="d-flex justify-center mt-4">
-                 <img src="full-stack-hero-logo.png" Style="height:150px" />
+                 <img src="full-stack-hero-logo.png" Style="height:130px" />
             </div>
         </MudItem>
-        <MudItem xs="12" sm="12" md="12">            
+        <MudItem xs="12" sm="12" md="12">
             <MudText Align="Align.Center" Typo="Typo.h5" Class="smaller">@L["fullstackhero's"]</MudText>
-         <MudText Align="Align.Center" Typo="Typo.h2">@L["Blazor WASM Boilerplate"] v1</MudText>
+         <MudText Align="Align.Center" Typo="Typo.h4">@L["Blazor WASM Boilerplate"]</MudText>
+
         </MudItem>
         <MudItem xs="12" sm="12" md="12">
             <MudText Align="Align.Center">
@@ -25,10 +26,12 @@
         <MudItem xs="12" sm="12" md="12">
            <div class="justify-center mud-text-align-center">
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" Link="https://fullstackhero.net/blazor-wasm-boilerplate/general/getting-started" Target="_blank" StartIcon="@Icons.Material.Filled.Rocket">@L["Get Started"]</MudButton>
-                <MudButton Variant="Variant.Outlined" Style="margin-left:5px" Color="Color.Secondary" Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" StartIcon="@Icons.Custom.Brands.GitHub">@L["Star on GitHub"]</MudButton>
-                </div>
+                <MudButton Variant="Variant.Outlined" Style="margin-left:5px" Color="Color.Default" Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" StartIcon="@Icons.Custom.Brands.GitHub">@L["Star on GitHub"]</MudButton>
+            </div>
         </MudItem>
-
+        <MudItem xs="12" sm="12" md="12">
+             <MudText Align="Align.Center">@L["Version 1.0"]</MudText>
+        </MudItem>
         <MudItem xs="12" sm="12" md="12">
             <MudExpansionPanels>
                 <MudExpansionPanel Class="mud-elevation-25" Text="@L["Getting Started"]" MaxHeight="150">
@@ -71,7 +74,7 @@
             </MudList>
                 </MudExpansionPanel>
             </MudExpansionPanels>
-        </MudItem>        
+        </MudItem>
         <MudItem  xs="12" sm="12" md="12">
             <MudAlert Style="margin-top:10px;justify-content:center" Severity="Severity.Info"><MudLink Href="https://github.com/fullstackhero/blazor-wasm-boilerplate">@L["Liked this Boilerplate? Star us on Github!"]</MudLink></MudAlert>
         </MudItem>
