@@ -73,24 +73,28 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canDelete = await CanDoPermission(Context.DeletePermission, state);
 
         await LocalLoadDataAsync();
-        await SubscribeToTableCustomizationPanel();
+        await SetAndSubscribeToTablePreference();
     }
 
-    private async Task SubscribeToTableCustomizationPanel()
+    private async Task SetAndSubscribeToTablePreference()
     {
-        if (await ClientPreferences.GetPreference() is not ClientPreference currentPreference) return;
-        Dense = currentPreference.EntityTablePreference.IsDense;
-        Striped = currentPreference.EntityTablePreference.IsStriped;
-        Bordered = currentPreference.EntityTablePreference.HasBorder;
-        Hoverable = currentPreference.EntityTablePreference.IsHoverable;
-        MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(currentPreference.EntityTablePreference), (_, value) =>
+        if (await ClientPreferences.GetPreference() is ClientPreference clientPreference)
         {
-            Dense = value.IsDense;
-            Striped = value.IsStriped;
-            Bordered = value.HasBorder;
-            Hoverable = value.IsHoverable;
-            StateHasChanged();
-        });
+            SetTablePreference(clientPreference.EntityTablePreference);
+            MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(ClientPreference.EntityTablePreference), (_, value) =>
+                {
+                    SetTablePreference(value);
+                    StateHasChanged();
+                });
+        }
+    }
+
+    private void SetTablePreference(EntityTablePreference tablePreference)
+    {
+        Dense = tablePreference.IsDense;
+        Striped = tablePreference.IsStriped;
+        Bordered = tablePreference.HasBorder;
+        Hoverable = tablePreference.IsHoverable;
     }
 
     private async Task<bool> CanDoPermission(string? permission, AuthenticationState state) =>
@@ -208,31 +212,27 @@ public partial class EntityTable<TEntity, TId, TRequest>
     {
         bool isCreate = entity is null;
 
-        string title = isCreate
-            ? L["Create "] + Context.EntityName
-            : L["Update "] + Context.EntityName;
-
         var parameters = new DialogParameters()
         {
             { nameof(AddEditModal<TRequest>.EditFormContent), EditFormContent },
             { nameof(AddEditModal<TRequest>.OnInitializedFunc), Context.EditFormInitializedFunc },
-            { nameof(AddEditModal<TRequest>.IsCreate), isCreate },
-            { nameof(AddEditModal<TRequest>.Title), title }
+            { nameof(AddEditModal<TRequest>.EntityName), Context.EntityName }
         };
+
+        TRequest requestModel;
 
         if (isCreate)
         {
             _ = Context.CreateFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
             parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), Context.CreateFunc);
 
-            var requestModel =
+            requestModel =
                 Context.GetDefaultsFunc is not null
                     && await ApiHelper.ExecuteCallGuardedAsync(
                             () => Context.GetDefaultsFunc(), Snackbar)
                         is TRequest defaultsResult
                 ? defaultsResult
                 : new TRequest();
-            parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
         }
         else
         {
@@ -244,7 +244,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
             Func<TRequest, Task> saveFunc = entity => Context.UpdateFunc(id, entity);
             parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), saveFunc);
 
-            var requestModel =
+            requestModel =
                 Context.GetDetailsFunc is not null
                     && await ApiHelper.ExecuteCallGuardedAsync(
                             () => Context.GetDetailsFunc(id!),
@@ -252,8 +252,9 @@ public partial class EntityTable<TEntity, TId, TRequest>
                         is TRequest detailsResult
                 ? detailsResult
                 : entity!.Adapt<TRequest>();
-            parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
         }
+
+        parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
 

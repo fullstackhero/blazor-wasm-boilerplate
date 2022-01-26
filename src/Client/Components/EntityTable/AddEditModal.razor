@@ -10,12 +10,13 @@
                 @if (IsCreate)
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                    @($"{L["Create"]} {EntityName}");
                 }
                 else
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                    @($"{L["Edit"]} {EntityName} {Id}");
                 }
-                @Title
             </MudText>
         </TitleContent>
 
@@ -23,14 +24,8 @@
             <DataAnnotationsValidator />
             <CustomValidation @ref="_customValidation" />
             <MudGrid>
-                @if (!IsCreate)
-                {
-                    <MudItem xs="12" md="6">
-                        <MudTextField Disabled For="@(() => Id)" @bind-Value="Id" Label="@L["Id"]" />
-                    </MudItem>
-                }
 
-                @EditFormContent(RequestModel!)
+                @EditFormContent(RequestModel)
 
             </MudGrid>
         </DialogContent>
