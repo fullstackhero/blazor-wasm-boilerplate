@@ -16,18 +16,18 @@
         @if (_canSearch && (Context.AdvancedSearchEnabled || AdvancedSearchContent is not null))
         {
             <MudExpansionPanel @bind-IsExpanded="_advancedSearchExpanded"
-            Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
-            Class="mud-elevation-25" Text="@L["Advanced Search"]">
+                Style="padding:10px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;"
+                Class="mud-elevation-25" Text="@L["Advanced Search"]">
                 <MudTextField @bind-Value="SearchString" Immediate="true"
-                Placeholder="@(L["Search for "] + Context.EntityNamePlural)" Adornment="Adornment.Start"
-                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-                Style="flex:none!important;margin:0px!important" TextChanged="OnSearchStringChanged">
+                    Placeholder="@(L["Search for "] + Context.EntityNamePlural)" Adornment="Adornment.Start"
+                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                    Style="flex:none!important;margin:0px!important" TextChanged="OnSearchStringChanged">
                 </MudTextField>
                 @if (Context.AdvancedSearchEnabled)
                 {
                     <div style="margin-top:10px!important">
                         <MudCheckBox Label="All Columns" T="bool" Checked="Context.AllColumnsChecked"
-                    CheckedChanged="Context.AllColumnsCheckChanged"></MudCheckBox>
+                            CheckedChanged="Context.AllColumnsCheckChanged"></MudCheckBox>
                         @foreach (var field in Context.Fields)
                         {
                             <MudCheckBox @bind-Checked="@field.CheckedForSearch" Label="@(field.DisplayName)"></MudCheckBox>
@@ -48,8 +48,8 @@
                     @if (_canCreate)
                     {
                         <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary"
-                        OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
-                        IconColor="Color.Surface">@L["Create"]</MudButton>
+                            OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
+                            IconColor="Color.Surface">@L["Create"]</MudButton>
                     }
                     <MudButton DisableElevation Variant="Variant.Filled" OnClick="ResetAsync"
                         StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary"
@@ -59,9 +59,9 @@
                 @if (_canSearch && !_advancedSearchExpanded)
                 {
                     <MudTextField @bind-Value="SearchString" Immediate="true" FullWidth="false"
-                    Placeholder="@(L["Search for "] + Context.EntityNamePlural)" Adornment="Adornment.End"
-                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"
-                    TextChanged="OnSearchStringChanged">
+                        Placeholder="@(L["Search for "] + Context.EntityNamePlural)" Adornment="Adornment.End"
+                        AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"
+                        TextChanged="OnSearchStringChanged">
                     </MudTextField>
                 }
             </ToolBarContent>
@@ -94,16 +94,13 @@
                         {
                             @field.Template(context)
                         }
+                        else if (field.Type == typeof(bool))
+                        {
+                            <MudCheckBox Checked="@field.ValueFunc(context)" ReadOnly Color="Color.Secondary"></MudCheckBox>
+                        }
                         else
                         {
-                            if (field.Type == typeof(bool))
-                            {
-                                <MudCheckBox Checked="@field.ValueFunc(context)" ReadOnly Color="Color.Secondary"></MudCheckBox>
-                            }
-                            else
-                            {
-                                <MudHighlighter Text="@field.ValueFunc(context)?.ToString()" HighlightedText="@SearchString" />
-                            }
+                            <MudHighlighter Text="@field.ValueFunc(context)?.ToString()" HighlightedText="@SearchString" />
                         }
                     </MudTd>
                 }
@@ -115,8 +112,8 @@
                     else if (HasActions)
                     {
                         <MudMenu Label="@L["Actions"]" Variant="Variant.Filled" DisableElevation="true"
-                        EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left"
-                        OffsetX="true">
+                            EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left"
+                            OffsetX="true">
                             @if (CanUpdateEntity(context))
                             {
                                 <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>
@@ -134,7 +131,7 @@
                     else
                     {
                         <MudButton Variant="Variant.Filled" DisableElevation="true"
-                        StartIcon="@Icons.Material.Filled.DoNotTouch" IconColor="Color.Secondary" Size="Size.Small"
+                            StartIcon="@Icons.Material.Filled.DoNotTouch" IconColor="Color.Secondary" Size="Size.Small"
                         Color="Color.Surface">
                             @L["No Allowed Actions"]
                         </MudButton>
