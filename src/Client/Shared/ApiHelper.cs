@@ -18,7 +18,7 @@ public static class ApiHelper
 
             if (!string.IsNullOrWhiteSpace(successMessage))
             {
-                snackbar.Add(successMessage, Severity.Success);
+                snackbar.Add(successMessage, Severity.Info);
             }
 
             return result;

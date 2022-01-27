@@ -140,7 +140,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
     }
 
     // Server Side paging/filtering
-    public async Task ServerLoadDataAsync()
+    private async Task ServerLoadDataAsync()
     {
         if (Context.IsServerContext)
         {
@@ -265,7 +265,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         if (!result.Cancelled)
         {
-            await ResetAsync();
+            await ReloadDataAsync();
         }
     }
 
@@ -290,11 +290,11 @@ public partial class EntityTable<TEntity, TId, TRequest>
                 () => Context.DeleteFunc(id),
                 Snackbar);
 
-            await ResetAsync();
+            await ReloadDataAsync();
         }
     }
 
-    private Task ResetAsync()
+    public Task ReloadDataAsync()
     {
         if (Context.IsClientContext)
         {
@@ -302,7 +302,6 @@ public partial class EntityTable<TEntity, TId, TRequest>
         }
         else
         {
-            SearchString = string.Empty;
             return ServerLoadDataAsync();
         }
     }

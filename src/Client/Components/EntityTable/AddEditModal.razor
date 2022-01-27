@@ -26,7 +26,7 @@
                 @if (!IsCreate)
                 {
                     <MudItem xs="12" md="6">
-                        <MudTextField Disabled For="@(() => Id)" @bind-Value="Id" Label="@L["Id"]" />
+                        <MudTextField ReadOnly DisableUnderLine For="@(() => Id)" @bind-Value="Id" Label="@L["Id"]" />
                     </MudItem>
                 }
 
