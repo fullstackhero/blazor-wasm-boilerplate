@@ -6,6 +6,8 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
+// Avoiding this for now. We Would probably have to create a seperate Razor Component instead of just extending the class.
+// Something like a BrandAutoComplete.razor which internally makes use of MudAutoComplete using @inherits setter.
 public class BrandAutocomplete : MudAutocomplete<Guid>
 {
     [Inject]

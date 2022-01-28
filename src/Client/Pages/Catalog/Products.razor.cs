@@ -1,6 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
+using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
@@ -20,46 +21,49 @@ public partial class Products
 
     private EntityTable<ProductDto, Guid, ProductViewModel> _table = default!;
 
-    protected override void OnInitialized() =>
+    protected override async Task OnInitializedAsync()
+    {
         Context = new(
-            fields: new()
-            {
-                new(prod => prod.Id, L["Id"], "Id"),
-                new(prod => prod.Name, L["Name"], "Name"),
-                new(prod => prod.BrandName, L["Brand"], "Brand.Name"),
-                new(prod => prod.Description, L["Description"], "Description"),
-                new(prod => prod.Rate, L["Rate"], "Rate")
-            },
-            enableAdvancedSearch: true,
-            idFunc: prod => prod.Id,
-            searchFunc: SearchFunc,
-            createFunc: async prod =>
-            {
-                if (!string.IsNullOrEmpty(ProductImage))
-                {
-                    prod.Image = new FileUploadRequest() { Data = ProductImage, Extension = ProductImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
-                }
+                    fields: new()
+                    {
+                        new(prod => prod.Id, L["Id"], "Id"),
+                        new(prod => prod.Name, L["Name"], "Name"),
+                        new(prod => prod.BrandName, L["Brand"], "Brand.Name"),
+                        new(prod => prod.Description, L["Description"], "Description"),
+                        new(prod => prod.Rate, L["Rate"], "Rate")
+                    },
+                    enableAdvancedSearch: true,
+                    idFunc: prod => prod.Id,
+                    searchFunc: SearchFunc,
+                    createFunc: async prod =>
+                    {
+                        if (!string.IsNullOrEmpty(ProductImage))
+                        {
+                            prod.Image = new FileUploadRequest() { Data = ProductImage, Extension = ProductImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                        }
 
-                await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
-                ProductImage = string.Empty;
-            },
-            updateFunc: async (id, prod) =>
-            {
-                if(!string.IsNullOrEmpty(ProductImage))
-                {
-                    prod.Image = new FileUploadRequest() { Data = ProductImage, Extension = ProductImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
-                }
+                        await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
+                        ProductImage = string.Empty;
+                    },
+                    updateFunc: async (id, prod) =>
+                    {
+                        if (!string.IsNullOrEmpty(ProductImage))
+                        {
+                            prod.Image = new FileUploadRequest() { Data = ProductImage, Extension = ProductImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                        }
 
-                await ProductsClient.UpdateAsync(id, prod);
-                ProductImage = string.Empty;
-            },
-            deleteFunc: async id => await ProductsClient.DeleteAsync(id),
-            entityName: L["Product"],
-            entityNamePlural: L["Products"],
-            searchPermission: FSHPermissions.Products.Search,
-            createPermission: FSHPermissions.Products.Register,
-            updatePermission: FSHPermissions.Products.Update,
-            deletePermission: FSHPermissions.Products.Remove);
+                        await ProductsClient.UpdateAsync(id, prod);
+                        ProductImage = string.Empty;
+                    },
+                    deleteFunc: async id => await ProductsClient.DeleteAsync(id),
+                    entityName: L["Product"],
+                    entityNamePlural: L["Products"],
+                    searchPermission: FSHPermissions.Products.Search,
+                    createPermission: FSHPermissions.Products.Register,
+                    updatePermission: FSHPermissions.Products.Update,
+                    deletePermission: FSHPermissions.Products.Remove);
+        await LoadBrandsAsync();
+    }
 
     // Advanced Search
 
@@ -131,6 +135,43 @@ public partial class Products
             ProductImage = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
         }
     }
+
+    public List<BrandDto> _brands { get; set; } = new();
+
+    private async Task LoadBrandsAsync()
+    {
+        var filter = new SearchBrandsRequest
+        {
+            PageSize = 100
+        };
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => BrandsClient.SearchAsync(filter), Snackbar)
+            is PaginationResponseOfBrandDto response)
+        {
+            _brands = response.Data.ToList();
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchBrands(string value)
+    {
+        var filter = new SearchBrandsRequest
+        {
+            PageSize = 10,
+            AdvancedSearch = new() { Fields = new[] { "name" }, Keyword = value }
+        };
+
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => BrandsClient.SearchAsync(filter), Snackbar)
+            is PaginationResponseOfBrandDto response)
+        {
+            _brands = response.Data.ToList();
+        }
+
+        return _brands.Select(x => x.Id);
+    }
+
+    private string GetBrandName(Guid id) =>
+        _brands.Find(b => b.Id == id)?.Name ?? string.Empty;
 }
 
 public class ProductViewModel : UpdateProductRequest
