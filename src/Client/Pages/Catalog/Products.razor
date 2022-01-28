@@ -32,11 +32,11 @@
         <MudItem xs="12" md="6">
             <MudItem>
                 @if(!string.IsNullOrEmpty(ProductImage))
-                {                    
+                {
                     <MudAvatar Image ="@ProductImage" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
                 else
-                {                    
+                {
                     <MudAvatar Image="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
             </MudItem>
@@ -47,7 +47,7 @@
                         StartIcon="@Icons.Filled.CloudUpload" for="fileInput">
                         @L["Upload"]
                     </MudButton>
-                    @if(!Context.AddEditModal.IsCreate)
+                    @if(!Context.AddEditModal.IsCreate && !string.IsNullOrEmpty(context.ImagePath))
                     {
                         <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" Target="_blank"
                         StartIcon="@Icons.Filled.RemoveRedEye" Link="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Style="margin-left: 5px;" >
