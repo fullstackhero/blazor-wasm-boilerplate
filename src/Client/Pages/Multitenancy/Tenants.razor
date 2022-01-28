@@ -35,11 +35,11 @@
             L["Hide"] : L["Show"]) @L["Tenant Details"]</MudMenuItem>
         @if (!context.IsActive)
         {
-                    <MudMenuItem OnClick="@(() => ActivateTenantAsync(context.Id))">@L["Activate Tenant"]</MudMenuItem>
+                    <MudMenuItem Style="color:limegreen!important" OnClick="@(() => ActivateTenantAsync(context.Id))">@L["Activate Tenant"]</MudMenuItem>
         }
         else
         {
-                    <MudMenuItem OnClick="@(() => DeactivateTenantAsync(context.Id))">@L["Deactivate Tenant"]</MudMenuItem>
+                    <MudMenuItem Style="color:red!important" OnClick="@(() => DeactivateTenantAsync(context.Id))">@L["Deactivate Tenant"]</MudMenuItem>
         }
     </ExtraActions>
 

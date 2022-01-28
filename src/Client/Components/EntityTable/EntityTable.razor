@@ -120,7 +120,7 @@
                             }
                             @if (CanDeleteEntity(context))
                             {
-                                <MudMenuItem @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
+                                <MudMenuItem Style="color:red!important" @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
                             }
                             @if (ExtraActions is not null)
                             {

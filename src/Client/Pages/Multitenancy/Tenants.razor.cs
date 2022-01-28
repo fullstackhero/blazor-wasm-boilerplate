@@ -22,7 +22,7 @@ public partial class Tenants
         Context = new(
             fields: new()
             {
-                new(tenant => tenant.Id, L["TenantId"]),
+                new(tenant => tenant.Id, L["Id"]),
                 new(tenant => tenant.Name, L["Name"]),
                 new(tenant => tenant.AdminEmail, L["Admin Email"]),
                 new(tenant => tenant.ValidUpto.ToString("MMM dd, yyyy"), L["Valid Upto"]),
