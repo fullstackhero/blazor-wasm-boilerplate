@@ -63,11 +63,10 @@ public partial class Profile
         var file = e.File;
         if (file is not null)
         {
-            var supportedFormats = new List<string> { ".jpeg", ".jpg", ".png" };
             string? extension = Path.GetExtension(file.Name);
-            if (!supportedFormats.Contains(extension.ToLower()))
+            if (!ApplicationConstants.SupportedImageFormats.Contains(extension.ToLower()))
             {
-                Snackbar.Add("File Format Not Supported.", Severity.Error);
+                Snackbar.Add("Image Format Not Supported.", Severity.Error);
                 return;
             }
 

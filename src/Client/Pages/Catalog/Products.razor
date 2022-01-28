@@ -5,7 +5,7 @@
 
 <FshTitle Title="@L["Products"]" Description="@L["Manage Products."]" />
 
-<EntityTable @ref="_table" TEntity="ProductDto" TId="Guid" TRequest="UpdateProductRequest" Context="@Context">
+<EntityTable @ref="_table" TEntity="ProductDto" TId="Guid" TRequest="ProductViewModel" Context="@Context">
 
     <AdvancedSearchContent>
         <BrandAutocomplete @bind-Value="SearchBrandId" />
@@ -31,15 +31,29 @@
         </MudItem>
         <MudItem xs="12" md="6">
             <MudItem>
-                <MudAvatar Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                @if(!string.IsNullOrEmpty(ProductImage))
+                {                    
+                    <MudAvatar Image ="@ProductImage" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                }
+                else
+                {                    
+                    <MudAvatar Image="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                }
             </MudItem>
             <MudItem>
-                @* <InputFile id="fileInput" hidden OnChange="UploadFiles" /> *@
+                <InputFile id="fileInput" hidden OnChange="UploadFiles" />
                 <div>
-                    <MudButton HtmlTag="label" Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
+                    <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small"
                         StartIcon="@Icons.Filled.CloudUpload" for="fileInput">
                         @L["Upload"]
                     </MudButton>
+                    @if(!Context.AddEditModal.IsCreate)
+                    {
+                        <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" Target="_blank"
+                        StartIcon="@Icons.Filled.RemoveRedEye" Link="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Style="margin-left: 5px;" >
+                        @L["View"]
+                    </MudButton>
+                    }
                 </div>
             </MudItem>
         </MudItem>
