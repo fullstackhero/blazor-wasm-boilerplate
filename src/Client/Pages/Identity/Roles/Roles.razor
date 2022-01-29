@@ -6,14 +6,6 @@
 
 <EntityTable TEntity="RoleDto" TId="string" TRequest="RoleRequest" Context="@Context">
 
-    <AdvancedSearchContent>
-        <div style="margin-top:10px!important">
-            <MudCheckBox @bind-Checked="@CheckBox" Label="All Columns"></MudCheckBox>
-            <MudCheckBox @bind-Checked="@CheckBox" Label="Column1"></MudCheckBox>
-            <MudCheckBox @bind-Checked="@CheckBox" Label="Column2"></MudCheckBox>
-        </div>
-    </AdvancedSearchContent>
-
     <ExtraActions>
         @if (_canViewRoleClaims)
         {
