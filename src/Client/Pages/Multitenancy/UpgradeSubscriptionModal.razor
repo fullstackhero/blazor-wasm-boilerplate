@@ -33,7 +33,7 @@
 {
     [Parameter] public UpgradeSubscriptionRequest Request { get; set; } = new();
     [Inject] protected ITenantsClient TenantsClient{ get; set; } = default!;
-    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
     DateTime? date = DateTime.Today;
 
     protected override void OnInitialized()

@@ -97,7 +97,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         Hoverable = tablePreference.IsHoverable;
     }
 
-    private async Task<bool> CanDoPermission(string? permission, AuthenticationState state) =>
+    public async Task<bool> CanDoPermission(string? permission, AuthenticationState state) =>
         !string.IsNullOrWhiteSpace(permission) &&
             ((bool.TryParse(permission, out bool can) && can) || // check if permmission equals "True", then it's allowed
             (await AuthService.AuthorizeAsync(state.User, permission)).Succeeded);
