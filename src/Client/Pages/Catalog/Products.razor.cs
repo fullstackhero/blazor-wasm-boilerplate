@@ -39,7 +39,7 @@ public partial class Products
                     {
                         if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
@@ -49,7 +49,7 @@ public partial class Products
                     {
                         if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.UpdateAsync(id, prod);
@@ -59,9 +59,9 @@ public partial class Products
                     entityName: L["Product"],
                     entityNamePlural: L["Products"],
                     searchPermission: FSHPermissions.Products.Search,
-                    createPermission: FSHPermissions.Products.Register,
+                    createPermission: FSHPermissions.Products.Create,
                     updatePermission: FSHPermissions.Products.Update,
-                    deletePermission: FSHPermissions.Products.Remove);
+                    deletePermission: FSHPermissions.Products.Delete);
         await LoadBrandsAsync();
     }
 
