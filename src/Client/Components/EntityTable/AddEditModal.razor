@@ -10,12 +10,14 @@
                 @if (IsCreate)
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
-                    @($"{L["Create"]} {EntityName}");
+                    @($"{L["Create"]} ");
+                    @L[EntityName]
                 }
                 else
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
-                    @($"{L["Edit"]} {EntityName}");
+                    @($"{L["Edit"]} ");
+                    @L[EntityName]
                 }
             </MudText>
         </TitleContent>
