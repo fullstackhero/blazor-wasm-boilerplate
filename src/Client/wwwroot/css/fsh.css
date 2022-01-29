@@ -55,3 +55,9 @@
     margin: 0px !important;
     margin-left: -12px !important;
 }
+
+.mud-table-toolbar
+{
+    flex-wrap:wrap;
+    margin-bottom:20px!important;
+}
