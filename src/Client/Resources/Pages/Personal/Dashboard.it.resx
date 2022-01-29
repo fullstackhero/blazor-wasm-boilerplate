@@ -139,12 +139,15 @@
     <value>Ruoli registrati</value>
   </data>
   <data name="Documents" xml:space="preserve">
-    <value>Documents</value>
+    <value>Documenti</value>
   </data>
   <data name="Document Types" xml:space="preserve">
-    <value>Document Types</value>
+    <value>Tipi di documenti</value>
   </data>
   <data name="Document Extended Attributes" xml:space="preserve">
     <value>Document Extended Attributes</value>
+  </data>
+  <data name="Realtime Updates &amp; Insights with SignalR." xml:space="preserve">
+    <value>Aggiornamenti in tempo reale e approfondimenti con SignalR</value>
   </data>
 </root>

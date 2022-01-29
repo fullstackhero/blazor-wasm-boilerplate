@@ -163,12 +163,12 @@
     <value>Barcode</value>
   </data>
   <data name="Products exported" xml:space="preserve">
-    <value>Products exported</value>
+    <value>Prodotti esportati</value>
   </data>
   <data name="Filtered Products exported" xml:space="preserve">
-    <value>Filtered Products exported</value>
+    <value>Prodotti filtrati esportati</value>
   </data>
   <data name="No Allowed Actions" xml:space="preserve">
-    <value>No Allowed Actions</value>
+    <value>Nessuna azione consentita</value>
   </data>
 </root>
