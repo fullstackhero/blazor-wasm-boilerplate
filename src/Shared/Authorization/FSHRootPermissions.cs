@@ -1,7 +1,12 @@
-﻿namespace FSH.BlazorWebAssembly.Shared.Authorization;
+﻿using System.ComponentModel;
+
+namespace FSH.BlazorWebAssembly.Shared.Authorization;
 
 public class FSHRootPermissions
 {
+
+    [DisplayName("Tenants")]
+    [Description("Tenants Permissions")]
     public static class Tenants
     {
         public const string View = "Permissions.Root.Tenants.View";
