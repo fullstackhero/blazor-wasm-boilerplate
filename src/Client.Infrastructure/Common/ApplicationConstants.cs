@@ -14,4 +14,7 @@ public static class ApplicationConstants
         ".jpg",
         ".png"
     };
+    public static readonly string StandardImageFormat = "image/jpeg";
+    public static readonly int MaxImageWidth = 1000;
+    public static readonly int MaxImageHeight = 1000;
 }

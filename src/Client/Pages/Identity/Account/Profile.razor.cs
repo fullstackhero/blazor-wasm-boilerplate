@@ -72,11 +72,10 @@ public partial class Profile
 
             string? fileName = $"{_userId}-{Guid.NewGuid():N}";
             fileName = fileName[..Math.Min(fileName.Length, 90)];
-            const string? format = "image/png";
-            var imageFile = await file.RequestImageFileAsync(format, 400, 400);
+            var imageFile = await file.RequestImageFileAsync(ApplicationConstants.StandardImageFormat, ApplicationConstants.MaxImageWidth, ApplicationConstants.MaxImageHeight);
             byte[]? buffer = new byte[imageFile.Size];
             await imageFile.OpenReadStream().ReadAsync(buffer);
-            string? base64String = $"data:image/png;base64,{Convert.ToBase64String(buffer)}";
+            string? base64String = $"data:{ApplicationConstants.StandardImageFormat};base64,{Convert.ToBase64String(buffer)}";
             _profileModel.Image = new FileUploadRequest() { Name = fileName, Data = base64String, Extension = extension };
 
             await UpdateProfileAsync();

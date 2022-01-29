@@ -29,32 +29,39 @@
         <MudItem xs="12" md="6">
             <MudTextField Label="@L["Rate"]" For="@(() => context.Rate)" @bind-Value="context.Rate" />
         </MudItem>
-        <MudItem xs="12" md="6">
+        <MudItem xs="12" md="12">
             <MudItem>
-                @if(!string.IsNullOrEmpty(ProductViewModel.ImageInBytes))
+                @if(!string.IsNullOrEmpty(context.ImageInBytes))
                 {
-                    <MudAvatar Image ="@ProductViewModel.ImageInBytes" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                    <MudAvatar Image ="@context.ImageInBytes" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
                 else
                 {
                     <MudAvatar Image="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
             </MudItem>
-            <MudItem>
-                <InputFile id="fileInput" hidden OnChange="UploadFiles" />
+            <MudItem>                
                 <div>
                     <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small"
                         StartIcon="@Icons.Filled.CloudUpload" for="fileInput">
                         @L["Upload"]
                     </MudButton>
-                    @if(!Context.AddEditModal.IsCreate && !string.IsNullOrEmpty(context.ImagePath))
+                    @if(!Context.AddEditModal.IsCreate && !string.IsNullOrEmpty(context.ImagePath) && string.IsNullOrEmpty(context.ImageInBytes))
                     {
-                        <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" Target="_blank"
+                        <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" Target="_blank"
                         StartIcon="@Icons.Filled.RemoveRedEye" Link="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Style="margin-left: 5px;" >
                         @L["View"]
                     </MudButton>
                     }
+                    @if(!string.IsNullOrEmpty(context.ImageInBytes))
+                    {
+                        <MudButton HtmlTag="label" DisableElevation OnClick="ClearImageInBytes" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Small" Target="_blank"
+                        StartIcon="@Icons.Filled.Clear" Style="margin-left: 5px;" >
+                        @L["Clear"]
+                    </MudButton>
+                    }
                 </div>
+                <InputFile id="fileInput" hidden OnChange="UploadFiles" />
             </MudItem>
         </MudItem>
     </EditFormContent>

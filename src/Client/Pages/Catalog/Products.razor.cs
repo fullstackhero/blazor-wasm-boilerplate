@@ -20,8 +20,6 @@ public partial class Products
     protected EntityServerTableContext<ProductDto, Guid, ProductViewModel> Context { get; set; } = default!;
 
     private EntityTable<ProductDto, Guid, ProductViewModel> _table = default!;
-    [Parameter]
-    public ProductViewModel ProductViewModel { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,23 +37,23 @@ public partial class Products
                     searchFunc: SearchFunc,
                     createFunc: async prod =>
                     {
-                        if (!string.IsNullOrEmpty(ProductViewModel.ImageInBytes))
+                        if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = ProductViewModel.ImageInBytes, Extension = ProductViewModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
-                        ProductViewModel.ImageInBytes = string.Empty;
+                        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
                     },
                     updateFunc: async (id, prod) =>
                     {
-                        if (!string.IsNullOrEmpty(ProductViewModel.ImageInBytes))
+                        if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = ProductViewModel.ImageInBytes, Extension = ProductViewModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.UpdateAsync(id, prod);
-                        ProductViewModel.ImageInBytes = string.Empty;
+                        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
                     },
                     deleteFunc: async id => await ProductsClient.DeleteAsync(id),
                     entityName: L["Product"],
@@ -121,18 +119,17 @@ public partial class Products
         _file = e.File;
         if (_file != null)
         {
-            ProductViewModel.ImageExtension = Path.GetExtension(_file.Name);
-            if (!ApplicationConstants.SupportedImageFormats.Contains(ProductViewModel.ImageExtension.ToLower()))
+            Context.AddEditModal.RequestModel.ImageExtension = Path.GetExtension(_file.Name);
+            if (!ApplicationConstants.SupportedImageFormats.Contains(Context.AddEditModal.RequestModel.ImageExtension.ToLower()))
             {
                 Snackbar.Add("Image Format Not Supported.", Severity.Error);
                 return;
             }
 
-            string? format = "image/jpeg";
-            var imageFile = await e.File.RequestImageFileAsync(format, 700, 700);
+            var imageFile = await e.File.RequestImageFileAsync(ApplicationConstants.StandardImageFormat, ApplicationConstants.MaxImageWidth, ApplicationConstants.MaxImageHeight);
             byte[]? buffer = new byte[imageFile.Size];
             await imageFile.OpenReadStream().ReadAsync(buffer);
-            ProductViewModel.ImageInBytes = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            Context.AddEditModal.RequestModel.ImageInBytes = $"data:{ApplicationConstants.StandardImageFormat};base64,{Convert.ToBase64String(buffer)}";
             Context.AddEditModal?.ForceRender();
         }
     }
@@ -173,6 +170,12 @@ public partial class Products
 
     private string GetBrandName(Guid id) =>
         _brands.Find(b => b.Id == id)?.Name ?? string.Empty;
+
+    public void ClearImageInBytes()
+    {
+        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+        Context.AddEditModal?.ForceRender();
+    }
 }
 
 public class ProductViewModel : UpdateProductRequest
