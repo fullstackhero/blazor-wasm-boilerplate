@@ -5,7 +5,7 @@
 
 <FshTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
 
-<EntityTable @ref="entityTable" TEntity="TenantDetail" TId="Guid" TRequest="CreateTenantRequest" Context="@Context"
+<EntityTable @ref="EntityTable" TEntity="TenantDetail" TId="Guid" TRequest="CreateTenantRequest" Context="@Context"
     @bind-SearchString="_searchString" Dense="false" Striped="true">
     <EditFormContent>
         <MudItem xs="12" md="6">
@@ -30,16 +30,22 @@
         }
     </EditFormContent>
     <ExtraActions>
-        <MudMenuItem OnClick="@(() => ViewUpgradeSubscriptionModalAsync(context.Id))">@L["Upgrade Subscription"]</MudMenuItem>
+        @if(_canUpgrade)
+        {
+            <MudMenuItem OnClick="@(() => ViewUpgradeSubscriptionModalAsync(context.Id))">@L["Upgrade Subscription"]</MudMenuItem>
+        }
              <MudMenuItem OnClick="@(() => ViewTenantDetails(context.Id))">@((context.ShowDetails == true) ?
             L["Hide"] : L["Show"]) @L["Tenant Details"]</MudMenuItem>
-        @if (!context.IsActive)
+        @if (_canModify)
         {
-                    <MudMenuItem Style="color:limegreen!important" OnClick="@(() => ActivateTenantAsync(context.Id))">@L["Activate Tenant"]</MudMenuItem>
-        }
-        else
-        {
-                    <MudMenuItem Style="color:red!important" OnClick="@(() => DeactivateTenantAsync(context.Id))">@L["Deactivate Tenant"]</MudMenuItem>
+            @if (!context.IsActive)
+            {
+                        <MudMenuItem Style="color:limegreen!important" OnClick="@(() => ActivateTenantAsync(context.Id))">@L["Activate Tenant"]</MudMenuItem>
+            }
+            else
+            {
+                        <MudMenuItem Style="color:red!important" OnClick="@(() => DeactivateTenantAsync(context.Id))">@L["Deactivate Tenant"]</MudMenuItem>
+            }
         }
     </ExtraActions>
 

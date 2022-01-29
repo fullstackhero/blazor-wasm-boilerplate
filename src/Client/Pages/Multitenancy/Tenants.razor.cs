@@ -1,9 +1,12 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Multitenancy;
@@ -12,13 +15,20 @@ public partial class Tenants
 {
     [Inject]
     private ITenantsClient TenantsClient { get; set; } = default!;
-    [Inject]
-    private IDialogService _dialogService{ get; set; } = default!;
     private string? _searchString;
     protected EntityClientTableContext<TenantDetail, Guid, CreateTenantRequest> Context { get; set; } = default!;
     private List<TenantDetail> _tenants = new();
-    public EntityTable<TenantDetail, Guid, CreateTenantRequest> entityTable { get; set; }
-    protected override void OnInitialized() =>
+    public EntityTable<TenantDetail, Guid, CreateTenantRequest> EntityTable { get; set; } = default!;
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+    [Inject]
+    protected IAuthorizationService AuthorizeService { get; set; } = default!;
+    private ClaimsPrincipal? _currentUser;
+
+    private bool _canUpgrade;
+    private bool _canModify;
+    protected override async Task OnInitializedAsync()
+    {
         Context = new(
             fields: new()
             {
@@ -34,7 +44,12 @@ public partial class Tenants
             searchPermission: true.ToString(),
             entityNamePlural: L["Tenants"],
             hasExtraActionsFunc: () => true,
-            createPermission: FSHPermissions.Tenants.Register);
+            createPermission: FSHRootPermissions.Tenants.Create);
+        var state = await AuthState;
+        _currentUser = state.User;
+        _canUpgrade = (await AuthorizeService.AuthorizeAsync(_currentUser, FSHRootPermissions.Tenants.UpgradeSubscription)).Succeeded;
+        _canModify = (await AuthorizeService.AuthorizeAsync(_currentUser, FSHRootPermissions.Tenants.Update)).Succeeded;
+    }
 
     private bool Search(string? searchString, TenantDetail tenantDto) =>
        string.IsNullOrWhiteSpace(searchString) || tenantDto?.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
@@ -52,18 +67,23 @@ public partial class Tenants
     private async Task ViewUpgradeSubscriptionModalAsync(string id)
     {
         var tenant = _tenants.First(f => f.Id == id);
-        var parameters = new DialogParameters();
-        parameters.Add(nameof(UpgradeSubscriptionModal.Request), new UpgradeSubscriptionRequest
+        var parameters = new DialogParameters
         {
-            TenantId = tenant.Id,
-            ExtendedExpiryDate = tenant.ValidUpto
-        });
+            {
+                nameof(UpgradeSubscriptionModal.Request),
+                new UpgradeSubscriptionRequest
+                {
+                    TenantId = tenant.Id,
+                    ExtendedExpiryDate = tenant.ValidUpto
+                }
+            }
+        };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-        var dialog = _dialogService.Show<UpgradeSubscriptionModal>(L["Upgrade Subscription"], parameters, options);
+        var dialog = DialogService.Show<UpgradeSubscriptionModal>(L["Upgrade Subscription"], parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
-            await entityTable.ReloadDataAsync();
+            await EntityTable.ReloadDataAsync();
         }
     }
 
@@ -75,7 +95,7 @@ public partial class Tenants
             null,
             L["Tenant Deactivated."]) is not null)
         {
-            await entityTable.ReloadDataAsync();
+            await EntityTable.ReloadDataAsync();
         }
     }
 
@@ -87,7 +107,7 @@ public partial class Tenants
             null,
             L["Tenant Activated."]) is not null)
         {
-            await entityTable.ReloadDataAsync();
+            await EntityTable.ReloadDataAsync();
         }
     }
 
