@@ -1,8 +1,12 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
+using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
@@ -13,32 +17,53 @@ public partial class Products
     [Inject]
     protected IBrandsClient BrandsClient { get; set; } = default!;
 
-    protected EntityServerTableContext<ProductDto, Guid, UpdateProductRequest> Context { get; set; } = default!;
+    protected EntityServerTableContext<ProductDto, Guid, ProductViewModel> Context { get; set; } = default!;
 
-    private EntityTable<ProductDto, Guid, UpdateProductRequest> _table = default!;
+    private EntityTable<ProductDto, Guid, ProductViewModel> _table = default!;
 
-    protected override void OnInitialized() =>
+    protected override async Task OnInitializedAsync()
+    {
         Context = new(
-            fields: new()
-            {
-                new(prod => prod.Id, L["Id"], "Id"),
-                new(prod => prod.Name, L["Name"], "Name"),
-                new(prod => prod.BrandName, L["Brand"], "Brand.Name"),
-                new(prod => prod.Description, L["Description"], "Description"),
-                new(prod => prod.Rate, L["Rate"], "Rate")
-            },
-            enableAdvancedSearch: true,
-            idFunc: prod => prod.Id,
-            searchFunc: SearchFunc,
-            createFunc: async prod => await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>()),
-            updateFunc: async (id, prod) => await ProductsClient.UpdateAsync(id, prod),
-            deleteFunc: async id => await ProductsClient.DeleteAsync(id),
-            entityName: L["Product"],
-            entityNamePlural: L["Products"],
-            searchPermission: FSHPermissions.Products.Search,
-            createPermission: FSHPermissions.Products.Register,
-            updatePermission: FSHPermissions.Products.Update,
-            deletePermission: FSHPermissions.Products.Remove);
+                    fields: new()
+                    {
+                        new(prod => prod.Id, L["Id"], "Id"),
+                        new(prod => prod.Name, L["Name"], "Name"),
+                        new(prod => prod.BrandName, L["Brand"], "Brand.Name"),
+                        new(prod => prod.Description, L["Description"], "Description"),
+                        new(prod => prod.Rate, L["Rate"], "Rate")
+                    },
+                    enableAdvancedSearch: true,
+                    idFunc: prod => prod.Id,
+                    searchFunc: SearchFunc,
+                    createFunc: async prod =>
+                    {
+                        if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
+                        {
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
+                        }
+
+                        await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
+                        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+                    },
+                    updateFunc: async (id, prod) =>
+                    {
+                        if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
+                        {
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
+                        }
+
+                        await ProductsClient.UpdateAsync(id, prod);
+                        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+                    },
+                    deleteFunc: async id => await ProductsClient.DeleteAsync(id),
+                    entityName: L["Product"],
+                    entityNamePlural: L["Products"],
+                    searchPermission: FSHPermissions.Products.Search,
+                    createPermission: FSHPermissions.Products.Create,
+                    updatePermission: FSHPermissions.Products.Update,
+                    deletePermission: FSHPermissions.Products.Delete);
+        await LoadBrandsAsync();
+    }
 
     // Advanced Search
 
@@ -49,7 +74,7 @@ public partial class Products
         set
         {
             _searchBrandId = value;
-            _ = _table.ServerLoadDataAsync();
+            _ = _table.ReloadDataAsync();
         }
     }
 
@@ -60,18 +85,18 @@ public partial class Products
         set
         {
             _searchMinimumRate = value;
-            _ = _table.ServerLoadDataAsync();
+            _ = _table.ReloadDataAsync();
         }
     }
 
-    private decimal _searchMaximumRate = 100;
+    private decimal _searchMaximumRate = 9999;
     private decimal SearchMaximumRate
     {
         get => _searchMaximumRate;
         set
         {
             _searchMaximumRate = value;
-            _ = _table.ServerLoadDataAsync();
+            _ = _table.ReloadDataAsync();
         }
     }
 
@@ -84,7 +109,81 @@ public partial class Products
         productFilter.MaximumRate = SearchMaximumRate;
 
         var result = await ProductsClient.SearchAsync(productFilter);
-
         return result.Adapt<PaginationResponse<ProductDto>>();
     }
+
+    private IBrowserFile? _file;
+
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        _file = e.File;
+        if (_file != null)
+        {
+            Context.AddEditModal.RequestModel.ImageExtension = Path.GetExtension(_file.Name);
+            if (!ApplicationConstants.SupportedImageFormats.Contains(Context.AddEditModal.RequestModel.ImageExtension.ToLower()))
+            {
+                Snackbar.Add("Image Format Not Supported.", Severity.Error);
+                return;
+            }
+
+            // TODO : Make this as a shared service or something? Since it's used by Profile Component also for now, and literally any other component that will have image upload.
+            // The new service should ideally return $"data:{ApplicationConstants.StandardImageFormat};base64,{Convert.ToBase64String(buffer)}"
+            var imageFile = await e.File.RequestImageFileAsync(ApplicationConstants.StandardImageFormat, ApplicationConstants.MaxImageWidth, ApplicationConstants.MaxImageHeight);
+            byte[]? buffer = new byte[imageFile.Size];
+            await imageFile.OpenReadStream(ApplicationConstants.MaxAllowedSize).ReadAsync(buffer);
+            Context.AddEditModal.RequestModel.ImageInBytes = $"data:{ApplicationConstants.StandardImageFormat};base64,{Convert.ToBase64String(buffer)}";
+            Context.AddEditModal?.ForceRender();
+        }
+    }
+
+    public List<BrandDto> _brands { get; set; } = new();
+
+    private async Task LoadBrandsAsync()
+    {
+        var filter = new SearchBrandsRequest
+        {
+            PageSize = 100
+        };
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => BrandsClient.SearchAsync(filter), Snackbar)
+            is PaginationResponseOfBrandDto response)
+        {
+            _brands = response.Data.ToList();
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchBrands(string value)
+    {
+        var filter = new SearchBrandsRequest
+        {
+            PageSize = 10,
+            AdvancedSearch = new() { Fields = new[] { "name" }, Keyword = value }
+        };
+
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+                () => BrandsClient.SearchAsync(filter), Snackbar)
+            is PaginationResponseOfBrandDto response)
+        {
+            _brands = response.Data.ToList();
+        }
+
+        return _brands.Select(x => x.Id);
+    }
+
+    private string GetBrandName(Guid id) =>
+        _brands.Find(b => b.Id == id)?.Name ?? string.Empty;
+
+    public void ClearImageInBytes()
+    {
+        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+        Context.AddEditModal?.ForceRender();
+    }
+}
+
+public class ProductViewModel : UpdateProductRequest
+{
+    public string? ImagePath { get; set; }
+
+    public string? ImageInBytes { get; set; }
+    public string? ImageExtension { get; set; }
 }

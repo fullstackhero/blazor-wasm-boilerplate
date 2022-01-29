@@ -14,10 +14,13 @@ else
     Striped="@_striped" Filter="new Func<PermissionUpdateDto, bool>(Search)">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
+                <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-auto" StartIcon="@Icons.Material.Filled.ArrowBack" Link="/roles">@_localizer["Back"]
+                </MudButton>
                 @if (_canEditRoleClaims)
             {
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="SaveAsync"
-                ButtonType="ButtonType.Submit">@_localizer["Update Role Permissions"]</MudButton>
+                ButtonType="ButtonType.Submit" Style="margin-left: 5px!important;" StartIcon="@Icons.Material.Filled.Save">@_localizer["Update Permissions"]
+                </MudButton>
             }
         </div>
         <MudSpacer />
@@ -54,14 +57,6 @@ else
             </MudCheckBox>
         </MudTd>
     </RowTemplate>
-    <FooterContent>
-        <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@_localizer["Dense"]
-        </MudSwitch>
-        <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@_localizer["Striped"]
-        </MudSwitch>
-        <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@_localizer["Bordered"]
-        </MudSwitch>
-    </FooterContent>
     <PagerContent>
         <TablePager />
     </PagerContent>

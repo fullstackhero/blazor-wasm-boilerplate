@@ -5,7 +5,7 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
-public partial class AddEditModal<TRequest> : IAddEditModal
+public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
 {
     [Parameter]
     [EditorRequired]
@@ -22,9 +22,7 @@ public partial class AddEditModal<TRequest> : IAddEditModal
 
     [Parameter]
     [EditorRequired]
-    public string Title { get; set; } = default!;
-    [Parameter]
-    public bool IsCreate { get; set; }
+    public string EntityName { get; set; } = default!;
     [Parameter]
     public object? Id { get; set; }
 
@@ -33,13 +31,9 @@ public partial class AddEditModal<TRequest> : IAddEditModal
 
     private CustomValidation? _customValidation;
 
-    protected override Task OnInitializedAsync() =>
-        OnInitializedFunc is not null
-            ? OnInitializedFunc()
-            : Task.CompletedTask;
+    public bool IsCreate => Id is null;
 
-    public void ForceRender() =>
-        StateHasChanged();
+    public void ForceRender() => StateHasChanged();
 
     // This should not be necessary anymore, except maybe in the case when the
     // UpdateEntityRequest has different validation rules than the CreateEntityRequest.
@@ -74,6 +68,11 @@ public partial class AddEditModal<TRequest> : IAddEditModal
 
         return true;
     }
+
+    protected override Task OnInitializedAsync() =>
+        OnInitializedFunc is not null
+            ? OnInitializedFunc()
+            : Task.CompletedTask;
 
     private async Task SaveAsync()
     {

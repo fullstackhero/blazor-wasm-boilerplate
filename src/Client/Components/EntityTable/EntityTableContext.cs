@@ -150,13 +150,15 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         CanDeleteEntityFunc = canDeleteEntityFunc;
     }
 
+    // AddEdit modal
     private IDialogReference? _addEditModalRef;
 
     internal void SetAddEditModalRef(IDialogReference dialog) =>
         _addEditModalRef = dialog;
 
-    public IAddEditModal? AddEditModal =>
-        _addEditModalRef?.Dialog as IAddEditModal;
+    public IAddEditModal<TRequest> AddEditModal =>
+        _addEditModalRef?.Dialog as IAddEditModal<TRequest>
+        ?? throw new InvalidOperationException("AddEditModal is only available when the modal is shown.");
 
     // Shortcuts
     public EntityClientTableContext<TEntity, TId, TRequest>? ClientContext => this as EntityClientTableContext<TEntity, TId, TRequest>;
