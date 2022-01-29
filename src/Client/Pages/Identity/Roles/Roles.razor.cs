@@ -43,10 +43,10 @@ public partial class Roles
             deleteFunc: async id => await RolesClient.DeleteAsync(id),
             entityName: L["Role"],
             entityNamePlural: L["Roles"],
-            searchPermission: FSHPermissions.Roles.ListAll,
-            createPermission: FSHPermissions.Roles.Register,
+            searchPermission: FSHPermissions.Roles.View,
+            createPermission: FSHPermissions.Roles.Create,
             updatePermission: FSHPermissions.Roles.Update,
-            deletePermission: FSHPermissions.Roles.Remove,
+            deletePermission: FSHPermissions.Roles.Delete,
             hasExtraActionsFunc: () => _canViewRoleClaims,
             canUpdateEntityFunc: e => !e.IsDefault,
             canDeleteEntityFunc: e => !e.IsDefault);

@@ -67,10 +67,13 @@ public partial class Login
     {
         BusySubmitting = true;
 
-        await ApiHelper.ExecuteCallGuardedAsync(
+        if(await ApiHelper.ExecuteCallGuardedAsync(
             () => AuthService.LoginAsync(_tenantKey, _tokenRequest),
             Snackbar,
-            _customValidation);
+            _customValidation))
+        {
+            Snackbar.Add($"Logged in as {_tokenRequest.Email}", Severity.Info);
+        }
 
         BusySubmitting = false;
     }

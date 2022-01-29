@@ -35,7 +35,7 @@ public partial class UserRoles
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canEditUsers = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Edit)).Succeeded;
+        _canEditUsers = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Update)).Succeeded;
         _canSearchRoles = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Roles.View)).Succeeded;
 
         if (await ApiHelper.ExecuteCallGuardedAsync(

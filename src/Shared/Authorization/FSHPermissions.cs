@@ -29,7 +29,7 @@ public class FSHPermissions
     [Description("Identity Permissions")]
     public static class Identity
     {
-        public const string Register = "Permissions.Identity.Register";
+        public const string Create = "Permissions.Identity.Create";
     }
 
     [DisplayName("Users")]
@@ -38,7 +38,7 @@ public class FSHPermissions
     {
         public const string View = "Permissions.Users.View";
         public const string Create = "Permissions.Users.Create";
-        public const string Edit = "Permissions.Users.Edit";
+        public const string Update = "Permissions.Users.Update";
         public const string Delete = "Permissions.Users.Delete";
         public const string Export = "Permissions.Users.Export";
         public const string Search = "Permissions.Users.Search";
@@ -49,10 +49,9 @@ public class FSHPermissions
     public static class Roles
     {
         public const string View = "Permissions.Roles.View";
-        public const string ListAll = "Permissions.Roles.ViewAll";
-        public const string Register = "Permissions.Roles.Register";
+        public const string Create = "Permissions.Roles.Create";
         public const string Update = "Permissions.Roles.Update";
-        public const string Remove = "Permissions.Roles.Remove";
+        public const string Delete = "Permissions.Roles.Delete";
     }
 
     [DisplayName("Products")]
@@ -61,9 +60,9 @@ public class FSHPermissions
     {
         public const string View = "Permissions.Products.View";
         public const string Search = "Permissions.Products.Search";
-        public const string Register = "Permissions.Products.Register";
+        public const string Create = "Permissions.Products.Create";
         public const string Update = "Permissions.Products.Update";
-        public const string Remove = "Permissions.Products.Remove";
+        public const string Delete = "Permissions.Products.Delete";
     }
 
     [DisplayName("Brands")]
@@ -72,9 +71,11 @@ public class FSHPermissions
     {
         public const string View = "Permissions.Brands.View";
         public const string Search = "Permissions.Brands.Search";
-        public const string Register = "Permissions.Brands.Register";
+        public const string Create = "Permissions.Brands.Create";
         public const string Update = "Permissions.Brands.Update";
-        public const string Remove = "Permissions.Brands.Remove";
+        public const string Delete = "Permissions.Brands.Delete";
+        public const string Generate = "Permissions.Brands.Generate";
+        public const string Clean = "Permissions.Brands.Clean";
     }
 
     [DisplayName("Role Claims")]
@@ -82,21 +83,9 @@ public class FSHPermissions
     public static class RoleClaims
     {
         public const string View = "Permissions.RoleClaims.View";
-        public const string Register = "Permissions.RoleClaims.Register";
-        public const string Edit = "Permissions.RoleClaims.Edit";
+        public const string Create = "Permissions.RoleClaims.Create";
         public const string Update = "Permissions.RoleClaims.Update";
+        public const string Delete = "Permissions.RoleClaims.Delete";
         public const string Search = "Permissions.RoleClaims.Search";
-    }
-
-    [DisplayName("Tenants")]
-    [Description("Tenants Permissions")]
-    public static class Tenants
-    {
-        public const string View = "Permissions.Tenants.View";
-        public const string ListAll = "Permissions.Tenants.ViewAll";
-        public const string Register = "Permissions.Tenants.Register";
-        public const string Update = "Permissions.Tenants.Update";
-        public const string UpgradeSubscription = "Permissions.Tenants.UpgradeSubscription";
-        public const string Remove = "Permissions.Tenants.Remove";
     }
 }

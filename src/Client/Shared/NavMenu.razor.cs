@@ -34,6 +34,6 @@ public partial class NavMenu
         _canViewUsers = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Users.View)).Succeeded;
         _canViewProducts = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Products.View)).Succeeded;
         _canViewBrands = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Brands.View)).Succeeded;
-        _canViewTenants = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Tenants.View)).Succeeded;
+        _canViewTenants = (await AuthService.AuthorizeAsync(_currentUser, FSHRootPermissions.Tenants.View)).Succeeded;
     }
 }
