@@ -62,6 +62,16 @@ public static class Startup
                 options.AddPolicy(permission, policy => policy.RequireClaim(FSHClaims.Permission, permission));
             }
         }
+
+        foreach (var prop in typeof(FSHRootPermissions)
+            .GetNestedTypes()
+            .SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
+        {
+            if (prop.GetValue(null)?.ToString() is string rootPermission)
+            {
+                options.AddPolicy(rootPermission, policy => policy.RequireClaim(FSHClaims.Permission, rootPermission));
+            }
+        }
     }
 
     public static IServiceCollection AutoRegisterInterfaces<T>(this IServiceCollection services)

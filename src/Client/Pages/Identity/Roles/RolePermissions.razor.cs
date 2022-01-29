@@ -46,12 +46,22 @@ public partial class RolePermissions
             _title = string.Format(_localizer["{0} Permissions"], role.Name);
             _description = string.Format(_localizer["Manage {0} Role Permissions"], role.Name);
 
-            RolePermissionsList = DefaultPermissions.Admin
-                .Union(DefaultPermissions.Root)
+            if (role.IsRootRole)
+            {
+                // Display Root Permissions only if the Role is Created for Root Tenant.
+
+                RolePermissionsList = DefaultPermissions.Admin.Union(DefaultPermissions.Root)
                 .Select(permission => new PermissionUpdateDto(
                     permission,
                     role.Permissions?.Any(p => p.Permission == permission) is true))
                 .ToList();
+            }
+            else
+            {
+                RolePermissionsList = DefaultPermissions.Admin.ConvertAll(permission => new PermissionUpdateDto(
+                    permission,
+                    role.Permissions?.Any(p => p.Permission == permission) is true));
+            }
         }
 
         _loaded = true;
