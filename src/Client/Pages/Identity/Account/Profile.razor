@@ -1,9 +1,9 @@
 ﻿@inject IStringLocalizer<Profile> L
 
 <MudGrid>
-    <MudItem xs="12" sm="12" md="5">
+    <MudItem xs="12" sm="12" md="3">
         <MudCard Elevation="25">
-            <MudCardContent>
+            <MudCardContent Style="padding:0px!important">
                 <div class="d-flex justify-center mb-4">
                     @if (!string.IsNullOrEmpty(_imageUrl))
                     {
@@ -22,7 +22,7 @@
                 <div style="padding-bottom:20px">
                 <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small"
                     StartIcon="@Icons.Filled.CloudUpload" for="fileInput">
-                    @L["Upload Image"]
+                    @L["Upload"]
                 </MudButton>
                 <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" Target="_blank"
                         StartIcon="@Icons.Filled.RemoveRedEye" Link="@_imageUrl" Style="margin-left: 5px;" >
@@ -33,7 +33,7 @@
             </MudCardActions>
         </MudCard>
     </MudItem>
-    <MudItem xs="12" sm="12" md="7">
+    <MudItem xs="12" sm="12" md="9">
         <EditForm Model="@_profileModel" OnValidSubmit="UpdateProfileAsync">
             <MudCard Elevation="25">
                 <MudCardHeader>
@@ -66,7 +66,7 @@
                     </MudGrid>
                 </MudCardContent>
                 <MudCardActions Class="pb-4 pl-4">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" StartIcon="@Icons.Filled.Save"
                         ButtonType="ButtonType.Submit">@L["Save Changes"]</MudButton>
                 </MudCardActions>
             </MudCard>
