@@ -20,6 +20,8 @@ public partial class Products
     protected EntityServerTableContext<ProductDto, Guid, ProductViewModel> Context { get; set; } = default!;
 
     private EntityTable<ProductDto, Guid, ProductViewModel> _table = default!;
+    [Parameter]
+    public ProductViewModel ProductViewModel { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,23 +39,23 @@ public partial class Products
                     searchFunc: SearchFunc,
                     createFunc: async prod =>
                     {
-                        if (!string.IsNullOrEmpty(ProductImage))
+                        if (!string.IsNullOrEmpty(ProductViewModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = ProductImage, Extension = ProductImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = ProductViewModel.ImageInBytes, Extension = ProductViewModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
-                        ProductImage = string.Empty;
+                        ProductViewModel.ImageInBytes = string.Empty;
                     },
                     updateFunc: async (id, prod) =>
                     {
-                        if (!string.IsNullOrEmpty(ProductImage))
+                        if (!string.IsNullOrEmpty(ProductViewModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = ProductImage, Extension = ProductImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = ProductViewModel.ImageInBytes, Extension = ProductViewModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.UpdateAsync(id, prod);
-                        ProductImage = string.Empty;
+                        ProductViewModel.ImageInBytes = string.Empty;
                     },
                     deleteFunc: async id => await ProductsClient.DeleteAsync(id),
                     entityName: L["Product"],
@@ -114,25 +116,24 @@ public partial class Products
 
     private IBrowserFile? _file;
 
-    public string? ProductImage { get; set; }
-    public string? ProductImageExtension { get; set; }
     private async Task UploadFiles(InputFileChangeEventArgs e)
     {
         _file = e.File;
         if (_file != null)
         {
-            ProductImageExtension = Path.GetExtension(_file.Name);
-            if (!ApplicationConstants.SupportedImageFormats.Contains(ProductImageExtension.ToLower()))
+            ProductViewModel.ImageExtension = Path.GetExtension(_file.Name);
+            if (!ApplicationConstants.SupportedImageFormats.Contains(ProductViewModel.ImageExtension.ToLower()))
             {
                 Snackbar.Add("Image Format Not Supported.", Severity.Error);
                 return;
             }
 
-            string? format = "image/png";
-            var imageFile = await e.File.RequestImageFileAsync(format, 400, 400);
+            string? format = "image/jpeg";
+            var imageFile = await e.File.RequestImageFileAsync(format, 700, 700);
             byte[]? buffer = new byte[imageFile.Size];
             await imageFile.OpenReadStream().ReadAsync(buffer);
-            ProductImage = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            ProductViewModel.ImageInBytes = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            Context.AddEditModal?.ForceRender();
         }
     }
 
@@ -177,4 +178,7 @@ public partial class Products
 public class ProductViewModel : UpdateProductRequest
 {
     public string? ImagePath { get; set; }
+
+    public string? ImageInBytes { get; set; }
+    public string? ImageExtension { get; set; }
 }

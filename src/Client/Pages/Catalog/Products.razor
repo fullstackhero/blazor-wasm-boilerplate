@@ -31,9 +31,9 @@
         </MudItem>
         <MudItem xs="12" md="6">
             <MudItem>
-                @if(!string.IsNullOrEmpty(ProductImage))
+                @if(!string.IsNullOrEmpty(ProductViewModel.ImageInBytes))
                 {
-                    <MudAvatar Image ="@ProductImage" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                    <MudAvatar Image ="@ProductViewModel.ImageInBytes" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
                 else
                 {
