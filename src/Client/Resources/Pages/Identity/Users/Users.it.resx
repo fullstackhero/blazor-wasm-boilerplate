@@ -123,6 +123,9 @@
   <data name="Active" xml:space="preserve">
     <value>Attiva</value>
   </data>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>Conferma Password</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Crea</value>
   </data>
@@ -156,6 +159,15 @@
   <data name="Not Allowed." xml:space="preserve">
     <value>Non autorizzato.</value>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Phone Number" xml:space="preserve">
+    <value>Numero di telefono</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numero di telefono</value>
+  </data>
   <data name="Register New User" xml:space="preserve">
     <value>Registra nuovo utente</value>
   </data>
@@ -164,6 +176,12 @@
   </data>
   <data name="Search For Users" xml:space="preserve">
     <value>Ricerca utenti</value>
+  </data>
+  <data name="User Name" xml:space="preserve">
+    <value>Nome utente</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Nome utente</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Utenti</value>

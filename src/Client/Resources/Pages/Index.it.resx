@@ -117,82 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
+  <data name="Blazor WASM Boilerplate" xml:space="preserve">
+    <value>Blazor WASM Boilerplate</value>
   </data>
-  <data name="Active" xml:space="preserve">
-    <value>Active</value>
+  <data name="Built with the goodness of" xml:space="preserve">
+    <value>Sviluppato con l'ultilizzo di componenti della libreria </value>
   </data>
-  <data name="Bordered" xml:space="preserve">
-    <value>Bordered</value>
+  <data name="Compatible with" xml:space="preserve">
+    <value>Compatibile con </value>
   </data>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Confirm Password</value>
+  <data name="Component Library" xml:space="preserve">
+    <value>Component Library</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Create</value>
+  <data name="In case you are stuck anywhere or have any queries regarding this implementation, I have compiled a Quick Start Guide for you reference." xml:space="preserve">
+    <value>Nel caso in cui tu sia bloccato ovunque o hai domande riguardanti questa implementazione, ho compilato una guida rapida per il tuo riferimento.</value>
   </data>
-  <data name="Dense" xml:space="preserve">
-    <value>Dense</value>
+  <data name="Read The Guide" xml:space="preserve">
+    <value>GUIDA</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Email Confirmation" xml:space="preserve">
-    <value>Email Confirmation</value>
-  </data>
-  <data name="Export" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="Filtered Users exported" xml:space="preserve">
-    <value>Filtered Users exported</value>
-  </data>
-  <data name="First Name" xml:space="preserve">
-    <value>First Name</value>
-  </data>
-  <data name="Last Name" xml:space="preserve">
-    <value>Last Name</value>
-  </data>
-  <data name="Manage Roles" xml:space="preserve">
-    <value>Manage Roles</value>
-  </data>
-  <data name="Manage Users" xml:space="preserve">
-    <value>Manage Users</value>
-  </data>
-  <data name="No Allowed Actions" xml:space="preserve">
-    <value>No Allowed Actions</value>
-  </data>
-  <data name="Not Allowed." xml:space="preserve">
-    <value>Not Allowed.</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="Phone Number" xml:space="preserve">
-    <value>Phone Number</value>
-  </data>
-  <data name="Register New User" xml:space="preserve">
-    <value>Register New User</value>
-  </data>
-  <data name="Reload" xml:space="preserve">
-    <value>Reload</value>
-  </data>
-  <data name="Search For Users" xml:space="preserve">
-    <value>Search For Users</value>
-  </data>
-  <data name="Striped" xml:space="preserve">
-    <value>Striped</value>
-  </data>
-  <data name="User Name" xml:space="preserve">
-    <value>User Name</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="Users exported" xml:space="preserve">
-    <value>Users exported</value>
-  </data>
-  <data name="View Profile" xml:space="preserve">
-    <value>View Profile</value>
+  <data name="Version 1.0" xml:space="preserve">
+    <value>Versione 1.0</value>
   </data>
 </root>
