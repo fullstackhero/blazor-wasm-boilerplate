@@ -1,36 +1,36 @@
 ﻿@using System.Security.Claims
+@inject IStringLocalizer<NavMenu> L
 <PersonCard
     Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text); margin-bottom:0px!important" />
 <MudNavMenu>
-    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">Start</MudText>
-    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home">Home</MudNavLink>
+    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Start"]</MudText>
+    <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home">@L["Home"]</MudNavLink>
     <MudNavLink Href="https://fullstackhero.net/getting-started/" Match="NavLinkMatch.All"
-        Icon="@Icons.Material.Outlined.Stars">Getting Started</MudNavLink>
-    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">Personal</MudText>
+        Icon="@Icons.Material.Outlined.Stars">@L["Getting Started"]</MudNavLink>
+    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Personal"]</MudText>
     @if (_canViewDashboard)
 
     {
-        <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Dashboard">Dashboard
-        </MudNavLink>
+        <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Dashboard">@L["Dashboard"]</MudNavLink>
 
     }
-    <MudNavLink Href="/account" Icon="@Icons.Material.Outlined.Person">Account</MudNavLink>
+    <MudNavLink Href="/account" Icon="@Icons.Material.Outlined.Person">@L["Account"]</MudNavLink>
     @if (_canViewAuditLogs)
 
     {
-        <MudNavLink Href="/audit-logs" Icon="@Icons.Material.Outlined.SecurityUpdateGood">Logs</MudNavLink>
+        <MudNavLink Href="/audit-logs" Icon="@Icons.Material.Outlined.SecurityUpdateGood">@L["Logs"]</MudNavLink>
 
     }
     @if (_canViewProducts || _canViewBrands)
 
     {
-        <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">Management</MudText>
-        <MudNavGroup Title="Catalog" Icon="@Icons.Filled.AddBox">
+        <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Management"]</MudText>
+        <MudNavGroup Title="@L["Catalog"]" Icon="@Icons.Filled.AddBox">
             @if (_canViewProducts)
 
             {
                 <MudNavLink Href="/catalog/products" Icon="@Icons.Filled.ShoppingBag">
-                    Products
+                    @L["Products"]
                 </MudNavLink>
 
             }
@@ -38,7 +38,7 @@
 
             {
                 <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.BrandingWatermark">
-                    Brands
+                    @L["Brands"]
                 </MudNavLink>
 
             }
@@ -48,18 +48,18 @@
     @if (CanViewAdministrationGroup)
 
     {
-        <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">Administration</MudText>
+        <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Administration"]</MudText>
         @if (_canViewUsers)
         {
-            <MudNavLink Match="NavLinkMatch.Prefix" Href="/users" Icon="@Icons.Material.Outlined.PeopleAlt">Users</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.Prefix" Href="/users" Icon="@Icons.Material.Outlined.PeopleAlt">@L["Users"]</MudNavLink>
         }
         @if (_canViewRoles)
         {
-            <MudNavLink Href="/roles" Icon="@Icons.Material.Outlined.EmojiPeople">Roles</MudNavLink>
+            <MudNavLink Href="/roles" Icon="@Icons.Material.Outlined.EmojiPeople">@L["Roles"]</MudNavLink>
         }
         @if(_canViewTenants)
         {
-            <MudNavLink Href="/tenants" Icon="@Icons.Material.Outlined.LocalMall" Disabled="!_canViewTenants">Tenants</MudNavLink>
+            <MudNavLink Href="/tenants" Icon="@Icons.Material.Outlined.LocalMall" Disabled="!_canViewTenants">@L["Tenants"]</MudNavLink>
         }
     }
 </MudNavMenu>
