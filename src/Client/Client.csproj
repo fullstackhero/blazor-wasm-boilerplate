@@ -31,4 +31,8 @@
              the user gets redirected to authentication/login-failed with no error message. -->
         <TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Shared\Components\EntityTable\" />
+    </ItemGroup>
 </Project>

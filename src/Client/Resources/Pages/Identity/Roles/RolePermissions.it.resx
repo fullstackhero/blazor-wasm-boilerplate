@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="All Permissions" xml:space="preserve">
-    <value>All Permissions</value>
+    <value>Tutti le autorizzazioni</value>
   </data>
   <data name="Apply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Applica</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Descrizione</value>
   </data>
   <data name="Here you can leave a comment for this permission for the current role" xml:space="preserve">
-    <value>Here you can leave a comment for this permission for the current role</value>
+    <value>Qui puoi lasciare un commento per questa autorizzazione per il ruolo corrente</value>
   </data>
   <data name="Manage Permission" xml:space="preserve">
     <value>Gestisci autorizzazione</value>
@@ -144,10 +144,13 @@
   <data name="Type" xml:space="preserve">
     <value>Questa è una visualizzazione solo amministratore</value>
   </data>
+  <data name="Update Permissions" xml:space="preserve">
+    <value>Salva autorizzazioni</value>
+  </data>
   <data name="Update Role Permissions" xml:space="preserve">
     <value>Aggiorna le autorizzazioni del ruolo</value>
   </data>
   <data name="Will be saved only when selected Permission" xml:space="preserve">
-    <value>Will be saved only when selected Permission</value>
+    <value>Saranno salvati solo i permessi selezionati</value>
   </data>
 </root>
