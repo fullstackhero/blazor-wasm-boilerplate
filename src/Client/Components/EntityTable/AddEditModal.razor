@@ -15,7 +15,7 @@
                 else
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
-                    @($"{L["Edit"]} {EntityName} {Id}");
+                    @($"{L["Edit"]} {EntityName}");
                 }
             </MudText>
         </TitleContent>
@@ -24,7 +24,12 @@
             <DataAnnotationsValidator />
             <CustomValidation @ref="_customValidation" />
             <MudGrid>
-
+                @if (!IsCreate)
+                {
+                    <MudItem xs="12" md="6">
+                        <MudTextField Value="Id" ReadOnly DisableUnderLine Label="@L[$"{EntityName} Id"]" />
+                    </MudItem>
+                }
                 @EditFormContent(RequestModel)
 
             </MudGrid>
