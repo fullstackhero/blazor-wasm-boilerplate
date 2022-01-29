@@ -39,7 +39,7 @@ public partial class Products
                     {
                         if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
@@ -49,7 +49,7 @@ public partial class Products
                     {
                         if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}-{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.UpdateAsync(id, prod);
