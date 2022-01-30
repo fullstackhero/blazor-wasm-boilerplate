@@ -128,11 +128,14 @@ public partial class RolePermissions
             Permissions = selectedPermissions.Where(x => x.Enabled).Select(x => x.Permission).ToList(),
         };
 
-        await ApiHelper.ExecuteCallGuardedAsync(
+        if (await ApiHelper.ExecuteCallGuardedAsync(
             () => RolesClient.UpdatePermissionsAsync(request),
             Snackbar,
             null,
-            _localizer["Updated Permissions."]);
+            _localizer["Updated Permissions."]) is not null)
+        {
+            Navigation.NavigateTo("/roles");
+        }
     }
 
     private bool Search(PermissionDto permission) =>
