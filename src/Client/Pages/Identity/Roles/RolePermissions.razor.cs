@@ -43,8 +43,8 @@ public partial class RolePermissions
                 () => RolesClient.GetByIdWithPermissionsAsync(Id), Snackbar)
             is RoleDto role)
         {
-            _title = string.Format(_localizer["{0} Permissions"], role.Name);
-            _description = string.Format(_localizer["Manage {0} Role Permissions"], role.Name);
+            _title = string.Format(L["{0} Permissions"], role.Name);
+            _description = string.Format(L["Manage {0} Role Permissions"], role.Name);
 
             if (role.IsRootRole)
             {
@@ -103,7 +103,7 @@ public partial class RolePermissions
                 }
             }
 
-            GroupedRoleClaims.Add(_localizer[moduleName], permissionListForModule);
+            GroupedRoleClaims.Add(L[moduleName], permissionListForModule);
         }
     }
 
@@ -132,7 +132,7 @@ public partial class RolePermissions
             () => RolesClient.UpdatePermissionsAsync(request),
             Snackbar,
             null,
-            _localizer["Updated Permissions."]) is not null)
+            L["Updated Permissions."]) is not null)
         {
             Navigation.NavigateTo("/roles");
         }

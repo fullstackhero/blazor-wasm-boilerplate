@@ -117,37 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="All Permissions" xml:space="preserve">
-    <value>All Permissions</value>
+  <data name="Active?" xml:space="preserve">
+    <value>Attivato ?</value>
   </data>
-  <data name="Apply" xml:space="preserve">
-    <value>Apply</value>
+  <data name="Administrator Settings." xml:space="preserve">
+    <value>Impostazioni amministratore.</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
+  <data name="Email" xml:space="preserve">
+    <value>E-Mail</value>
   </data>
-  <data name="Here you can leave a comment for this permission for the current role" xml:space="preserve">
-    <value>Here you can leave a comment for this permission for the current role</value>
+  <data name="First Name" xml:space="preserve">
+    <value>Nome</value>
   </data>
-  <data name="Manage Permission" xml:space="preserve">
-    <value>Gestisci autorizzazione</value>
+  <data name="Last Name" xml:space="preserve">
+    <value>Cognome</value>
   </data>
-  <data name="Manage {0} {1}'s Permissions" xml:space="preserve">
-    <value>Gestisci {0} {1} Autorizzazioni</value>
+  <data name="Phone Number" xml:space="preserve">
+    <value>Telefono</value>
   </data>
-  <data name="Permission Name" xml:space="preserve">
-    <value>Nome autorizzazioni</value>
+  <data name="Profile" xml:space="preserve">
+    <value>Profilo</value>
   </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status</value>
+  <data name="Public Profile" xml:space="preserve">
+    <value>Profilo pubblico</value>
   </data>
-  <data name="Type" xml:space="preserve">
-    <value>Questa è una visualizzazione solo amministratore</value>
+  <data name="Save Changes" xml:space="preserve">
+    <value>Salvare le modifiche</value>
   </data>
-  <data name="Update Role Permissions" xml:space="preserve">
-    <value>Aggiorna le autorizzazioni del ruolo</value>
+  <data name="This is an Administrator Only View." xml:space="preserve">
+    <value>Questa è una visualizzazione solo amministratore.</value>
   </data>
-  <data name="Will be saved only when selected Permission" xml:space="preserve">
-    <value>Will be saved only when selected Permission</value>
+  <data name="Updated User Status." xml:space="preserve">
+    <value>Aggiorna status utente.</value>
   </data>
 </root>

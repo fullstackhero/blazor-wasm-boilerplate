@@ -117,19 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Done!" xml:space="preserve">
-    <value>Hecho!</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Acties</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>Correo</value>
+  <data name="Advanced Search" xml:space="preserve">
+    <value>geavanceerd zoeken</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>Ingrese su correo para blanquear su contraseña</value>
+  <data name="Brand" xml:space="preserve">
+    <value>Merk</value>
   </data>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>¿Olvidó su Contraseña?</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuleren</value>
   </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>Blanquear Contraseña</value>
+  <data name="Create" xml:space="preserve">
+    <value>Creëren</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Bewerk</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="Search for" xml:space="preserve">
+    <value>Search for</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
   </data>
 </root>

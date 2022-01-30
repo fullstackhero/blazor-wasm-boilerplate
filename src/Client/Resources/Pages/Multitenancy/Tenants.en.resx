@@ -117,19 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Done!" xml:space="preserve">
-    <value>Klar!</value>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-post</value>
+  <data name="Admin Email" xml:space="preserve">
+    <value>Admin Email</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>Ange e-postadress för återställning av lösenord</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>Glömt ditt lösenord?</value>
-  </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>Återställ lösenord</value>
+  <data name="Valid Upto" xml:space="preserve">
+    <value>Valid Upto</value>
   </data>
 </root>

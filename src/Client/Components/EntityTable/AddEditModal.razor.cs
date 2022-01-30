@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
@@ -69,10 +70,12 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
         return true;
     }
 
-    protected override Task OnInitializedAsync() =>
-        OnInitializedFunc is not null
+    protected override Task OnInitializedAsync()
+    {
+        return OnInitializedFunc is not null
             ? OnInitializedFunc()
             : Task.CompletedTask;
+    }
 
     private async Task SaveAsync()
     {

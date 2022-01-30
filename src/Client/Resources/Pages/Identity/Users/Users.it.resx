@@ -117,19 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Done!" xml:space="preserve">
-    <value>រួចរាល់!</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Azioni</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>អ៊ីម៉ែល</value>
+  <data name="Active" xml:space="preserve">
+    <value>Attiva</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>សូមបញ្ចូលអ៊ីម៉ែលដើម្បីកំណត់លេខកូដសម្ងាត់ឡើងវិញ</value>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>Conferma Password</value>
   </data>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>ភ្លេចលេខកូដសម្ងាត់?</value>
+  <data name="Create" xml:space="preserve">
+    <value>Crea</value>
   </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>កំណត់លេខកូដសម្ងាត់ឡើងវិញ</value>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Email Confirmation" xml:space="preserve">
+    <value>Conferma E-Mail </value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Filtered Users exported" xml:space="preserve">
+    <value>Filtered Users exported</value>
+  </data>
+  <data name="First Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Last Name" xml:space="preserve">
+    <value>Cognome</value>
+  </data>
+  <data name="Manage Roles" xml:space="preserve">
+    <value>Gestisci ruoli</value>
+  </data>
+  <data name="Manage Users" xml:space="preserve">
+    <value>Gestisci utenti</value>
+  </data>
+  <data name="No Allowed Actions" xml:space="preserve">
+    <value>No Allowed Actions</value>
+  </data>
+  <data name="Not Allowed." xml:space="preserve">
+    <value>Non autorizzato.</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Phone Number" xml:space="preserve">
+    <value>Numero di telefono</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numero di telefono</value>
+  </data>
+  <data name="Register New User" xml:space="preserve">
+    <value>Registra nuovo utente</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Ricarica</value>
+  </data>
+  <data name="Search For Users" xml:space="preserve">
+    <value>Ricerca utenti</value>
+  </data>
+  <data name="User Name" xml:space="preserve">
+    <value>Nome utente</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Nome utente</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Utenti</value>
+  </data>
+  <data name="Users exported" xml:space="preserve">
+    <value>Users exported</value>
+  </data>
+  <data name="View Profile" xml:space="preserve">
+    <value>Vedi profilo</value>
   </data>
 </root>

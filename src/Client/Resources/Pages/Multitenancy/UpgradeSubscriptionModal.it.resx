@@ -117,19 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Done!" xml:space="preserve">
-    <value>Selesai!</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annulla</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-mail</value>
+  <data name="Current Expiry Date" xml:space="preserve">
+    <value>Data di scadenza</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>Masukkan email untuk atur ulang sandi</value>
+  <data name="New Expiry Date" xml:space="preserve">
+    <value>Nuova data di scadenza</value>
   </data>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>Lupa sandi?</value>
+  <data name="Upgrade" xml:space="preserve">
+    <value>Aggiornamento</value>
   </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>Atur ulang sandi</value>
+  <data name="Upgrade Subscription" xml:space="preserve">
+    <value>Aggiorna Subscription</value>
+  </data>
+  <data name="Upgraded Subscription." xml:space="preserve">
+    <value>Subscription Aggiornata.</value>
   </data>
 </root>
