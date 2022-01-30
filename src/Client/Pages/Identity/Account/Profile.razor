@@ -1,7 +1,7 @@
 ﻿@inject IStringLocalizer<Profile> L
 
 <MudGrid>
-    <MudItem xs="12" sm="12" md="3">
+    <MudItem xs="12" sm="12" md="4">
         <MudCard Elevation="25">
             <MudCardContent Style="padding:0px!important">
                 <div class="d-flex justify-center mb-4">
@@ -33,7 +33,7 @@
             </MudCardActions>
         </MudCard>
     </MudItem>
-    <MudItem xs="12" sm="12" md="9">
+    <MudItem xs="12" sm="12" md="8">
         <EditForm Model="@_profileModel" OnValidSubmit="UpdateProfileAsync">
             <MudCard Elevation="25">
                 <MudCardHeader>
