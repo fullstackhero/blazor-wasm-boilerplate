@@ -159,6 +159,12 @@
   <data name="Manage Products." xml:space="preserve">
     <value>Manage Products.</value>
   </data>
+  <data name="Maximum Rate" xml:space="preserve">
+    <value>Maximum Rate</value>
+  </data>
+  <data name="Minimum Rate" xml:space="preserve">
+    <value>Minimum Rate</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>

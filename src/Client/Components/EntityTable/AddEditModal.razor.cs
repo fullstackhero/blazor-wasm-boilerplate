@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
-public partial class AddEditModal{}
+public partial class AddEditModal { }
 
 public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
 {
@@ -36,8 +36,6 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
     public bool IsCreate => Id is null;
 
     public void ForceRender() => StateHasChanged();
-
-    [Inject] private IStringLocalizer<SharedResource> LS2 { get; set; }
 
     // This should not be necessary anymore, except maybe in the case when the
     // UpdateEntityRequest has different validation rules than the CreateEntityRequest.

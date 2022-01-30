@@ -65,9 +65,6 @@ public partial class EntityTable<TEntity, TId, TRequest>
     private IEnumerable<TEntity>? _entityList;
     private int _totalItems;
 
-    [Inject]
-    protected IStringLocalizer<EntityTable<TEntity, TId, TRequest>> L2 { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
@@ -75,7 +72,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canCreate = await CanDoPermission(Context.CreatePermission, state);
         _canUpdate = await CanDoPermission(Context.UpdatePermission, state);
         _canDelete = await CanDoPermission(Context.DeletePermission, state);
-        
+
         await LocalLoadDataAsync();
         await SetAndSubscribeToTablePreference();
     }

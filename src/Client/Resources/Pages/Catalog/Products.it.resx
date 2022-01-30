@@ -171,4 +171,10 @@
   <data name="No Allowed Actions" xml:space="preserve">
     <value>Nessuna azione consentita</value>
   </data>
+  <data name="Maximum Rate" xml:space="preserve">
+    <value>Tasso massimo</value>
+  </data>
+  <data name="Minimum Rate" xml:space="preserve">
+    <value>Tasso minimo</value>
+  </data>
 </root>
