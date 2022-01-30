@@ -117,19 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>Password dimenticata?</value>
+  <data name="Blazor WASM Boilerplate" xml:space="preserve">
+    <value>Blazor WASM Boilerplate</value>
   </data>
-  <data name="E-Mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Built with the goodness of" xml:space="preserve">
+    <value>Built with the goodness of</value>
   </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>Ripristina Password</value>
+  <data name="Compatible with" xml:space="preserve">
+    <value>Compatible with</value>
   </data>
-  <data name="Done!" xml:space="preserve">
-    <value>Fatto!</value>
+  <data name="Component Library" xml:space="preserve">
+    <value>Component Library</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>Inserisci l'indirizzo E-Mail collegato al tuo utente e riceverai un link per il ripristino della password.</value>
+  <data name="In case you are stuck anywhere or have any queries regarding this implementation, I have compiled a Quick Start Guide for you reference." xml:space="preserve">
+    <value>In case you are stuck anywhere or have any queries regarding this implementation, I have compiled a Quick Start Guide for you reference.</value>
+  </data>
+  <data name="Read The Guide" xml:space="preserve">
+    <value>Read The Guide</value>
+  </data>
+  <data name="Version 1.0" xml:space="preserve">
+    <value>Version 1.0</value>
   </data>
 </root>

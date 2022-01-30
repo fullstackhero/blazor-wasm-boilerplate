@@ -117,19 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Done!" xml:space="preserve">
-    <value>Klaar!</value>
+  <data name="All Permissions" xml:space="preserve">
+    <value>Tutti le autorizzazioni</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-mail</value>
+  <data name="Apply" xml:space="preserve">
+    <value>Applica</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>Voer uw E-mail in voor het opnieuw instellen van het wachtwoord!</value>
+  <data name="Description" xml:space="preserve">
+    <value>Descrizione</value>
   </data>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>Wachtwoord vergeten?</value>
+  <data name="Here you can leave a comment for this permission for the current role" xml:space="preserve">
+    <value>Qui puoi lasciare un commento per questa autorizzazione per il ruolo corrente</value>
   </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>Wachtwoord opnieuw instellen</value>
+  <data name="Manage Permission" xml:space="preserve">
+    <value>Gestisci autorizzazione</value>
+  </data>
+  <data name="Manage {0} {1}'s Permissions" xml:space="preserve">
+    <value>Gestisci {0} {1} Autorizzazioni</value>
+  </data>
+  <data name="Permission Name" xml:space="preserve">
+    <value>Nome autorizzazioni</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Questa è una visualizzazione solo amministratore</value>
+  </data>
+  <data name="Update Permissions" xml:space="preserve">
+    <value>Salva autorizzazioni</value>
+  </data>
+  <data name="Update Role Permissions" xml:space="preserve">
+    <value>Aggiorna le autorizzazioni del ruolo</value>
+  </data>
+  <data name="Will be saved only when selected Permission" xml:space="preserve">
+    <value>Saranno salvati solo i permessi selezionati</value>
   </data>
 </root>

@@ -117,37 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Active?" xml:space="preserve">
-    <value>Attiva?</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
   </data>
-  <data name="Administrator Settings." xml:space="preserve">
-    <value>Impostazioni amministratore.</value>
+  <data name="Advanced Search" xml:space="preserve">
+    <value>Advanced Search</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
   </data>
-  <data name="First Name" xml:space="preserve">
-    <value>Nome</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="Last Name" xml:space="preserve">
-    <value>Cognome</value>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
   </data>
-  <data name="Phone Number" xml:space="preserve">
-    <value>Telefono</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="Profile" xml:space="preserve">
-    <value>Profilo</value>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
   </data>
-  <data name="Public Profile" xml:space="preserve">
-    <value>Profilo pubblico</value>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
   </data>
-  <data name="Save Changes" xml:space="preserve">
-    <value>Salvare le modifiche</value>
+  <data name="Reload" xml:space="preserve">
+    <value>Reload</value>
   </data>
-  <data name="This is an Administrator Only View." xml:space="preserve">
-    <value>Questa è una visualizzazione solo amministratore.</value>
+  <data name="Search for" xml:space="preserve">
+    <value>Search for</value>
   </data>
-  <data name="Updated User Status." xml:space="preserve">
-    <value>Aggiorna status utente.</value>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
   </data>
 </root>
