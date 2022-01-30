@@ -25,9 +25,9 @@ public partial class RolePermissions
     public string _description = string.Empty;
 
     private string _searchString = string.Empty;
-    private bool _dense;
+    private bool _dense = false;
     private bool _striped = true;
-    private bool _bordered;
+    private bool _bordered = false;
 
     private bool _canEditRoleClaims;
     private bool _canSearchRoleClaims;
