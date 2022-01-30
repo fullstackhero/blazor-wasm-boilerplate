@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
@@ -36,6 +37,8 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
 
     public void ForceRender() => StateHasChanged();
 
+    [Inject] private IStringLocalizer<SharedResource> LS2 { get; set; }
+
     // This should not be necessary anymore, except maybe in the case when the
     // UpdateEntityRequest has different validation rules than the CreateEntityRequest.
     // If that would happen a lot we can still change the design so this method doesn't need to be called manually.
@@ -70,10 +73,12 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
         return true;
     }
 
-    protected override Task OnInitializedAsync() =>
-        OnInitializedFunc is not null
+    protected override Task OnInitializedAsync()
+    {
+        return OnInitializedFunc is not null
             ? OnInitializedFunc()
             : Task.CompletedTask;
+    }
 
     private async Task SaveAsync()
     {

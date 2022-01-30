@@ -1,6 +1,6 @@
 ﻿@typeparam TRequest
 
-@inject IStringLocalizer<AddEditModal> L
+@inject IStringLocalizer<SharedResource> L
 
 <EditForm Model="@RequestModel" OnValidSubmit="SaveAsync">
     <MudDialog>
@@ -10,14 +10,12 @@
                 @if (IsCreate)
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
-                    @($"{L["Create"]} ");
-                    @L[EntityName] 
+                    @($"{L["Create"]} "); @L[EntityName];
                 }
                 else
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
-                    @($"{L["Edit"]} ");
-                    @L[EntityName] 
+                    @($"{L["Edit"]} "); @L[EntityName] 
                 }
             </MudText>
         </TitleContent>

@@ -2,6 +2,7 @@
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.MultiTenancy;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
 
@@ -15,6 +16,13 @@ public partial class ForgotPassword
     private IIdentityClient IdentityClient { get; set; } = default!;
 
     private string Tenant { get; set; } = MultitenancyConstants.DefaultTenant.Key;
+
+    [Inject] private IStringLocalizer<ForgotPassword> L2 { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
 
     private async Task SubmitAsync()
     {

@@ -12,7 +12,6 @@ using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
-public partial class EntityTable{}
 
 public partial class EntityTable<TEntity, TId, TRequest>
     where TRequest : new()

@@ -118,21 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Actions" xml:space="preserve">
-    <value>Azioni</value>
+    <value>Acties</value>
   </data>
   <data name="Advanced Search" xml:space="preserve">
-    <value>Ricerca avanzata</value>
+    <value>geavanceerd zoeken</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Merk</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuleren</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Crea</value>
+    <value>Creëren</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Modifica</value>
+    <value>Bewerk</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
   </data>
   <data name="Reload" xml:space="preserve">
-    <value>Ricarica</value>
+    <value>Reload</value>
   </data>
   <data name="Search for" xml:space="preserve">
-    <value>Ricerca per </value>
+    <value>Search for</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
   </data>
 </root>

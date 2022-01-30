@@ -117,19 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>Password dimenticata?</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Azioni</value>
   </data>
-  <data name="E-Mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Advanced Search" xml:space="preserve">
+    <value>Ricerca avanzata</value>
   </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>Ripristina Password</value>
+  <data name="Brand" xml:space="preserve">
+    <value>Marchio</value>
   </data>
-  <data name="Done!" xml:space="preserve">
-    <value>Fatto!</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annulla</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>Inserisci l'indirizzo E-Mail collegato al tuo utente e riceverai un link per il ripristino della password.</value>
+  <data name="Create" xml:space="preserve">
+    <value>Crea</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifica</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Prodotto</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Prodotti</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Ricarica</value>
+  </data>
+  <data name="Search for" xml:space="preserve">
+    <value>Ricerca per </value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Aggiorna</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Utente</value>
   </data>
 </root>
