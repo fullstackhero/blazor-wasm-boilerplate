@@ -2,7 +2,7 @@
 
 public static class DefaultPermissions
 {
-    public static List<string> Admin => typeof(FSHPermissions).GetNestedClassesStaticStringValues();
+    public static Type[] AdminPermissionTypes => typeof(FSHPermissions).GetNestedTypes();
 
-    public static List<string> Root => typeof(FSHRootPermissions).GetNestedClassesStaticStringValues();
+    public static Type[] RootPermissionTypes => typeof(FSHRootPermissions).GetNestedTypes();
 }

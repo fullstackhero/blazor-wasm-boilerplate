@@ -1,10 +1,13 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using System.ComponentModel;
+using System.Reflection;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
 
@@ -19,15 +22,12 @@ public partial class RolePermissions
     [Inject]
     protected IRolesClient RolesClient { get; set; } = default!;
 
-    protected List<PermissionUpdateDto> RolePermissionsList { get; set; } = new();
+    private Dictionary<string, List<PermissionUpdateDto>> GroupedRoleClaims { get; } = new();
 
     public string _title = string.Empty;
     public string _description = string.Empty;
 
     private string _searchString = string.Empty;
-    private bool _dense;
-    private bool _striped = true;
-    private bool _bordered;
 
     private bool _canEditRoleClaims;
     private bool _canSearchRoleClaims;
@@ -50,39 +50,89 @@ public partial class RolePermissions
             {
                 // Display Root Permissions only if the Role is Created for Root Tenant.
 
-                RolePermissionsList = DefaultPermissions.Admin.Union(DefaultPermissions.Root)
-                .Select(permission => new PermissionUpdateDto(
-                    permission,
-                    role.Permissions?.Any(p => p.Permission == permission) is true))
-                .ToList();
+                var adminPermissions = DefaultPermissions.AdminPermissionTypes;
+                GeneratePermissionGroups(adminPermissions, role);
+
+                var rootPermissions = DefaultPermissions.RootPermissionTypes;
+                GeneratePermissionGroups(rootPermissions, role);
             }
             else
             {
-                RolePermissionsList = DefaultPermissions.Admin.ConvertAll(permission => new PermissionUpdateDto(
-                    permission,
-                    role.Permissions?.Any(p => p.Permission == permission) is true));
+                var adminPermissions = DefaultPermissions.AdminPermissionTypes;
+                GeneratePermissionGroups(adminPermissions, role);
             }
         }
 
         _loaded = true;
     }
 
+    private void GeneratePermissionGroups(Type[] modules, RoleDto role)
+    {
+        List<PermissionUpdateDto> permissionListForModule = new();
+        foreach (var module in modules)
+        {
+            permissionListForModule = new();
+            string? moduleName = string.Empty;
+            string? moduleDescription = string.Empty;
+
+            if (module.GetCustomAttributes(typeof(DisplayNameAttribute), true)
+                .FirstOrDefault() is DisplayNameAttribute displayNameAttribute)
+            {
+                moduleName = displayNameAttribute.DisplayName;
+            }
+
+            if (module.GetCustomAttributes(typeof(DescriptionAttribute), true)
+                .FirstOrDefault() is DescriptionAttribute descriptionAttribute)
+            {
+                moduleDescription = descriptionAttribute.Description;
+            }
+
+            var fields = module.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+
+            foreach (var fi in fields)
+            {
+                object? propertyValue = fi.GetValue(null);
+
+                if (propertyValue?.ToString() != null)
+                {
+                    permissionListForModule.Add(new PermissionUpdateDto(propertyValue.ToString() ?? string.Empty, role.Permissions?.Any(p => p.Permission == propertyValue.ToString()) is true)
+                    {
+                        Description = moduleDescription,
+                        Group = moduleName
+                    });
+                }
+            }
+
+            GroupedRoleClaims.Add(_localizer[moduleName], permissionListForModule);
+        }
+    }
+
+    private Color GetGroupBadgeColor(int selected, int all)
+    {
+        if (selected == 0)
+            return Color.Error;
+
+        if (selected == all)
+            return Color.Success;
+
+        return Color.Info;
+    }
+
     private async Task SaveAsync()
     {
+        var allPermissions = GroupedRoleClaims.Values.SelectMany(a => a);
+        var selectedPermissions = allPermissions.Where(a => a.Enabled);
         var request = new UpdatePermissionsRequest()
         {
             RoleId = Id,
-            Permissions = RolePermissionsList.Where(x => x.Enabled).Select(x => x.Permission).ToList(),
+            Permissions = selectedPermissions.Where(x => x.Enabled).Select(x => x.Permission).ToList(),
         };
 
-        if (await ApiHelper.ExecuteCallGuardedAsync(
+        await ApiHelper.ExecuteCallGuardedAsync(
             () => RolesClient.UpdatePermissionsAsync(request),
             Snackbar,
             null,
-            _localizer["Success"]) is not null)
-        {
-            Navigation.NavigateTo("/roles");
-        }
+            _localizer["Updated Permissions."]);
     }
 
     private bool Search(PermissionDto permission) =>

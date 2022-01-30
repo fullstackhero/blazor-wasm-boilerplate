@@ -10,8 +10,13 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="RolePermissionsList" Dense="@_dense" Bordered="@_bordered"
-    Striped="@_striped" Filter="new Func<PermissionUpdateDto, bool>(Search)">
+     <MudTabs Elevation="25" Rounded="true" Centered="true" ApplyEffectsToContainer="true" AlwaysShowScrollButtons="true">
+        @foreach (var group in GroupedRoleClaims.Keys)
+        {
+            var selectedRoleClaimsInGroup = GroupedRoleClaims[group].Where(c => c.Enabled).ToList();
+            var allRoleClaimsInGroup = GroupedRoleClaims[group].ToList();
+            <MudTabPanel Text="@group" BadgeData="@($"{selectedRoleClaimsInGroup.Count}/{allRoleClaimsInGroup.Count}")" Style="padding-right: 43px;" BadgeColor="@GetGroupBadgeColor(selectedRoleClaimsInGroup.Count, allRoleClaimsInGroup.Count)">
+                    <MudTable Hover="true" Elevation="25" Items="@allRoleClaimsInGroup" Style="margin-bottom:0px!important" Filter="new Func<PermissionUpdateDto, bool>(Search)">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-auto" StartIcon="@Icons.Material.Filled.ArrowBack" Link="/roles">@_localizer["Back"]
@@ -61,4 +66,8 @@ else
         <TablePager />
     </PagerContent>
 </MudTable>
+            </MudTabPanel>
+        }
+        </MudTabs>
+
 }
