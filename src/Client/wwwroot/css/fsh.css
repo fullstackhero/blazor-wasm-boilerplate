@@ -61,3 +61,8 @@
     flex-wrap:wrap;
     margin-bottom:20px!important;
 }
+
+::-webkit-scrollbar {
+    width: 2px!important;
+    height: 6px!important;
+}

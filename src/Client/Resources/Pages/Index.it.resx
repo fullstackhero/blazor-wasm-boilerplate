@@ -117,76 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
+  <data name="Blazor WASM Boilerplate" xml:space="preserve">
+    <value>Blazor WASM Boilerplate</value>
   </data>
-  <data name="Barcode" xml:space="preserve">
-    <value>Barcode</value>
+  <data name="Built with the goodness of" xml:space="preserve">
+    <value>Sviluppato con l'ultilizzo di componenti della libreria </value>
   </data>
-  <data name="Bordered" xml:space="preserve">
-    <value>Bordered</value>
+  <data name="Compatible with" xml:space="preserve">
+    <value>Compatibile con </value>
   </data>
-  <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+  <data name="Component Library" xml:space="preserve">
+    <value>Component Library</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Create</value>
+  <data name="In case you are stuck anywhere or have any queries regarding this implementation, I have compiled a Quick Start Guide for you reference." xml:space="preserve">
+    <value>Nel caso in cui tu sia bloccato ovunque o hai domande riguardanti questa implementazione, ho compilato una guida rapida per il tuo riferimento.</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="Read The Guide" xml:space="preserve">
+    <value>GUIDA</value>
   </data>
-  <data name="Delete Content" xml:space="preserve">
-    <value>Delete Content</value>
-  </data>
-  <data name="Dense" xml:space="preserve">
-    <value>Dense</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="Export" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="Filtered Products exported" xml:space="preserve">
-    <value>Filtered Products exported</value>
-  </data>
-  <data name="Id" xml:space="preserve">
-    <value>Id</value>
-  </data>
-  <data name="Manage Products." xml:space="preserve">
-    <value>Manage Products.</value>
-  </data>
-  <data name="Maximum Rate" xml:space="preserve">
-    <value>Maximum Rate</value>
-  </data>
-  <data name="Minimum Rate" xml:space="preserve">
-    <value>Minimum Rate</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="No Allowed Actions" xml:space="preserve">
-    <value>No Allowed Actions</value>
-  </data>
-  <data name="Products" xml:space="preserve">
-    <value>Products</value>
-  </data>
-  <data name="Products exported" xml:space="preserve">
-    <value>Products exported</value>
-  </data>
-  <data name="Rate" xml:space="preserve">
-    <value>Rate</value>
-  </data>
-  <data name="Reload" xml:space="preserve">
-    <value>Reload</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="Striped" xml:space="preserve">
-    <value>Striped</value>
+  <data name="Version 1.0" xml:space="preserve">
+    <value>Versione 1.0</value>
   </data>
 </root>

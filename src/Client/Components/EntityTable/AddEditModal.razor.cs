@@ -16,10 +16,8 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
     [Parameter]
     [EditorRequired]
     public Func<TRequest, Task> SaveFunc { get; set; } = default!;
-
     [Parameter]
     public Func<Task>? OnInitializedFunc { get; set; }
-
     [Parameter]
     [EditorRequired]
     public string EntityName { get; set; } = default!;
@@ -80,7 +78,7 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
             () => SaveFunc(RequestModel),
             Snackbar,
             _customValidation,
-            L["Entity Saved."]))
+            $"{EntityName} {(IsCreate ? L["Created"] : L["Updated"])}."))
         {
             MudDialog.Close();
         }

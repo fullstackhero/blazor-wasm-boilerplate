@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
+    <value>Azioni</value>
   </data>
   <data name="All Groups" xml:space="preserve">
     <value>All Groups</value>
@@ -127,10 +127,10 @@
     <value>Bordered</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>Crea</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Cancella</value>
   </data>
   <data name="Delete Extended Attribute?" xml:space="preserve">
     <value>Delete Extended Attribute?</value>
@@ -139,16 +139,16 @@
     <value>Dense</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Descrizione</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Modifica</value>
   </data>
   <data name="Entity Id" xml:space="preserve">
     <value>Entity Id</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Export</value>
+    <value>Esporta</value>
   </data>
   <data name="Extended Attributes exported" xml:space="preserve">
     <value>Extended Attributes exported</value>
@@ -160,7 +160,7 @@
     <value>Filtered Extended Attributes exported</value>
   </data>
   <data name="Group" xml:space="preserve">
-    <value>Group</value>
+    <value>Gruppo</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>
@@ -169,7 +169,7 @@
     <value>Include Entity fields (Export)</value>
   </data>
   <data name="Is Active" xml:space="preserve">
-    <value>Is Active</value>
+    <value>Attivo</value>
   </data>
   <data name="Key" xml:space="preserve">
     <value>Key</value>
@@ -181,19 +181,19 @@
     <value>Manage {0} {1}'s Extended Attributes</value>
   </data>
   <data name="No Allowed Actions" xml:space="preserve">
-    <value>No Allowed Actions</value>
+    <value>Nessuna azione è consentita</value>
   </data>
   <data name="Not Allowed." xml:space="preserve">
-    <value>Not Allowed.</value>
+    <value>Non consentito</value>
   </data>
   <data name="Only Selected Group (Export)" xml:space="preserve">
-    <value>Only Selected Group (Export)</value>
+    <value>Solo il gruppo selezionato (Export)</value>
   </data>
   <data name="Owner" xml:space="preserve">
     <value>Owner</value>
   </data>
   <data name="Reload" xml:space="preserve">
-    <value>Reload</value>
+    <value>Ricarica</value>
   </data>
   <data name="Search For {0} Extended Attributes" xml:space="preserve">
     <value>Search For {0} Extended Attributes</value>
@@ -202,10 +202,10 @@
     <value>Striped</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Tipo</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Valore</value>
   </data>
   <data name="you" xml:space="preserve">
     <value>you</value>

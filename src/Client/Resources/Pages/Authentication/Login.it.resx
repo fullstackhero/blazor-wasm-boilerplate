@@ -126,6 +126,9 @@
   <data name="Email is required!" xml:space="preserve">
     <value>È richiesto un indirizzo E-Mail</value>
   </data>
+  <data name="Enter your credentials to get started." xml:space="preserve">
+    <value>Inserisci le tue credenziali per iniziare.</value>
+  </data>
   <data name="Fill Administrator Credentials" xml:space="preserve">
     <value>Utilizza credenziali amministrative</value>
   </data>

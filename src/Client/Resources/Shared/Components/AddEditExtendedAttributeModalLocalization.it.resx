@@ -121,10 +121,10 @@
     <value>Add Extended Attribute</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annulla</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Pulisci</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
@@ -160,7 +160,7 @@
     <value>Ok</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Salva</value>
   </data>
   <data name="Text" xml:space="preserve">
     <value>Text</value>
@@ -172,7 +172,7 @@
     <value>Type</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Aggiorna</value>
   </data>
   <data name="Update Extended Attribute" xml:space="preserve">
     <value>Update Extended Attribute</value>

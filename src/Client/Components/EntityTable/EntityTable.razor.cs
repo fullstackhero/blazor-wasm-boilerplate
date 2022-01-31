@@ -107,15 +107,10 @@ public partial class EntityTable<TEntity, TId, TRequest>
     private bool CanDeleteEntity(TEntity entity) => _canDelete && (Context.CanDeleteEntityFunc is null || Context.CanDeleteEntityFunc(entity));
 
     // Client side paging/filtering
-    private bool LocalSearch(TEntity entity)
-    {
-        if (Context.ClientContext?.SearchFunc is null)
-        {
-            return string.IsNullOrWhiteSpace(SearchString);
-        }
-
-        return Context.ClientContext.SearchFunc(SearchString, entity);
-    }
+    private bool LocalSearch(TEntity entity) =>
+        Context.ClientContext?.SearchFunc is { } searchFunc
+            ? searchFunc(SearchString, entity)
+            : string.IsNullOrWhiteSpace(SearchString);
 
     private async Task LocalLoadDataAsync()
     {
@@ -165,7 +160,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
             if (await ApiHelper.ExecuteCallGuardedAsync(
                     () => Context.ServerContext.SearchFunc(filter), Snackbar)
-                is PaginationResponse<TEntity> result)
+                is { } result)
             {
                 _totalItems = result.TotalCount;
                 _entityList = result.Data;
@@ -230,7 +225,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
                 Context.GetDefaultsFunc is not null
                     && await ApiHelper.ExecuteCallGuardedAsync(
                             () => Context.GetDefaultsFunc(), Snackbar)
-                        is TRequest defaultsResult
+                        is { } defaultsResult
                 ? defaultsResult
                 : new TRequest();
         }
@@ -249,7 +244,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
                     && await ApiHelper.ExecuteCallGuardedAsync(
                             () => Context.GetDetailsFunc(id!),
                             Snackbar)
-                        is TRequest detailsResult
+                        is { } detailsResult
                 ? detailsResult
                 : entity!.Adapt<TRequest>();
         }
@@ -295,15 +290,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
         }
     }
 
-    public Task ReloadDataAsync()
-    {
-        if (Context.IsClientContext)
-        {
-            return LocalLoadDataAsync();
-        }
-        else
-        {
-            return ServerLoadDataAsync();
-        }
-    }
+    public Task ReloadDataAsync() =>
+        Context.IsClientContext
+            ? LocalLoadDataAsync()
+            : ServerLoadDataAsync();
 }

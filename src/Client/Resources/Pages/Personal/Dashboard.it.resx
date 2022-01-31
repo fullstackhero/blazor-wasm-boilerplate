@@ -117,19 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Done!" xml:space="preserve">
-    <value>Terminé !</value>
+  <data name="Products" xml:space="preserve">
+    <value>Prodotti</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>Courriel</value>
+  <data name="Registered Users" xml:space="preserve">
+    <value>Utenti registrati</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>Entrez un courriel pour réinitialiser votre mot de passe</value>
+  <data name="Brands" xml:space="preserve">
+    <value>Marche</value>
   </data>
-  <data name="Forgot password?" xml:space="preserve">
-    <value>Mot de passe oublié ?</value>
+  <data name="Charts comming soon ish..." xml:space="preserve">
+    <value>Grafici... coming soon...</value>
   </data>
-  <data name="Reset Password" xml:space="preserve">
-    <value>Réinitialiser le mot de passe</value>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Quick Insights." xml:space="preserve">
+    <value>Approfondimenti rapidi.</value>
+  </data>
+  <data name="Registered Roles" xml:space="preserve">
+    <value>Ruoli registrati</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>Documenti</value>
+  </data>
+  <data name="Document Types" xml:space="preserve">
+    <value>Tipi di documenti</value>
+  </data>
+  <data name="Document Extended Attributes" xml:space="preserve">
+    <value>Document Extended Attributes</value>
+  </data>
+  <data name="Realtime Updates &amp; Insights with SignalR." xml:space="preserve">
+    <value>Aggiornamenti in tempo reale e approfondimenti con SignalR</value>
   </data>
 </root>
