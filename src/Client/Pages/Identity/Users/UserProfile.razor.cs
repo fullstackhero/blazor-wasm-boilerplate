@@ -5,7 +5,6 @@ using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 

@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
@@ -17,10 +16,8 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
     [Parameter]
     [EditorRequired]
     public Func<TRequest, Task> SaveFunc { get; set; } = default!;
-
     [Parameter]
     public Func<Task>? OnInitializedFunc { get; set; }
-
     [Parameter]
     [EditorRequired]
     public string EntityName { get; set; } = default!;
@@ -70,12 +67,10 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
         return true;
     }
 
-    protected override Task OnInitializedAsync()
-    {
-        return OnInitializedFunc is not null
+    protected override Task OnInitializedAsync() =>
+        OnInitializedFunc is not null
             ? OnInitializedFunc()
             : Task.CompletedTask;
-    }
 
     private async Task SaveAsync()
     {
@@ -83,7 +78,7 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
             () => SaveFunc(RequestModel),
             Snackbar,
             _customValidation,
-            L["Entity Saved."]))
+            $"{EntityName} {(IsCreate ? L["Created"] : L["Updated"])}."))
         {
             MudDialog.Close();
         }
