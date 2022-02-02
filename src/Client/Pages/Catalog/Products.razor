@@ -37,7 +37,7 @@
                 }
                 else
                 {
-                    <MudAvatar Image="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                    <MudAvatar Image="@(Config[ConfigNames.ApiBaseUrl] + @context.ImagePath)" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
             </MudItem>
             <MudItem>                
@@ -49,7 +49,7 @@
                     @if(!Context.AddEditModal.IsCreate && !string.IsNullOrEmpty(context.ImagePath) && string.IsNullOrEmpty(context.ImageInBytes))
                     {
                         <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" Target="_blank"
-                        StartIcon="@Icons.Filled.RemoveRedEye" Link="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Style="margin-left: 5px;" >
+                        StartIcon="@Icons.Filled.RemoveRedEye" Link="@(Config[ConfigNames.ApiBaseUrl] + @context.ImagePath)" Style="margin-left: 5px;" >
                         @L["View"]
                     </MudButton>
                     }

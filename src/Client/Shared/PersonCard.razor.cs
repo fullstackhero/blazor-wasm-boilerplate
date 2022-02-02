@@ -42,7 +42,7 @@ public partial class PersonCard
                 UserId = user.GetUserId();
                 Email = user.GetEmail();
                 string? userImage = user.GetImageUrl();
-                ImageUri = userImage?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
+                ImageUri = Config[ConfigNames.ApiBaseUrl] + userImage;
                 StateHasChanged();
             }
         }
