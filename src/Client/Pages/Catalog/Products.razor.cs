@@ -37,23 +37,23 @@ public partial class Products
                     searchFunc: SearchFunc,
                     createFunc: async prod =>
                     {
-                        if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
+                        if (!string.IsNullOrEmpty(prod.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = prod.ImageInBytes, Extension = prod.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.CreateAsync(prod.Adapt<CreateProductRequest>());
-                        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+                        prod.ImageInBytes = string.Empty;
                     },
                     updateFunc: async (id, prod) =>
                     {
-                        if (!string.IsNullOrEmpty(Context.AddEditModal.RequestModel.ImageInBytes))
+                        if (!string.IsNullOrEmpty(prod.ImageInBytes))
                         {
-                            prod.Image = new FileUploadRequest() { Data = Context.AddEditModal.RequestModel.ImageInBytes, Extension = Context.AddEditModal.RequestModel.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
+                            prod.Image = new FileUploadRequest() { Data = prod.ImageInBytes, Extension = prod.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
                         }
 
                         await ProductsClient.UpdateAsync(id, prod);
-                        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+                        prod.ImageInBytes = string.Empty;
                     },
                     deleteFunc: async id => await ProductsClient.DeleteAsync(id),
                     entityName: L["Product"],
