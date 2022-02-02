@@ -22,24 +22,31 @@ public class BrandAutocomplete : MudAutocomplete<Guid>
     // supply default parameters, but leave the possibility to override them
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        var dict = parameters.ToDictionary();
-        if (!dict.ContainsKey(nameof(Label)))
-            Label = L["Brand"];
-        if (!dict.ContainsKey(nameof(Variant)))
-            Variant = Variant.Filled;
-        if (!dict.ContainsKey(nameof(Dense)))
-            Dense = true;
-        if (!dict.ContainsKey(nameof(Margin)))
-            Margin = Margin.Dense;
-        if (!dict.ContainsKey(nameof(ResetValueOnEmptyText)))
-            ResetValueOnEmptyText = true;
-        if (!dict.ContainsKey(nameof(SearchFunc)))
-            SearchFunc = SearchBrands;
-        if (!dict.ContainsKey(nameof(ToStringFunc)))
-            ToStringFunc = GetBrandName;
-        if (!dict.ContainsKey(nameof(Clearable)))
-            Clearable = true;
+        Label = L["Brand"];
+        Variant = Variant.Filled;
+        Dense = true;
+        Margin = Margin.Dense;
+        ResetValueOnEmptyText = true;
+        SearchFunc = SearchBrands;
+        ToStringFunc = GetBrandName;
+        Clearable = true;
         return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_value != default)
+            {
+                if (await ApiHelper.ExecuteCallGuardedAsync(
+                    () => BrandsClient.GetAsync(_value), Snackbar) is { } brand)
+                {
+                    _brands.Add(brand);
+                    ForceRender(true);
+                }
+            }
+        }
     }
 
     private async Task<IEnumerable<Guid>> SearchBrands(string value)
