@@ -6,8 +6,6 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
-// Avoiding this for now. We Would probably have to create a seperate Razor Component instead of just extending the class.
-// Something like a BrandAutoComplete.razor which internally makes use of MudAutoComplete using @inherits setter.
 public class BrandAutocomplete : MudAutocomplete<Guid>
 {
     [Inject]
@@ -33,19 +31,17 @@ public class BrandAutocomplete : MudAutocomplete<Guid>
         return base.SetParametersAsync(parameters);
     }
 
+    // when the value parameter is set, we have to load that one brand to be able to show the name
+    // we can't do that in OnInitialized because of a strange bug (https://github.com/MudBlazor/MudBlazor/issues/3818)
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender &&
+            _value != default &&
+            await ApiHelper.ExecuteCallGuardedAsync(
+                () => BrandsClient.GetAsync(_value), Snackbar) is { } brand)
         {
-            if (_value != default)
-            {
-                if (await ApiHelper.ExecuteCallGuardedAsync(
-                    () => BrandsClient.GetAsync(_value), Snackbar) is { } brand)
-                {
-                    _brands.Add(brand);
-                    ForceRender(true);
-                }
-            }
+            _brands.Add(brand);
+            ForceRender(true);
         }
     }
 
