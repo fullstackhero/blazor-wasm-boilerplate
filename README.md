@@ -3,7 +3,7 @@
 [![Twitter](https://img.shields.io/twitter/follow/codewithmukesh?color=1DA1F2&label=Twitter&logo=Twitter&style=flat-square)](https://twitter.com/codewithmukesh)
 
 <p align="center">
-    <img src="https://codewithmukesh.com/wp-content/uploads/2022/01/fullstackhero-blazor-wasm-banner.jpg" alt="fullstackhero">
+    <img src="https://codewithmukesh.com/wp-content/uploads/2022/02/fullstackhero-blazor-wasm-banner.png" alt="fullstackhero">
 </p>
 
 # Blazor WASM Boilerplate 
