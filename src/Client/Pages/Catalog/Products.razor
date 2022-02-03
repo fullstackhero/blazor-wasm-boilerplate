@@ -35,7 +35,7 @@
                 }
                 else
                 {
-                    <MudAvatar Image="@(Config[ConfigNames.ApiBaseUrl] + @context.ImagePath)" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                    <MudAvatar Image="@(string.IsNullOrEmpty(@context.ImagePath) ? string.Empty : (Config[ConfigNames.ApiBaseUrl] + @context.ImagePath))" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
             </MudItem>
             <MudItem>                
