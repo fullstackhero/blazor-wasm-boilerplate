@@ -2,6 +2,7 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Client.Shared;
+using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -44,7 +45,7 @@ public partial class Profile
 
         if (_profileModel.FirstName?.Length > 0)
         {
-            _firstLetterOfName = _profileModel.FirstName[0];
+            _firstLetterOfName = _profileModel.FirstName.ToUpper().FirstOrDefault();
         }
     }
 
@@ -78,6 +79,23 @@ public partial class Profile
             string? base64String = $"data:{ApplicationConstants.StandardImageFormat};base64,{Convert.ToBase64String(buffer)}";
             _profileModel.Image = new FileUploadRequest() { Name = fileName, Data = base64String, Extension = extension };
 
+            await UpdateProfileAsync();
+        }
+    }
+
+    public async Task RemoveImageAsync()
+    {
+        string deleteContent = L["You're sure you want to delete your Profile Image?"];
+        var parameters = new DialogParameters
+        {
+            { nameof(DeleteConfirmation.ContentText), deleteContent }
+        };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>(L["Delete"], parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            _profileModel.DeleteCurrentImage = true;
             await UpdateProfileAsync();
         }
     }

@@ -57,10 +57,11 @@ public partial class Products
             {
                 if (!string.IsNullOrEmpty(prod.ImageInBytes))
                 {
+                    prod.DeleteCurrentImage = true;
                     prod.Image = new FileUploadRequest() { Data = prod.ImageInBytes, Extension = prod.ImageExtension ?? string.Empty, Name = $"{prod.Name}_{Guid.NewGuid():N}" };
                 }
 
-                await ProductsClient.UpdateAsync(id, prod);
+                await ProductsClient.UpdateAsync(id, prod.Adapt<UpdateProductRequest>());
                 prod.ImageInBytes = string.Empty;
             },
             deleteFunc: async id => await ProductsClient.DeleteAsync(id),
@@ -131,6 +132,14 @@ public partial class Products
     public void ClearImageInBytes()
     {
         Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+        Context.AddEditModal.ForceRender();
+    }
+
+    public void SetDeleteCurrentImageFlag()
+    {
+        Context.AddEditModal.RequestModel.ImageInBytes = string.Empty;
+        Context.AddEditModal.RequestModel.ImagePath = string.Empty;
+        Context.AddEditModal.RequestModel.DeleteCurrentImage = true;
         Context.AddEditModal.ForceRender();
     }
 }
