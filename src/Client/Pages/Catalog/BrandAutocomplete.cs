@@ -6,8 +6,6 @@ using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
 
-// Avoiding this for now. We Would probably have to create a seperate Razor Component instead of just extending the class.
-// Something like a BrandAutoComplete.razor which internally makes use of MudAutoComplete using @inherits setter.
 public class BrandAutocomplete : MudAutocomplete<Guid>
 {
     [Inject]
@@ -22,24 +20,29 @@ public class BrandAutocomplete : MudAutocomplete<Guid>
     // supply default parameters, but leave the possibility to override them
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        var dict = parameters.ToDictionary();
-        if (!dict.ContainsKey(nameof(Label)))
-            Label = L["Brand"];
-        if (!dict.ContainsKey(nameof(Variant)))
-            Variant = Variant.Filled;
-        if (!dict.ContainsKey(nameof(Dense)))
-            Dense = true;
-        if (!dict.ContainsKey(nameof(Margin)))
-            Margin = Margin.Dense;
-        if (!dict.ContainsKey(nameof(ResetValueOnEmptyText)))
-            ResetValueOnEmptyText = true;
-        if (!dict.ContainsKey(nameof(SearchFunc)))
-            SearchFunc = SearchBrands;
-        if (!dict.ContainsKey(nameof(ToStringFunc)))
-            ToStringFunc = GetBrandName;
-        if (!dict.ContainsKey(nameof(Clearable)))
-            Clearable = true;
+        Label = L["Brand"];
+        Variant = Variant.Filled;
+        Dense = true;
+        Margin = Margin.Dense;
+        ResetValueOnEmptyText = true;
+        SearchFunc = SearchBrands;
+        ToStringFunc = GetBrandName;
+        Clearable = true;
         return base.SetParametersAsync(parameters);
+    }
+
+    // when the value parameter is set, we have to load that one brand to be able to show the name
+    // we can't do that in OnInitialized because of a strange bug (https://github.com/MudBlazor/MudBlazor/issues/3818)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender &&
+            _value != default &&
+            await ApiHelper.ExecuteCallGuardedAsync(
+                () => BrandsClient.GetAsync(_value), Snackbar) is { } brand)
+        {
+            _brands.Add(brand);
+            ForceRender(true);
+        }
     }
 
     private async Task<IEnumerable<Guid>> SearchBrands(string value)

@@ -1,12 +1,15 @@
-﻿@using System.Security.Claims
-@inject IStringLocalizer<NavMenu> L
+﻿@inject IStringLocalizer<NavMenu> L
 <PersonCard
     Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text); margin-bottom:0px!important" />
 <MudNavMenu>
     <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Start"]</MudText>
     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Outlined.Home">@L["Home"]</MudNavLink>
-    <MudNavLink Href="https://fullstackhero.net/getting-started/" Match="NavLinkMatch.All"
+    <MudNavLink Href="https://fullstackhero.net/getting-started/" Match="NavLinkMatch.All" Target="_blank"
         Icon="@Icons.Material.Outlined.Stars">@L["Getting Started"]</MudNavLink>
+        @if (_canViewHangfire)
+        {
+        <MudNavLink Href="@_hangfireUrl" Match="NavLinkMatch.All" Target="_blank" Icon="@Icons.Material.Filled.Work">@L["Hangfire"]</MudNavLink>
+        }
     <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Personal"]</MudText>
     @if (_canViewDashboard)
 
@@ -29,7 +32,7 @@
             @if (_canViewProducts)
 
             {
-                <MudNavLink Href="/catalog/products" Icon="@Icons.Filled.ShoppingBag">
+                <MudNavLink Href="/catalog/products" Icon="@Icons.Filled.ShoppingBag" Class="fsh-nav-child">
                     @L["Products"]
                 </MudNavLink>
 
@@ -37,7 +40,7 @@
             @if (_canViewBrands)
 
             {
-                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.BrandingWatermark">
+                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.BrandingWatermark" Class="fsh-nav-child">
                     @L["Brands"]
                 </MudNavLink>
 

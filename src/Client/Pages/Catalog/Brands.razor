@@ -25,23 +25,23 @@
     protected EntityServerTableContext<BrandDto, Guid, UpdateBrandRequest> Context { get; set; } = default!;
 
     protected override void OnInitialized() =>
-    Context = new(
-    fields: new()
-    {
-        new(brand => brand.Id, L["Id"], "Id"),
-        new(brand => brand.Name, L["Name"], "Name"),
-        new(brand => brand.Description, L["Description"], "Description"),
-    },
-    idFunc: brand => brand.Id,
-    searchFunc: async filter => (await
-    BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
-    createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
-    updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
-    deleteFunc: async id => await BrandsClient.DeleteAsync(id),
-    entityName: L["Brand"],
-    entityNamePlural: L["Brands"],
-    searchPermission: FSHPermissions.Brands.Search,
-    createPermission: FSHPermissions.Brands.Create,
-    updatePermission: FSHPermissions.Brands.Update,
-    deletePermission: FSHPermissions.Brands.Delete);
+        Context = new(
+            fields: new()
+            {
+                new(brand => brand.Id, L["Id"], "Id"),
+                new(brand => brand.Name, L["Name"], "Name"),
+                new(brand => brand.Description, L["Description"], "Description"),
+            },
+            idFunc: brand => brand.Id,
+            searchFunc: async filter => (await
+            BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
+            createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
+            updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
+            deleteFunc: async id => await BrandsClient.DeleteAsync(id),
+            entityName: L["Brand"],
+            entityNamePlural: L["Brands"],
+            searchPermission: FSHPermissions.Brands.Search,
+            createPermission: FSHPermissions.Brands.Create,
+            updatePermission: FSHPermissions.Brands.Update,
+            deletePermission: FSHPermissions.Brands.Delete);
 }

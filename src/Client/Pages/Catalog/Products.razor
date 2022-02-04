@@ -9,10 +9,8 @@
 
     <AdvancedSearchContent>
         <BrandAutocomplete @bind-Value="SearchBrandId" />
-        <MudSlider T="decimal" @bind-value="SearchMinimumRate">@L["Minimum Rate"]: @_searchMinimumRate.ToString()
-        </MudSlider>
-        <MudSlider T="decimal" @bind-value="SearchMaximumRate">@L["Maximum Rate"]: @_searchMaximumRate.ToString()
-        </MudSlider>
+        <MudSlider T="decimal" @bind-value="SearchMinimumRate">@L["Minimum Rate"]: @_searchMinimumRate.ToString()</MudSlider>
+        <MudSlider T="decimal" @bind-value="SearchMaximumRate">@L["Maximum Rate"]: @_searchMaximumRate.ToString()</MudSlider>
     </AdvancedSearchContent>
 
     <EditFormContent>
@@ -24,7 +22,7 @@
                 @bind-Value="context.Description" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudAutocomplete T="Guid" Label="@L["Brand"]" For="@(() => context.BrandId)" @bind-Value="context.BrandId" SearchFunc="@SearchBrands" Variant="Variant.Filled" ToStringFunc="@GetBrandName" OffsetY="true" />
+            <BrandAutocomplete For="@(() => context.BrandId)" @bind-Value="context.BrandId" OffsetY="true" />
         </MudItem>
         <MudItem xs="12" md="6">
             <MudTextField Label="@L["Rate"]" For="@(() => context.Rate)" @bind-Value="context.Rate" />
@@ -37,10 +35,10 @@
                 }
                 else
                 {
-                    <MudAvatar Image="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                    <MudAvatar Image="@(string.IsNullOrEmpty(@context.ImagePath) ? string.Empty : (Config[ConfigNames.ApiBaseUrl] + @context.ImagePath))" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
                 }
             </MudItem>
-            <MudItem>                
+            <MudItem>
                 <div>
                     <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small"
                         StartIcon="@Icons.Filled.CloudUpload" for="fileInput">
@@ -49,16 +47,21 @@
                     @if(!Context.AddEditModal.IsCreate && !string.IsNullOrEmpty(context.ImagePath) && string.IsNullOrEmpty(context.ImageInBytes))
                     {
                         <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Info" Size="Size.Small" Target="_blank"
-                        StartIcon="@Icons.Filled.RemoveRedEye" Link="@context.ImagePath?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl])" Style="margin-left: 5px;" >
-                        @L["View"]
-                    </MudButton>
+                            StartIcon="@Icons.Filled.RemoveRedEye" Link="@(Config[ConfigNames.ApiBaseUrl] + @context.ImagePath)" Style="margin-left: 5px;" >
+                            @L["View"]
+                        </MudButton>
+
+                        <MudButton HtmlTag="label" DisableElevation Variant="Variant.Filled" Color="Color.Error" Size="Size.Small"
+                            StartIcon="@Icons.Filled.Delete" OnClick="SetDeleteCurrentImageFlag" Style="margin-left: 5px;" >
+                            @L["Delete"]
+                        </MudButton>
                     }
                     @if(!string.IsNullOrEmpty(context.ImageInBytes))
                     {
                         <MudButton HtmlTag="label" DisableElevation OnClick="ClearImageInBytes" Variant="Variant.Filled" Color="Color.Warning" Size="Size.Small" Target="_blank"
-                        StartIcon="@Icons.Filled.Clear" Style="margin-left: 5px;" >
-                        @L["Clear"]
-                    </MudButton>
+                            StartIcon="@Icons.Filled.Clear" Style="margin-left: 5px;" >
+                            @L["Clear"]
+                        </MudButton>
                     }
                 </div>
                 <InputFile id="fileInput" hidden OnChange="UploadFiles" />

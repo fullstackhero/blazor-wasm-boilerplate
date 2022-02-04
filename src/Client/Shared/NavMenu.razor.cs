@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -13,7 +14,7 @@ public partial class NavMenu
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
     private ClaimsPrincipal? _currentUser;
-
+    private string? _hangfireUrl;
     private bool _canViewHangfire;
     private bool _canViewDashboard;
     private bool _canViewAuditLogs;
@@ -25,6 +26,7 @@ public partial class NavMenu
     private bool CanViewAdministrationGroup => _canViewUsers || _canViewRoles || _canViewTenants;
     protected override async Task OnParametersSetAsync()
     {
+        _hangfireUrl = Config[ConfigNames.ApiBaseUrl] + "jobs";
         var state = await AuthState;
         _currentUser = state.User;
         _canViewHangfire = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Hangfire.View)).Succeeded;
@@ -35,5 +37,6 @@ public partial class NavMenu
         _canViewProducts = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Products.View)).Succeeded;
         _canViewBrands = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Brands.View)).Succeeded;
         _canViewTenants = (await AuthService.AuthorizeAsync(_currentUser, FSHRootPermissions.Tenants.View)).Succeeded;
+        _canViewHangfire = (await AuthService.AuthorizeAsync(_currentUser, FSHPermissions.Hangfire.View)).Succeeded;
     }
 }
