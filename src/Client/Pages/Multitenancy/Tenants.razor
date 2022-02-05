@@ -6,7 +6,7 @@
 <FshTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
 
 <EntityTable @ref="EntityTable" TEntity="TenantDetail" TId="Guid" TRequest="CreateTenantRequest" Context="@Context"
-    @bind-SearchString="_searchString" Dense="false" Striped="true">
+    @bind-SearchString="_searchString">
     <EditFormContent>
         <MudItem xs="12" md="6">
             <MudTextField T="string" For="@(() => context.Id)" @bind-Value="context.Id" Label="@L["Key"]" />
