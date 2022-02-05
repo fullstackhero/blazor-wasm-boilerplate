@@ -43,7 +43,7 @@ public partial class UserRoles
             is UserDetailsDto user)
         {
             Title = $"{user.FirstName} {user.LastName}";
-            Description = string.Format(_localizer["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
+            Description = string.Format(L["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
 
             if (await ApiHelper.ExecuteCallGuardedAsync(
                     () => UsersClient.GetRolesAsync(user.Id.ToString()), Snackbar)
@@ -67,7 +67,7 @@ public partial class UserRoles
             () => UsersClient.AssignRolesAsync(Id, request),
             Snackbar,
             new CustomValidation(),
-            _localizer["Success"]) is not null)
+            L["Updated User Roles."]) is not null)
         {
             Navigation.NavigateTo("/users");
         }
