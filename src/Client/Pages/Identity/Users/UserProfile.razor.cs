@@ -55,13 +55,13 @@ public partial class UserProfile
             _email = user.Email;
             _phoneNumber = user.PhoneNumber;
             _active = user.IsActive;
-            _imageUrl = user.ImageUrl?.Replace("{server_url}/", Config[ConfigNames.ApiBaseUrl]);
+            _imageUrl = string.IsNullOrEmpty(user.ImageUrl) ? string.Empty : (Config[ConfigNames.ApiBaseUrl] + user.ImageUrl);
 
             Title = $"{_firstName} {_lastName}'s {_localizer["Profile"]}";
             Description = _email;
             if (_firstName?.Length > 0)
             {
-                _firstLetterOfName = _firstName[0];
+                _firstLetterOfName = _firstName.ToUpper().FirstOrDefault();
             }
         }
 
