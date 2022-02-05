@@ -42,6 +42,7 @@ public partial class Tenants
             searchFunc: Search,
             createFunc: async tenant => await TenantsClient.CreateAsync(tenant.Adapt<CreateTenantRequest>()),
             searchPermission: true.ToString(),
+            entityName: L["Tenant"],
             entityNamePlural: L["Tenants"],
             hasExtraActionsFunc: () => true,
             createPermission: FSHRootPermissions.Tenants.Create);
