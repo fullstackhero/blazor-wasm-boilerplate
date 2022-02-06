@@ -1,7 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -67,10 +67,10 @@ public partial class Products
             deleteFunc: async id => await ProductsClient.DeleteAsync(id),
             entityName: L["Product"],
             entityNamePlural: L["Products"],
-            searchPermission: FSHPermissions.Products.Search,
-            createPermission: FSHPermissions.Products.Create,
-            updatePermission: FSHPermissions.Products.Update,
-            deletePermission: FSHPermissions.Products.Delete);
+            searchPermission: FSHPermission.GetName(FSHAction.Search, FSHResource.Products),
+            createPermission: FSHPermission.GetName(FSHAction.Create, FSHResource.Products),
+            updatePermission: FSHPermission.GetName(FSHAction.Update, FSHResource.Products),
+            deletePermission: FSHPermission.GetName(FSHAction.Delete, FSHResource.Products));
 
     // Advanced Search
 

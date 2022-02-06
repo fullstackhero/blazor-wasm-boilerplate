@@ -1,9 +1,9 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
-using FSH.BlazorWebAssembly.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
@@ -18,7 +18,7 @@ public partial class Profile
     [Inject]
     protected IAuthenticationService AuthService { get; set; } = default!;
     [Inject]
-    protected IIdentityClient IdentityClient { get; set; } = default!;
+    protected IProfileClient ProfileClient { get; set; } = default!;
 
     private readonly UpdateProfileRequest _profileModel = new();
 
@@ -30,9 +30,7 @@ public partial class Profile
 
     protected override async Task OnInitializedAsync()
     {
-        var state = await AuthState;
-        var user = state.User;
-        if (user is not null)
+        if ((await AuthState).User is { } user)
         {
             _userId = user.GetUserId();
             _profileModel.Email = user.GetEmail() ?? string.Empty;
@@ -40,7 +38,7 @@ public partial class Profile
             _profileModel.LastName = user.GetSurname() ?? string.Empty;
             _profileModel.PhoneNumber = user.GetPhoneNumber();
             _imageUrl = string.IsNullOrEmpty(user?.GetImageUrl()) ? string.Empty : (Config[ConfigNames.ApiBaseUrl] + user?.GetImageUrl());
-            if (_userId != null) _profileModel.Id = _userId;
+            if (_userId is not null) _profileModel.Id = _userId;
         }
 
         if (_profileModel.FirstName?.Length > 0)
@@ -52,7 +50,7 @@ public partial class Profile
     private async Task UpdateProfileAsync()
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => IdentityClient.UpdateProfileAsync(_profileModel), Snackbar, _customValidation))
+            () => ProfileClient.UpdateAsync(_profileModel), Snackbar, _customValidation))
         {
             Snackbar.Add(L["Your Profile has been updated. Please Login again to Continue."], Severity.Success);
             await AuthService.ReLoginAsync(Navigation.Uri);

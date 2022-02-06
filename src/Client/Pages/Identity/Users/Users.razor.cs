@@ -1,6 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -18,9 +19,9 @@ public partial class Users
     [Inject]
     protected IUsersClient UsersClient { get; set; } = default!;
     [Inject]
-    protected IIdentityClient IdentityClient { get; set; } = default!;
+    protected IProfileClient ProfileClient { get; set; } = default!;
 
-    protected EntityClientTableContext<UserDetailsDto, Guid, RegisterUserRequest> Context { get; set; } = default!;
+    protected EntityClientTableContext<UserDetailsDto, Guid, CreateProfileRequest> Context { get; set; } = default!;
 
     private bool _canExportUsers;
     private bool _canViewRoles;
@@ -35,9 +36,9 @@ public partial class Users
 
     protected override async Task OnInitializedAsync()
     {
-        var state = await AuthState;
-        _canExportUsers = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Export)).Succeeded;
-        _canViewRoles = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Roles.View)).Succeeded;
+        var user = (await AuthState).User;
+        _canExportUsers = await AuthService.HasPermissionAsync(user, FSHAction.Export, FSHResource.Users);
+        _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.UserRoles);
 
         Context = new(
             fields: new()
@@ -51,13 +52,13 @@ public partial class Users
                 new(user => user.IsActive, L["Active"], Type: typeof(bool))
             },
             idFunc: user => user.Id,
-            loadDataFunc: async () => (await UsersClient.GetAllAsync()).ToList(),
+            loadDataFunc: async () => (await UsersClient.GetListAsync()).ToList(),
             searchFunc: Search,
-            createFunc: async user => await IdentityClient.RegisterAsync(user),
+            createFunc: async user => await ProfileClient.CreateAsync(user),
             entityName: L["User"],
             entityNamePlural: L["Users"],
-            searchPermission: FSHPermissions.Users.Search,
-            createPermission: FSHPermissions.Users.Create,
+            searchPermission: FSHPermission.GetName(FSHAction.Search, FSHResource.Users),
+            createPermission: FSHPermission.GetName(FSHAction.Create, FSHResource.Users),
             hasExtraActionsFunc: () => true);
     }
 

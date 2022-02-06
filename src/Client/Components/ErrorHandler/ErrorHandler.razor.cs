@@ -1,4 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

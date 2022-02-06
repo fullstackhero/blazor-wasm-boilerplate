@@ -1,7 +1,7 @@
 ﻿@page "/users/{Id}/roles"
-@attribute [Authorize(Policy = FSHPermissions.Roles.View)]
-@inject Microsoft.Extensions.Localization.IStringLocalizer<UserRoles> L
-@using Microsoft.AspNetCore.Components
+@attribute [MustHavePermission(FSHAction.View, FSHResource.UserRoles)]
+
+@inject IStringLocalizer<UserRoles> L
 
 <FshTitle Title="@Title" Description="@Description" />
 
@@ -12,61 +12,65 @@
 else
 {
     <MudTable Hover="true" Elevation="25" Items="UserRolesList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped"
-    Filter="new Func<UserRoleDto, bool>(Search)">
+        Filter="new Func<UserRoleDto, bool>(Search)">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
-                 <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-auto" StartIcon="@Icons.Material.Filled.ArrowBack" Link="/users">@L["Back"]
+                <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-auto" StartIcon="@Icons.Material.Filled.ArrowBack" Link="/users">
+                    @L["Back"]
                 </MudButton>
                 @if (_canEditUsers)
+                {
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="SaveAsync" StartIcon="@Icons.Material.Filled.Save"
+                        ButtonType="ButtonType.Submit" Style="margin-left: 5px!important;">
+                        @L["Update"]
+                    </MudButton>
+                }
+            </div>
+            <MudSpacer />
+            @if (_canSearchRoles)
             {
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="SaveAsync" StartIcon="@Icons.Material.Filled.Save"
-                ButtonType="ButtonType.Submit" Style="margin-left: 5px!important;">@L["Update"]</MudButton>
+                <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false
+                    Placeholder="@L["Search For User Roles"]" Adornment="Adornment.End"
+                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3">
+                </MudTextField>
             }
-        </div>
-        <MudSpacer />
-        @if (_canSearchRoles)
-        {
-            <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false
-            Placeholder="@L["Search For User Roles"]" Adornment="Adornment.End"
-            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
-        }
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<UserRoleDto, object?>(x => x.RoleName)">@L["Role Name"]
-            </MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<UserRoleDto, object?>(x => x.Description)">@L["Description"]
-            </MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<UserRoleDto, object>(x => x.Enabled)">@L["Status"]
-            </MudTableSortLabel>
-        </MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="@L["Role Name"]">
-            <MudHighlighter Text="@context.RoleName" HighlightedText="@_searchString" />
-        </MudTd>
-        <MudTd DataLabel="@L["Description"]">
-            <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
-        </MudTd>
-        <MudTd DataLabel="Role">
-            <MudCheckBox @bind-Checked="@context.Enabled" Disabled="@(!_canEditUsers)" Color="Color.Secondary">
-            </MudCheckBox>
-        </MudTd>
-    </RowTemplate>
-    <FooterContent>
-        <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@L["Dense"]
-        </MudSwitch>
-        <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@L["Striped"]
-        </MudSwitch>
-        <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@L["Bordered"]
-        </MudSwitch>
-    </FooterContent>
-    <PagerContent>
-        <TablePager />
-    </PagerContent>
-</MudTable>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<UserRoleDto, object?>(x => x.RoleName)">@L["Role Name"]
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<UserRoleDto, object?>(x => x.Description)">@L["Description"]
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<UserRoleDto, object>(x => x.Enabled)">@L["Status"]
+                </MudTableSortLabel>
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="@L["Role Name"]">
+                <MudHighlighter Text="@context.RoleName" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="@L["Description"]">
+                <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Role">
+                <MudCheckBox @bind-Checked="@context.Enabled" Disabled="@(!_canEditUsers)" Color="Color.Secondary">
+                </MudCheckBox>
+            </MudTd>
+        </RowTemplate>
+        <FooterContent>
+            <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@L["Dense"]
+            </MudSwitch>
+            <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@L["Striped"]
+            </MudSwitch>
+            <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@L["Bordered"]
+            </MudSwitch>
+        </FooterContent>
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
 }

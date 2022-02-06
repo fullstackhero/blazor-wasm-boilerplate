@@ -8,7 +8,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Account;
 public partial class Security
 {
     [Inject]
-    public IIdentityClient IdentityClient { get; set; } = default!;
+    public IProfileClient ProfileClient { get; set; } = default!;
 
     private readonly ChangePasswordRequest _passwordModel = new();
 
@@ -17,7 +17,7 @@ public partial class Security
     private async Task ChangePasswordAsync()
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => IdentityClient.ChangePasswordAsync(_passwordModel),
+            () => ProfileClient.ChangePasswordAsync(_passwordModel),
             Snackbar,
             _customValidation,
             L["Password Changed!"]))
@@ -28,6 +28,7 @@ public partial class Security
         }
     }
 
+    private bool _currentPasswordVisibility;
     private InputType _currentPasswordInput = InputType.Password;
     private string _currentPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
     private bool _newPasswordVisibility;
@@ -49,6 +50,21 @@ public partial class Security
                 _newPasswordVisibility = true;
                 _newPasswordInputIcon = Icons.Material.Filled.Visibility;
                 _newPasswordInput = InputType.Text;
+            }
+        }
+        else
+        {
+            if (_currentPasswordVisibility)
+            {
+                _currentPasswordVisibility = false;
+                _currentPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+                _currentPasswordInput = InputType.Password;
+            }
+            else
+            {
+                _currentPasswordVisibility = true;
+                _currentPasswordInputIcon = Icons.Material.Filled.Visibility;
+                _currentPasswordInput = InputType.Text;
             }
         }
     }

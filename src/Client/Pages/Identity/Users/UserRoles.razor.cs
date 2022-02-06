@@ -1,6 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -21,12 +22,13 @@ public partial class UserRoles
     public string? Description { get; set; }
     [Inject]
     protected IUsersClient UsersClient { get; set; } = default!;
+
     public List<UserRoleDto> UserRolesList { get; set; } = new();
 
     private string _searchString = string.Empty;
-    private bool _dense = false;
+    private bool _dense;
     private bool _striped = true;
-    private bool _bordered = false;
+    private bool _bordered;
 
     private bool _canEditUsers;
     private bool _canSearchRoles;
@@ -35,8 +37,8 @@ public partial class UserRoles
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canEditUsers = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Update)).Succeeded;
-        _canSearchRoles = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Roles.View)).Succeeded;
+        _canEditUsers = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Users);
+        _canSearchRoles = await AuthService.HasPermissionAsync(state.User, FSHAction.View, FSHResource.UserRoles);
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => UsersClient.GetByIdAsync(Id), Snackbar)
@@ -73,14 +75,7 @@ public partial class UserRoles
         }
     }
 
-    private bool Search(UserRoleDto userRole)
-    {
-        if (string.IsNullOrWhiteSpace(_searchString)) return true;
-        if (userRole.RoleName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
-        {
-            return true;
-        }
-
-        return false;
-    }
+    private bool Search(UserRoleDto userRole) =>
+        string.IsNullOrWhiteSpace(_searchString)
+            || userRole.RoleName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) is true;
 }

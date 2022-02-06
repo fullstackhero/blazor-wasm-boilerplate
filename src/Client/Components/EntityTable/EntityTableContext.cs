@@ -17,7 +17,7 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
 
     /// <summary>
     /// The permission name of the search permission. When empty, no search functionality will be available.
-    /// When the string "true", search funtionality will be enabled, otherwise it will only be enabled if the
+    /// When the string is "true", search funtionality will be enabled, otherwise it will only be enabled if the
     /// user has the permission specified.
     /// </summary>
     public string SearchPermission { get; }
@@ -69,14 +69,14 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
 
     /// <summary>
     /// The permission name of the update permission. When empty, no update functionality will be available.
-    /// When the string "true", update funtionality will be enabled, otherwise it will only be enabled if the
+    /// When the string is "true", update funtionality will be enabled, otherwise it will only be enabled if the
     /// user has the permission specified.
     /// </summary>
     public string? UpdatePermission { get; }
 
     /// <summary>
     /// The permission name of the delete permission. When empty, no delete functionality will be available.
-    /// When the string "true", delete funtionality will be enabled, otherwise it will only be enabled if the
+    /// When the string is "true", delete funtionality will be enabled, otherwise it will only be enabled if the
     /// user has the permission specified.
     /// </summary>
     public string? DeletePermission { get; }

@@ -1,10 +1,10 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth.AzureAd;
 
 internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount>
 {
@@ -24,8 +24,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
 
         if (principal.Identity?.IsAuthenticated is true)
         {
-            var userDetails = await _services.GetRequiredService<IIdentityClient>()
-                .GetProfileDetailsAsync();
+            var userDetails = await _services.GetRequiredService<IProfileClient>().GetAsync();
 
             var userIdentity = (ClaimsIdentity)principal.Identity;
 
@@ -64,12 +63,9 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                 userIdentity.AddClaim(new Claim(FSHClaims.ImageUrl, userDetails.ImageUrl));
             }
 
-            var permissions = await _services.GetRequiredService<IUsersClient>()
-                .GetPermissionsAsync(userDetails.Id.ToString());
+            var permissions = await _services.GetRequiredService<IPersonalClient>().GetMyPermissionsAsync();
 
-            userIdentity.AddClaims(permissions
-                .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
-                .Select(p => new Claim(FSHClaims.Permission, p!.Permission!)));
+            userIdentity.AddClaims(permissions.Select(permission => new Claim(FSHClaims.Permission, permission)));
         }
 
         return principal;

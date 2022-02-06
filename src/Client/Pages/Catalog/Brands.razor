@@ -1,5 +1,5 @@
 ﻿@page "/catalog/brands"
-@attribute [Authorize(Policy = FSHPermissions.Brands.View)]
+@attribute [MustHavePermission(FSHAction.View, FSHResource.Brands)]
 
 @inject IStringLocalizer<Brands> L
 @inject IBrandsClient BrandsClient
@@ -40,8 +40,8 @@
             deleteFunc: async id => await BrandsClient.DeleteAsync(id),
             entityName: L["Brand"],
             entityNamePlural: L["Brands"],
-            searchPermission: FSHPermissions.Brands.Search,
-            createPermission: FSHPermissions.Brands.Create,
-            updatePermission: FSHPermissions.Brands.Update,
-            deletePermission: FSHPermissions.Brands.Delete);
+            searchPermission: FSHPermission.GetName(FSHAction.Search, FSHResource.Brands),
+            createPermission: FSHPermission.GetName(FSHAction.Create, FSHResource.Brands),
+            updatePermission: FSHPermission.GetName(FSHAction.Update, FSHResource.Brands),
+            deletePermission: FSHPermission.GetName(FSHAction.Delete, FSHResource.Brands));
 }

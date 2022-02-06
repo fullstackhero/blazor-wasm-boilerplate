@@ -1,6 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.Dashboard;
+using FSH.WebApi.Shared.Notifications;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -18,7 +18,7 @@ public partial class Dashboard
     public int RoleCount { get; set; }
 
     [Inject]
-    private IStatsClient StatsClient { get; set; } = default!;
+    private IDashboardClient DashboardClient { get; set; } = default!;
     [Inject]
     private HubConnection HubConnection { get; set; } = default!;
 
@@ -42,7 +42,7 @@ public partial class Dashboard
     private async Task LoadDataAsync()
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => StatsClient.GetAsync(),
+                () => DashboardClient.GetAsync(),
                 Snackbar)
             is StatsDto statsDto)
         {

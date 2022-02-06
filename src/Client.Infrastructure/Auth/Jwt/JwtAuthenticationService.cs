@@ -1,9 +1,9 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth.Jwt;
 
 public class JwtAuthenticationService : AuthenticationStateProvider, IAuthenticationService, IAccessTokenProvider
 {
@@ -11,15 +11,15 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
 
     private readonly ILocalStorageService _localStorage;
     private readonly ITokensClient _tokensClient;
-    private readonly IUsersClient _usersClient;
+    private readonly IPersonalClient _personalClient;
     private readonly NavigationManager _navigation;
 
     public AuthProvider ProviderType => AuthProvider.Jwt;
 
-    public JwtAuthenticationService(ILocalStorageService localStorage, IUsersClient usersClient, ITokensClient tokensClient, NavigationManager navigation)
+    public JwtAuthenticationService(ILocalStorageService localStorage, IPersonalClient personalClient, ITokensClient tokensClient, NavigationManager navigation)
     {
         _localStorage = localStorage;
-        _usersClient = usersClient;
+        _personalClient = personalClient;
         _tokensClient = tokensClient;
         _navigation = navigation;
     }
@@ -47,9 +47,9 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
     public void NavigateToExternalLogin(string returnUrl) =>
         throw new NotImplementedException();
 
-    public async Task<bool> LoginAsync(string tenantKey, TokenRequest request)
+    public async Task<bool> LoginAsync(string tenantId, TokenRequest request)
     {
-        var tokenResponse = await _tokensClient.GetTokenAsync(tenantKey, request);
+        var tokenResponse = await _tokensClient.GetTokenAsync(tenantId, request);
 
         string? token = tokenResponse.Token;
         string? refreshToken = tokenResponse.RefreshToken;
@@ -62,17 +62,8 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
         await CacheAuthTokens(token, refreshToken);
 
         // Get permissions for this user and add them to the cache
-        var claims = GetClaimsFromJwt(token);
-        string? userId = claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        if (!string.IsNullOrWhiteSpace(userId))
-        {
-            var permissions = await _usersClient.GetPermissionsAsync(userId);
-
-            await CachePermissions(permissions
-                .Where(p => !string.IsNullOrWhiteSpace(p?.Permission))
-                .Select(p => p!.Permission!)
-                .ToList());
-        }
+        var permissions = await _personalClient.GetMyPermissionsAsync();
+        await CachePermissions(permissions);
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
@@ -163,7 +154,7 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
         await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
     }
 
-    private ValueTask CachePermissions(List<string> permissions) =>
+    private ValueTask CachePermissions(ICollection<string> permissions) =>
         _localStorage.SetItemAsync(StorageConstants.Local.Permissions, permissions);
 
     private async Task ClearCacheAsync()

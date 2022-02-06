@@ -9,7 +9,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 public partial class AuditLogs
 {
     [Inject]
-    private IAuditLogsClient AuditLogsClient { get; set; } = default!;
+    private IPersonalClient PersonalClient { get; set; } = default!;
 
     protected EntityClientTableContext<RelatedAuditTrail, Guid, object> Context { get; set; } = default!;
 
@@ -36,7 +36,7 @@ public partial class AuditLogs
                 new(audit => audit.DateTime, L["Date"], Template: DateFieldTemplate),
                 new(audit => audit.Type, L["Type"])
             },
-            loadDataFunc: async () => _trails = (await AuditLogsClient.GetMyLogsAsync()).Adapt<List<RelatedAuditTrail>>() ?? new List<RelatedAuditTrail>(),
+            loadDataFunc: async () => _trails = (await PersonalClient.GetMyLogsAsync()).Adapt<List<RelatedAuditTrail>>(),
             searchFunc: Search,
             searchPermission: true.ToString(),
             entityNamePlural: L["Trails"],
