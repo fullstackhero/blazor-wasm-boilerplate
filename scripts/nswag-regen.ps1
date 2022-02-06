@@ -3,7 +3,8 @@ $rootDirectory = git rev-parse --show-toplevel
 $hostDirectory = $rootDirectory + '/src/Host'
 $infrastructurePrj = $rootDirectory + '/src/Client.Infrastructure/Client.Infrastructure.csproj'
 
-Write-Host -NoNewLine 'Make sure you have run the FSH.WebApi project.`nPress any key to continue...`n';
+Write-Host "Make sure you have run the FSH.WebApi project. `n"
+Write-Host "Press any key to continue... `n"
 $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
 
 Set-Location -Path $hostDirectory
