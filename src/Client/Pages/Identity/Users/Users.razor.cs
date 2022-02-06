@@ -41,6 +41,12 @@ public partial class Users
         _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.UserRoles);
 
         Context = new(
+            entityName: L["User"],
+            entityNamePlural: L["Users"],
+            entityResource: FSHResource.Users,
+            searchAction: FSHAction.View,
+            updateAction: string.Empty,
+            deleteAction: string.Empty,
             fields: new()
             {
                 new(user => user.FirstName, L["First Name"]),
@@ -53,22 +59,16 @@ public partial class Users
             },
             idFunc: user => user.Id,
             loadDataFunc: async () => (await UsersClient.GetListAsync()).ToList(),
-            searchFunc: Search,
-            createFunc: async user => await ProfileClient.CreateAsync(user),
-            entityName: L["User"],
-            entityNamePlural: L["Users"],
-            searchPermission: FSHPermission.GetName(FSHAction.Search, FSHResource.Users),
-            createPermission: FSHPermission.GetName(FSHAction.Create, FSHResource.Users),
+            searchFunc: (searchString, user) =>
+                string.IsNullOrWhiteSpace(searchString)
+                    || user.FirstName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+                    || user.LastName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+                    || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+                    || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+                    || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
+            createFunc: user => ProfileClient.CreateAsync(user),
             hasExtraActionsFunc: () => true);
     }
-
-    private bool Search(string? searchString, UserDetailsDto user) =>
-        string.IsNullOrWhiteSpace(searchString)
-            || user.FirstName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
-            || user.LastName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
-            || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
-            || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
-            || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
 
     private void ViewProfile(Guid userId) =>
         Navigation.NavigateTo($"/users/{userId}/profile");
@@ -91,6 +91,6 @@ public partial class Users
             _passwordInput = InputType.Text;
         }
 
-        Context.AddEditModal?.ForceRender();
+        Context.AddEditModal.ForceRender();
     }
 }

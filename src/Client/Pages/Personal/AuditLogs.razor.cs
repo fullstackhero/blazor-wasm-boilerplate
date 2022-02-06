@@ -29,6 +29,8 @@ public partial class AuditLogs
     protected override void OnInitialized()
     {
         Context = new(
+            entityNamePlural: L["Trails"],
+            searchAction: true.ToString(),
             fields: new()
             {
                 new(audit => audit.Id, L["Id"]),
@@ -37,23 +39,19 @@ public partial class AuditLogs
                 new(audit => audit.Type, L["Type"])
             },
             loadDataFunc: async () => _trails = (await PersonalClient.GetMyLogsAsync()).Adapt<List<RelatedAuditTrail>>(),
-            searchFunc: Search,
-            searchPermission: true.ToString(),
-            entityNamePlural: L["Trails"],
+            searchFunc: (searchString, trail) =>
+                (string.IsNullOrWhiteSpace(searchString) // check Search String
+                    || trail.TableName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+                    || (_searchInOldValues &&
+                        trail.OldValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true)
+                    || (_searchInNewValues &&
+                        trail.NewValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true))
+                && ((_dateRange?.Start is null && _dateRange?.End is null) // check Date Range
+                    || (_dateRange?.Start is not null && _dateRange.End is null && trail.DateTime >= _dateRange.Start)
+                    || (_dateRange?.Start is null && _dateRange?.End is not null && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))
+                    || (trail.DateTime >= _dateRange!.Start && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))),
             hasExtraActionsFunc: () => true);
     }
-
-    private bool Search(string? searchString, RelatedAuditTrail trail) =>
-        (string.IsNullOrWhiteSpace(searchString) // check Search String
-            || trail.TableName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
-            || (_searchInOldValues &&
-                trail.OldValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true)
-            || (_searchInNewValues &&
-                trail.NewValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true))
-        && ((_dateRange?.Start is null && _dateRange?.End is null) // check Date Range
-            || (_dateRange?.Start is not null && _dateRange.End is null && trail.DateTime >= _dateRange.Start)
-            || (_dateRange?.Start is null && _dateRange?.End is not null && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))
-            || (trail.DateTime >= _dateRange!.Start && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999)));
 
     private void ShowBtnPress(Guid id)
     {

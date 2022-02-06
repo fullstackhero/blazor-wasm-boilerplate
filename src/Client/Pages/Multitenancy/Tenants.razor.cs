@@ -1,6 +1,5 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.WebApi.Shared.Authorization;
 using Mapster;
@@ -30,6 +29,12 @@ public partial class Tenants
     protected override async Task OnInitializedAsync()
     {
         Context = new(
+            entityName: L["Tenant"],
+            entityNamePlural: L["Tenants"],
+            entityResource: FSHResource.Tenants,
+            searchAction: FSHAction.View,
+            deleteAction: string.Empty,
+            updateAction: string.Empty,
             fields: new()
             {
                 new(tenant => tenant.Id, L["Id"]),
@@ -39,21 +44,16 @@ public partial class Tenants
                 new(tenant => tenant.IsActive, L["Active"], Type: typeof(bool))
             },
             loadDataFunc: async () => _tenants = (await TenantsClient.GetListAsync()).Adapt<List<TenantDetail>>(),
-            searchFunc: Search,
-            createFunc: async tenant => await TenantsClient.CreateAsync(tenant.Adapt<CreateTenantRequest>()),
-            searchPermission: true.ToString(),
-            entityName: L["Tenant"],
-            entityNamePlural: L["Tenants"],
-            hasExtraActionsFunc: () => true,
-            createPermission: FSHPermission.GetName(FSHAction.Create, FSHResource.Tenants));
+            searchFunc: (searchString, tenantDto) =>
+                string.IsNullOrWhiteSpace(searchString)
+                    || tenantDto.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase),
+            createFunc: tenant => TenantsClient.CreateAsync(tenant.Adapt<CreateTenantRequest>()),
+            hasExtraActionsFunc: () => true);
 
-        var user = (await AuthState).User;
-        _canUpgrade = await AuthService.HasPermissionAsync(user, FSHAction.UpgradeSubscription, FSHResource.Tenants);
-        _canModify = await AuthService.HasPermissionAsync(user, FSHAction.Update, FSHResource.Tenants);
+        var state = await AuthState;
+        _canUpgrade = await Context.CanDoActionAsync(FSHAction.UpgradeSubscription, state, AuthService);
+        _canModify = await Context.CanDoActionAsync(FSHAction.Update, state, AuthService);
     }
-
-    private bool Search(string? searchString, TenantDetail tenantDto) =>
-       string.IsNullOrWhiteSpace(searchString) || tenantDto?.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
 
     private void ViewTenantDetails(string id)
     {

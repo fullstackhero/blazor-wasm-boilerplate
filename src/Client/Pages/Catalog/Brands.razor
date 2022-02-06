@@ -26,6 +26,9 @@
 
     protected override void OnInitialized() =>
         Context = new(
+            entityName: L["Brand"],
+            entityNamePlural: L["Brands"],
+            entityResource: FSHResource.Brands,
             fields: new()
             {
                 new(brand => brand.Id, L["Id"], "Id"),
@@ -33,15 +36,10 @@
                 new(brand => brand.Description, L["Description"], "Description"),
             },
             idFunc: brand => brand.Id,
-            searchFunc: async filter => (await
-            BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
+            searchFunc: async filter => (await BrandsClient
+                .SearchAsync(filter.Adapt<SearchBrandsRequest>()))
+                .Adapt<PaginationResponse<BrandDto>>(),
             createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
             updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
-            deleteFunc: async id => await BrandsClient.DeleteAsync(id),
-            entityName: L["Brand"],
-            entityNamePlural: L["Brands"],
-            searchPermission: FSHPermission.GetName(FSHAction.Search, FSHResource.Brands),
-            createPermission: FSHPermission.GetName(FSHAction.Create, FSHResource.Brands),
-            updatePermission: FSHPermission.GetName(FSHAction.Update, FSHResource.Brands),
-            deletePermission: FSHPermission.GetName(FSHAction.Delete, FSHResource.Brands));
+            deleteFunc: async id => await BrandsClient.DeleteAsync(id));
 }

@@ -67,40 +67,19 @@ public partial class EntityTable<TEntity, TId, TRequest>
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canSearch = await CanDoPermission(Context.SearchPermission, state);
-        _canCreate = await CanDoPermission(Context.CreatePermission, state);
-        _canUpdate = await CanDoPermission(Context.UpdatePermission, state);
-        _canDelete = await CanDoPermission(Context.DeletePermission, state);
+        _canSearch = await Context.CanDoActionAsync(Context.SearchAction, state, AuthService);
+        _canCreate = await Context.CanDoActionAsync(Context.CreateAction, state, AuthService);
+        _canUpdate = await Context.CanDoActionAsync(Context.UpdateAction, state, AuthService);
+        _canDelete = await Context.CanDoActionAsync(Context.DeleteAction, state, AuthService);
 
         await LocalLoadDataAsync();
         await SetAndSubscribeToTablePreference();
     }
 
-    private async Task SetAndSubscribeToTablePreference()
-    {
-        if (await ClientPreferences.GetPreference() is ClientPreference clientPreference)
-        {
-            SetTablePreference(clientPreference.EntityTablePreference);
-            MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(ClientPreference.EntityTablePreference), (_, value) =>
-                {
-                    SetTablePreference(value);
-                    StateHasChanged();
-                });
-        }
-    }
-
-    private void SetTablePreference(EntityTablePreference tablePreference)
-    {
-        Dense = tablePreference.IsDense;
-        Striped = tablePreference.IsStriped;
-        Bordered = tablePreference.HasBorder;
-        Hoverable = tablePreference.IsHoverable;
-    }
-
-    public async Task<bool> CanDoPermission(string? permission, AuthenticationState state) =>
-        !string.IsNullOrWhiteSpace(permission) &&
-            ((bool.TryParse(permission, out bool can) && can) || // check if permmission equals "True", then it's allowed
-            (await AuthService.AuthorizeAsync(state.User, permission)).Succeeded);
+    public Task ReloadDataAsync() =>
+        Context.IsClientContext
+            ? LocalLoadDataAsync()
+            : ServerLoadDataAsync();
 
     private bool HasActions => _canUpdate || _canDelete || Context.HasExtraActionsFunc is null || Context.HasExtraActionsFunc();
     private bool CanUpdateEntity(TEntity entity) => _canUpdate && (Context.CanUpdateEntityFunc is null || Context.CanUpdateEntityFunc(entity));
@@ -131,6 +110,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
         Loading = false;
     }
 
+    // Server Side paging/filtering
+
     private async Task OnSearchStringChanged(string? text = null)
     {
         await SearchStringChanged.InvokeAsync(SearchString);
@@ -138,7 +119,6 @@ public partial class EntityTable<TEntity, TId, TRequest>
         await ServerLoadDataAsync();
     }
 
-    // Server Side paging/filtering
     private async Task ServerLoadDataAsync()
     {
         if (Context.IsServerContext)
@@ -253,7 +233,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
 
-        var dialog = DialogService.Show<AddEditModal<TRequest>>(isCreate ? L["Create"] : L["Edit"], parameters, options);
+        var dialog = DialogService.Show<AddEditModal<TRequest>>(string.Empty, parameters, options);
 
         Context.SetAddEditModalRef(dialog);
 
@@ -290,8 +270,25 @@ public partial class EntityTable<TEntity, TId, TRequest>
         }
     }
 
-    public Task ReloadDataAsync() =>
-        Context.IsClientContext
-            ? LocalLoadDataAsync()
-            : ServerLoadDataAsync();
+    private async Task SetAndSubscribeToTablePreference()
+    {
+        if (await ClientPreferences.GetPreference() is ClientPreference clientPreference)
+        {
+            SetTablePreference(clientPreference.EntityTablePreference);
+        }
+
+        MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(ClientPreference.EntityTablePreference), (_, value) =>
+        {
+            SetTablePreference(value);
+            StateHasChanged();
+        });
+    }
+
+    private void SetTablePreference(EntityTablePreference tablePreference)
+    {
+        Dense = tablePreference.IsDense;
+        Striped = tablePreference.IsStriped;
+        Bordered = tablePreference.HasBorder;
+        Hoverable = tablePreference.IsHoverable;
+    }
 }

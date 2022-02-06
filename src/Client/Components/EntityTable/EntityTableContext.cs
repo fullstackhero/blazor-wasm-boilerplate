@@ -1,4 +1,8 @@
-﻿using MudBlazor;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+using FSH.WebApi.Shared.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
@@ -14,13 +18,6 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     /// The columns you want to display on the table.
     /// </summary>
     public List<EntityField<TEntity>> Fields { get; }
-
-    /// <summary>
-    /// The permission name of the search permission. When empty, no search functionality will be available.
-    /// When the string is "true", search funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has the permission specified.
-    /// </summary>
-    public string SearchPermission { get; }
 
     /// <summary>
     /// A function that returns the Id of the entity. This is only needed when using the CRUD functionality.
@@ -61,27 +58,6 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     public Func<TId, Task>? DeleteFunc { get; }
 
     /// <summary>
-    /// The permission name of the create permission. When empty, no create functionality will be available.
-    /// When the string "true", create funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has the permission specified.
-    /// </summary>
-    public string? CreatePermission { get; }
-
-    /// <summary>
-    /// The permission name of the update permission. When empty, no update functionality will be available.
-    /// When the string is "true", update funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has the permission specified.
-    /// </summary>
-    public string? UpdatePermission { get; }
-
-    /// <summary>
-    /// The permission name of the delete permission. When empty, no delete functionality will be available.
-    /// When the string is "true", delete funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has the permission specified.
-    /// </summary>
-    public string? DeletePermission { get; }
-
-    /// <summary>
     /// The name of the entity. This is used in the title of the add/edit modal and delete confirmation.
     /// </summary>
     public string? EntityName { get; }
@@ -90,6 +66,39 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     /// The plural name of the entity. This is used in the "Search for ..." placeholder.
     /// </summary>
     public string? EntityNamePlural { get; }
+
+    /// <summary>
+    /// The FSHResource that is representing this entity. This is used in combination with the xxActions to check for permissions.
+    /// </summary>
+    public string? EntityResource { get; }
+
+    /// <summary>
+    /// The FSHAction name of the search permission. When empty, no search functionality will be available.
+    /// When the string is "true", search funtionality will be enabled, otherwise it will only be enabled if the
+    /// user has permission for this action on the EntityResource.
+    /// </summary>
+    public string SearchAction { get; }
+
+    /// <summary>
+    /// The permission name of the create permission. When empty, no create functionality will be available.
+    /// When the string "true", create funtionality will be enabled, otherwise it will only be enabled if the
+    /// user has the permission specified.
+    /// </summary>
+    public string CreateAction { get; }
+
+    /// <summary>
+    /// The permission name of the update permission. When empty, no update functionality will be available.
+    /// When the string is "true", update funtionality will be enabled, otherwise it will only be enabled if the
+    /// user has the permission specified.
+    /// </summary>
+    public string UpdateAction { get; }
+
+    /// <summary>
+    /// The permission name of the delete permission. When empty, no delete functionality will be available.
+    /// When the string is "true", delete funtionality will be enabled, otherwise it will only be enabled if the
+    /// user has the permission specified.
+    /// </summary>
+    public string DeleteAction { get; }
 
     /// <summary>
     /// Use this if you want to run initialization during OnInitialized of the AddEdit form.
@@ -114,41 +123,48 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
 
     public EntityTableContext(
         List<EntityField<TEntity>> fields,
-        string searchPermission,
         Func<TEntity, TId>? idFunc,
         Func<Task<TRequest>>? getDefaultsFunc,
         Func<TRequest, Task>? createFunc,
         Func<TId, Task<TRequest>>? getDetailsFunc,
         Func<TId, TRequest, Task>? updateFunc,
         Func<TId, Task>? deleteFunc,
-        string? createPermission,
-        string? updatePermission,
-        string? deletePermission,
         string? entityName,
         string? entityNamePlural,
+        string? entityResource,
+        string? searchAction,
+        string? createAction,
+        string? updateAction,
+        string? deleteAction,
         Func<Task>? editFormInitializedFunc,
         Func<bool>? hasExtraActionsFunc,
         Func<TEntity, bool>? canUpdateEntityFunc,
         Func<TEntity, bool>? canDeleteEntityFunc)
     {
+        EntityResource = entityResource;
         Fields = fields;
-        SearchPermission = searchPermission;
+        EntityName = entityName;
+        EntityNamePlural = entityNamePlural;
         IdFunc = idFunc;
         GetDefaultsFunc = getDefaultsFunc;
         CreateFunc = createFunc;
         GetDetailsFunc = getDetailsFunc;
         UpdateFunc = updateFunc;
         DeleteFunc = deleteFunc;
-        CreatePermission = createPermission;
-        UpdatePermission = updatePermission;
-        DeletePermission = deletePermission;
-        EntityName = entityName;
-        EntityNamePlural = entityNamePlural;
+        SearchAction = searchAction ?? FSHAction.Search;
+        CreateAction = createAction ?? FSHAction.Create;
+        UpdateAction = updateAction ?? FSHAction.Update;
+        DeleteAction = deleteAction ?? FSHAction.Delete;
         EditFormInitializedFunc = editFormInitializedFunc;
         HasExtraActionsFunc = hasExtraActionsFunc;
         CanUpdateEntityFunc = canUpdateEntityFunc;
         CanDeleteEntityFunc = canDeleteEntityFunc;
     }
+
+    public async Task<bool> CanDoActionAsync(string? action, AuthenticationState state, IAuthorizationService authService) =>
+        !string.IsNullOrWhiteSpace(action) &&
+            ((bool.TryParse(action, out bool isTrue) && isTrue) || // check if action equals "True", then it's allowed
+            (EntityResource is not null && await authService.HasPermissionAsync(state.User, action, EntityResource)));
 
     // AddEdit modal
     private IDialogReference? _addEditModalRef;

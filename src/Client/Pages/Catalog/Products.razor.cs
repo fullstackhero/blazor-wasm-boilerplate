@@ -22,6 +22,9 @@ public partial class Products
 
     protected override void OnInitialized() =>
         Context = new(
+            entityName: L["Product"],
+            entityNamePlural: L["Products"],
+            entityResource: FSHResource.Products,
             fields: new()
             {
                 new(prod => prod.Id, L["Id"], "Id"),
@@ -64,13 +67,7 @@ public partial class Products
                 await ProductsClient.UpdateAsync(id, prod.Adapt<UpdateProductRequest>());
                 prod.ImageInBytes = string.Empty;
             },
-            deleteFunc: async id => await ProductsClient.DeleteAsync(id),
-            entityName: L["Product"],
-            entityNamePlural: L["Products"],
-            searchPermission: FSHPermission.GetName(FSHAction.Search, FSHResource.Products),
-            createPermission: FSHPermission.GetName(FSHAction.Create, FSHResource.Products),
-            updatePermission: FSHPermission.GetName(FSHAction.Update, FSHResource.Products),
-            deletePermission: FSHPermission.GetName(FSHAction.Delete, FSHResource.Products));
+            deleteFunc: async id => await ProductsClient.DeleteAsync(id));
 
     // Advanced Search
 
