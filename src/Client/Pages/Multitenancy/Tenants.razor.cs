@@ -1,5 +1,6 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.WebApi.Shared.Authorization;
 using Mapster;
@@ -51,8 +52,8 @@ public partial class Tenants
             hasExtraActionsFunc: () => true);
 
         var state = await AuthState;
-        _canUpgrade = await Context.CanDoActionAsync(FSHAction.UpgradeSubscription, state, AuthService);
-        _canModify = await Context.CanDoActionAsync(FSHAction.Update, state, AuthService);
+        _canUpgrade = await AuthService.HasPermissionAsync(state.User, FSHAction.UpgradeSubscription, FSHResource.Tenants);
+        _canModify = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Tenants);
     }
 
     private void ViewTenantDetails(string id)

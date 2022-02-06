@@ -1,7 +1,4 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.WebApi.Shared.Authorization;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using FSH.WebApi.Shared.Authorization;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
@@ -73,30 +70,34 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     public string? EntityResource { get; }
 
     /// <summary>
-    /// The FSHAction name of the search permission. When empty, no search functionality will be available.
-    /// When the string is "true", search funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has permission for this action on the EntityResource.
+    /// The FSHAction name of the search permission. This is FSHAction.Search by default.
+    /// When empty, no search functionality will be available.
+    /// When the string is "true", search funtionality will be enabled,
+    /// otherwise it will only be enabled if the user has permission for this action on the EntityResource.
     /// </summary>
     public string SearchAction { get; }
 
     /// <summary>
-    /// The permission name of the create permission. When empty, no create functionality will be available.
-    /// When the string "true", create funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has the permission specified.
+    /// The permission name of the create permission. This is FSHAction.Create by default.
+    /// When empty, no create functionality will be available.
+    /// When the string "true", create funtionality will be enabled,
+    /// otherwise it will only be enabled if the user has permission for this action on the EntityResource.
     /// </summary>
     public string CreateAction { get; }
 
     /// <summary>
-    /// The permission name of the update permission. When empty, no update functionality will be available.
-    /// When the string is "true", update funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has the permission specified.
+    /// The permission name of the update permission. This is FSHAction.Update by default.
+    /// When empty, no update functionality will be available.
+    /// When the string is "true", update funtionality will be enabled,
+    /// otherwise it will only be enabled if the user has permission for this action on the EntityResource.
     /// </summary>
     public string UpdateAction { get; }
 
     /// <summary>
-    /// The permission name of the delete permission. When empty, no delete functionality will be available.
-    /// When the string is "true", delete funtionality will be enabled, otherwise it will only be enabled if the
-    /// user has the permission specified.
+    /// The permission name of the delete permission. This is FSHAction.Delete by default.
+    /// When empty, no delete functionality will be available.
+    /// When the string is "true", delete funtionality will be enabled,
+    /// otherwise it will only be enabled if the user has permission for this action on the EntityResource.
     /// </summary>
     public string DeleteAction { get; }
 
@@ -160,11 +161,6 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         CanUpdateEntityFunc = canUpdateEntityFunc;
         CanDeleteEntityFunc = canDeleteEntityFunc;
     }
-
-    public async Task<bool> CanDoActionAsync(string? action, AuthenticationState state, IAuthorizationService authService) =>
-        !string.IsNullOrWhiteSpace(action) &&
-            ((bool.TryParse(action, out bool isTrue) && isTrue) || // check if action equals "True", then it's allowed
-            (EntityResource is not null && await authService.HasPermissionAsync(state.User, action, EntityResource)));
 
     // AddEdit modal
     private IDialogReference? _addEditModalRef;

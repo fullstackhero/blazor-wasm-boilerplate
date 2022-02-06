@@ -61,7 +61,7 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
 
         await CacheAuthTokens(token, refreshToken);
 
-        // Get permissions for this user and add them to the cache
+        // Get permissions for the current user and add them to the cache
         var permissions = await _personalClient.GetMyPermissionsAsync();
         await CachePermissions(permissions);
 
@@ -170,8 +170,8 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
     private ValueTask<string> GetCachedRefreshTokenAsync() =>
         _localStorage.GetItemAsync<string>(StorageConstants.Local.RefreshToken);
 
-    private ValueTask<List<string>> GetCachedPermissionsAsync() =>
-        _localStorage.GetItemAsync<List<string>>(StorageConstants.Local.Permissions);
+    private ValueTask<ICollection<string>> GetCachedPermissionsAsync() =>
+        _localStorage.GetItemAsync<ICollection<string>>(StorageConstants.Local.Permissions);
 
     private IEnumerable<Claim> GetClaimsFromJwt(string jwt)
     {

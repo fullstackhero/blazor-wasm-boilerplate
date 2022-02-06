@@ -1,6 +1,7 @@
 using AKSoftware.Blazor.Utilities;
 using FSH.BlazorWebAssembly.Client.Components.ThemeManager;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
@@ -67,10 +68,10 @@ public partial class EntityTable<TEntity, TId, TRequest>
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canSearch = await Context.CanDoActionAsync(Context.SearchAction, state, AuthService);
-        _canCreate = await Context.CanDoActionAsync(Context.CreateAction, state, AuthService);
-        _canUpdate = await Context.CanDoActionAsync(Context.UpdateAction, state, AuthService);
-        _canDelete = await Context.CanDoActionAsync(Context.DeleteAction, state, AuthService);
+        _canSearch = await CanDoActionAsync(Context.SearchAction, state);
+        _canCreate = await CanDoActionAsync(Context.CreateAction, state);
+        _canUpdate = await CanDoActionAsync(Context.UpdateAction, state);
+        _canDelete = await CanDoActionAsync(Context.DeleteAction, state);
 
         await LocalLoadDataAsync();
         await SetAndSubscribeToTablePreference();
@@ -80,6 +81,11 @@ public partial class EntityTable<TEntity, TId, TRequest>
         Context.IsClientContext
             ? LocalLoadDataAsync()
             : ServerLoadDataAsync();
+
+    private async Task<bool> CanDoActionAsync(string? action, AuthenticationState state) =>
+        !string.IsNullOrWhiteSpace(action) &&
+            ((bool.TryParse(action, out bool isTrue) && isTrue) || // check if action equals "True", then it's allowed
+            (Context.EntityResource is { } resource && await AuthService.HasPermissionAsync(state.User, action, resource)));
 
     private bool HasActions => _canUpdate || _canDelete || Context.HasExtraActionsFunc is null || Context.HasExtraActionsFunc();
     private bool CanUpdateEntity(TEntity entity) => _canUpdate && (Context.CanUpdateEntityFunc is null || Context.CanUpdateEntityFunc(entity));
