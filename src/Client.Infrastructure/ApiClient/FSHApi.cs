@@ -23,82 +23,82 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     public partial interface ITenantsClient : IApiService
     {
         /// <summary>
-        /// Get all the available Tenants.
+        /// Get a list of all tenants.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TenantDto>> GetListAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Get all the available Tenants.
+        /// Get a list of all tenants.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TenantDto>> GetListAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
-        /// Create a new Tenant.
+        /// Create a new tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Create a new Tenant.
+        /// Create a new tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
-        /// Get Tenant Details.
+        /// Get tenant details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId);
+        System.Threading.Tasks.Task<TenantDto> GetAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Get Tenant Details.
+        /// Get tenant details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<TenantDto> GetAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
-        /// Activate Tenant.
+        /// Activate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> ActivateAsync(string? tenantId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <summary>
-        /// Activate Tenant.
-        /// </summary>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> ActivateAsync(string? tenantId, System.Threading.CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Deactivate Tenant.
-        /// </summary>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> DeactivateAsync(string? tenantId);
+        System.Threading.Tasks.Task<string> ActivateAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Deactivate Tenant.
+        /// Activate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> DeactivateAsync(string? tenantId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<string> ActivateAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
         /// <summary>
-        /// Upgrade Subscription of Tenant.
+        /// Deactivate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? tenantId, UpgradeSubscriptionRequest request);
+        System.Threading.Tasks.Task<string> DeactivateAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Upgrade Subscription of Tenant.
+        /// Deactivate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? tenantId, UpgradeSubscriptionRequest request, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<string> DeactivateAsync(string? id, System.Threading.CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Upgrade a tenant's subscription.
+        /// </summary>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? id, UpgradeSubscriptionRequest request);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Upgrade a tenant's subscription.
+        /// </summary>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? id, UpgradeSubscriptionRequest request, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -130,7 +130,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <summary>
-        /// Get all the available Tenants.
+        /// Get a list of all tenants.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TenantDto>> GetListAsync()
@@ -140,7 +140,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Get all the available Tenants.
+        /// Get a list of all tenants.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TenantDto>> GetListAsync(System.Threading.CancellationToken cancellationToken)
@@ -222,7 +222,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <summary>
-        /// Create a new Tenant.
+        /// Create a new tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request)
@@ -232,7 +232,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Create a new Tenant.
+        /// Create a new tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> CreateAsync(CreateTenantRequest request, System.Threading.CancellationToken cancellationToken)
@@ -320,24 +320,24 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <summary>
-        /// Get Tenant Details.
+        /// Get tenant details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId)
+        public virtual System.Threading.Tasks.Task<TenantDto> GetAsync(string? id)
         {
-            return GetAsync(tenantId, System.Threading.CancellationToken.None);
+            return GetAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Get Tenant Details.
+        /// Get tenant details.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TenantDto> GetAsync(string? tenantId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<TenantDto> GetAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/tenants/{tenantId}");
-            urlBuilder_.Replace("{tenantId}", System.Uri.EscapeDataString(ConvertToString(tenantId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/tenants/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -413,24 +413,24 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <summary>
-        /// Activate Tenant.
+        /// Activate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> ActivateAsync(string? tenantId)
+        public virtual System.Threading.Tasks.Task<string> ActivateAsync(string? id)
         {
-            return ActivateAsync(tenantId, System.Threading.CancellationToken.None);
+            return ActivateAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Activate Tenant.
+        /// Activate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> ActivateAsync(string? tenantId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<string> ActivateAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/tenants/{tenantId}/activate");
-            urlBuilder_.Replace("{tenantId}", System.Uri.EscapeDataString(ConvertToString(tenantId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/tenants/{id}/activate");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -507,24 +507,24 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <summary>
-        /// Deactivate Tenant.
+        /// Deactivate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> DeactivateAsync(string? tenantId)
+        public virtual System.Threading.Tasks.Task<string> DeactivateAsync(string? id)
         {
-            return DeactivateAsync(tenantId, System.Threading.CancellationToken.None);
+            return DeactivateAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Deactivate Tenant.
+        /// Deactivate a tenant.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> DeactivateAsync(string? tenantId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<string> DeactivateAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/tenants/{tenantId}/deactivate");
-            urlBuilder_.Replace("{tenantId}", System.Uri.EscapeDataString(ConvertToString(tenantId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/tenants/{id}/deactivate");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -601,27 +601,27 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <summary>
-        /// Upgrade Subscription of Tenant.
+        /// Upgrade a tenant's subscription.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? tenantId, UpgradeSubscriptionRequest request)
+        public virtual System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? id, UpgradeSubscriptionRequest request)
         {
-            return UpgradeSubscriptionAsync(tenantId, request, System.Threading.CancellationToken.None);
+            return UpgradeSubscriptionAsync(id, request, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Upgrade Subscription of Tenant.
+        /// Upgrade a tenant's subscription.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? tenantId, UpgradeSubscriptionRequest request, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<string> UpgradeSubscriptionAsync(string? id, UpgradeSubscriptionRequest request, System.Threading.CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new System.ArgumentNullException("request");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/tenants/{tenantId}/upgrade");
-            urlBuilder_.Replace("{tenantId}", System.Uri.EscapeDataString(ConvertToString(tenantId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append("api/tenants/{id}/upgrade");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -805,61 +805,109 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IProfileClient : IApiService
     {
+        /// <summary>
+        /// Get profile details of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<UserDetailsDto> GetAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get profile details of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<UserDetailsDto> GetAsync(System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Create a new profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> CreateAsync(CreateProfileRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Create a new profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> CreateAsync(CreateProfileRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Update an existing profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task UpdateAsync(UpdateProfileRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update an existing profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task UpdateAsync(UpdateProfileRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Confirm email address for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ConfirmEmailAsync(string? userId, string? code, string? tenant);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Confirm email address for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ConfirmEmailAsync(string? userId, string? code, string? tenant, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Confirm phone number for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ConfirmPhoneNumberAsync(string? userId, string? code);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Confirm phone number for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ConfirmPhoneNumberAsync(string? userId, string? code, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Request a pasword reset email.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Request a pasword reset email.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Reset your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ResetPasswordAsync(ResetPasswordRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Reset your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> ResetPasswordAsync(ResetPasswordRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Change your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest model);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Change your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest model, System.Threading.CancellationToken cancellationToken);
 
@@ -892,6 +940,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
+        /// <summary>
+        /// Get profile details of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<UserDetailsDto> GetAsync()
         {
@@ -899,6 +950,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get profile details of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<UserDetailsDto> GetAsync(System.Threading.CancellationToken cancellationToken)
         {
@@ -978,6 +1032,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Create a new profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> CreateAsync(CreateProfileRequest request)
         {
@@ -985,6 +1042,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Create a new profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> CreateAsync(CreateProfileRequest request, System.Threading.CancellationToken cancellationToken)
         {
@@ -1070,6 +1130,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Update an existing profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task UpdateAsync(UpdateProfileRequest request)
         {
@@ -1077,6 +1140,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update an existing profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task UpdateAsync(UpdateProfileRequest request, System.Threading.CancellationToken cancellationToken)
         {
@@ -1156,6 +1222,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Confirm email address for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> ConfirmEmailAsync(string? userId, string? code, string? tenant)
         {
@@ -1163,6 +1232,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Confirm email address for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> ConfirmEmailAsync(string? userId, string? code, string? tenant, System.Threading.CancellationToken cancellationToken)
         {
@@ -1255,6 +1327,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Confirm phone number for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> ConfirmPhoneNumberAsync(string? userId, string? code)
         {
@@ -1262,6 +1337,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Confirm phone number for a profile.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> ConfirmPhoneNumberAsync(string? userId, string? code, System.Threading.CancellationToken cancellationToken)
         {
@@ -1350,6 +1428,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Request a pasword reset email.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request)
@@ -1358,6 +1439,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Request a pasword reset email.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> ForgotPasswordAsync(string tenant, ForgotPasswordRequest request, System.Threading.CancellationToken cancellationToken)
@@ -1448,6 +1532,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Reset your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> ResetPasswordAsync(ResetPasswordRequest request)
         {
@@ -1455,6 +1542,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Reset your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> ResetPasswordAsync(ResetPasswordRequest request, System.Threading.CancellationToken cancellationToken)
         {
@@ -1540,6 +1630,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Change your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest model)
         {
@@ -1547,6 +1640,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Change your password.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest model, System.Threading.CancellationToken cancellationToken)
         {
@@ -1732,45 +1828,81 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IRolesClient : IApiService
     {
+        /// <summary>
+        /// Get a list of all roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RoleDto>> GetListAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RoleDto>> GetListAsync(System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Create or update a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> RegisterRoleAsync(CreateOrUpdateRoleRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Create or update a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> RegisterRoleAsync(CreateOrUpdateRoleRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Get role details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<RoleDto> GetByIdAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get role details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<RoleDto> GetByIdAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Delete a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> DeleteAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> DeleteAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Get role details with its permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<RoleDto> GetByIdWithPermissionsAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get role details with its permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<RoleDto> GetByIdWithPermissionsAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Update a role's permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, UpdateRolePermissionsRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update a role's permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, UpdateRolePermissionsRequest request, System.Threading.CancellationToken cancellationToken);
 
@@ -1803,6 +1935,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
+        /// <summary>
+        /// Get a list of all roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RoleDto>> GetListAsync()
         {
@@ -1810,6 +1945,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RoleDto>> GetListAsync(System.Threading.CancellationToken cancellationToken)
         {
@@ -1889,6 +2027,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Create or update a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> RegisterRoleAsync(CreateOrUpdateRoleRequest request)
         {
@@ -1896,6 +2037,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Create or update a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> RegisterRoleAsync(CreateOrUpdateRoleRequest request, System.Threading.CancellationToken cancellationToken)
         {
@@ -1981,6 +2125,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Get role details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<RoleDto> GetByIdAsync(string? id)
         {
@@ -1988,6 +2135,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get role details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<RoleDto> GetByIdAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
@@ -2068,6 +2218,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Delete a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> DeleteAsync(string? id)
         {
@@ -2075,6 +2228,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete a role.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> DeleteAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
@@ -2155,6 +2311,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Get role details with its permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<RoleDto> GetByIdWithPermissionsAsync(string? id)
         {
@@ -2162,6 +2321,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get role details with its permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<RoleDto> GetByIdWithPermissionsAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
@@ -2242,6 +2404,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Update a role's permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, UpdateRolePermissionsRequest request)
         {
@@ -2249,6 +2414,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update a role's permissions.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> UpdatePermissionsAsync(string? id, UpdateRolePermissionsRequest request, System.Threading.CancellationToken cancellationToken)
         {
@@ -2442,7 +2610,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     public partial interface ITokensClient : IApiService
     {
         /// <summary>
-        /// Submit Credentials with Tenant Id to generate valid Access Token.
+        /// Request an access token using credentials.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -2450,17 +2618,23 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Submit Credentials with Tenant Id to generate valid Access Token.
+        /// Request an access token using credentials.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<TokenResponse> GetTokenAsync(string tenant, TokenRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Request an access token using a refresh token.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<TokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Request an access token using a refresh token.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<TokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request, System.Threading.CancellationToken cancellationToken);
@@ -2495,7 +2669,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <summary>
-        /// Submit Credentials with Tenant Id to generate valid Access Token.
+        /// Request an access token using credentials.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -2506,7 +2680,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Submit Credentials with Tenant Id to generate valid Access Token.
+        /// Request an access token using credentials.
         /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -2598,6 +2772,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Request an access token using a refresh token.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<TokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request)
@@ -2606,6 +2783,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Request an access token using a refresh token.
+        /// </summary>
         /// <param name="tenant">Input your tenant Id to access this API</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<TokenResponse> RefreshAsync(string tenant, RefreshTokenRequest request, System.Threading.CancellationToken cancellationToken)
@@ -2802,40 +2982,70 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IUsersClient : IApiService
     {
+        /// <summary>
+        /// Get list of all users.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserDetailsDto>> GetListAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get list of all users.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserDetailsDto>> GetListAsync(System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Get user details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<UserDetailsDto> GetByIdAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get user details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<UserDetailsDto> GetByIdAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Get a user's roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserRoleDto>> GetRolesAsync(string? id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a user's roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserRoleDto>> GetRolesAsync(string? id, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Change a user's assigned roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> AssignRolesAsync(string? id, UserRolesRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Change a user's assigned roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> AssignRolesAsync(string? id, UserRolesRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Toggle a user's active status.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ToggleUserStatusAsync(ToggleUserStatusRequest request);
+        System.Threading.Tasks.Task ToggleUserStatusAsync(string? id, ToggleUserStatusRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Toggle a user's active status.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ToggleUserStatusAsync(ToggleUserStatusRequest request, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task ToggleUserStatusAsync(string? id, ToggleUserStatusRequest request, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -2866,6 +3076,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
+        /// <summary>
+        /// Get list of all users.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserDetailsDto>> GetListAsync()
         {
@@ -2873,6 +3086,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get list of all users.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserDetailsDto>> GetListAsync(System.Threading.CancellationToken cancellationToken)
         {
@@ -2952,6 +3168,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Get user details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<UserDetailsDto> GetByIdAsync(string? id)
         {
@@ -2959,6 +3178,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get user details.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<UserDetailsDto> GetByIdAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
@@ -3039,6 +3261,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Get a user's roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserRoleDto>> GetRolesAsync(string? id)
         {
@@ -3046,6 +3271,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a user's roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserRoleDto>> GetRolesAsync(string? id, System.Threading.CancellationToken cancellationToken)
         {
@@ -3126,6 +3354,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Change a user's assigned roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<string> AssignRolesAsync(string? id, UserRolesRequest request)
         {
@@ -3133,6 +3364,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Change a user's assigned roles.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> AssignRolesAsync(string? id, UserRolesRequest request, System.Threading.CancellationToken cancellationToken)
         {
@@ -3219,21 +3453,28 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Toggle a user's active status.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ToggleUserStatusAsync(ToggleUserStatusRequest request)
+        public virtual System.Threading.Tasks.Task ToggleUserStatusAsync(string? id, ToggleUserStatusRequest request)
         {
-            return ToggleUserStatusAsync(request, System.Threading.CancellationToken.None);
+            return ToggleUserStatusAsync(id, request, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Toggle a user's active status.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ToggleUserStatusAsync(ToggleUserStatusRequest request, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ToggleUserStatusAsync(string? id, ToggleUserStatusRequest request, System.Threading.CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new System.ArgumentNullException("request");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append("api/users/toggle-status");
+            urlBuilder_.Append("api/users/{id}/toggle-status");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3411,17 +3652,29 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IPersonalClient : IApiService
     {
+        /// <summary>
+        /// Get audit logs of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<AuditDto>> GetMyLogsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get audit logs of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<AuditDto>> GetMyLogsAsync(System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Get permissions of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> GetMyPermissionsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get permissions of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> GetMyPermissionsAsync(System.Threading.CancellationToken cancellationToken);
 
@@ -3454,6 +3707,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
+        /// <summary>
+        /// Get audit logs of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<AuditDto>> GetMyLogsAsync()
         {
@@ -3461,6 +3717,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get audit logs of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<AuditDto>> GetMyLogsAsync(System.Threading.CancellationToken cancellationToken)
         {
@@ -3540,6 +3799,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             }
         }
 
+        /// <summary>
+        /// Get permissions of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> GetMyPermissionsAsync()
         {
@@ -3547,6 +3809,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get permissions of currently logged in user.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> GetMyPermissionsAsync(System.Threading.CancellationToken cancellationToken)
         {
@@ -3732,10 +3997,16 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IDashboardClient : IApiService
     {
+        /// <summary>
+        /// Get statistics for the dashboard.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<StatsDto> GetAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get statistics for the dashboard.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<StatsDto> GetAsync(System.Threading.CancellationToken cancellationToken);
 
@@ -3768,6 +4039,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
+        /// <summary>
+        /// Get statistics for the dashboard.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<StatsDto> GetAsync()
         {
@@ -3775,6 +4049,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get statistics for the dashboard.
+        /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<StatsDto> GetAsync(System.Threading.CancellationToken cancellationToken)
         {
@@ -3961,14 +4238,14 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
     public partial interface IBrandsClient : IApiService
     {
         /// <summary>
-        /// Search Brands using available Filters.
+        /// Search brands using available filters.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<PaginationResponseOfBrandDto> SearchAsync(SearchBrandsRequest request);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Search Brands using available Filters.
+        /// Search brands using available filters.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<PaginationResponseOfBrandDto> SearchAsync(SearchBrandsRequest request, System.Threading.CancellationToken cancellationToken);
@@ -4081,7 +4358,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
         /// <summary>
-        /// Search Brands using available Filters.
+        /// Search brands using available filters.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<PaginationResponseOfBrandDto> SearchAsync(SearchBrandsRequest request)
@@ -4091,7 +4368,7 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// Search Brands using available Filters.
+        /// Search brands using available filters.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<PaginationResponseOfBrandDto> SearchAsync(SearchBrandsRequest request, System.Threading.CancellationToken cancellationToken)
