@@ -66,10 +66,10 @@ public partial class UserRoles
         };
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => UsersClient.AssignRolesAsync(Id, request),
-            Snackbar,
-            new CustomValidation(),
-            L["Updated User Roles."]) is not null)
+                () => UsersClient.AssignRolesAsync(Id, request),
+                Snackbar,
+                successMessage: L["Updated User Roles."])
+            is not null)
         {
             Navigation.NavigateTo("/users");
         }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.ErrorHandler;
+namespace FSH.BlazorWebAssembly.Client.Components.Common;
 
 public partial class ErrorHandler
 {

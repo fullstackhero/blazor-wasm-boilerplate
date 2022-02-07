@@ -1,10 +1,10 @@
 using AKSoftware.Blazor.Utilities;
+using FSH.BlazorWebAssembly.Client.Components.Dialogs;
 using FSH.BlazorWebAssembly.Client.Components.ThemeManager;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Client.Shared.Dialogs;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;

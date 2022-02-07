@@ -3,7 +3,7 @@ using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Shared;
+namespace FSH.BlazorWebAssembly.Client.Components.Common;
 
 public partial class PersonCard
 {
