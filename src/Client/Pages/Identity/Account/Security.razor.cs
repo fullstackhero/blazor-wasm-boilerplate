@@ -9,7 +9,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Account;
 public partial class Security
 {
     [Inject]
-    public IProfileClient ProfileClient { get; set; } = default!;
+    public IPersonalClient PersonalClient { get; set; } = default!;
 
     private readonly ChangePasswordRequest _passwordModel = new();
 
@@ -18,7 +18,7 @@ public partial class Security
     private async Task ChangePasswordAsync()
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => ProfileClient.ChangePasswordAsync(_passwordModel),
+            () => PersonalClient.ChangePasswordAsync(_passwordModel),
             Snackbar,
             _customValidation,
             L["Password Changed!"]))

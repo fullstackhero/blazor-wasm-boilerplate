@@ -5,7 +5,7 @@
 
 <FshTitle Title="@L["Users"]" Description="@L["Manage Users"]" />
 
-<EntityTable TEntity="UserDetailsDto" TId="Guid" TRequest="CreateProfileRequest" Context="@Context">
+<EntityTable TEntity="UserDetailsDto" TId="Guid" TRequest="CreateUserRequest" Context="@Context">
     <ExtraActions>
         <MudMenuItem OnClick="(() => ViewProfile(context.Id))">@L["View Profile"]</MudMenuItem>
         @if (_canViewRoles)

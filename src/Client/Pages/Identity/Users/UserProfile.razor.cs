@@ -38,7 +38,7 @@ public partial class UserProfile
     private async Task ToggleUserStatus()
     {
         var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
-        await ApiHelper.ExecuteCallGuardedAsync(() => UsersClient.ToggleUserStatusAsync(Id, request), Snackbar);
+        await ApiHelper.ExecuteCallGuardedAsync(() => UsersClient.ToggleStatusAsync(Id, request), Snackbar);
         Navigation.NavigateTo("/users");
     }
 

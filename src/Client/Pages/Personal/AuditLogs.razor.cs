@@ -38,7 +38,7 @@ public partial class AuditLogs
                 new(audit => audit.DateTime, L["Date"], Template: DateFieldTemplate),
                 new(audit => audit.Type, L["Type"])
             },
-            loadDataFunc: async () => _trails = (await PersonalClient.GetMyLogsAsync()).Adapt<List<RelatedAuditTrail>>(),
+            loadDataFunc: async () => _trails = (await PersonalClient.GetLogsAsync()).Adapt<List<RelatedAuditTrail>>(),
             searchFunc: (searchString, trail) =>
                 (string.IsNullOrWhiteSpace(searchString) // check Search String
                     || trail.TableName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true

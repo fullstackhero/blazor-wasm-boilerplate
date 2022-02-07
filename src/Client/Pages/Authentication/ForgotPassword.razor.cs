@@ -13,7 +13,7 @@ public partial class ForgotPassword
     private bool BusySubmitting { get; set; }
 
     [Inject]
-    private IProfileClient ProfileClient { get; set; } = default!;
+    private IUsersClient UsersClient { get; set; } = default!;
 
     private string Tenant { get; set; } = MultitenancyConstants.Root.Id;
 
@@ -22,7 +22,7 @@ public partial class ForgotPassword
         BusySubmitting = true;
 
         await ApiHelper.ExecuteCallGuardedAsync(
-            () => ProfileClient.ForgotPasswordAsync(Tenant, _forgotPasswordRequest),
+            () => UsersClient.ForgotPasswordAsync(Tenant, _forgotPasswordRequest),
             Snackbar,
             _customValidation);
 

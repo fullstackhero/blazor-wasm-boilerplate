@@ -24,7 +24,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
 
         if (principal.Identity?.IsAuthenticated is true)
         {
-            var userDetails = await _services.GetRequiredService<IProfileClient>().GetAsync();
+            var userDetails = await _services.GetRequiredService<IPersonalClient>().GetProfileAsync();
 
             var userIdentity = (ClaimsIdentity)principal.Identity;
 
@@ -63,7 +63,7 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                 userIdentity.AddClaim(new Claim(FSHClaims.ImageUrl, userDetails.ImageUrl));
             }
 
-            var permissions = await _services.GetRequiredService<IPersonalClient>().GetMyPermissionsAsync();
+            var permissions = await _services.GetRequiredService<IPersonalClient>().GetPermissionsAsync();
 
             userIdentity.AddClaims(permissions.Select(permission => new Claim(FSHClaims.Permission, permission)));
         }

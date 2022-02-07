@@ -18,10 +18,8 @@ public partial class Users
 
     [Inject]
     protected IUsersClient UsersClient { get; set; } = default!;
-    [Inject]
-    protected IProfileClient ProfileClient { get; set; } = default!;
 
-    protected EntityClientTableContext<UserDetailsDto, Guid, CreateProfileRequest> Context { get; set; } = default!;
+    protected EntityClientTableContext<UserDetailsDto, Guid, CreateUserRequest> Context { get; set; } = default!;
 
     private bool _canExportUsers;
     private bool _canViewRoles;
@@ -66,7 +64,7 @@ public partial class Users
                     || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
-            createFunc: user => ProfileClient.CreateAsync(user),
+            createFunc: user => UsersClient.CreateAsync(user),
             hasExtraActionsFunc: () => true);
     }
 
