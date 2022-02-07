@@ -33,7 +33,6 @@
                     new(brand => brand.Description, L["Description"], "Description"),
                 },
             idFunc: brand => brand.Id,
-            exportFunc: null,
             searchFunc: async filter => (await
             BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
             createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
