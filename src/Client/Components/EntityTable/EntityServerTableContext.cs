@@ -14,11 +14,17 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
     /// and returns a PaginatedResult of TEntity.
     /// </summary>
     public Func<PaginationFilter, Task<PaginationResponse<TEntity>>> SearchFunc { get; }
+
+    /// <summary>
+    /// A function that exports the specified data from the API.
+    /// </summary>
+    public Func<Task<FileResponse>> ExportFunc { get; }
     public bool EnableAdvancedSearch { get; }
 
     public EntityServerTableContext(
         List<EntityField<TEntity>> fields,
         Func<PaginationFilter, Task<PaginationResponse<TEntity>>> searchFunc,
+        Func<Task<FileResponse>> exportFunc,
         string searchPermission,
         bool enableAdvancedSearch = false,
         Func<TEntity, TId>? idFunc = null,
@@ -32,6 +38,7 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
         string? createPermission = null,
         string? updatePermission = null,
         string? deletePermission = null,
+        string? exportPermission = null,
         Func<Task>? editFormInitializedFunc = null,
         Func<bool>? hasExtraActionsFunc = null,
         Func<TEntity, bool>? canUpdateEntityFunc = null,
@@ -48,6 +55,7 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
             createPermission,
             updatePermission,
             deletePermission,
+            exportPermission,
             entityName,
             entityNamePlural,
             editFormInitializedFunc,
@@ -56,6 +64,7 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
             canDeleteEntityFunc)
     {
         SearchFunc = searchFunc;
+        ExportFunc = exportFunc;
         EnableAdvancedSearch = enableAdvancedSearch;
     }
 }

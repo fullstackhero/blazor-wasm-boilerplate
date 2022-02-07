@@ -27,12 +27,13 @@
     protected override void OnInitialized() =>
         Context = new(
             fields: new()
-            {
-                new(brand => brand.Id, L["Id"], "Id"),
-                new(brand => brand.Name, L["Name"], "Name"),
-                new(brand => brand.Description, L["Description"], "Description"),
-            },
+                {
+                    new(brand => brand.Id, L["Id"], "Id"),
+                    new(brand => brand.Name, L["Name"], "Name"),
+                    new(brand => brand.Description, L["Description"], "Description"),
+                },
             idFunc: brand => brand.Id,
+            exportFunc: null,
             searchFunc: async filter => (await
             BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
             createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
@@ -43,5 +44,6 @@
             searchPermission: FSHPermissions.Brands.Search,
             createPermission: FSHPermissions.Brands.Create,
             updatePermission: FSHPermissions.Brands.Update,
-            deletePermission: FSHPermissions.Brands.Delete);
+            deletePermission: FSHPermissions.Brands.Delete,
+            exportPermission: string.Empty);
 }

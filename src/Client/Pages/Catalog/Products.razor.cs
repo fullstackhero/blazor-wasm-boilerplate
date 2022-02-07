@@ -32,6 +32,7 @@ public partial class Products
             },
             enableAdvancedSearch: true,
             idFunc: prod => prod.Id,
+            exportFunc: async () => await ProductsClient.ExportAsync(),
             searchFunc: async filter =>
             {
                 var productFilter = filter.Adapt<SearchProductsRequest>();
@@ -70,7 +71,8 @@ public partial class Products
             searchPermission: FSHPermissions.Products.Search,
             createPermission: FSHPermissions.Products.Create,
             updatePermission: FSHPermissions.Products.Update,
-            deletePermission: FSHPermissions.Products.Delete);
+            deletePermission: FSHPermissions.Products.Delete,
+            exportPermission: FSHPermissions.Products.Export);
 
     // Advanced Search
 

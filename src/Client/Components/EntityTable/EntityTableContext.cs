@@ -82,6 +82,11 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     public string? DeletePermission { get; }
 
     /// <summary>
+    /// The permission name of the export permission. When empty, no export functionality will be available.
+    /// </summary>
+    public string? ExportPermission { get; }
+
+    /// <summary>
     /// The name of the entity. This is used in the title of the add/edit modal and delete confirmation.
     /// </summary>
     public string? EntityName { get; }
@@ -124,6 +129,7 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         string? createPermission,
         string? updatePermission,
         string? deletePermission,
+        string? exportPermission,
         string? entityName,
         string? entityNamePlural,
         Func<Task>? editFormInitializedFunc,
@@ -142,6 +148,7 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         CreatePermission = createPermission;
         UpdatePermission = updatePermission;
         DeletePermission = deletePermission;
+        ExportPermission = exportPermission;
         EntityName = entityName;
         EntityNamePlural = entityNamePlural;
         EditFormInitializedFunc = editFormInitializedFunc;

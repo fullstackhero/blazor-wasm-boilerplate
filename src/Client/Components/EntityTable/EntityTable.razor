@@ -2,6 +2,7 @@
 @typeparam TId
 @typeparam TRequest
 
+@inject IJSRuntime JS
 @inject IStringLocalizer<SharedResource> L
 
 <style>
@@ -50,6 +51,12 @@
                         <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary"
                             OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
                             IconColor="Color.Surface">@L["Create"]</MudButton>
+                    }
+                    @if (_canExport)
+                    {
+                        <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Tertiary"
+                            OnClick="(() => ExportAsync())" StartIcon="@Icons.Material.Filled.ImportExport"
+                            Style="margin-left: 5px;" IconColor="Color.Surface">@L["Export"]</MudButton>
                     }
                     <MudButton DisableElevation Variant="Variant.Filled" OnClick="ReloadDataAsync"
                         StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary"

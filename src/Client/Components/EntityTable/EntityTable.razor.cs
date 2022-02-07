@@ -8,6 +8,7 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
@@ -57,6 +58,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
     private bool _canCreate;
     private bool _canUpdate;
     private bool _canDelete;
+    private bool _canExport;
 
     private bool _advancedSearchExpanded;
 
@@ -71,6 +73,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canCreate = await CanDoPermission(Context.CreatePermission, state);
         _canUpdate = await CanDoPermission(Context.UpdatePermission, state);
         _canDelete = await CanDoPermission(Context.DeletePermission, state);
+        _canExport = await CanDoPermission(Context.ExportPermission, state);
 
         await LocalLoadDataAsync();
         await SetAndSubscribeToTablePreference();
@@ -170,6 +173,27 @@ public partial class EntityTable<TEntity, TId, TRequest>
         }
 
         return new TableData<TEntity> { TotalItems = _totalItems, Items = _entityList };
+    }
+
+    private async Task ExportAsync()
+    {
+        if (!Loading && Context.ServerContext is not null)
+        {
+            if (Context.ServerContext.ExportFunc is not null)
+            {
+                Loading = true;
+
+                if (await ApiHelper.ExecuteCallGuardedAsync(
+                        () => Context.ServerContext.ExportFunc(), Snackbar)
+                    is { } result)
+                {
+                    using var streamRef = new DotNetStreamReference(result.Stream);
+                    await JS.InvokeVoidAsync("downloadFileFromStream", "DataFSH.xlsx", streamRef);
+                }
+
+                Loading = false;
+            }
+        }
     }
 
     private PaginationFilter GetPaginationFilter(TableState state)

@@ -2016,6 +2016,19 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Guid> CreateAsync(CreateProductRequest request, System.Threading.CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Export a products.
+        /// </summary>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> ExportAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Export a products.
+        /// </summary>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> ExportAsync(System.Threading.CancellationToken cancellationToken);
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -2616,6 +2629,82 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             throw new ApiException<ErrorResult>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Export a products.
+        /// </summary>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<FileResponse> ExportAsync()
+        {
+            return ExportAsync(System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Export a products.
+        /// </summary>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<FileResponse> ExportAsync(System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/export");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 206)
+                        {
+                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
+                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
+                            return fileResponse_;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -6986,6 +7075,41 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
     }
 
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FileResponse : System.IDisposable
+    {
+        private System.IDisposable? _client;
+        private System.IDisposable? _response;
+
+        public int StatusCode { get; private set; }
+
+        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
+
+        public System.IO.Stream Stream { get; private set; }
+
+        public bool IsPartial
+        {
+            get { return StatusCode == 206; }
+        }
+
+        public FileResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.IO.Stream stream, System.IDisposable? client, System.IDisposable? response)
+        {
+            StatusCode = statusCode;
+            Headers = headers;
+            Stream = stream;
+            _client = client;
+            _response = response;
+        }
+
+        public void Dispose()
+        {
+            Stream.Dispose();
+            if (_response != null)
+                _response.Dispose();
+            if (_client != null)
+                _client.Dispose();
+        }
+    }
 
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
