@@ -3,7 +3,7 @@
 
 @inject IStringLocalizer<UserRoles> L
 
-<FshTitle Title="@Title" Description="@Description" />
+<FshTitle Title="@_title" Description="@_description" />
 
 @if (!_loaded)
 {
@@ -11,8 +11,7 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="UserRolesList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped"
-        Filter="new Func<UserRoleDto, bool>(Search)">
+    <MudTable Hover="true" Elevation="25" Items="_userRolesList" Filter="new Func<UserRoleDto, bool>(Search)">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-auto" StartIcon="@Icons.Material.Filled.ArrowBack" Link="/users">
@@ -61,14 +60,6 @@ else
                 </MudCheckBox>
             </MudTd>
         </RowTemplate>
-        <FooterContent>
-            <MudSwitch @bind-Checked="@_dense" Color="Color.Secondary" Style="margin-left: 5px;">@L["Dense"]
-            </MudSwitch>
-            <MudSwitch @bind-Checked="@_striped" Color="Color.Tertiary" Style="margin-left: 5px;">@L["Striped"]
-            </MudSwitch>
-            <MudSwitch @bind-Checked="@_bordered" Color="Color.Warning" Style="margin-left: 5px;">@L["Bordered"]
-            </MudSwitch>
-        </FooterContent>
         <PagerContent>
             <TablePager />
         </PagerContent>

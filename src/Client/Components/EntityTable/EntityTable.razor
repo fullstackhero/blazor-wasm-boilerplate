@@ -39,9 +39,8 @@
             </MudExpansionPanel>
         }
 
-        <MudTable @ref="_table" Elevation="25" ServerData="@ServerReloadFunc" Items="@_entityList" Filter="LocalSearch"
-            Dense="@Dense" Bordered="@Bordered" Striped="@Striped" Hover="@Hoverable" Loading="@Loading"
-            LoadingProgressColor="@Color.Secondary" ChildRowContent="@ChildRowContent">
+        <FshTable @ref="_table" Elevation="25" ServerData="@ServerReloadFunc" Items="@_entityList" Filter="LocalSearch"
+            Loading="@Loading" LoadingProgressColor="@Color.Secondary" ChildRowContent="@ChildRowContent">
 
             <ToolBarContent>
                 <div class="justify-center mud-text-align-center">
@@ -143,7 +142,7 @@
                 <TablePager />
             </PagerContent>
 
-        </MudTable>
+        </FshTable>
 
     </ChildContent>
     <ErrorContent>

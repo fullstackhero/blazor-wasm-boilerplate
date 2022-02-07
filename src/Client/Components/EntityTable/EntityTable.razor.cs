@@ -1,9 +1,6 @@
-using AKSoftware.Blazor.Utilities;
 using FSH.BlazorWebAssembly.Client.Components.Dialogs;
-using FSH.BlazorWebAssembly.Client.Components.ThemeManager;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 using FSH.BlazorWebAssembly.Client.Shared;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -20,14 +17,6 @@ public partial class EntityTable<TEntity, TId, TRequest>
     [EditorRequired]
     public EntityTableContext<TEntity, TId, TRequest> Context { get; set; } = default!;
 
-    [Parameter]
-    public bool Dense { get; set; }
-    [Parameter]
-    public bool Striped { get; set; }
-    [Parameter]
-    public bool Bordered { get; set; }
-    [Parameter]
-    public bool Hoverable { get; set; }
     [Parameter]
     public bool Loading { get; set; }
 
@@ -74,7 +63,6 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canDelete = await CanDoActionAsync(Context.DeleteAction, state);
 
         await LocalLoadDataAsync();
-        await SetAndSubscribeToTablePreference();
     }
 
     public Task ReloadDataAsync() =>
@@ -274,27 +262,5 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
             await ReloadDataAsync();
         }
-    }
-
-    private async Task SetAndSubscribeToTablePreference()
-    {
-        if (await ClientPreferences.GetPreference() is ClientPreference clientPreference)
-        {
-            SetTablePreference(clientPreference.EntityTablePreference);
-        }
-
-        MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(ClientPreference.EntityTablePreference), (_, value) =>
-        {
-            SetTablePreference(value);
-            StateHasChanged();
-        });
-    }
-
-    private void SetTablePreference(EntityTablePreference tablePreference)
-    {
-        Dense = tablePreference.IsDense;
-        Striped = tablePreference.IsStriped;
-        Bordered = tablePreference.HasBorder;
-        Hoverable = tablePreference.IsHoverable;
     }
 }
