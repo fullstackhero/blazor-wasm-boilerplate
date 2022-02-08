@@ -2020,14 +2020,14 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Export a products.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> ExportAsync();
+        System.Threading.Tasks.Task<FileResponse> ExportAsync(ExportProductsRequest filter);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Export a products.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> ExportAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<FileResponse> ExportAsync(ExportProductsRequest filter, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -2649,9 +2649,9 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Export a products.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> ExportAsync()
+        public virtual System.Threading.Tasks.Task<FileResponse> ExportAsync(ExportProductsRequest filter)
         {
-            return ExportAsync(System.Threading.CancellationToken.None);
+            return ExportAsync(filter, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -2659,8 +2659,11 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
         /// Export a products.
         /// </summary>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> ExportAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse> ExportAsync(ExportProductsRequest filter, System.Threading.CancellationToken cancellationToken)
         {
+            if (filter == null)
+                throw new System.ArgumentNullException("filter");
+
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append("api/v1/products/export");
 
@@ -2670,7 +2673,10 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(filter, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -6709,6 +6715,20 @@ namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient
 
         [Newtonsoft.Json.JsonProperty("image", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public FileUploadRequest? Image { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.7.0 (NJsonSchema v10.6.7.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ExportProductsRequest : BaseFilter
+    {
+        [Newtonsoft.Json.JsonProperty("brandId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid? BrandId { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("minimumRate", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public decimal? MinimumRate { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("maximumRate", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public decimal? MaximumRate { get; set; } = default!;
 
     }
 

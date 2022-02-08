@@ -18,14 +18,14 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
     /// <summary>
     /// A function that exports the specified data from the API.
     /// </summary>
-    public Func<Task<FileResponse>>? ExportFunc { get; }
+    public Func<BaseFilter, Task<FileResponse>>? ExportFunc { get; }
     public bool EnableAdvancedSearch { get; }
 
     public EntityServerTableContext(
         List<EntityField<TEntity>> fields,
         Func<PaginationFilter, Task<PaginationResponse<TEntity>>> searchFunc,
         string searchPermission,
-        Func<Task<FileResponse>>? exportFunc = null,
+        Func<BaseFilter, Task<FileResponse>>? exportFunc = null,
         bool enableAdvancedSearch = false,
         Func<TEntity, TId>? idFunc = null,
         Func<Task<TRequest>>? getDefaultsFunc = null,

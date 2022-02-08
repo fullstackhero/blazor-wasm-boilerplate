@@ -183,8 +183,10 @@ public partial class EntityTable<TEntity, TId, TRequest>
             {
                 Loading = true;
 
+                var filter = GetBaseFilter();
+
                 if (await ApiHelper.ExecuteCallGuardedAsync(
-                        () => Context.ServerContext.ExportFunc(), Snackbar)
+                        () => Context.ServerContext.ExportFunc(filter), Snackbar)
                     is { } result)
                 {
                     using var streamRef = new DotNetStreamReference(result.Stream);
@@ -212,6 +214,26 @@ public partial class EntityTable<TEntity, TId, TRequest>
             PageNumber = state.Page + 1,
             Keyword = SearchString,
             OrderBy = orderings ?? Array.Empty<string>()
+        };
+
+        if (!Context.AllColumnsChecked)
+        {
+            filter.AdvancedSearch = new()
+            {
+                Fields = Context.SearchFields,
+                Keyword = filter.Keyword
+            };
+            filter.Keyword = null;
+        }
+
+        return filter;
+    }
+
+    private BaseFilter GetBaseFilter()
+    {
+        var filter = new BaseFilter
+        {
+            Keyword = SearchString,
         };
 
         if (!Context.AllColumnsChecked)

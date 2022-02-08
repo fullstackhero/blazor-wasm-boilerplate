@@ -32,7 +32,16 @@ public partial class Products
             },
             enableAdvancedSearch: true,
             idFunc: prod => prod.Id,
-            exportFunc: async () => await ProductsClient.ExportAsync(),
+            exportFunc: async filter =>
+            {
+                var exportFilter = filter.Adapt<ExportProductsRequest>();
+
+                exportFilter.BrandId = SearchBrandId == default ? null : SearchBrandId;
+                exportFilter.MinimumRate = SearchMinimumRate;
+                exportFilter.MaximumRate = SearchMaximumRate;
+
+                return await ProductsClient.ExportAsync(exportFilter);
+            },
             searchFunc: async filter =>
             {
                 var productFilter = filter.Adapt<SearchProductsRequest>();
