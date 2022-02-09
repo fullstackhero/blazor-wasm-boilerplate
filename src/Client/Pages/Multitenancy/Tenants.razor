@@ -16,7 +16,7 @@
             <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudTextField T="string" For="@(() => context.ConnectionString)" @bind-Value="context.ConnectionString"
+            <MudTextField T="string" For="@(() => context.ConnectionString)" HelperText="@L["To use default connection string, leave this field blank."]" @bind-Value="context.ConnectionString"
                 Label="@L["Connection String"]" />
         </MudItem>
         <MudItem xs="12" md="6">
