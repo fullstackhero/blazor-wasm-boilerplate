@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -11,7 +11,7 @@ public class NotificationClient : IAsyncDisposable
     private readonly IConfiguration _config;
     private readonly NavigationManager _navigation;
     private readonly IAuthenticationService _authService;
-    private CancellationTokenSource _cts = new();
+    private readonly CancellationTokenSource _cts = new();
 
     public HubConnection HubConnection { get; private set; }
 

@@ -9,7 +9,7 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 public partial class AuditLogs
 {
     [Inject]
-    private IAuditLogsClient AuditLogsClient { get; set; } = default!;
+    private IPersonalClient PersonalClient { get; set; } = default!;
 
     protected EntityClientTableContext<RelatedAuditTrail, Guid, object> Context { get; set; } = default!;
 
@@ -29,6 +29,8 @@ public partial class AuditLogs
     protected override void OnInitialized()
     {
         Context = new(
+            entityNamePlural: L["Trails"],
+            searchAction: true.ToString(),
             fields: new()
             {
                 new(audit => audit.Id, L["Id"]),
@@ -36,24 +38,20 @@ public partial class AuditLogs
                 new(audit => audit.DateTime, L["Date"], Template: DateFieldTemplate),
                 new(audit => audit.Type, L["Type"])
             },
-            loadDataFunc: async () => _trails = (await AuditLogsClient.GetMyLogsAsync()).Adapt<List<RelatedAuditTrail>>() ?? new List<RelatedAuditTrail>(),
-            searchFunc: Search,
-            searchPermission: true.ToString(),
-            entityNamePlural: L["Trails"],
+            loadDataFunc: async () => _trails = (await PersonalClient.GetLogsAsync()).Adapt<List<RelatedAuditTrail>>(),
+            searchFunc: (searchString, trail) =>
+                (string.IsNullOrWhiteSpace(searchString) // check Search String
+                    || trail.TableName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+                    || (_searchInOldValues &&
+                        trail.OldValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true)
+                    || (_searchInNewValues &&
+                        trail.NewValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true))
+                && ((_dateRange?.Start is null && _dateRange?.End is null) // check Date Range
+                    || (_dateRange?.Start is not null && _dateRange.End is null && trail.DateTime >= _dateRange.Start)
+                    || (_dateRange?.Start is null && _dateRange?.End is not null && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))
+                    || (trail.DateTime >= _dateRange!.Start && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))),
             hasExtraActionsFunc: () => true);
     }
-
-    private bool Search(string? searchString, RelatedAuditTrail trail) =>
-        (string.IsNullOrWhiteSpace(searchString) // check Search String
-            || trail.TableName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
-            || (_searchInOldValues &&
-                trail.OldValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true)
-            || (_searchInNewValues &&
-                trail.NewValues?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true))
-        && ((_dateRange?.Start is null && _dateRange?.End is null) // check Date Range
-            || (_dateRange?.Start is not null && _dateRange.End is null && trail.DateTime >= _dateRange.Start)
-            || (_dateRange?.Start is null && _dateRange?.End is not null && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999))
-            || (trail.DateTime >= _dateRange!.Start && trail.DateTime <= _dateRange.End + new TimeSpan(0, 11, 59, 59, 999)));
 
     private void ShowBtnPress(Guid id)
     {

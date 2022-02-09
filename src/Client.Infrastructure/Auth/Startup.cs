@@ -1,10 +1,10 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.Jwt;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Auth.AzureAd;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth.Jwt;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 
 internal static class Startup
 {

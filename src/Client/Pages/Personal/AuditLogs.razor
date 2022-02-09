@@ -4,7 +4,7 @@
 
 <FshTitle Title="@L["Audit Logs"]" Description="@L["Your Recent Activities."]" />
 
-<EntityTable TEntity="RelatedAuditTrail" TId="Guid" TRequest="object" Context="@Context" @bind-SearchString="_searchString" Dense="true">
+<EntityTable TEntity="RelatedAuditTrail" TId="Guid" TRequest="object" Context="@Context" @bind-SearchString="_searchString">
 
     <AdvancedSearchContent>
         <MudSwitch @bind-Checked="@_searchInOldValues" Color="Color.Primary" Style="margin-left: 5px;">@L["Search in Old Values"]</MudSwitch>

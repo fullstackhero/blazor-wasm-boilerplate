@@ -1,6 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -13,22 +14,23 @@ public partial class Roles
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
-
     [Inject]
     private IRolesClient RolesClient { get; set; } = default!;
 
-    protected EntityClientTableContext<RoleDto, string?, RoleRequest> Context { get; set; } = default!;
+    protected EntityClientTableContext<RoleDto, string?, CreateOrUpdateRoleRequest> Context { get; set; } = default!;
 
     private bool _canViewRoleClaims;
-
-    protected bool CheckBox { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canViewRoleClaims = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.RoleClaims.View)).Succeeded;
+        _canViewRoleClaims = await AuthService.HasPermissionAsync(state.User, FSHAction.View, FSHResource.RoleClaims);
 
         Context = new(
+            entityName: L["Role"],
+            entityNamePlural: L["Roles"],
+            entityResource: FSHResource.Roles,
+            searchAction: FSHAction.View,
             fields: new()
             {
                 new(role => role.Id, L["Id"]),
@@ -37,25 +39,17 @@ public partial class Roles
             },
             idFunc: role => role.Id,
             loadDataFunc: async () => (await RolesClient.GetListAsync()).ToList(),
-            searchFunc: Search,
+            searchFunc: (searchString, role) =>
+                string.IsNullOrWhiteSpace(searchString)
+                    || role.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
+                    || role.Description?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
             createFunc: async role => await RolesClient.RegisterRoleAsync(role),
             updateFunc: async (_, role) => await RolesClient.RegisterRoleAsync(role),
             deleteFunc: async id => await RolesClient.DeleteAsync(id),
-            entityName: L["Role"],
-            entityNamePlural: L["Roles"],
-            searchPermission: FSHPermissions.Roles.View,
-            createPermission: FSHPermissions.Roles.Create,
-            updatePermission: FSHPermissions.Roles.Update,
-            deletePermission: FSHPermissions.Roles.Delete,
             hasExtraActionsFunc: () => _canViewRoleClaims,
-            canUpdateEntityFunc: e => !e.IsDefault,
-            canDeleteEntityFunc: e => !e.IsDefault);
+            canUpdateEntityFunc: e => !FSHRoles.IsDefault(e.Name),
+            canDeleteEntityFunc: e => !FSHRoles.IsDefault(e.Name));
     }
-
-    private bool Search(string? searchString, RoleDto role) =>
-        string.IsNullOrWhiteSpace(searchString)
-        || role.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
-        || role.Description?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
 
     private void ManagePermissions(string? roleId)
     {

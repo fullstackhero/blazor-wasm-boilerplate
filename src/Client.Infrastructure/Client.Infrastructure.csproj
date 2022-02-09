@@ -9,14 +9,14 @@
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
         <PackageReference Include="AKSoftware.Blazor.Utilities" Version="1.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.2" />
+        <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.2" />
         <PackageReference Include="MudBlazor" Version="6.0.6" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="NSwag.MSBuild" Version="13.15.7">

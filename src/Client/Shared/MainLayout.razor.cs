@@ -19,8 +19,8 @@ public partial class MainLayout
     [Inject]
     public NotificationClient Notifications { get; set; } = default!;
 
-    private bool _drawerOpen = false;
-    private bool _rightToLeft = false;
+    private bool _drawerOpen;
+    private bool _rightToLeft;
 
     protected override async Task OnInitializedAsync()
     {

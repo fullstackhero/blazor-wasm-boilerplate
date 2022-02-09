@@ -1,7 +1,7 @@
 ﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -22,6 +22,9 @@ public partial class Products
 
     protected override void OnInitialized() =>
         Context = new(
+            entityName: L["Product"],
+            entityNamePlural: L["Products"],
+            entityResource: FSHResource.Products,
             fields: new()
             {
                 new(prod => prod.Id, L["Id"], "Id"),
@@ -64,13 +67,7 @@ public partial class Products
                 await ProductsClient.UpdateAsync(id, prod.Adapt<UpdateProductRequest>());
                 prod.ImageInBytes = string.Empty;
             },
-            deleteFunc: async id => await ProductsClient.DeleteAsync(id),
-            entityName: L["Product"],
-            entityNamePlural: L["Products"],
-            searchPermission: FSHPermissions.Products.Search,
-            createPermission: FSHPermissions.Products.Create,
-            updatePermission: FSHPermissions.Products.Update,
-            deletePermission: FSHPermissions.Products.Delete);
+            deleteFunc: async id => await ProductsClient.DeleteAsync(id));
 
     // Advanced Search
 

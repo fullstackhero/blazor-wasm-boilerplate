@@ -1,5 +1,6 @@
 ﻿@page "/roles/{Id}/permissions"
-@attribute [Authorize(Policy = FSHPermissions.Roles.View)]
+@attribute [MustHavePermission(FSHAction.View, FSHResource.RoleClaims)]
+
 @inject IStringLocalizer<RolePermissions> L
 
 <FshTitle Title="@_title" Description="@_description" />
@@ -10,64 +11,65 @@
 }
 else
 {
-     <MudTabs Elevation="25" Rounded="true" Centered="true" ApplyEffectsToContainer="true" AlwaysShowScrollButtons="true">
-        @foreach (var group in GroupedRoleClaims.Keys)
+    <MudTabs Elevation="25" Rounded="true" Centered="true" ApplyEffectsToContainer="true" AlwaysShowScrollButtons="true">
+        @foreach (var group in _groupedRoleClaims.Keys)
         {
-            var selectedRoleClaimsInGroup = GroupedRoleClaims[group].Where(c => c.Enabled).ToList();
-            var allRoleClaimsInGroup = GroupedRoleClaims[group].ToList();
-            <MudTabPanel Text="@group" BadgeData="@($"{selectedRoleClaimsInGroup.Count}/{allRoleClaimsInGroup.Count}")" Style="padding-right: 43px;" BadgeColor="@GetGroupBadgeColor(selectedRoleClaimsInGroup.Count, allRoleClaimsInGroup.Count)">
-                    <MudTable Hover="true" Elevation="25" Items="@allRoleClaimsInGroup" Style="margin-bottom:0px!important" Filter="new Func<PermissionUpdateDto, bool>(Search)">
-        <ToolBarContent>
-            <div class="justify-center mud-text-align-center">
-                <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-auto" StartIcon="@Icons.Material.Filled.ArrowBack" Link="/roles">@L["Back"]
-                </MudButton>
-                @if (_canEditRoleClaims)
-            {
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="SaveAsync"
-                ButtonType="ButtonType.Submit" Style="margin-left: 5px!important;" StartIcon="@Icons.Material.Filled.Save">@L["Update Permissions"]
-                </MudButton>
-            }
-        </div>
-        <MudSpacer />
-        @if (_canSearchRoleClaims)
-        {
-            <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false
-            Placeholder="@L["Search For Role Permissions"]" Adornment="Adornment.End"
-            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
-        }
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<PermissionUpdateDto, object?>(x => x.Permission)">
-                @L["Permission Name"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<PermissionUpdateDto, object?>(x => x.Description)">
-                @L["Description"]</MudTableSortLabel>
-        </MudTh>
-        <MudTh>
-            <MudTableSortLabel SortBy="new Func<PermissionUpdateDto, object>(x => x.Enabled)">@L["Status"]
-            </MudTableSortLabel>
-        </MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="@L["Permission Name"]">
-            <MudHighlighter Text="@context.Permission" HighlightedText="@_searchString" />
-        </MudTd>
-        <MudTd DataLabel="@L["Description"]">
-            <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
-        </MudTd>
-        <MudTd DataLabel="Permission">
-            <MudCheckBox @bind-Checked="@context.Enabled" Disabled="@(!_canEditRoleClaims)" Color="Color.Secondary">
-            </MudCheckBox>
-        </MudTd>
-    </RowTemplate>
-    <PagerContent>
-        <TablePager />
-    </PagerContent>
-</MudTable>
+            var selectedRoleClaimsInGroup = _groupedRoleClaims[group].Where(c => c.Enabled).ToList();
+            var allRoleClaimsInGroup = _groupedRoleClaims[group].ToList();
+            <MudTabPanel Text="@group" BadgeData="@($"{selectedRoleClaimsInGroup.Count}/{allRoleClaimsInGroup.Count}")" Style="padding-right: 43px;"
+                BadgeColor="@GetGroupBadgeColor(selectedRoleClaimsInGroup.Count, allRoleClaimsInGroup.Count)">
+                <MudTable Hover="true" Elevation="25" Items="@allRoleClaimsInGroup" Style="margin-bottom:0px!important" Filter="new Func<PermissionViewModel, bool>(Search)">
+                    <ToolBarContent>
+                        <div class="justify-center mud-text-align-center">
+                            <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-auto" StartIcon="@Icons.Material.Filled.ArrowBack" Link="/roles">@L["Back"]
+                            </MudButton>
+                            @if (_canEditRoleClaims)
+                            {
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="SaveAsync"
+                                    ButtonType="ButtonType.Submit" Style="margin-left: 5px!important;" StartIcon="@Icons.Material.Filled.Save">@L["Update Permissions"]
+                                </MudButton>
+                            }
+                        </div>
+                        <MudSpacer />
+                        @if (_canSearchRoleClaims)
+                        {
+                            <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false
+                                Placeholder="@L["Search For Role Permissions"]" Adornment="Adornment.End"
+                                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3">
+                            </MudTextField>
+                        }
+                    </ToolBarContent>
+                    <HeaderContent>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<PermissionViewModel, object?>(x => x.Name)">
+                                @L["Permission Name"]</MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<PermissionViewModel, object?>(x => x.Description)">
+                                @L["Description"]</MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<PermissionViewModel, object>(x => x.Enabled)">@L["Status"]
+                            </MudTableSortLabel>
+                        </MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="@L["Permission Name"]">
+                            <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+                        </MudTd>
+                        <MudTd DataLabel="@L["Description"]">
+                            <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
+                        </MudTd>
+                        <MudTd DataLabel="Permission">
+                            <MudCheckBox @bind-Checked="@context.Enabled" Disabled="@(!_canEditRoleClaims)" Color="Color.Secondary">
+                            </MudCheckBox>
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <TablePager />
+                    </PagerContent>
+                </MudTable>
             </MudTabPanel>
         }
-        </MudTabs>
-
+    </MudTabs>
 }

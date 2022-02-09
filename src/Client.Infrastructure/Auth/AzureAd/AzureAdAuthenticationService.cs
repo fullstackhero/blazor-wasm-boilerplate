@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication.AzureAd;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth.AzureAd;
 
 internal class AzureAdAuthenticationService : IAuthenticationService
 {
@@ -17,7 +17,7 @@ internal class AzureAdAuthenticationService : IAuthenticationService
     public void NavigateToExternalLogin(string returnUrl) =>
         _navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(returnUrl)}");
 
-    public Task<bool> LoginAsync(string tenantKey, TokenRequest request) =>
+    public Task<bool> LoginAsync(string tenantId, TokenRequest request) =>
         throw new NotImplementedException();
 
     public async Task LogoutAsync()

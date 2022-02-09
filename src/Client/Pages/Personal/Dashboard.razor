@@ -1,5 +1,5 @@
 ﻿@page "/dashboard"
-@attribute [Authorize(Policy = FSHPermissions.Dashboard.View)]
+@attribute [MustHavePermission(FSHAction.View, FSHResource.Dashboard)]
 
 @inject IStringLocalizer<Dashboard> L
 

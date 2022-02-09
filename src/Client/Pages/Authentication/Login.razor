@@ -26,8 +26,8 @@
                 AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
         </MudItem>
         <MudItem xs="12">
-            <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="_tenantKey"
-                For="@(() => _tenantKey)" Required />
+            <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="_tenantId"
+                For="@(() => _tenantId)" Required />
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-space-between align-center">
             <MudButton Link="/account/forgot-password">@L["Forgot password?"]</MudButton>

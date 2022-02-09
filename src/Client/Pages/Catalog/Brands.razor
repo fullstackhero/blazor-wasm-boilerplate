@@ -1,5 +1,5 @@
 ﻿@page "/catalog/brands"
-@attribute [Authorize(Policy = FSHPermissions.Brands.View)]
+@attribute [MustHavePermission(FSHAction.View, FSHResource.Brands)]
 
 @inject IStringLocalizer<Brands> L
 @inject IBrandsClient BrandsClient
@@ -26,6 +26,9 @@
 
     protected override void OnInitialized() =>
         Context = new(
+            entityName: L["Brand"],
+            entityNamePlural: L["Brands"],
+            entityResource: FSHResource.Brands,
             fields: new()
             {
                 new(brand => brand.Id, L["Id"], "Id"),
@@ -33,15 +36,10 @@
                 new(brand => brand.Description, L["Description"], "Description"),
             },
             idFunc: brand => brand.Id,
-            searchFunc: async filter => (await
-            BrandsClient.SearchAsync(filter.Adapt<SearchBrandsRequest>())).Adapt<PaginationResponse<BrandDto>>(),
+            searchFunc: async filter => (await BrandsClient
+                .SearchAsync(filter.Adapt<SearchBrandsRequest>()))
+                .Adapt<PaginationResponse<BrandDto>>(),
             createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
             updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
-            deleteFunc: async id => await BrandsClient.DeleteAsync(id),
-            entityName: L["Brand"],
-            entityNamePlural: L["Brands"],
-            searchPermission: FSHPermissions.Brands.Search,
-            createPermission: FSHPermissions.Brands.Create,
-            updatePermission: FSHPermissions.Brands.Update,
-            deletePermission: FSHPermissions.Brands.Delete);
+            deleteFunc: async id => await BrandsClient.DeleteAsync(id));
 }
