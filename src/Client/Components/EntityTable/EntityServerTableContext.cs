@@ -14,11 +14,18 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
     /// and returns a PaginatedResult of TEntity.
     /// </summary>
     public Func<PaginationFilter, Task<PaginationResponse<TEntity>>> SearchFunc { get; }
+
+    /// <summary>
+    /// A function that exports the specified data from the API.
+    /// </summary>
+    public Func<BaseFilter, Task<FileResponse>>? ExportFunc { get; }
+
     public bool EnableAdvancedSearch { get; }
 
     public EntityServerTableContext(
         List<EntityField<TEntity>> fields,
         Func<PaginationFilter, Task<PaginationResponse<TEntity>>> searchFunc,
+        Func<BaseFilter, Task<FileResponse>>? exportFunc = null,
         bool enableAdvancedSearch = false,
         Func<TEntity, TId>? idFunc = null,
         Func<Task<TRequest>>? getDefaultsFunc = null,
@@ -33,6 +40,7 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
         string? createAction = null,
         string? updateAction = null,
         string? deleteAction = null,
+        string? exportAction = null,
         Func<Task>? editFormInitializedFunc = null,
         Func<bool>? hasExtraActionsFunc = null,
         Func<TEntity, bool>? canUpdateEntityFunc = null,
@@ -52,12 +60,14 @@ public class EntityServerTableContext<TEntity, TId, TRequest>
             createAction,
             updateAction,
             deleteAction,
+            exportAction,
             editFormInitializedFunc,
             hasExtraActionsFunc,
             canUpdateEntityFunc,
             canDeleteEntityFunc)
     {
         SearchFunc = searchFunc;
+        ExportFunc = exportFunc;
         EnableAdvancedSearch = enableAdvancedSearch;
     }
 }
