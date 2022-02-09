@@ -48,7 +48,8 @@ public partial class Roles
             deleteFunc: async id => await RolesClient.DeleteAsync(id),
             hasExtraActionsFunc: () => _canViewRoleClaims,
             canUpdateEntityFunc: e => !FSHRoles.IsDefault(e.Name),
-            canDeleteEntityFunc: e => !FSHRoles.IsDefault(e.Name));
+            canDeleteEntityFunc: e => !FSHRoles.IsDefault(e.Name),
+            exportAction: string.Empty);
     }
 
     private void ManagePermissions(string? roleId)
