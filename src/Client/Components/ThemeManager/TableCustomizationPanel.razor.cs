@@ -14,11 +14,11 @@ public partial class TableCustomizationPanel
     public bool HasBorder { get; set; }
     [Parameter]
     public bool IsHoverable { get; set; }
-    private EntityTablePreference _entityTablePreference = new();
+    private FshTablePreference _entityTablePreference = new();
     protected override async Task OnInitializedAsync()
     {
         if (await ClientPreferences.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
-        _entityTablePreference = themePreference.EntityTablePreference;
+        _entityTablePreference = themePreference.TablePreference;
         IsDense = _entityTablePreference.IsDense;
         IsStriped = _entityTablePreference.IsStriped;
         HasBorder = _entityTablePreference.HasBorder;
@@ -41,27 +41,27 @@ public partial class TableCustomizationPanel
     {
         _entityTablePreference.IsDense = !_entityTablePreference.IsDense;
         await OnDenseSwitchToggled.InvokeAsync(_entityTablePreference.IsDense);
-        MessagingCenter.Send(this, nameof(EntityTablePreference), _entityTablePreference);
+        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
     }
 
     private async Task ToggleStripedSwitch()
     {
         _entityTablePreference.IsStriped = !_entityTablePreference.IsStriped;
         await OnStripedSwitchToggled.InvokeAsync(_entityTablePreference.IsStriped);
-        MessagingCenter.Send(this, nameof(EntityTablePreference), _entityTablePreference);
+        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
     }
 
     private async Task ToggleBorderedSwitch()
     {
         _entityTablePreference.HasBorder = !_entityTablePreference.HasBorder;
         await OnBorderdedSwitchToggled.InvokeAsync(_entityTablePreference.HasBorder);
-        MessagingCenter.Send(this, nameof(EntityTablePreference), _entityTablePreference);
+        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
     }
 
     private async Task ToggleHoverableSwitch()
     {
         _entityTablePreference.IsHoverable = !_entityTablePreference.IsHoverable;
         await OnHoverableSwitchToggled.InvokeAsync(_entityTablePreference.IsHoverable);
-        MessagingCenter.Send(this, nameof(EntityTablePreference), _entityTablePreference);
+        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
     }
 }

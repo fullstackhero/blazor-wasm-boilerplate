@@ -1,6 +1,6 @@
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 
-public class EntityTablePreference
+public class FshTablePreference
 {
     public bool IsDense { get; set; }
     public bool IsStriped { get; set; }

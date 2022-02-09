@@ -11,5 +11,5 @@ public class ClientPreference : IPreference
     public string SecondaryColor { get; set; } = CustomColors.Light.Secondary;
     public double BorderRadius { get; set; } = 5;
     public string LanguageCode { get; set; } = LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US";
-    public EntityTablePreference EntityTablePreference { get; set; } = new EntityTablePreference();
+    public FshTablePreference TablePreference { get; set; } = new FshTablePreference();
 }

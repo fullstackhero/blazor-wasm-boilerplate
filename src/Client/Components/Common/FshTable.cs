@@ -15,10 +15,10 @@ public class FshTable<T> : MudTable<T>
     {
         if (await ClientPreferences.GetPreference() is ClientPreference clientPreference)
         {
-            SetTablePreference(clientPreference.EntityTablePreference);
+            SetTablePreference(clientPreference.TablePreference);
         }
 
-        MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(ClientPreference.EntityTablePreference), (_, value) =>
+        MessagingCenter.Subscribe<TableCustomizationPanel, FshTablePreference>(this, nameof(FshTablePreference), (_, value) =>
         {
             SetTablePreference(value);
             StateHasChanged();
@@ -27,7 +27,7 @@ public class FshTable<T> : MudTable<T>
         await base.OnInitializedAsync();
     }
 
-    private void SetTablePreference(EntityTablePreference tablePreference)
+    private void SetTablePreference(FshTablePreference tablePreference)
     {
         Dense = tablePreference.IsDense;
         Striped = tablePreference.IsStriped;
