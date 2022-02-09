@@ -1,7 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+﻿using FSH.BlazorWebAssembly.Client.Components.Common;
+using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.MultiTenancy;
+using FSH.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -17,10 +18,10 @@ public partial class Login
 
     private CustomValidation? _customValidation;
 
-    public bool BusySubmitting { get; set; } = false;
+    public bool BusySubmitting { get; set; }
 
     private readonly TokenRequest _tokenRequest = new();
-    private string _tenantKey { get; set; } = string.Empty;
+    private string _tenantId { get; set; } = string.Empty;
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -58,17 +59,17 @@ public partial class Login
 
     private void FillAdministratorCredentials()
     {
-        _tokenRequest.Email = MultitenancyConstants.DefaultTenant.EmailAddress;
+        _tokenRequest.Email = MultitenancyConstants.Root.EmailAddress;
         _tokenRequest.Password = MultitenancyConstants.DefaultPassword;
-        _tenantKey = MultitenancyConstants.DefaultTenant.Key;
+        _tenantId = MultitenancyConstants.Root.Id;
     }
 
     private async Task SubmitAsync()
     {
         BusySubmitting = true;
 
-        if(await ApiHelper.ExecuteCallGuardedAsync(
-            () => AuthService.LoginAsync(_tenantKey, _tokenRequest),
+        if (await ApiHelper.ExecuteCallGuardedAsync(
+            () => AuthService.LoginAsync(_tenantId, _tokenRequest),
             Snackbar,
             _customValidation))
         {

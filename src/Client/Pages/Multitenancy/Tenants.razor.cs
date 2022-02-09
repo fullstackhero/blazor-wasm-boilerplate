@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -22,14 +22,20 @@ public partial class Tenants
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
     [Inject]
-    protected IAuthorizationService AuthorizeService { get; set; } = default!;
-    private ClaimsPrincipal? _currentUser;
+    protected IAuthorizationService AuthService { get; set; } = default!;
 
     private bool _canUpgrade;
     private bool _canModify;
+
     protected override async Task OnInitializedAsync()
     {
         Context = new(
+            entityName: L["Tenant"],
+            entityNamePlural: L["Tenants"],
+            entityResource: FSHResource.Tenants,
+            searchAction: FSHAction.View,
+            deleteAction: string.Empty,
+            updateAction: string.Empty,
             fields: new()
             {
                 new(tenant => tenant.Id, L["Id"]),
@@ -38,22 +44,17 @@ public partial class Tenants
                 new(tenant => tenant.ValidUpto.ToString("MMM dd, yyyy"), L["Valid Upto"]),
                 new(tenant => tenant.IsActive, L["Active"], Type: typeof(bool))
             },
-            loadDataFunc: async () => _tenants = (await TenantsClient.GetAllAsync()).Adapt<List<TenantDetail>>(),
-            searchFunc: Search,
-            createFunc: async tenant => await TenantsClient.CreateAsync(tenant.Adapt<CreateTenantRequest>()),
-            searchPermission: true.ToString(),
-            entityName: L["Tenant"],
-            entityNamePlural: L["Tenants"],
-            hasExtraActionsFunc: () => true,
-            createPermission: FSHRootPermissions.Tenants.Create);
-        var state = await AuthState;
-        _currentUser = state.User;
-        _canUpgrade = (await AuthorizeService.AuthorizeAsync(_currentUser, FSHRootPermissions.Tenants.UpgradeSubscription)).Succeeded;
-        _canModify = (await AuthorizeService.AuthorizeAsync(_currentUser, FSHRootPermissions.Tenants.Update)).Succeeded;
-    }
+            loadDataFunc: async () => _tenants = (await TenantsClient.GetListAsync()).Adapt<List<TenantDetail>>(),
+            searchFunc: (searchString, tenantDto) =>
+                string.IsNullOrWhiteSpace(searchString)
+                    || tenantDto.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase),
+            createFunc: tenant => TenantsClient.CreateAsync(tenant.Adapt<CreateTenantRequest>()),
+            hasExtraActionsFunc: () => true);
 
-    private bool Search(string? searchString, TenantDetail tenantDto) =>
-       string.IsNullOrWhiteSpace(searchString) || tenantDto?.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true;
+        var state = await AuthState;
+        _canUpgrade = await AuthService.HasPermissionAsync(state.User, FSHAction.UpgradeSubscription, FSHResource.Tenants);
+        _canModify = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Tenants);
+    }
 
     private void ViewTenantDetails(string id)
     {
@@ -91,7 +92,7 @@ public partial class Tenants
     private async Task DeactivateTenantAsync(string id)
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => TenantsClient.DeactivateTenantAsync(id),
+            () => TenantsClient.DeactivateAsync(id),
             Snackbar,
             null,
             L["Tenant Deactivated."]) is not null)
@@ -103,7 +104,7 @@ public partial class Tenants
     private async Task ActivateTenantAsync(string id)
     {
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => TenantsClient.ActivateTenantAsync(id),
+            () => TenantsClient.ActivateAsync(id),
             Snackbar,
             null,
             L["Tenant Activated."]) is not null)

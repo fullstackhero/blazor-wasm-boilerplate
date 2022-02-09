@@ -1,5 +1,5 @@
 ﻿@page "/catalog/products"
-@attribute [Authorize(Policy = FSHPermissions.Products.View)]
+@attribute [MustHavePermission(FSHAction.View, FSHResource.Products)]
 
 @inject IStringLocalizer<Products> L
 

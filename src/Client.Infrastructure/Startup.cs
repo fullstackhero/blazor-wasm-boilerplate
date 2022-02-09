@@ -1,10 +1,9 @@
 ﻿using System.Globalization;
-using System.Reflection;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -53,24 +52,9 @@ public static class Startup
 
     private static void RegisterPermissionClaims(AuthorizationOptions options)
     {
-        foreach (var prop in typeof(FSHPermissions)
-            .GetNestedTypes()
-            .SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
+        foreach (var permission in FSHPermissions.All)
         {
-            if (prop.GetValue(null)?.ToString() is string permission)
-            {
-                options.AddPolicy(permission, policy => policy.RequireClaim(FSHClaims.Permission, permission));
-            }
-        }
-
-        foreach (var prop in typeof(FSHRootPermissions)
-            .GetNestedTypes()
-            .SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
-        {
-            if (prop.GetValue(null)?.ToString() is string rootPermission)
-            {
-                options.AddPolicy(rootPermission, policy => policy.RequireClaim(FSHClaims.Permission, rootPermission));
-            }
+            options.AddPolicy(permission.Name, policy => policy.RequireClaim(FSHClaims.Permission, permission.Name));
         }
     }
 

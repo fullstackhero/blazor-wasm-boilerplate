@@ -27,6 +27,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{F529F1FF-B2FD-46D5-80A1-D4C726230E40}"
 	ProjectSection(SolutionItems) = preProject
 		scripts\nswag-regen.ps1 = scripts\nswag-regen.ps1
+		scripts\pull-shared-from-webapi.ps1 = scripts\pull-shared-from-webapi.ps1
 	EndProjectSection
 EndProject
 Global

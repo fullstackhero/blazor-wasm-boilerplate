@@ -1,7 +1,8 @@
 ﻿@page "/tenants"
+@attribute [MustHavePermission(FSHAction.View, FSHResource.Tenants)]
 
 @inject IStringLocalizer<Tenants> L
-@inject IAuthenticationService AuthService
+@inject IAuthenticationService Authentication
 
 <FshTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
 
@@ -22,11 +23,11 @@
             <MudTextField T="string" For="@(() => context.AdminEmail)" @bind-Value="context.AdminEmail"
                 Label="@L["Admin Email"]" />
         </MudItem>
-        @if (AuthService.ProviderType == AuthProvider.AzureAd)
+        @if (Authentication.ProviderType == AuthProvider.AzureAd)
         {
-                    <MudItem xs="12" md="6">
-                        <MudTextField T="string" For="@(() => context.Issuer)" @bind-Value="context.Issuer" Label="@L["Issuer"]" />
-                    </MudItem>
+            <MudItem xs="12" md="6">
+                <MudTextField T="string" For="@(() => context.Issuer)" @bind-Value="context.Issuer" Label="@L["Issuer"]" />
+            </MudItem>
         }
     </EditFormContent>
     <ExtraActions>
@@ -34,17 +35,18 @@
         {
             <MudMenuItem OnClick="@(() => ViewUpgradeSubscriptionModalAsync(context.Id))">@L["Upgrade Subscription"]</MudMenuItem>
         }
-             <MudMenuItem OnClick="@(() => ViewTenantDetails(context.Id))">@((context.ShowDetails == true) ?
-            L["Hide"] : L["Show"]) @L["Tenant Details"]</MudMenuItem>
+        <MudMenuItem OnClick="@(() => ViewTenantDetails(context.Id))">
+            @((context.ShowDetails == true) ? L["Hide"] : L["Show"]) @L["Tenant Details"]
+        </MudMenuItem>
         @if (_canModify)
         {
             @if (!context.IsActive)
             {
-                        <MudMenuItem Style="color:limegreen!important" OnClick="@(() => ActivateTenantAsync(context.Id))">@L["Activate Tenant"]</MudMenuItem>
+                <MudMenuItem Style="color:limegreen!important" OnClick="@(() => ActivateTenantAsync(context.Id))">@L["Activate Tenant"]</MudMenuItem>
             }
             else
             {
-                        <MudMenuItem Style="color:red!important" OnClick="@(() => DeactivateTenantAsync(context.Id))">@L["Deactivate Tenant"]</MudMenuItem>
+                <MudMenuItem Style="color:red!important" OnClick="@(() => DeactivateTenantAsync(context.Id))">@L["Deactivate Tenant"]</MudMenuItem>
             }
         }
     </ExtraActions>
@@ -52,46 +54,47 @@
     <ChildRowContent>
         @if (context.ShowDetails)
         {
-                    <MudTr>
-                        <td colspan="6">
-                            <MudCard Elevation="25" style="margin: 10px !important;">
-                                <MudCardHeader>
-                                    <CardHeaderContent>
-                                        <MudAlert Severity="Severity.Info" Typo="Typo.body1">@L["Details for Tenant"] :
-                                            <strong>@context.Id</strong>
-                                        </MudAlert>
-                                    </CardHeaderContent>
-                                </MudCardHeader>
-                                <MudCardContent>
-                                    <table class="mud-table-root">
-                                        <tbody class="mud-table-body">
-                                            <tr class="mud-table-row">
-                                                <td>@L["Connection String"]</td>
-                                                <td>
-                                                    <MudItem>
-                                                        <MudChip Label="true" Color="Color.Primary">
-                                                    @context.ConnectionString?.Trim()</MudChip>
-                                                    </MudItem>
-                                                </td>
-                                            </tr>
-                                    @if (AuthService.ProviderType == AuthProvider.AzureAd)
+            <MudTr>
+                <td colspan="6">
+                    <MudCard Elevation="25" style="margin: 10px !important;">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudAlert Severity="Severity.Info" Typo="Typo.body1">@L["Details for Tenant"] :
+                                    <strong>@context.Id</strong>
+                                </MudAlert>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <table class="mud-table-root">
+                                <tbody class="mud-table-body">
+                                    <tr class="mud-table-row">
+                                        <td>@L["Connection String"]</td>
+                                        <td>
+                                            <MudItem>
+                                                <MudChip Label="true" Color="Color.Primary">
+                                            @context.ConnectionString?.Trim()</MudChip>
+                                            </MudItem>
+                                        </td>
+                                    </tr>
+                                    @if (Authentication.ProviderType == AuthProvider.AzureAd)
                                     {
-                                                        <tr class="mud-table-row">
-                                                            <td>@L["Issuer"]</td>
-                                                            <td>
-                                                                <MudItem>
-                                                                    <MudChip Label="true" Color="Color.Primary">
-                                                        @context.Issuer?.Trim()</MudChip>
-                                                                </MudItem>
-                                                            </td>
-                                                        </tr>
+                                        <tr class="mud-table-row">
+                                            <td>@L["Issuer"]</td>
+                                            <td>
+                                                <MudItem>
+                                                    <MudChip Label="true" Color="Color.Primary">
+                                                        @context.Issuer?.Trim()
+                                                    </MudChip>
+                                                </MudItem>
+                                            </td>
+                                        </tr>
                                     }
-                                        </tbody>
-                                    </table>
-                                </MudCardContent>
-                            </MudCard>
-                        </td>
-                    </MudTr>
+                                </tbody>
+                            </table>
+                        </MudCardContent>
+                    </MudCard>
+                </td>
+            </MudTr>
         }
     </ChildRowContent>
 

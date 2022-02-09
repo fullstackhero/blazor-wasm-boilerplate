@@ -1,7 +1,8 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.BlazorWebAssembly.Shared.Authorization;
+using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -37,7 +38,7 @@ public partial class UserProfile
     private async Task ToggleUserStatus()
     {
         var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
-        await ApiHelper.ExecuteCallGuardedAsync(() => UsersClient.ToggleUserStatusAsync(request), Snackbar);
+        await ApiHelper.ExecuteCallGuardedAsync(() => UsersClient.ToggleStatusAsync(Id, request), Snackbar);
         Navigation.NavigateTo("/users");
     }
 
@@ -66,7 +67,7 @@ public partial class UserProfile
         }
 
         var state = await AuthState;
-        _canToggleUserStatus = (await AuthService.AuthorizeAsync(state.User, FSHPermissions.Users.Update)).Succeeded;
+        _canToggleUserStatus = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Users);
         _loaded = true;
     }
 }

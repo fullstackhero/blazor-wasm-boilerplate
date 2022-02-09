@@ -1,6 +1,7 @@
 ﻿@page "/users/{Id}/profile"
-@using FSH.BlazorWebAssembly.Client.Infrastructure.Common
-@inject Microsoft.Extensions.Localization.IStringLocalizer<UserProfile> _localizer
+@attribute [MustHavePermission(FSHAction.View, FSHResource.Users)]
+
+@inject IStringLocalizer<UserProfile> _localizer
 
 <FshTitle Title="@Title" Description="@Description" />
 @if (!_loaded)

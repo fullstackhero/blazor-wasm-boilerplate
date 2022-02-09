@@ -9,7 +9,7 @@ public partial class BaseLayout
     private ClientPreference? _themePreference;
     private MudTheme _currentTheme = new LightTheme();
     private bool _themeDrawerOpen;
-    private bool _rightToLeft = false;
+    private bool _rightToLeft;
 
     protected override async Task OnInitializedAsync()
     {

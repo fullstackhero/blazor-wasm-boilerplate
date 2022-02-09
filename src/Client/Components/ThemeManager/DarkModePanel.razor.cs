@@ -5,7 +5,7 @@ namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager;
 
 public partial class DarkModePanel
 {
-    private bool _isDarkMode = false;
+    private bool _isDarkMode;
 
     protected override async Task OnInitializedAsync()
     {

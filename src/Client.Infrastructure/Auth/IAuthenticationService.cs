@@ -1,6 +1,6 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Authentication;
+namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 
 public interface IAuthenticationService
 {
@@ -8,7 +8,7 @@ public interface IAuthenticationService
 
     void NavigateToExternalLogin(string returnUrl);
 
-    Task<bool> LoginAsync(string tenantKey, TokenRequest request);
+    Task<bool> LoginAsync(string tenantId, TokenRequest request);
 
     Task LogoutAsync();
 

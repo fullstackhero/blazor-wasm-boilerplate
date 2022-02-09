@@ -1,34 +1,39 @@
-﻿using System.Security.Claims;
+using FSH.WebApi.Shared.Authorization;
 
-namespace FSH.BlazorWebAssembly.Shared.Authorization;
+namespace System.Security.Claims;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static string? GetEmail(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+    public static string? GetEmail(this ClaimsPrincipal principal)
+        => principal.FindFirstValue(ClaimTypes.Email);
 
-    public static string? GetTenant(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(FSHClaims.Tenant);
+    public static string? GetTenant(this ClaimsPrincipal principal)
+        => principal.FindFirstValue(FSHClaims.Tenant);
 
-    public static string? GetFullName(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal?.FindFirst(FSHClaims.Fullname)?.Value;
+    public static string? GetFullName(this ClaimsPrincipal principal)
+        => principal?.FindFirst(FSHClaims.Fullname)?.Value;
 
-    public static string? GetFirstName(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal?.FindFirst(ClaimTypes.Name)?.Value;
+    public static string? GetFirstName(this ClaimsPrincipal principal)
+        => principal?.FindFirst(ClaimTypes.Name)?.Value;
 
-    public static string? GetSurname(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal?.FindFirst(ClaimTypes.Surname)?.Value;
+    public static string? GetSurname(this ClaimsPrincipal principal)
+        => principal?.FindFirst(ClaimTypes.Surname)?.Value;
 
-    public static string? GetPhoneNumber(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.FindFirstValue(ClaimTypes.MobilePhone);
+    public static string? GetPhoneNumber(this ClaimsPrincipal principal)
+        => principal.FindFirstValue(ClaimTypes.MobilePhone);
 
-    public static string? GetUserId(this ClaimsPrincipal claimsPrincipal)
-       => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+    public static string? GetUserId(this ClaimsPrincipal principal)
+       => principal.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    public static string? GetImageUrl(this ClaimsPrincipal claimsPrincipal)
-       => claimsPrincipal.FindFirstValue(FSHClaims.ImageUrl);
+    public static string? GetImageUrl(this ClaimsPrincipal principal)
+       => principal.FindFirstValue(FSHClaims.ImageUrl);
 
-    public static DateTimeOffset GetExpiration(this ClaimsPrincipal claimsPrincipal) =>
+    public static DateTimeOffset GetExpiration(this ClaimsPrincipal principal) =>
         DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(
-            claimsPrincipal.FindFirstValue(FSHClaims.Expiration)));
+            principal.FindFirstValue(FSHClaims.Expiration)));
+
+    private static string? FindFirstValue(this ClaimsPrincipal principal, string claimType) =>
+        principal is null
+            ? throw new ArgumentNullException(nameof(principal))
+            : principal.FindFirst(claimType)?.Value;
 }
