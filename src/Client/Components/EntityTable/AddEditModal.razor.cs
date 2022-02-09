@@ -31,6 +31,8 @@ public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
     private CustomValidation? _customValidation;
 
     public bool IsCreate => Id is null;
+    [Parameter]
+    public bool HideId { get; set; }
 
     public void ForceRender() => StateHasChanged();
 

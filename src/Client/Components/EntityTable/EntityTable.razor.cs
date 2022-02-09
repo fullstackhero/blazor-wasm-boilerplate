@@ -37,6 +37,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
     [Parameter]
     public RenderFragment<TRequest>? EditFormContent { get; set; }
+    [Parameter]
+    public bool HideId { get; set; }
 
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
@@ -185,7 +187,8 @@ public partial class EntityTable<TEntity, TId, TRequest>
         {
             { nameof(AddEditModal<TRequest>.EditFormContent), EditFormContent },
             { nameof(AddEditModal<TRequest>.OnInitializedFunc), Context.EditFormInitializedFunc },
-            { nameof(AddEditModal<TRequest>.EntityName), Context.EntityName }
+            { nameof(AddEditModal<TRequest>.EntityName), Context.EntityName },
+            { nameof(AddEditModal<TRequest>.HideId), HideId}
         };
 
         TRequest requestModel;
