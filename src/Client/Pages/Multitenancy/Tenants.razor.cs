@@ -49,7 +49,8 @@ public partial class Tenants
                 string.IsNullOrWhiteSpace(searchString)
                     || tenantDto.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase),
             createFunc: tenant => TenantsClient.CreateAsync(tenant.Adapt<CreateTenantRequest>()),
-            hasExtraActionsFunc: () => true);
+            hasExtraActionsFunc: () => true,
+            exportAction: string.Empty);
 
         var state = await AuthState;
         _canUpgrade = await AuthService.HasPermissionAsync(state.User, FSHAction.UpgradeSubscription, FSHResource.Tenants);

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using Microsoft.JSInterop;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
@@ -47,6 +48,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
     private bool _canCreate;
     private bool _canUpdate;
     private bool _canDelete;
+    private bool _canExport;
 
     private bool _advancedSearchExpanded;
 
@@ -61,6 +63,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canCreate = await CanDoActionAsync(Context.CreateAction, state);
         _canUpdate = await CanDoActionAsync(Context.UpdateAction, state);
         _canDelete = await CanDoActionAsync(Context.DeleteAction, state);
+        _canExport = await CanDoActionAsync(Context.ExportAction, state);
 
         await LocalLoadDataAsync();
     }
@@ -146,6 +149,29 @@ public partial class EntityTable<TEntity, TId, TRequest>
         return new TableData<TEntity> { TotalItems = _totalItems, Items = _entityList };
     }
 
+    private async Task ExportAsync()
+    {
+        if (!Loading && Context.ServerContext is not null)
+        {
+            if (Context.ServerContext.ExportFunc is not null)
+            {
+                Loading = true;
+
+                var filter = GetBaseFilter();
+
+                if (await ApiHelper.ExecuteCallGuardedAsync(
+                        () => Context.ServerContext.ExportFunc(filter), Snackbar)
+                    is { } result)
+                {
+                    using var streamRef = new DotNetStreamReference(result.Stream);
+                    await JS.InvokeVoidAsync("downloadFileFromStream", "DataFSH.xlsx", streamRef);
+                }
+
+                Loading = false;
+            }
+        }
+    }
+
     private PaginationFilter GetPaginationFilter(TableState state)
     {
         string[]? orderings = null;
@@ -162,6 +188,26 @@ public partial class EntityTable<TEntity, TId, TRequest>
             PageNumber = state.Page + 1,
             Keyword = SearchString,
             OrderBy = orderings ?? Array.Empty<string>()
+        };
+
+        if (!Context.AllColumnsChecked)
+        {
+            filter.AdvancedSearch = new()
+            {
+                Fields = Context.SearchFields,
+                Keyword = filter.Keyword
+            };
+            filter.Keyword = null;
+        }
+
+        return filter;
+    }
+
+    private BaseFilter GetBaseFilter()
+    {
+        var filter = new BaseFilter
+        {
+            Keyword = SearchString,
         };
 
         if (!Context.AllColumnsChecked)

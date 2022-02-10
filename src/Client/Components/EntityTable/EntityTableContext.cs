@@ -102,6 +102,11 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
     public string DeleteAction { get; }
 
     /// <summary>
+    /// The permission name of the export permission. This is FSHAction.Export by default.
+    /// </summary>
+    public string ExportAction { get; }
+
+    /// <summary>
     /// Use this if you want to run initialization during OnInitialized of the AddEdit form.
     /// </summary>
     public Func<Task>? EditFormInitializedFunc { get; }
@@ -137,6 +142,7 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         string? createAction,
         string? updateAction,
         string? deleteAction,
+        string? exportAction,
         Func<Task>? editFormInitializedFunc,
         Func<bool>? hasExtraActionsFunc,
         Func<TEntity, bool>? canUpdateEntityFunc,
@@ -156,6 +162,7 @@ public abstract class EntityTableContext<TEntity, TId, TRequest>
         CreateAction = createAction ?? FSHAction.Create;
         UpdateAction = updateAction ?? FSHAction.Update;
         DeleteAction = deleteAction ?? FSHAction.Delete;
+        ExportAction = exportAction ?? FSHAction.Export;
         EditFormInitializedFunc = editFormInitializedFunc;
         HasExtraActionsFunc = hasExtraActionsFunc;
         CanUpdateEntityFunc = canUpdateEntityFunc;
