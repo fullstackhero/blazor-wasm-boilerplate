@@ -164,7 +164,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
                     is { } result)
                 {
                     using var streamRef = new DotNetStreamReference(result.Stream);
-                    await JS.InvokeVoidAsync("downloadFileFromStream", "DataFSH.xlsx", streamRef);
+                    await JS.InvokeVoidAsync("downloadFileFromStream", $"{Context.EntityNamePlural}.xlsx", streamRef);
                 }
 
                 Loading = false;
