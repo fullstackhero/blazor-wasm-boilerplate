@@ -41,5 +41,6 @@
                 .Adapt<PaginationResponse<BrandDto>>(),
             createFunc: async brand => await BrandsClient.CreateAsync(brand.Adapt<CreateBrandRequest>()),
             updateFunc: async (id, brand) => await BrandsClient.UpdateAsync(id, brand),
-            deleteFunc: async id => await BrandsClient.DeleteAsync(id));
+            deleteFunc: async id => await BrandsClient.DeleteAsync(id),
+            exportAction: string.Empty);
 }
