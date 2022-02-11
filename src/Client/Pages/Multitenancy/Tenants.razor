@@ -16,7 +16,7 @@
             <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
         </MudItem>
         <MudItem xs="12" md="6">
-            <MudTextField T="string" For="@(() => context.ConnectionString)" @bind-Value="context.ConnectionString"
+            <MudTextField T="string" For="@(() => context.ConnectionString)" HelperText="@L["To use default connection string, leave this field blank."]" @bind-Value="context.ConnectionString"
                 Label="@L["Connection String"]" />
         </MudItem>
         <MudItem xs="12" md="6">
@@ -68,13 +68,19 @@
                             <table class="mud-table-root">
                                 <tbody class="mud-table-body">
                                     <tr class="mud-table-row">
-                                        <td>@L["Connection String"]</td>
-                                        <td>
-                                            <MudItem>
-                                                <MudChip Label="true" Color="Color.Primary">
-                                            @context.ConnectionString?.Trim()</MudChip>
-                                            </MudItem>
-                                        </td>
+                                        @if(string.IsNullOrEmpty(context.ConnectionString?.Trim()))
+                                        {
+                                            <MudChip Label="true" Color="Color.Secondary">@L["Shared Database"]</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <td>@L["Connection String"]</td>
+                                            <td>
+                                                <MudItem>
+                                                        <MudChip Label="true" Color="Color.Primary">@context.ConnectionString?.Trim()</MudChip>
+                                                </MudItem>
+                                            </td>
+                                        }
                                     </tr>
                                     @if (Authentication.ProviderType == AuthProvider.AzureAd)
                                     {
