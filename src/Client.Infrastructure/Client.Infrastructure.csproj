@@ -8,7 +8,6 @@
 
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
-        <PackageReference Include="AKSoftware.Blazor.Utilities" Version="1.0.0" />
         <PackageReference Include="MediatR.Courier.DependencyInjection" Version="5.0.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.2" />

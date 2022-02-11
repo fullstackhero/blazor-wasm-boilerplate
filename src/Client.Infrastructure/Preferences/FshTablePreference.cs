@@ -1,6 +1,8 @@
+using FSH.WebApi.Shared.Notifications;
+
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 
-public class FshTablePreference
+public class FshTablePreference : INotificationMessage
 {
     public bool IsDense { get; set; }
     public bool IsStriped { get; set; }

@@ -1,6 +1,6 @@
-﻿using AKSoftware.Blazor.Utilities;
-using FSH.BlazorWebAssembly.Client.Components.ThemeManager;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+using MediatR.Courier;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -10,6 +10,8 @@ public class FshTable<T> : MudTable<T>
 {
     [Inject]
     private IClientPreferenceManager ClientPreferences { get; set; } = default!;
+    [Inject]
+    protected ICourier Courier { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -18,9 +20,9 @@ public class FshTable<T> : MudTable<T>
             SetTablePreference(clientPreference.TablePreference);
         }
 
-        MessagingCenter.Subscribe<TableCustomizationPanel, FshTablePreference>(this, nameof(FshTablePreference), (_, value) =>
+        Courier.SubscribeWeak<NotificationWrapper<FshTablePreference>>(wrapper =>
         {
-            SetTablePreference(value);
+            SetTablePreference(wrapper.Notification);
             StateHasChanged();
         });
 

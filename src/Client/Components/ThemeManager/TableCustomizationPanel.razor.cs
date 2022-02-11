@@ -1,4 +1,4 @@
-using AKSoftware.Blazor.Utilities;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
 using Microsoft.AspNetCore.Components;
 
@@ -14,15 +14,22 @@ public partial class TableCustomizationPanel
     public bool HasBorder { get; set; }
     [Parameter]
     public bool IsHoverable { get; set; }
-    private FshTablePreference _entityTablePreference = new();
+    [Inject]
+    protected INotificationPublisher Notifications { get; set; } = default!;
+
+    private FshTablePreference _tablePreference = new();
+
     protected override async Task OnInitializedAsync()
     {
-        if (await ClientPreferences.GetPreference() is not ClientPreference themePreference) themePreference = new ClientPreference();
-        _entityTablePreference = themePreference.TablePreference;
-        IsDense = _entityTablePreference.IsDense;
-        IsStriped = _entityTablePreference.IsStriped;
-        HasBorder = _entityTablePreference.HasBorder;
-        IsHoverable = _entityTablePreference.IsHoverable;
+        if (await ClientPreferences.GetPreference() is ClientPreference clientPreference)
+        {
+            _tablePreference = clientPreference.TablePreference;
+        }
+
+        IsDense = _tablePreference.IsDense;
+        IsStriped = _tablePreference.IsStriped;
+        HasBorder = _tablePreference.HasBorder;
+        IsHoverable = _tablePreference.IsHoverable;
     }
 
     [Parameter]
@@ -39,29 +46,29 @@ public partial class TableCustomizationPanel
 
     private async Task ToggleDenseSwitch()
     {
-        _entityTablePreference.IsDense = !_entityTablePreference.IsDense;
-        await OnDenseSwitchToggled.InvokeAsync(_entityTablePreference.IsDense);
-        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
+        _tablePreference.IsDense = !_tablePreference.IsDense;
+        await OnDenseSwitchToggled.InvokeAsync(_tablePreference.IsDense);
+        await Notifications.PublishAsync(_tablePreference);
     }
 
     private async Task ToggleStripedSwitch()
     {
-        _entityTablePreference.IsStriped = !_entityTablePreference.IsStriped;
-        await OnStripedSwitchToggled.InvokeAsync(_entityTablePreference.IsStriped);
-        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
+        _tablePreference.IsStriped = !_tablePreference.IsStriped;
+        await OnStripedSwitchToggled.InvokeAsync(_tablePreference.IsStriped);
+        await Notifications.PublishAsync(_tablePreference);
     }
 
     private async Task ToggleBorderedSwitch()
     {
-        _entityTablePreference.HasBorder = !_entityTablePreference.HasBorder;
-        await OnBorderdedSwitchToggled.InvokeAsync(_entityTablePreference.HasBorder);
-        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
+        _tablePreference.HasBorder = !_tablePreference.HasBorder;
+        await OnBorderdedSwitchToggled.InvokeAsync(_tablePreference.HasBorder);
+        await Notifications.PublishAsync(_tablePreference);
     }
 
     private async Task ToggleHoverableSwitch()
     {
-        _entityTablePreference.IsHoverable = !_entityTablePreference.IsHoverable;
-        await OnHoverableSwitchToggled.InvokeAsync(_entityTablePreference.IsHoverable);
-        MessagingCenter.Send(this, nameof(FshTablePreference), _entityTablePreference);
+        _tablePreference.IsHoverable = !_tablePreference.IsHoverable;
+        await OnHoverableSwitchToggled.InvokeAsync(_tablePreference.IsHoverable);
+        await Notifications.PublishAsync(_tablePreference);
     }
 }
