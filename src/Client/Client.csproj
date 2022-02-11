@@ -31,4 +31,10 @@
              the user gets redirected to authentication/login-failed with no error message. -->
         <TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
     </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Components\Common\TablePager.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+    </ItemGroup>
 </Project>

@@ -65,7 +65,8 @@ public partial class Users
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
             createFunc: user => UsersClient.CreateAsync(user),
-            hasExtraActionsFunc: () => true);
+            hasExtraActionsFunc: () => true,
+            exportAction: string.Empty);
     }
 
     private void ViewProfile(Guid userId) =>
