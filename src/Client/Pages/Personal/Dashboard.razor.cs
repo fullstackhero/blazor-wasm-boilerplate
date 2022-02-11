@@ -1,8 +1,9 @@
 ﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Shared;
 using FSH.WebApi.Shared.Notifications;
+using MediatR.Courier;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.SignalR.Client;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
 
@@ -20,7 +21,7 @@ public partial class Dashboard
     [Inject]
     private IDashboardClient DashboardClient { get; set; } = default!;
     [Inject]
-    private HubConnection HubConnection { get; set; } = default!;
+    private ICourier Courier { get; set; } = default!;
 
     private readonly string[] _dataEnterBarChartXAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
     private readonly List<MudBlazor.ChartSeries> _dataEnterBarChartSeries = new();
@@ -28,7 +29,7 @@ public partial class Dashboard
 
     protected override async Task OnInitializedAsync()
     {
-        HubConnection.On<StatsChangedNotification>(nameof(StatsChangedNotification), async _ =>
+        Courier.SubscribeWeak<NotificationWrapper<StatsChangedNotification>>(async _ =>
         {
             await LoadDataAsync();
             StateHasChanged();
