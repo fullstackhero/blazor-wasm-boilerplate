@@ -68,13 +68,19 @@
                             <table class="mud-table-root">
                                 <tbody class="mud-table-body">
                                     <tr class="mud-table-row">
-                                        <td>@L["Connection String"]</td>
-                                        <td>
-                                            <MudItem>
-                                                <MudChip Label="true" Color="Color.Primary">
-                                            @context.ConnectionString?.Trim()</MudChip>
-                                            </MudItem>
-                                        </td>
+                                        @if(string.IsNullOrEmpty(context.ConnectionString?.Trim()))
+                                        {
+                                            <MudChip Label="true" Color="Color.Secondary">@L["Shared Database"]</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <td>@L["Connection String"]</td>
+                                            <td>
+                                                <MudItem>
+                                                        <MudChip Label="true" Color="Color.Primary">@context.ConnectionString?.Trim()</MudChip>
+                                                </MudItem>
+                                            </td>
+                                        }
                                     </tr>
                                     @if (Authentication.ProviderType == AuthProvider.AzureAd)
                                     {
