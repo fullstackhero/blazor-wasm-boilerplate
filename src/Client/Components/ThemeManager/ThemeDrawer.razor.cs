@@ -62,7 +62,7 @@ public partial class ThemeDrawer
     {
         if (ThemePreference is not null)
         {
-            ThemePreference.EntityTablePreference.IsDense = isDense;
+            ThemePreference.TablePreference.IsDense = isDense;
             await ThemePreferenceChanged.InvokeAsync(ThemePreference);
         }
     }
@@ -71,7 +71,7 @@ public partial class ThemeDrawer
     {
         if (ThemePreference is not null)
         {
-            ThemePreference.EntityTablePreference.IsStriped = isStriped;
+            ThemePreference.TablePreference.IsStriped = isStriped;
             await ThemePreferenceChanged.InvokeAsync(ThemePreference);
         }
     }
@@ -80,7 +80,7 @@ public partial class ThemeDrawer
     {
         if (ThemePreference is not null)
         {
-            ThemePreference.EntityTablePreference.HasBorder = hasBorder;
+            ThemePreference.TablePreference.HasBorder = hasBorder;
             await ThemePreferenceChanged.InvokeAsync(ThemePreference);
         }
     }
@@ -89,7 +89,7 @@ public partial class ThemeDrawer
     {
         if (ThemePreference is not null)
         {
-            ThemePreference.EntityTablePreference.IsHoverable = isHoverable;
+            ThemePreference.TablePreference.IsHoverable = isHoverable;
             await ThemePreferenceChanged.InvokeAsync(ThemePreference);
         }
     }

@@ -17,7 +17,6 @@ public static class Startup
 
     public static IServiceCollection AddClientServices(this IServiceCollection services, IConfiguration config) =>
         services
-            .AddDistributedMemoryCache() // why do we need a distributed memorycache in a client application?
             .AddLocalization(options => options.ResourcesPath = "Resources")
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
@@ -31,6 +30,7 @@ public static class Startup
             .AddScoped<IClientPreferenceManager, ClientPreferenceManager>()
             .AutoRegisterInterfaces<IAppService>()
             .AutoRegisterInterfaces<IApiService>()
+            .AddNotifications()
             .AddAuthentication(config)
             .AddAuthorizationCore(RegisterPermissionClaims)
 
