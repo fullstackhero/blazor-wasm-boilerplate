@@ -1,8 +1,12 @@
 ﻿using System.Net;
+using System.Reflection;
+using System.Text.Json.Nodes;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+using FSH.WebApi.Shared.Notifications;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Logging;
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 
@@ -12,6 +16,8 @@ public class NotificationClient : IAsyncDisposable
     private readonly NavigationManager _navigation;
     private readonly IAuthenticationService _authService;
     private readonly CancellationTokenSource _cts = new();
+    private readonly INotificationPublisher _publisher;
+    private readonly ILogger<NotificationClient> _logger;
 
     public HubConnection HubConnection { get; private set; }
 
@@ -25,11 +31,19 @@ public class NotificationClient : IAsyncDisposable
 
     public event EventHandler<ConnectionStateChangedEventArgs>? ConnectionStateChanged;
 
-    public NotificationClient(IAccessTokenProvider tokenProvider, IConfiguration config, NavigationManager navigation, IAuthenticationService authService)
+    public NotificationClient(
+        IAccessTokenProvider tokenProvider,
+        IConfiguration config,
+        NavigationManager navigation,
+        IAuthenticationService authService,
+        INotificationPublisher publisher,
+        ILogger<NotificationClient> logger)
     {
         _config = config;
         _navigation = navigation;
         _authService = authService;
+        _publisher = publisher;
+        _logger = logger;
 
         HubConnection = new HubConnectionBuilder()
             .WithUrl($"{config[ConfigNames.ApiBaseUrl]}notifications", options =>
@@ -53,6 +67,23 @@ public class NotificationClient : IAsyncDisposable
             // handling this event we can manually attempt to reconnect
             await ConnectWithRetryAsync(_cts.Token);
         };
+
+        HubConnection.On<string, JsonObject>(NotificationConstants.NotificationFromServer, (notificationTypeName, notificationJson) =>
+        {
+            if (Assembly.GetAssembly(typeof(INotificationMessage))!.GetType(notificationTypeName)
+                is { } notificationType
+                && notificationJson.Deserialize(
+                    notificationType,
+                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
+                    is INotificationMessage notification)
+            {
+                return _publisher.PublishAsync(notification);
+            }
+
+            _logger.LogError("Invalid Notification Received ({name}).", notificationTypeName);
+
+            return Task.CompletedTask;
+        });
     }
 
     public Task TryConnectAsync() =>

@@ -1,6 +1,6 @@
-﻿using AKSoftware.Blazor.Utilities;
-using FSH.BlazorWebAssembly.Client.Components.ThemeManager;
+﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+using MediatR.Courier;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -10,24 +10,26 @@ public class FshTable<T> : MudTable<T>
 {
     [Inject]
     private IClientPreferenceManager ClientPreferences { get; set; } = default!;
+    [Inject]
+    protected ICourier Courier { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
         if (await ClientPreferences.GetPreference() is ClientPreference clientPreference)
         {
-            SetTablePreference(clientPreference.EntityTablePreference);
+            SetTablePreference(clientPreference.TablePreference);
         }
 
-        MessagingCenter.Subscribe<TableCustomizationPanel, EntityTablePreference>(this, nameof(ClientPreference.EntityTablePreference), (_, value) =>
+        Courier.SubscribeWeak<NotificationWrapper<FshTablePreference>>(wrapper =>
         {
-            SetTablePreference(value);
+            SetTablePreference(wrapper.Notification);
             StateHasChanged();
         });
 
         await base.OnInitializedAsync();
     }
 
-    private void SetTablePreference(EntityTablePreference tablePreference)
+    private void SetTablePreference(FshTablePreference tablePreference)
     {
         Dense = tablePreference.IsDense;
         Striped = tablePreference.IsStriped;
