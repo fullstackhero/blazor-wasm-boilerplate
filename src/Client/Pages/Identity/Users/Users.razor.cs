@@ -64,7 +64,7 @@ public partial class Users
                     || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
-            createFunc: user => UsersClient.CreateAsync(user),
+            createFunc: user => UsersClient.CreateAsync("root",user),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
     }

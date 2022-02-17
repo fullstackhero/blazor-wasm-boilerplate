@@ -29,8 +29,11 @@
             <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="_tenantId"
                 For="@(() => _tenantId)" Required />
         </MudItem>
-        <MudItem xs="12" Class="d-flex justify-space-between align-center">
+         <MudItem xs="6" Class="d-flex justify-space-between align-center">
             <MudButton Link="/account/forgot-password">@L["Forgot password?"]</MudButton>
+        </MudItem>
+        <MudItem xs="6" Class="d-flex justify-space-between align-center">
+            <MudButton Link="/users/create">@L["Register?"]</MudButton>
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-center">
             <MudButton ButtonType="ButtonType.Submit" Disabled="BusySubmitting" Variant="Variant.Filled"
