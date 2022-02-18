@@ -34,9 +34,16 @@ public partial class Users
 
     protected override async Task OnInitializedAsync()
     {
+        const string CLAIMTYPE_ENDSWITH = "claims/name";
+
         var user = (await AuthState).User;
         _canExportUsers = await AuthService.HasPermissionAsync(user, FSHAction.Export, FSHResource.Users);
         _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.UserRoles);
+
+        string? tennant = user.Claims
+                            .Where(u => u.Type.EndsWith(CLAIMTYPE_ENDSWITH))
+                            .Select(x => x.Value)
+                            .FirstOrDefault() ?? string.Empty;
 
         Context = new(
             entityName: L["User"],
@@ -64,7 +71,7 @@ public partial class Users
                     || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
-            createFunc: user => UsersClient.CreateAsync("root",user),
+            createFunc: user => UsersClient.CreateAsync(tennant, user),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
     }

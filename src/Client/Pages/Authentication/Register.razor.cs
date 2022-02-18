@@ -26,6 +26,8 @@ public partial class Register
     {
         BusySubmitting = true;
 
+
+
         string? sucessMessage = await ApiHelper.ExecuteCallGuardedAsync(
             () => UsersClient.CreateAsync(Tenant, _createUserRequest),
             Snackbar,
