@@ -9,10 +9,9 @@ namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
 
 public partial class Register
 {
-    private readonly CreateUserRequest _createUserRequest = new();
     private CustomValidation? _customValidation;
+    private readonly CreateUserRequest _createUserRequest = new();
     private bool BusySubmitting { get; set; }
-
 
     [Inject]
     private IUsersClient UsersClient { get; set; } = default!;
@@ -25,20 +24,19 @@ public partial class Register
 
     private async Task SubmitAsync()
     {
-
-        //if (!PasswordConfirm.Equals(_createUserRequest.Password, StringComparison.CurrentCulture))
-        //{
-        //    // FAIL
-        //    return;
-        //}
-
         BusySubmitting = true;
-        
-        await ApiHelper.ExecuteCallGuardedAsync(
-            () => UsersClient.CreateAsync(Tenant, _createUserRequest),
-            Snackbar, _customValidation);
 
-        Navigation.NavigateTo("/login");
+        string? sucessMessage = await ApiHelper.ExecuteCallGuardedAsync(
+            () => UsersClient.CreateAsync(Tenant, _createUserRequest),
+            Snackbar,
+            _customValidation);
+
+        if (sucessMessage != null)
+        {
+            Snackbar.Add(sucessMessage, Severity.Info);
+            Navigation.NavigateTo("/login");
+        }
+
 
         BusySubmitting = false;
     }
