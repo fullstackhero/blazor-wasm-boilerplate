@@ -26,11 +26,14 @@
                 AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
         </MudItem>
         <MudItem xs="12">
-            <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="_tenantId"
-                For="@(() => _tenantId)" Required />
+            <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="TenantId"
+                For="@(() => TenantId)" Required />
         </MudItem>
-        <MudItem xs="12" Class="d-flex justify-space-between align-center">
+         <MudItem xs="6" Class="d-flex justify-space-between align-center">
             <MudButton Link="/account/forgot-password">@L["Forgot password?"]</MudButton>
+        </MudItem>
+        <MudItem xs="6" Class="d-flex justify-space-between align-center">
+            <MudButton Link="/users/self-register">@L["Register?"]</MudButton>
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-center">
             <MudButton ButtonType="ButtonType.Submit" Disabled="BusySubmitting" Variant="Variant.Filled"
