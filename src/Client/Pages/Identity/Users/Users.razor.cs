@@ -36,9 +36,10 @@ public partial class Users
     protected override async Task OnInitializedAsync()
     {
         var user = (await AuthState).User;
-        string tenantId = user.GetTenant()!;
         _canExportUsers = await AuthService.HasPermissionAsync(user, FSHAction.Export, FSHResource.Users);
         _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.UserRoles);
+
+        string? tenant = user.GetTenant() ?? string.Empty;
 
         Context = new(
             entityName: L["User"],
@@ -66,15 +67,15 @@ public partial class Users
                     || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
-            createFunc: user => UsersClient.CreateAsync(tenantId, user),
+            createFunc: user => UsersClient.CreateAsync(tenant, user),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
     }
 
-    private void ViewProfile(Guid userId) =>
+    private void ViewProfile(in Guid userId) =>
         Navigation.NavigateTo($"/users/{userId}/profile");
 
-    private void ManageRoles(Guid userId) =>
+    private void ManageRoles(in Guid userId) =>
         Navigation.NavigateTo($"/users/{userId}/roles");
 
     private void TogglePasswordVisibility()
