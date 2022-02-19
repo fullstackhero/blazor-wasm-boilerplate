@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 
@@ -35,6 +36,7 @@ public partial class Users
     protected override async Task OnInitializedAsync()
     {
         var user = (await AuthState).User;
+        string tenantId = user.GetTenant()!;
         _canExportUsers = await AuthService.HasPermissionAsync(user, FSHAction.Export, FSHResource.Users);
         _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.UserRoles);
 
@@ -64,7 +66,7 @@ public partial class Users
                     || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
-            createFunc: user => UsersClient.CreateAsync(user),
+            createFunc: user => UsersClient.CreateAsync(tenantId, user),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
     }
