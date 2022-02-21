@@ -26,6 +26,7 @@ public partial class UserProfile
     public string? Description { get; set; }
 
     private bool _active;
+    private bool _emailConfirmed;
     private char _firstLetterOfName;
     private string? _firstName;
     private string? _lastName;
@@ -56,8 +57,8 @@ public partial class UserProfile
             _email = user.Email;
             _phoneNumber = user.PhoneNumber;
             _active = user.IsActive;
+            _emailConfirmed = user.EmailConfirmed;
             _imageUrl = string.IsNullOrEmpty(user.ImageUrl) ? string.Empty : (Config[ConfigNames.ApiBaseUrl] + user.ImageUrl);
-
             Title = $"{_firstName} {_lastName}'s {_localizer["Profile"]}";
             Description = _email;
             if (_firstName?.Length > 0)

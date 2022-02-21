@@ -24,8 +24,9 @@ else
                         </MudCardHeader>
                         <MudCardContent Class="pa-46" Style="padding:26px!important">
                             <MudGrid>
-                                <MudCheckBox @bind-Checked="@_active" Label="@_localizer["Active?"]" Color="Color.Primary">
-                                </MudCheckBox>
+                                <MudSwitch @bind-Checked="@_active" Color="Color.Primary" Label="@_localizer["Active?"]"></MudSwitch>
+                                <MudCheckBox ReadOnly @bind-Checked="@_emailConfirmed" Disabled Label="@_localizer["Email Confirmed?"]" Color="Color.Secondary">
+                                    </MudCheckBox>
                                 <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
                             OnClick="ToggleUserStatus" ButtonType="ButtonType.Submit">@_localizer["Save Changes"]
                                 </MudButton>
@@ -94,4 +95,54 @@ else
             </MudCard>
         </MudItem>
     </MudGrid>
+}
+
+@code
+{
+public class CustomStringToBoolConverter : BoolConverter<string>
+    {
+
+        public CustomStringToBoolConverter()
+        {
+            SetFunc = OnSet;
+            GetFunc = OnGet;
+        }
+        private string TrueString = "User Active";
+        private string FalseString = "no, at all";
+        private string NullString = "I don't know";
+
+        private string OnGet(bool? value)
+        {
+            try
+            {
+                return (value == true) ? TrueString : FalseString;
+            }
+            catch (Exception e)
+            {
+                UpdateGetError("Conversion error: " + e.Message);
+                return NullString;
+            }
+        }
+
+        private bool? OnSet(string arg)
+        {
+            if (arg == null)
+                return null;
+            try
+            {
+                if (arg == TrueString)
+                    return true;
+                if (arg == FalseString)
+                    return false;
+                else
+                    return null;
+            }
+            catch (FormatException e)
+            {
+                UpdateSetError("Conversion error: " + e.Message);
+                return null;
+            }
+        }
+
+    }
 }
