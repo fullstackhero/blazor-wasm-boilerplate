@@ -27,7 +27,7 @@ public partial class SelfRegister
         BusySubmitting = true;
 
         string? sucessMessage = await ApiHelper.ExecuteCallGuardedAsync(
-            () => UsersClient.SelfRegisterAsync(Tenant, _createUserRequest),
+            () => UsersClient.CreateAsync(Tenant, _createUserRequest),
             Snackbar,
             _customValidation);
 
