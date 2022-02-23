@@ -21,7 +21,7 @@ public partial class Login
     public bool BusySubmitting { get; set; }
 
     private readonly TokenRequest _tokenRequest = new();
-    private string _tenantId { get; set; } = string.Empty;
+    private string TenantId { get; set; } = string.Empty;
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -61,7 +61,7 @@ public partial class Login
     {
         _tokenRequest.Email = MultitenancyConstants.Root.EmailAddress;
         _tokenRequest.Password = MultitenancyConstants.DefaultPassword;
-        _tenantId = MultitenancyConstants.Root.Id;
+        TenantId = MultitenancyConstants.Root.Id;
     }
 
     private async Task SubmitAsync()
@@ -69,7 +69,7 @@ public partial class Login
         BusySubmitting = true;
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
-            () => AuthService.LoginAsync(_tenantId, _tokenRequest),
+            () => AuthService.LoginAsync(TenantId, _tokenRequest),
             Snackbar,
             _customValidation))
         {

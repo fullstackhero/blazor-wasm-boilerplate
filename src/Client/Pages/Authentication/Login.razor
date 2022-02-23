@@ -26,18 +26,22 @@
                 AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
         </MudItem>
         <MudItem xs="12">
-            <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="_tenantId"
-                For="@(() => _tenantId)" Required />
+            <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="TenantId"
+                For="@(() => TenantId)" Required />
         </MudItem>
-        <MudItem xs="12" Class="d-flex justify-space-between align-center">
-            <MudButton Link="/account/forgot-password">@L["Forgot password?"]</MudButton>
+        
+        <MudItem xs="12" md="6">
+            <MudButton StartIcon="@Icons.Filled.AppRegistration" Link="/users/self-register">@L["Register?"]</MudButton>
+        </MudItem>
+         <MudItem xs="12" md="6">
+            <MudButton StartIcon="@Icons.Filled.LockReset" Link="/account/forgot-password">@L["Forgot password?"]</MudButton>
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-center">
             <MudButton ButtonType="ButtonType.Submit" Disabled="BusySubmitting" Variant="Variant.Filled"
                 Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Filled.Login" Style="width: 100%;">@L["Sign In"]</MudButton>
         </MudItem>
         <MudItem xs="12">
-            <MudButton OnClick="FillAdministratorCredentials">@L["Fill Administrator Credentials"]</MudButton>
+            <MudButton StartIcon="@Icons.Filled.Password" OnClick="FillAdministratorCredentials">@L["Fill Administrator Credentials"]</MudButton>
         </MudItem>
     </MudGrid>
 </EditForm>

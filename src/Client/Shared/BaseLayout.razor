@@ -6,13 +6,13 @@
     <MudSnackbarProvider />
     <AuthorizeView>
         <NotAuthorized>
-            <MudAppBar Elevation="0">
+            <MudAppBar Elevation="0" Style="background:#6e6e6e00!important">
                 <ThemeDrawer @bind-ThemeDrawerOpen="_themeDrawerOpen" ThemePreference="_themePreference"
                     ThemePreferenceChanged="ThemePreferenceChanged" />
                 <ThemeButton OnClick="@(() => _themeDrawerOpen = true)" />
             </MudAppBar>
             <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 100vh;">
-                <MudPaper Elevation="25" Class="pa-8" Style="width: 500px;">
+                <MudPaper Elevation="25" Class="pa-8"> 
                     @Body
                 </MudPaper>
             </MudContainer>

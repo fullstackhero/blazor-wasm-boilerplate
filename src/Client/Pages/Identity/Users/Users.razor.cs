@@ -1,4 +1,5 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.WebApi.Shared.Authorization;
@@ -38,6 +39,8 @@ public partial class Users
         _canExportUsers = await AuthService.HasPermissionAsync(user, FSHAction.Export, FSHResource.Users);
         _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.UserRoles);
 
+        string? tenant = user.GetTenant() ?? string.Empty;
+
         Context = new(
             entityName: L["User"],
             entityNamePlural: L["Users"],
@@ -64,15 +67,15 @@ public partial class Users
                     || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
-            createFunc: user => UsersClient.CreateAsync(user),
+            createFunc: user => UsersClient.CreateAsync(tenant, user),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
     }
 
-    private void ViewProfile(Guid userId) =>
+    private void ViewProfile(in Guid userId) =>
         Navigation.NavigateTo($"/users/{userId}/profile");
 
-    private void ManageRoles(Guid userId) =>
+    private void ManageRoles(in Guid userId) =>
         Navigation.NavigateTo($"/users/{userId}/roles");
 
     private void TogglePasswordVisibility()
