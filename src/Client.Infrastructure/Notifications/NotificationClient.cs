@@ -104,6 +104,7 @@ public class NotificationClient : IAsyncDisposable
             {
                 await HubConnection.StartAsync(cancellationToken);
                 await OnConnectionStateChangedAsync(ConnectionState.Connected, HubConnection.ConnectionId);
+                return;
             }
             catch when (cancellationToken.IsCancellationRequested)
             {
