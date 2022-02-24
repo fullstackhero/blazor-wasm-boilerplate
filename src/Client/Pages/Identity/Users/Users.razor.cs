@@ -1,4 +1,5 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.WebApi.Shared.Authorization;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using System.Security.Claims;
 
 namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
 

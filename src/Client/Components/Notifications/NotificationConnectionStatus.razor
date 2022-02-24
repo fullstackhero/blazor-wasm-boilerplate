@@ -1,4 +1,4 @@
-@inject NotificationClient Notifications
+@inject ICourier Courier
 
 <MudTooltip Text="@TooltipText">
     <MudIconButton Icon="@Icon" Color="@IconColor" />
@@ -8,12 +8,18 @@
     public string TooltipText { get; set; } = "No Connection";
     public string Icon { get; set; } = Icons.Filled.SignalWifi0Bar;
     public Color IconColor { get; set; } = Color.Error;
+    
+    [CascadingParameter] private NotificationConnection _notifications { get; set; } = default!;
 
     protected override void OnInitialized()
     {
-        SetConnectionState(Notifications.ConnectionState, Notifications.HubConnection.ConnectionId);
-        Notifications.ConnectionStateChanged += (obj, arg) =>
-        SetConnectionState(arg.State, arg.Message);
+        SetConnectionState(_notifications.ConnectionState, _notifications.ConnectionId);
+
+        Courier.SubscribeWeak<NotificationWrapper<ConnectionStateChanged>>(wrapper =>
+        {
+            SetConnectionState(wrapper.Notification.State, wrapper.Notification.Message);
+            StateHasChanged();
+        });
     }
 
     private void SetConnectionState(ConnectionState state, string? message)

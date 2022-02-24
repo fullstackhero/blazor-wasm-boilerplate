@@ -2,7 +2,7 @@
 
 namespace FSH.BlazorWebAssembly.Client.Infrastructure.Common;
 
-internal static class AccessTokenProviderExtensions
+public static class AccessTokenProviderExtensions
 {
     public static async Task<string?> GetAccessTokenAsync(this IAccessTokenProvider tokenProvider) =>
         (await tokenProvider.RequestAccessToken())
