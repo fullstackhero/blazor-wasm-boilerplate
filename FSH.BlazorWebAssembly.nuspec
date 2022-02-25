@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>FullStackHero.BlazorWebAssembly.Boilerplate</id>
-    <title>FullStackHero Blazor WebAssembly Boilerplate</title>
+    <title>Blazor WebAssembly Boilerplate - FullStackHero</title>
     <version>0.0.1-rc</version>
     <authors>Mukesh Murugan</authors>
     <description>
@@ -11,7 +11,7 @@
     <language>en-US</language>
     <license type="expression">MIT</license>
     <copyright>2021</copyright>
-    <projectUrl>https://fullstackhero.net/blazor-wasm-boilerplate/</projectUrl>
+    <projectUrl>https://fullstackhero.net/blazor-webassembly-boilerplate/general/getting-started/</projectUrl>
     <repository type="git" url="https://github.com/fullstackhero/blazor-wasm-boilerplate.git" branch="master" />
     <packageTypes>
       <packageType name="Template" />
