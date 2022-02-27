@@ -6,8 +6,8 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor;
 using Microsoft.JSInterop;
+using MudBlazor;
 
 namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
 
@@ -78,7 +78,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
             ((bool.TryParse(action, out bool isTrue) && isTrue) || // check if action equals "True", then it's allowed
             (Context.EntityResource is { } resource && await AuthService.HasPermissionAsync(state.User, action, resource)));
 
-    private bool HasActions => _canUpdate || _canDelete || Context.HasExtraActionsFunc is null || Context.HasExtraActionsFunc();
+    private bool HasActions => _canUpdate || _canDelete || (Context.HasExtraActionsFunc is not null && Context.HasExtraActionsFunc());
     private bool CanUpdateEntity(TEntity entity) => _canUpdate && (Context.CanUpdateEntityFunc is null || Context.CanUpdateEntityFunc(entity));
     private bool CanDeleteEntity(TEntity entity) => _canDelete && (Context.CanDeleteEntityFunc is null || Context.CanDeleteEntityFunc(entity));
 

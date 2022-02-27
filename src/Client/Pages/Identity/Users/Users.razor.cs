@@ -1,4 +1,5 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿using System.Security.Claims;
+using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.WebApi.Shared.Authorization;
@@ -69,10 +70,10 @@ public partial class Users
             exportAction: string.Empty);
     }
 
-    private void ViewProfile(Guid userId) =>
+    private void ViewProfile(in Guid userId) =>
         Navigation.NavigateTo($"/users/{userId}/profile");
 
-    private void ManageRoles(Guid userId) =>
+    private void ManageRoles(in Guid userId) =>
         Navigation.NavigateTo($"/users/{userId}/roles");
 
     private void TogglePasswordVisibility()

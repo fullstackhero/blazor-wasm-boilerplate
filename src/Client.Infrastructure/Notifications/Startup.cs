@@ -10,6 +10,7 @@ internal static class Startup
 {
     public static IServiceCollection AddNotifications(this IServiceCollection services)
     {
+        // Add mediator processing of notifications
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
         services
