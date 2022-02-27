@@ -136,7 +136,7 @@
     <value>Hier kunt u een commentaar achterlaten voor deze toestemming voor de huidige rol</value>
   </data>
   <data name="Manage Permission" xml:space="preserve">
-    <value>Beheer Toestemming</value>
+    <value>Berechtigungen verwalten</value>
   </data>
   <data name="Manage {0} {1}'s Permissions" xml:space="preserve">
     <value>Beheer {0} {1}'s Toestemmingen</value>
