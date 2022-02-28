@@ -117,22 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Passwort bestätigen</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Aktionen</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Bordered" xml:space="preserve">
+    <value>Gerahmt</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>E-Mail-Adresse eingeben um, das Passwort zurückzusetzen</value>
+  <data name="Browse Available Documents." xml:space="preserve">
+    <value>Verfügbare Dokumente durchsuchen.</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passwort</value>
+  <data name="Create" xml:space="preserve">
+    <value>Erstellen</value>
   </data>
-  <data name="Reset password" xml:space="preserve">
-    <value>Passwort zurücksetzen</value>
+  <data name="Date Created" xml:space="preserve">
+    <value>Erstellungsdatum</value>
   </data>
-  <data name="Token Not Found!" xml:space="preserve">
-    <value>Token nicht gefunden!</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Delete Content" xml:space="preserve">
+    <value>Inhalt löschen</value>
+  </data>
+  <data name="Dense" xml:space="preserve">
+    <value>Schmal</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="Document Store" xml:space="preserve">
+    <value>Dokumentenspeicher</value>
+  </data>
+  <data name="Document Type" xml:space="preserve">
+    <value>Dokumenttyp</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Herunterladen</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Is Public" xml:space="preserve">
+    <value>Öffentlich</value>
+  </data>
+  <data name="Manage Extended Attributes" xml:space="preserve">
+    <value>Erweiterte Attribute verwalten</value>
+  </data>
+  <data name="No Allowed Actions" xml:space="preserve">
+    <value>Keine Aktionen erlaubt</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Eigentümer</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Neu laden</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Suche</value>
+  </data>
+  <data name="Striped" xml:space="preserve">
+    <value>Gebändert</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titel</value>
+  </data>
+  <data name="you" xml:space="preserve">
+    <value>Du</value>
   </data>
 </root>

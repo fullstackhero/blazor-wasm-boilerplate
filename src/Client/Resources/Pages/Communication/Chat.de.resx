@@ -117,22 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Passwort bestätigen</value>
+  <data name="chat" xml:space="preserve">
+    <value>Chat</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="contacts" xml:space="preserve">
+    <value>Kontakte</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>E-Mail-Adresse eingeben um, das Passwort zurückzusetzen</value>
+  <data name="detailed guide for more." xml:space="preserve">
+    <value>Detaillierte Anleitung für mehr.</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passwort</value>
+  <data name="Enter your message..." xml:space="preserve">
+    <value>Gibt deine Nachricht ein...</value>
   </data>
-  <data name="Reset password" xml:space="preserve">
-    <value>Passwort zurücksetzen</value>
+  <data name="Logged In." xml:space="preserve">
+    <value>Eingeloggt.</value>
   </data>
-  <data name="Token Not Found!" xml:space="preserve">
-    <value>Token nicht gefunden!</value>
+  <data name="Logged Out." xml:space="preserve">
+    <value>Ausgeloggt.</value>
+  </data>
+  <data name="New Message From {0}" xml:space="preserve">
+    <value>Neue Nachricht von {0}</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Absenden</value>
+  </data>
+  <data name="Want to understand how Chat is implemented in BlazorHero ? Refer this" xml:space="preserve">
+    <value>Du möchtest verstehen, wie der Chat in FullStackHero implementiert ist? Lies hier</value>
   </data>
 </root>
