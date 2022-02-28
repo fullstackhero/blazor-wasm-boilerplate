@@ -117,22 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Passwort bestätigen</value>
+  <data name="All Permissions" xml:space="preserve">
+    <value>Alle Berechtigungen</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Apply" xml:space="preserve">
+    <value>Anwenden</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>E-Mail-Adresse eingeben um, das Passwort zurückzusetzen</value>
+  <data name="Bordered" xml:space="preserve">
+    <value>Gerahmt</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passwort</value>
+  <data name="Dense" xml:space="preserve">
+    <value>Schmal</value>
   </data>
-  <data name="Reset password" xml:space="preserve">
-    <value>Passwort zurücksetzen</value>
+  <data name="Description" xml:space="preserve">
+    <value>Beschreibung</value>
   </data>
-  <data name="Token Not Found!" xml:space="preserve">
-    <value>Token nicht gefunden!</value>
+  <data name="Here you can leave a comment for this permission for the current role" xml:space="preserve">
+    <value>Hier kann ein Kommentar für diese Berechtigung der aktuellen Rolle hinterlassen werden</value>
+  </data>
+  <data name="Manage Permission" xml:space="preserve">
+    <value>Berechtigungen verwalten</value>
+  </data>
+  <data name="Manage {0} {1}'s Permissions" xml:space="preserve">
+    <value>Verwalte {0} Berechtigungen von {1}</value>
+  </data>
+  <data name="Permission Name" xml:space="preserve">
+    <value>Berechtigungsname</value>
+  </data>
+  <data name="Search For Permissions" xml:space="preserve">
+    <value>Nach Berechtigungen suchen</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Striped" xml:space="preserve">
+    <value>Gebändert</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="Update Role Permissions" xml:space="preserve">
+    <value>Rollenberechtigungen verwalten</value>
+  </data>
+  <data name="Will be saved only when selected Permission" xml:space="preserve">
+    <value>Wird nur gespeichert wenn Berechtigung ausgewählt</value>
   </data>
 </root>

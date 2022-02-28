@@ -117,22 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Passwort bestätigen</value>
+  <data name="Account" xml:space="preserve">
+    <value>Konto</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Buy Me A Coffee!" xml:space="preserve">
+    <value>Kauf mir einen Kaffee!</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>E-Mail-Adresse eingeben um, das Passwort zurückzusetzen</value>
+  <data name="Chat?" xml:space="preserve">
+    <value>Chat?</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passwort</value>
+  <data name="Community" xml:space="preserve">
+    <value>Community</value>
   </data>
-  <data name="Reset password" xml:space="preserve">
-    <value>Passwort zurücksetzen</value>
+  <data name="Facebook Group" xml:space="preserve">
+    <value>Facebook-Gruppe</value>
   </data>
-  <data name="Token Not Found!" xml:space="preserve">
-    <value>Token nicht gefunden!</value>
+  <data name="Facebook Page" xml:space="preserve">
+    <value>Facebook-Seite</value>
+  </data>
+  <data name="Fork Repository" xml:space="preserve">
+    <value>Repository forken</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Ausloggen</value>
+  </data>
+  <data name="Logout Confirmation" xml:space="preserve">
+    <value>Möchtest du dich wirklich ausloggen?</value>
+  </data>
+  <data name="MudBlazor Documentation" xml:space="preserve">
+    <value>MudBlazor-Dokumentation</value>
+  </data>
+  <data name="Quick-Start Guide" xml:space="preserve">
+    <value>Schnellstartanleitung</value>
+  </data>
+  <data name="Refreshed Token." xml:space="preserve">
+    <value>Token aktualisiert.</value>
+  </data>
+  <data name="Resources" xml:space="preserve">
+    <value>Ressourcen</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+    <value>Support</value>
+  </data>
+  <data name="Toggle Dark Mode" xml:space="preserve">
+    <value>Umschalten zum dunklen Modus</value>
+  </data>
+  <data name="Toggle right-to-left/left-to-right" xml:space="preserve">
+    <value>Rechts nach Links / Links nach Rechts umschalten</value>
+  </data>
+  <data name="Welcome {0}" xml:space="preserve">
+    <value>Willkommen {0}</value>
+  </data>
+  <data name="You are logged out because the Permissions of one of your Roles have been updated." xml:space="preserve">
+    <value>Du wurdest ausgeloggt, weil die Berechtigungen einer deine Rollen aktualisiert wurden.</value>
+  </data>
+  <data name="You are logged out because the user with your Token has been deleted." xml:space="preserve">
+    <value>Du wurdest ausgeloggt, weil der Benutzer mit deinem Token gelöscht wurde.</value>
+  </data>
+  <data name="You are Logged Out." xml:space="preserve">
+    <value>Bis bist ausgeloggt.</value>
   </data>
 </root>

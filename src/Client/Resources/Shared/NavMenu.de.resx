@@ -126,32 +126,50 @@
   <data name="Brands" xml:space="preserve">
     <value>Marken</value>
   </data>
-  <data name="Catalog Management" xml:space="preserve">
-    <value>Katalogverwaltung</value>
+  <data name="Catalog" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
   </data>
   <data name="Communication" xml:space="preserve">
     <value>Kommunikation</value>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
   <data name="Document Management" xml:space="preserve">
-    <value>Document Management</value>
+    <value>Dokumentenverwaltung</value>
+  </data>
+  <data name="Document Store" xml:space="preserve">
+    <value>Dokumentenspeicher</value>
   </data>
   <data name="Document Types" xml:space="preserve">
-    <value>Document Types</value>
+    <value>Documenttypen</value>
   </data>
   <data name="FAQs" xml:space="preserve">
     <value>FAQs</value>
   </data>
   <data name="Features" xml:space="preserve">
-    <value>Features</value>
+    <value>Merkmale</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Start</value>
+  </data>
+  <data name="Logs" xml:space="preserve">
+    <value>Protokolle</value>
+  </data>
+  <data name="Mail" xml:space="preserve">
+    <value>E-Mail</value>
   </data>
   <data name="Personal" xml:space="preserve">
     <value>Persönlich</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
+  </data>
+  <data name="Quick Start Guide" xml:space="preserve">
+    <value>Schnellstartanleitung</value>
   </data>
   <data name="Resources" xml:space="preserve">
     <value>Ressourcen</value>
@@ -163,6 +181,6 @@
     <value>Swagger</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Nutzer</value>
+    <value>Benutzer</value>
   </data>
 </root>
