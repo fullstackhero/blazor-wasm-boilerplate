@@ -117,31 +117,10 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Already have an account?" xml:space="preserve">
-        <value>Bereits registriert?</value>
+    <data name="InfoFormat" xml:space="preserve">
+        <value>{first_item}-{last_item} von {all_items}</value>
     </data>
-    <data name="E-mail" xml:space="preserve">
-        <value>E-Mail</value>
-    </data>
-    <data name="I agree to the terms and privacy" xml:space="preserve">
-        <value>Ich stimme den Nutzungs- und Datenschutzbedingungen zu.</value>
-    </data>
-    <data name="Password" xml:space="preserve">
-        <value>Passwort</value>
-    </data>
-    <data name="Phone Number" xml:space="preserve">
-        <value>Telefon</value>
-    </data>
-    <data name="Register" xml:space="preserve">
-        <value>Registrieren</value>
-    </data>
-    <data name="Sign In" xml:space="preserve">
-        <value>Anmelden</value>
-    </data>
-    <data name="Sign Up" xml:space="preserve">
-        <value>Registrieren</value>
-    </data>
-    <data name="Username" xml:space="preserve">
-        <value>Benutzername</value>
+    <data name="RowsPerPageString" xml:space="preserve">
+        <value>Zeilen je Seite:</value>
     </data>
 </root>

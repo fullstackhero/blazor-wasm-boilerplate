@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -121,16 +121,16 @@
     <value>Aktionen</value>
   </data>
   <data name="Add Brand" xml:space="preserve">
-    <value>Add Brand</value>
+    <value>Marke hinzufügen</value>
   </data>
   <data name="Bordered" xml:space="preserve">
-    <value>Bordered</value>
+    <value>Gerahmt</value>
   </data>
   <data name="Brands" xml:space="preserve">
-    <value>Brands</value>
+    <value>Marken</value>
   </data>
   <data name="Brands exported" xml:space="preserve">
-    <value>Brands exported</value>
+    <value>Marken exportiert</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Hinzufügen</value>
@@ -139,10 +139,10 @@
     <value>Löschen</value>
   </data>
   <data name="Delete Content" xml:space="preserve">
-    <value>Delete Content</value>
+    <value>Inhalt löschen</value>
   </data>
   <data name="Dense" xml:space="preserve">
-    <value>Dense</value>
+    <value>Schmal</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Beschreibung</value>
@@ -151,36 +151,36 @@
     <value>Bearbeiten</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Export</value>
+    <value>Exportieren</value>
   </data>
   <data name="Filtered Brands exported" xml:space="preserve">
-    <value>Filtered Brands exported</value>
+    <value>Gefilterte Marken exportiert</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>Importieren</value>
   </data>
   <data name="Manage Brands." xml:space="preserve">
-    <value>Manage Brands.</value>
+    <value>Marken verwalten.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="No Allowed Actions" xml:space="preserve">
-    <value>No Allowed Actions</value>
+    <value>Keine Aktionen erlaubt</value>
   </data>
   <data name="Reload" xml:space="preserve">
     <value>Neu laden</value>
   </data>
   <data name="Search for Brands" xml:space="preserve">
-    <value>Search for Brands</value>
+    <value>Nach Marken suchen</value>
   </data>
   <data name="Striped" xml:space="preserve">
-    <value>Striped</value>
+    <value>Gebändert</value>
   </data>
   <data name="Tax" xml:space="preserve">
-    <value>Tax</value>
+    <value>Steuer</value>
   </data>
 </root>

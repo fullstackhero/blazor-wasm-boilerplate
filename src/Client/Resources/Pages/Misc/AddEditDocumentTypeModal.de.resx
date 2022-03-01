@@ -117,22 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Passwort bestätigen</value>
+  <data name="Add Document Type" xml:space="preserve">
+    <value>Dokumenttyp hinzufügen</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>E-Mail-Adresse eingeben um, das Passwort zurückzusetzen</value>
+  <data name="Description" xml:space="preserve">
+    <value>Beschreibung</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passwort</value>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
   </data>
-  <data name="Reset password" xml:space="preserve">
-    <value>Passwort zurücksetzen</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Token Not Found!" xml:space="preserve">
-    <value>Token nicht gefunden!</value>
+  <data name="Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="Update Document Type" xml:space="preserve">
+    <value>Dokumenttyp aktualisieren</value>
   </data>
 </root>

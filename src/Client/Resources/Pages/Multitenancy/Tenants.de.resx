@@ -117,22 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm Password" xml:space="preserve">
-    <value>Passwort bestätigen</value>
+  <data name="Active" xml:space="preserve">
+    <value>Aktiv</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
-    <value>E-Mail</value>
+  <data name="Admin Email" xml:space="preserve">
+    <value>E-Mail-Adresse des Administrators</value>
   </data>
-  <data name="Enter email for password reset" xml:space="preserve">
-    <value>E-Mail-Adresse eingeben um, das Passwort zurückzusetzen</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Passwort</value>
-  </data>
-  <data name="Reset password" xml:space="preserve">
-    <value>Passwort zurücksetzen</value>
-  </data>
-  <data name="Token Not Found!" xml:space="preserve">
-    <value>Token nicht gefunden!</value>
+  <data name="Valid Upto" xml:space="preserve">
+    <value>Gültig bis</value>
   </data>
 </root>
