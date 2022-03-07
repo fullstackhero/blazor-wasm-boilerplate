@@ -1,7 +1,7 @@
 ﻿@page "/authentication/{action}"
 @attribute [AllowAnonymous]
 
-@inject IStringLocalizer<Authentication> L;
+@inject IStringLocalizer<Authentication> L
 
 <RemoteAuthenticatorView Action="@Action">
     @* Override the different child items to adapt them to our own style
@@ -25,7 +25,17 @@
         <span>@L["Checking permissions..."]</span>
     </CompletingLoggingIn>
     <LogInFailed>
-        <span>@L["Sorry, your login failed. Please try again or contact support."]</span>
+        <MudItem Class="d-flex justify-center">
+            <MudText Typo="Typo.h5" GutterBottom="true">
+                @L["Sorry, your login failed. Please try again or contact support."]
+            </MudText>
+        </MudItem>
+        @if (GetMessage() is string message && !string.IsNullOrWhiteSpace(message))
+        {
+            <MudItem Class="d-flex justify-center">
+                @message
+            </MudItem>
+        }
     </LogInFailed>
     <LogOut>
         <span>@L["Logging you out..."]</span>
@@ -47,6 +57,18 @@
 @code {
     [Parameter] public string? Action { get; set; }
 
-    public void GoHome() =>
-    Navigation.NavigateTo("/");
+    private void GoHome() => Navigation.NavigateTo("/");
+
+    private string? GetMessage()
+    {
+        var query = Navigation.ToAbsoluteUri(Navigation.Uri).Query;
+
+        if (!string.IsNullOrWhiteSpace(query)
+            && QueryHelpers.ParseQuery(query).TryGetValue("message", out var message))
+        {
+            return message.ToString();
+        }
+
+        return null;
+    }
 }
