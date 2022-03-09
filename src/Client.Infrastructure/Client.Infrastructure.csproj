@@ -11,7 +11,7 @@
         <PackageReference Include="MediatR.Courier.DependencyInjection" Version="5.0.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.2" />
         <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.2" />
