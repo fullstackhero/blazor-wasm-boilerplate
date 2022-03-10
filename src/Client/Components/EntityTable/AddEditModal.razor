@@ -24,7 +24,7 @@
             <DataAnnotationsValidator />
             <CustomValidation @ref="_customValidation" />
             <MudGrid>
-                @if (!IsCreate)
+                @if (!IsCreate && !HideId)
                 {
                     <MudItem xs="12" md="6">
                         <MudTextField Value="Id" ReadOnly DisableUnderLine Label="@L[$"{EntityName} Id"]" />
