@@ -9,6 +9,12 @@
 <EntityTable TEntity="BrandDto" TId="Guid" TRequest="UpdateBrandRequest" Context="@Context">
 
     <EditFormContent>
+        @if (!Context.AddEditModal.IsCreate)
+        {
+            <MudItem xs="12" md="6">
+                <MudTextField Value="context.Id" ReadOnly DisableUnderLine Label="@L[$"Brand Id"]" />
+            </MudItem>
+        }
         <MudItem xs="12" md="6">
             <MudTextField T="string" For="@(() => context.Name)" @bind-Value="context.Name" Label="@L["Name"]" />
         </MudItem>

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.WebApi.Shared.Authorization;

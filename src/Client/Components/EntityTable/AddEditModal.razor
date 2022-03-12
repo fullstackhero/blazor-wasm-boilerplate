@@ -10,13 +10,12 @@
                 @if (IsCreate)
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
-                    @($"{L["Create"]} "); @L[EntityName];
                 }
                 else
                 {
                     <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
-                    @($"{L["Edit"]} "); @L[EntityName] 
                 }
+                @Title
             </MudText>
         </TitleContent>
 
@@ -24,28 +23,25 @@
             <DataAnnotationsValidator />
             <CustomValidation @ref="_customValidation" />
             <MudGrid>
-                @if (!IsCreate)
-                {
-                    <MudItem xs="12" md="6">
-                        <MudTextField Value="Id" ReadOnly DisableUnderLine Label="@L[$"{EntityName} Id"]" />
-                    </MudItem>
-                }
-                @EditFormContent(RequestModel)
+
+                @ChildContent(RequestModel)
 
             </MudGrid>
         </DialogContent>
 
         <DialogActions>
-            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel" StartIcon="@Icons.Filled.Cancel">@L["Cancel"]</MudButton>
+            <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Filled.Cancel" OnClick="MudDialog.Cancel">
+                @L["Cancel"]
+            </MudButton>
             @if (IsCreate)
             {
-                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success" StartIcon="@Icons.Filled.Save" >
+                <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" ButtonType="ButtonType.Submit" Color="Color.Success">
                     @L["Save"]
                 </MudButton>
             }
             else
             {
-                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Secondary" StartIcon="@Icons.Filled.Update">
+                <MudButton DisableElevation Variant="Variant.Filled" StartIcon="@Icons.Filled.Update" ButtonType="ButtonType.Submit" Color="Color.Secondary">
                     @L["Update"]
                 </MudButton>
             }

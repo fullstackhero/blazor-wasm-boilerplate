@@ -14,6 +14,12 @@
     </AdvancedSearchContent>
 
     <EditFormContent>
+        @if (!Context.AddEditModal.IsCreate)
+        {
+            <MudItem xs="12" md="6">
+                <MudTextField Value="context.Id" ReadOnly DisableUnderLine Label="@L[$"Product Id"]" />
+            </MudItem>
+        }
         <MudItem xs="12" md="6">
             <MudTextField Label="@L["Name"]" For="@(() => context.Name)" @bind-Value="context.Name" />
         </MudItem>
