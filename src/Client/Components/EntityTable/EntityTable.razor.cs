@@ -229,17 +229,20 @@ public partial class EntityTable<TEntity, TId, TRequest>
 
         var parameters = new DialogParameters()
         {
-            { nameof(AddEditModal<TRequest>.EditFormContent), EditFormContent },
+            { nameof(AddEditModal<TRequest>.ChildContent), EditFormContent },
             { nameof(AddEditModal<TRequest>.OnInitializedFunc), Context.EditFormInitializedFunc },
-            { nameof(AddEditModal<TRequest>.EntityName), Context.EntityName }
+            { nameof(AddEditModal<TRequest>.IsCreate), isCreate }
         };
 
+        Func<TRequest, Task> saveFunc;
         TRequest requestModel;
+        string title, successMessage;
 
         if (isCreate)
         {
             _ = Context.CreateFunc ?? throw new InvalidOperationException("CreateFunc can't be null!");
-            parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), Context.CreateFunc);
+
+            saveFunc = Context.CreateFunc;
 
             requestModel =
                 Context.GetDefaultsFunc is not null
@@ -248,16 +251,18 @@ public partial class EntityTable<TEntity, TId, TRequest>
                         is { } defaultsResult
                 ? defaultsResult
                 : new TRequest();
+
+            title = $"{L["Create"]} {Context.EntityName}";
+            successMessage = $"{Context.EntityName} {L["Created"]}";
         }
         else
         {
             _ = Context.IdFunc ?? throw new InvalidOperationException("IdFunc can't be null!");
-            var id = Context.IdFunc(entity!);
-            parameters.Add(nameof(AddEditModal<TRequest>.Id), id);
-
             _ = Context.UpdateFunc ?? throw new InvalidOperationException("UpdateFunc can't be null!");
-            Func<TRequest, Task> saveFunc = entity => Context.UpdateFunc(id, entity);
-            parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), saveFunc);
+
+            var id = Context.IdFunc(entity!);
+
+            saveFunc = request => Context.UpdateFunc(id, request);
 
             requestModel =
                 Context.GetDetailsFunc is not null
@@ -267,13 +272,17 @@ public partial class EntityTable<TEntity, TId, TRequest>
                         is { } detailsResult
                 ? detailsResult
                 : entity!.Adapt<TRequest>();
+
+            title = $"{L["Edit"]} {Context.EntityName}";
+            successMessage = $"{Context.EntityName} {L["Updated"]}";
         }
 
+        parameters.Add(nameof(AddEditModal<TRequest>.SaveFunc), saveFunc);
         parameters.Add(nameof(AddEditModal<TRequest>.RequestModel), requestModel);
+        parameters.Add(nameof(AddEditModal<TRequest>.Title), title);
+        parameters.Add(nameof(AddEditModal<TRequest>.SuccessMessage), successMessage);
 
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
-
-        var dialog = DialogService.Show<AddEditModal<TRequest>>(string.Empty, parameters, options);
+        var dialog = DialogService.ShowModal<AddEditModal<TRequest>>(parameters);
 
         Context.SetAddEditModalRef(dialog);
 
