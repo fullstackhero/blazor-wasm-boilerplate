@@ -9,8 +9,8 @@
 
     <AdvancedSearchContent>
         <BrandAutocomplete @bind-Value="SearchBrandId" />
-        <MudSlider T="decimal" @bind-value="SearchMinimumRate">@L["Minimum Rate"]: @_searchMinimumRate.ToString()</MudSlider>
-        <MudSlider T="decimal" @bind-value="SearchMaximumRate">@L["Maximum Rate"]: @_searchMaximumRate.ToString()</MudSlider>
+        <MudSlider T="decimal" @bind-value="SearchMinimumRate" Min="0" Max="9999" Step="100">@L["Minimum Rate"]: @_searchMinimumRate.ToString()</MudSlider>
+        <MudSlider T="decimal" @bind-value="SearchMaximumRate" Min="0" Max="9999" Step="100">@L["Maximum Rate"]: @_searchMaximumRate.ToString()</MudSlider>
     </AdvancedSearchContent>
 
     <EditFormContent>
