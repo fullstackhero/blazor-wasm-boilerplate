@@ -49,6 +49,7 @@
 .mud-dialog-content {
     max-height: 75vh !important;
     overflow: auto !important;
+    overflow-x: hidden !important;
 }
 
 .mud-grid-spacing-xs-3 {
