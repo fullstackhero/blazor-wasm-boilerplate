@@ -11,7 +11,7 @@
     <ItemGroup>
         <PackageReference Include="Mapster" Version="7.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.3" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.4" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
         <PackageReference Include="MudBlazor" Version="6.0.9" />
