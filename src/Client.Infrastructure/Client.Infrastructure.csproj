@@ -13,7 +13,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.5" />
         <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.4" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
