@@ -5,16 +5,29 @@
 
 <FshTitle Title="@L["Users"]" Description="@L["Manage Users"]" />
 
-<EntityTable TEntity="UserDetailsDto" TId="Guid" TRequest="CreateUserRequest" Context="@Context">
+<EntityTable TEntity="UserDetailsDto" TId="Guid" TRequest="UserViewModel" Context="@Context">
+    <ActionsContent>
+        <MudTooltip Text="@L["View Profile"]">
+            <MudIconButton OnClick="(() => ViewProfile(context.Id))" Icon="@Icons.Outlined.ManageAccounts" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small" />
+        </MudTooltip>
+    </ActionsContent>
     <ExtraActions>
         <MudMenuItem OnClick="(() => ViewProfile(context.Id))">@L["View Profile"]</MudMenuItem>
         @if (_canViewRoles)
         {
-            <MudMenuItem OnClick="(() => ManageRoles(context.Id))">@L["Manage Roles"]</MudMenuItem>
+            <MudTooltip Text="@L["Manage Roles"]">
+                <MudIconButton OnClick="(() => ManageRoles(context.Id))" Icon="@Icons.Outlined.AddModerator" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small" />
+            </MudTooltip>
         }
     </ExtraActions>
 
     <EditFormContent>
+        @if (!Context.AddEditModal.IsCreate)
+        {
+            <MudItem xs="12" md="6">
+                <MudTextField For="@(() => context.Id)" @bind-Value="context.Id" Label="@L["User Id"]" />
+            </MudItem>
+        }
         <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.UserName)" @bind-Value="context.UserName" Label="@L["User Name"]" />
         </MudItem>
@@ -26,21 +39,25 @@
         </MudItem>
         <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.Email)" InputType="InputType.Email" @bind-Value="context.Email"
-                Label="@L["Email"]" />
+                          Label="@L["Email"]" />
         </MudItem>
         <MudItem xs="12" md="12">
             <MudTextField For="@(() => context.PhoneNumber)" @bind-Value="context.PhoneNumber"
-                Label="@L["Phone Number"]" />
+                          Label="@L["Phone Number"]" />
         </MudItem>
-        <MudItem xs="12" md="6">
-            <MudTextField For="@(() => context.Password)" @bind-Value="context.Password" Label="@L["Password"]"
-                InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon"
-                OnAdornmentClick="TogglePasswordVisibility" />
+        <MudItem xs="12">
+            <MudSwitch @bind-Checked="PasswordTogleFormVisibility" Color="Color.Tertiary">string: "@(_passwordTogleFormVisibility)"</MudSwitch>
         </MudItem>
-        <MudItem xs="12" md="6">
+        <MudItem xs="12" md="6" Class="@(_passwordTogleFormVisibility ? string.Empty : "d-none")">
+            <MudTextField For="@(() => context.Password)" @bind-Value="context.Password" Label="@L["Password"]" Disabled="_passwordTogleFormVisibility"
+                          InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon"
+                          OnAdornmentClick="TogglePasswordVisibility" />
+        </MudItem>
+        <MudItem xs="12" md="6" Class="@(_passwordTogleFormVisibility ? string.Empty : "d-none")">
             <MudTextField For="@(() => context.ConfirmPassword)" @bind-Value="context.ConfirmPassword"
-                Label="@L["Confirm Password"]" InputType="InputType.Password" />
+                          Label="@L["Confirm Password"]" InputType="InputType.Password" />
         </MudItem>
+
     </EditFormContent>
 
 </EntityTable>
