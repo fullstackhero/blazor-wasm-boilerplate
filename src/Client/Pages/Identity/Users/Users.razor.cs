@@ -30,27 +30,11 @@ public partial class Users
     protected string Password { get; set; } = string.Empty;
 
     protected string ConfirmPassword { get; set; } = string.Empty;
+    private readonly bool _passwordTogleFormVisibility;
 
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
-    private bool _passwordTogleFormVisibility;
-
-    public bool PasswordTogleFormVisibility
-    {
-        get
-        {
-            return _passwordTogleFormVisibility;
-        }
-
-        set
-        {
-            _passwordTogleFormVisibility = value;
-            Context.AddEditModal.ForceRender();
-            // TogglePasswordFormVisibility();
-        }
-    }
-
     protected override async Task OnInitializedAsync()
     {
         var user = (await AuthState).User;
@@ -85,6 +69,7 @@ public partial class Users
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
             createFunc: async user => await UsersClient.CreateAsync(user.Adapt<CreateUserRequest>()),
             updateFunc: async (id, user) => await UsersClient.UpdateUserAsync(id.ToString(), user),
+            deleteFunc: async id => await UsersClient.DeleteAsync(id.ToString()),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
     }
@@ -113,35 +98,9 @@ public partial class Users
         Context.AddEditModal.ForceRender();
     }
 
-    /*private bool TogglePasswordFormVisibility()
-    {
-        Context.AddEditModal.ForceRender();
-        return true;
-    }*/
-
-    /*private void TogglePasswordChangeVisibility()
-    {
-        if (_passwordTogleFormVisibility)
-        {
-            _passwordTogleFormVisibility = false;
-            //_passwordTogleFormVisibilityClass = string.Empty;
-        }
-        else
-        {
-            _passwordTogleFormVisibility = true;
-            //_passwordTogleFormVisibilityClass = "d-none";
-        }
-    }*/
-
     public class UserViewModel : UpdateUserRequest
     {
-        public static int TestInt { get; set; }
-        public static bool PasswordTogleFormVisibility { get; set; }
-        public Newtonsoft.Json.Required GetWeatherDisplay(double tempInCelsius) => tempInCelsius < 20.0 ? Newtonsoft.Json.Required.Always : Newtonsoft.Json.Required.Always;
-
-        [Newtonsoft.Json.JsonProperty("password", Required = 1 > 5 ? Newtonsoft.Json.Required.Always : Newtonsoft.Json.Required.Always)]
         public string? Password { get; set; }
-        [Newtonsoft.Json.JsonProperty("confirmPassword", Required = Newtonsoft.Json.Required.Always)]
         public string? ConfirmPassword { get; set; }
     }
 }
