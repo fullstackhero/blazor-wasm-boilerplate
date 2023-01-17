@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>FSH.BlazorWebAssembly.Client</RootNamespace>
         <AssemblyName>FSH.BlazorWebAssembly.Client</AssemblyName>
         <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
@@ -10,11 +10,11 @@
 
     <ItemGroup>
         <PackageReference Include="Mapster" Version="7.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.2" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-        <PackageReference Include="MudBlazor" Version="6.0.10" />
+        <PackageReference Include="MudBlazor" Version="6.1.7" />
     </ItemGroup>
 
     <ItemGroup>
@@ -31,5 +31,12 @@
              There's something too much trimmed from Msal in the publish step. Then, after logging in,
              the user gets redirected to authentication/login-failed with no error message. -->
         <TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="Roslynator.Analyzers" Version="4.2.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 </Project>
