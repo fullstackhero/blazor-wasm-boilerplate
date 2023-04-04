@@ -2,6 +2,7 @@
 using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
 using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
 using FSH.WebApi.Shared.Authorization;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -13,25 +14,27 @@ public partial class Users
 {
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
+
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
 
     [Inject]
     protected IUsersClient UsersClient { get; set; } = default!;
 
-    protected EntityClientTableContext<UserDetailsDto, Guid, CreateUserRequest> Context { get; set; } = default!;
+    protected EntityClientTableContext<UserDetailsDto, Guid, UserViewModel> Context { get; set; } = default!;
 
     private bool _canExportUsers;
     private bool _canViewRoles;
 
     // Fields for editform
     protected string Password { get; set; } = string.Empty;
+
     protected string ConfirmPassword { get; set; } = string.Empty;
+    private readonly bool _passwordTogleFormVisibility;
 
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
-
     protected override async Task OnInitializedAsync()
     {
         var user = (await AuthState).User;
@@ -43,8 +46,8 @@ public partial class Users
             entityNamePlural: L["Users"],
             entityResource: FSHResource.Users,
             searchAction: FSHAction.View,
-            updateAction: string.Empty,
-            deleteAction: string.Empty,
+            updateAction: FSHAction.Update,
+            deleteAction: FSHAction.Delete,
             fields: new()
             {
                 new(user => user.FirstName, L["First Name"]),
@@ -64,7 +67,9 @@ public partial class Users
                     || user.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true
                     || user.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true,
-            createFunc: user => UsersClient.CreateAsync(user),
+            createFunc: async user => await UsersClient.CreateAsync(user.Adapt<CreateUserRequest>()),
+            updateFunc: async (id, user) => await UsersClient.UpdateUserAsync(id.ToString(), user),
+            deleteFunc: async id => await UsersClient.DeleteAsync(id.ToString()),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
     }
@@ -91,5 +96,11 @@ public partial class Users
         }
 
         Context.AddEditModal.ForceRender();
+    }
+
+    public class UserViewModel : UpdateUserRequest
+    {
+        public string? Password { get; set; }
+        public string? ConfirmPassword { get; set; }
     }
 }

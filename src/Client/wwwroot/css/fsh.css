@@ -70,3 +70,9 @@
 .fsh-nav-child {
     padding-left: 10px !important;
 }
+.fsh-td-action {
+    white-space: nowrap;
+}
+    .fsh-td-action .mud-menu {
+        display: block;
+    }
