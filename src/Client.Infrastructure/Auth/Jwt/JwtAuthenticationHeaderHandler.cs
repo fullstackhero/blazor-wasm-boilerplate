@@ -16,8 +16,10 @@ public class JwtAuthenticationHeaderHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        // skip token endpoints
-        if (request.RequestUri?.AbsolutePath.Contains("/tokens") is not true)
+        // skip token endpoints and pages with attribute [AllowAnonymous]
+        if (request.RequestUri?.AbsolutePath.Contains("/tokens") is not true &&
+          request.RequestUri?.AbsolutePath.Contains("/self-register") is not true &&
+          request.RequestUri?.AbsolutePath.Contains("/forgot-password") is not true)
         {
             if (await _tokenProviderAccessor.TokenProvider.GetAccessTokenAsync() is string token)
             {
