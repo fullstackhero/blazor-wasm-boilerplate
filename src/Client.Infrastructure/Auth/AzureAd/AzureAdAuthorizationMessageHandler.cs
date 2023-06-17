@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth.AzureAd;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Auth.AzureAd;
 
 public class AzureAdAuthorizationMessageHandler : AuthorizationMessageHandler
 {

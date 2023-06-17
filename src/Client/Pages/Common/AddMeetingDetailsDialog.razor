@@ -1,0 +1,774 @@
+﻿@if (_updateMeetingRequest.Id == Guid.Empty)
+{
+    <EditForm Model="@_createMeetingRequest" OnValidSubmit="SaveAsync">
+        <MudDialog>
+            <TitleContent>
+                <MudItem>
+                    <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Meeting Information</MudText>
+                </MudItem>
+
+            </TitleContent>
+            <DialogContent>
+                <MudContainer Style="max-height: 350px; overflow-y: scroll">
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudTextField For="@(() => _createMeetingRequest.MeetingTitle)" @bind-Value="_createMeetingRequest.MeetingTitle" T="string" Margin="Margin.Dense" Label="New Meeting"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField T="string" For="@(() => _createMeetingRequest.Location)" @bind-Value="_createMeetingRequest.Location" Margin="Margin.Dense" Label="Location"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="3">
+                            <MudInputLabel Style="font-size:14px;margin-top:12px;margin-left:2px">All Day</MudInputLabel>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudCheckBox @onclick="AllDayCheck" @bind-Checked="@allDayCheck"></MudCheckBox>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSelect @bind-Value="RemindMe" Margin="Margin.Dense" T="string" Label="Remind me">
+                                <MudSelectItem Value="@("1")">Before 1 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("3")">Before 3 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("5")">Before 5 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("10")">Before 10 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("15")">Before 15 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("20")">Before 20 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("30")">Before 30 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("45")">Before 45 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("60")">Before 1 hover </MudSelectItem>
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    @if (!allDayCheck)
+                    {
+                        <MudGrid>
+                            <MudItem xs="6">
+
+                                <MudDatePicker @bind-Date="selectedFromDate" Margin="Margin.Dense" PickerVariant="PickerVariant.Dialog" Label="From Date" />
+
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudSelect SelectedValuesChanged="(() => SelectedFromTime(_saveFromTime))" T="string" @bind-Value="_saveFromTime" Margin="Margin.Dense" Label="From Time">
+                                    <MudSelectItem Value="@("00:00:00")">12.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("00:30:00")">12.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("01:00:00")">01.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("01:30:00")">01.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("02:00:00")">02.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("02:30:00")">02.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("03:00:00")">03.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("03:30:00")">03.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("04:00:00")">04.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("04:30:00")">04.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("05:00:00")">05.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("05:30:00")">05.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("06:00:00")">06.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("06:30:00")">06.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("07:00:00")">07.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("07:30:00")">07.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("08:00:00")">08.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("08:30:00")">08.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("09:00:00")">09.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("09:30:00")">09.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("10:00:00")">10.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("10:30:00")">10.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("11:00:00")">11.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("11:30:00")">11.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("12:00:00")">12.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("12:30:00")">12.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("13:00:00")">01.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("13:30:00")">01.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("14:00:00")">02.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("14:30:00")">02.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("15:00:00")">03.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("15:30:00")">03.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("16:00:00")">04.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("16:30:00")">04.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("17:00:00")">05.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("17:30:00")">05.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("18:00:00")">06.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("18:30:00")">06.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("19:00:00")">07.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("19:30:00")">07.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("20:00:00")">08.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("20:30:00")">08.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("21:00:00")">09.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("21:30:00")">09.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("22:00:00")">10.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("22:30:00")">10.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("23:00:00")">11.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("23:30:00")">11.30 PM</MudSelectItem>
+                                </MudSelect>
+
+                                @*<MudTimePicker Label="Time" AmPm="true" @bind-Time="selectedFromTime" />*@
+                            </MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="6">
+
+                                <MudDatePicker @bind-Date="selectedToDate" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" Label="To Date" />
+
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudSelect T="string" @bind-Value="_saveToTime" Margin="Margin.Dense" Label="To Time">
+                                    @foreach (var state in timeList)
+                                    {
+                                        <MudSelectItem T="string" Value="@state.ToString()" />
+                                    }
+                                </MudSelect>
+                                @*<MudTimePicker Label="Time" AmPm="true" @bind-Time="selectedToTime" />*@
+                            </MudItem>
+                        </MudGrid>
+                    }
+                    else
+                    {
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudDatePicker @bind-Date="selectedFromDate" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" Label="From Date" />
+                            </MudItem>
+
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudDatePicker @bind-Date="selectedToDate" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" Label="To Date" />
+                            </MudItem>
+
+                        </MudGrid>
+                    }
+                    <MudGrid>
+                        @* <MudItem xs="1">
+                    <MudItem Class="MarginTopStyle">Host</MudItem>
+                    </MudItem>*@
+                        <MudItem xs="6">
+                            @if (_createMeetingRequest.RelatedTo == "Account")
+                            {
+                                <MudAutocomplete T="Guid" Label="Host" For="@(() => _createMeetingRequest.MeetingOwnerId)" @bind-Value="_createMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                            else
+                            {
+                                <MudAutocomplete T="Guid" Label="Host" For="@(() => _createMeetingRequest.MeetingOwnerId)" @bind-Value="_createMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                        </MudItem>
+                        <MudItem xs="6">
+                            @*<MudSelect T="string" Label="Add Participants" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options">*@
+                            @if (_createMeetingRequest.RelatedTo == "Account")
+                            {
+                                @*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDetailsResponses)
+                        {
+                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                        }
+                        </MudSelect>*@
+                            }
+                            else if (_createMeetingRequest.RelatedTo == "Contact")
+                            {
+                                @* <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDetailsResponses)
+                        {
+                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                        }
+                        </MudSelect>*@
+                            }
+                            else if (_createMeetingRequest.RelatedTo == "Quote")
+                            {
+                                @*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDetailsResponses)
+                        {
+                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                        }
+                        </MudSelect>*@
+                            }
+                            else
+                            {
+                                <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Label="Add Lead" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                    @foreach (var leadlist in _leadDetailsDtos)
+                                    {
+                                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            }
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudSelect @bind-Value="_mettingstatus" Margin="Margin.Dense" T="string" Label="Status">
+                                <MudSelectItem T="string" Value="@("Meeting not Started")" />
+                                <MudSelectItem T="string" Value="@("Completed")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField T="string" @bind-Value="_createMeetingRequest.Description" Label="Description" Lines="3" />
+                        </MudItem>
+                    </MudGrid>
+                </MudContainer>
+            </DialogContent>
+            <DialogActions>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Style="float:right;">Save</MudButton>
+
+                <MudButton Variant="Variant.Filled" OnClick="Cancel" Color="Color.Secondary" Style="float:right;">Cancel</MudButton>
+            </DialogActions>
+        </MudDialog>
+
+    </EditForm>
+}
+else
+{
+    <EditForm Model="@_updateMeetingRequest" OnValidSubmit="UpdateAsync">
+        <MudDialog>
+            <TitleContent>
+                <MudItem>
+                    <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Meeting Information</MudText>
+                </MudItem>
+
+            </TitleContent>
+            <DialogContent>
+                <MudContainer Style="max-height: 350px; overflow-y: scroll">
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudTextField For="@(() => _updateMeetingRequest.MeetingTitle)" @bind-Value="_updateMeetingRequest.MeetingTitle" T="string" Margin="Margin.Dense" Label="New Meeting"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField T="string" For="@(() => _updateMeetingRequest.Location)" @bind-Value="_updateMeetingRequest.Location" Margin="Margin.Dense" Label="Location"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="3">
+                            <MudInputLabel Style="font-size:14px;margin-top:12px;margin-left:2px">All Day</MudInputLabel>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudCheckBox @onclick="AllDayCheck" @bind-Checked="@allDayCheck"></MudCheckBox>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSelect @bind-Value="RemindMe" Margin="Margin.Dense" T="string" Label="Remind me">
+                                <MudSelectItem Value="@("1")">Before 1 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("3")">Before 3 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("5")">Before 5 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("10")">Before 10 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("15")">Before 15 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("20")">Before 20 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("30")">Before 30 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("45")">Before 45 minutes</MudSelectItem>
+                                <MudSelectItem Value="@("60")">Before 1 hover </MudSelectItem>
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    @if (!allDayCheck)
+                    {
+                        <MudGrid>
+                            <MudItem xs="6">
+
+                                <MudDatePicker @bind-Date="selectedFromDate" Margin="Margin.Dense" PickerVariant="PickerVariant.Dialog" Label="From Date" />
+
+                            </MudItem>
+                            <MudItem xs="6">
+
+                                <MudSelect SelectedValuesChanged="(() => SelectedFromTime(_saveFromTime))" T="string" @bind-Value="_saveFromTime" Margin="Margin.Dense" Label="From Time">
+                                    <MudSelectItem Value="@("00:00:00")">12.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("00:30:00")">12.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("01:00:00")">01.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("01:30:00")">01.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("02:00:00")">02.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("02:30:00")">02.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("03:00:00")">03.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("03:30:00")">03.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("04:00:00")">04.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("04:30:00")">04.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("05:00:00")">05.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("05:30:00")">05.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("06:00:00")">06.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("06:30:00")">06.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("07:00:00")">07.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("07:30:00")">07.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("08:00:00")">08.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("08:30:00")">08.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("09:00:00")">09.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("09:30:00")">09.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("10:00:00")">10.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("10:30:00")">10.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("11:00:00")">11.00 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("11:30:00")">11.30 AM</MudSelectItem>
+                                    <MudSelectItem Value="@("12:00:00")">12.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("12:30:00")">12.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("13:00:00")">01.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("13:30:00")">01.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("14:00:00")">02.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("14:30:00")">02.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("15:00:00")">03.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("15:30:00")">03.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("16:00:00")">04.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("16:30:00")">04.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("17:00:00")">05.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("17:30:00")">05.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("18:00:00")">06.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("18:30:00")">06.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("19:00:00")">07.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("19:30:00")">07.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("20:00:00")">08.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("20:30:00")">08.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("21:00:00")">09.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("21:30:00")">09.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("22:00:00")">10.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("22:30:00")">10.30 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("23:00:00")">11.00 PM</MudSelectItem>
+                                    <MudSelectItem Value="@("23:30:00")">11.30 PM</MudSelectItem>
+                                </MudSelect>
+
+
+                                @*<MudTimePicker Label="Time" AmPm="true" @bind-Time="selectedFromTime" />*@
+                            </MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="6">
+
+                                <MudDatePicker @bind-Date="selectedToDate" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" Label="To Date" />
+
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudSelect T="string" @bind-Value="_saveToTime" Margin="Margin.Dense" Label="To Time">
+                                    @foreach (var state in timeList)
+                                    {
+                                        <MudSelectItem T="string" Value="@state.ToString()" />
+                                    }
+                                </MudSelect>
+                                @*<MudTimePicker Label="Time" AmPm="true" @bind-Time="selectedToTime" />*@
+                            </MudItem>
+                        </MudGrid>
+                    }
+                    else
+                    {
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudDatePicker @bind-Date="selectedFromDate" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" Label="From Date" />
+                            </MudItem>
+
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudDatePicker @bind-Date="selectedToDate" PickerVariant="PickerVariant.Dialog" Margin="Margin.Dense" Label="To Date" />
+                            </MudItem>
+
+                        </MudGrid>
+                    }
+                    <MudGrid>
+                        @* <MudItem xs="1">
+                    <MudItem Class="MarginTopStyle">Host</MudItem>
+                    </MudItem>*@
+                        <MudItem xs="6">
+                            @if (_updateMeetingRequest.RelatedTo == "Account")
+                            {
+                                <MudAutocomplete T="Guid" Label="Host" For="@(() => _updateMeetingRequest.MeetingOwnerId)" @bind-Value="_updateMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                            else
+                            {
+                                <MudAutocomplete T="Guid" Label="Host" For="@(() => _updateMeetingRequest.MeetingOwnerId)" @bind-Value="_updateMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                        </MudItem>
+                        <MudItem xs="6">
+                            @*<MudSelect T="string" Label="Add Participants" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options">*@
+                            @if (_updateMeetingRequest.RelatedTo == "Account")
+                            {
+                                @*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDetailsResponses)
+                        {
+                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                        }
+                        </MudSelect>*@
+                            }
+                            else if (_updateMeetingRequest.RelatedTo == "Contact")
+                            {
+                                @* <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDetailsResponses)
+                        {
+                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                        }
+                        </MudSelect>*@
+                            }
+                            else if (_updateMeetingRequest.RelatedTo == "Quote")
+                            {
+                                @*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDetailsResponses)
+                        {
+                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                        }
+                        </MudSelect>*@
+                            }
+                            else
+                            {
+                                <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Label="Add Lead" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                    @foreach (var leadlist in _leadDetailsDtos)
+                                    {
+                                        <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            }
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudSelect ReadOnly="true" @bind-Value="_mettingstatus" Margin="Margin.Dense" T="string" Label="Status">
+                                <MudSelectItem T="string" Value="@("Meeting not Started")" />
+                                <MudSelectItem T="string" Value="@("Completed")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField T="string" @bind-Value="_updateMeetingRequest.Description" Label="Description" Lines="3" />
+                        </MudItem>
+                    </MudGrid>
+                </MudContainer>
+            </DialogContent>
+            <DialogActions>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Style="float:right;">Update</MudButton>
+
+                <MudButton Variant="Variant.Filled" OnClick="Cancel" Color="Color.Secondary" Style="float:right;">Cancel</MudButton>
+            </DialogActions>
+        </MudDialog>
+
+    </EditForm>
+}
+
+@code {
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_updateMeetingRequest.Id == Guid.Empty)
+        {
+            _mettingstatus = "Meeting not Started";
+        }
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetAllUserData();
+        await GetAllLeadData();
+        await SelectedFromTime(_saveFromTime);
+
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUser(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userDetailsDtos.Select(x => x.Id);
+
+        return _userDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] ILeadDetailsClient _leadDetails { get; set; }
+    List<LeadDetailsDto> _leadDetailsDtos = new();
+
+    async Task GetAllLeadData()
+    {
+        try
+        {
+            _leadDetailsDtos = (await _leadDetails.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUserLead(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _leadDetailsDtos.Select(x => x.Id);
+
+        return _leadDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+
+
+
+    //CreateMeetingRequest _createMeetingRequest = new();
+
+    private bool allDayCheck = false;
+    public string _mettingstatus;
+    private string RemindMe { get; set; }
+
+    private IEnumerable<string> ParticipantsOptions { get; set; } = new HashSet<string>();
+
+    private bool multiselectionTextChoice;
+    private string GetMultiSelectionText(List<string> selectedValues)
+    {
+        if (multiselectionTextChoice)
+        {
+            return $"Selected Participants {(selectedValues.Count > 1 ? "s" : "")}: {string.Join(", ", selectedValues.Select(x => x))}";
+        }
+        else
+        {
+            return $"{selectedValues.Count} Participants{(selectedValues.Count > 1 ? "s have" : " has")} been selected";
+        }
+    }
+
+    private DateTime? selectedFromDate;
+    private TimeSpan? selectedFromTime;
+    private DateTime? selectedToDate;
+    private TimeSpan? selectedToTime;
+    string _saveFromTime;
+    string _saveToTime;
+
+    [Inject] IMeetingDetailsClient _meetingDetailsClient { get; set; }
+    [Parameter] public CreateMeetingRequest _createMeetingRequest { get; set; } = new();
+    async Task SaveAsync()
+    {
+        if (allDayCheck)
+        {
+            _createMeetingRequest.FromDate = selectedFromDate;
+            _createMeetingRequest.ToDate = selectedToDate;
+        }
+        else
+        {
+            if ((_saveFromTime != null && _saveFromTime != "") && (_saveToTime != null && _saveToTime != ""))
+            {
+                selectedFromTime = TimeSpan.Parse(_saveFromTime);
+
+                DateTime _convertToTime = DateTime.Parse(_saveToTime.Substring(0, 8));
+                selectedToTime = TimeSpan.Parse(_convertToTime.ToString("HH:mm"));
+
+                _createMeetingRequest.FromDate = (selectedFromDate + selectedFromTime)?.ToUniversalTime();
+                _createMeetingRequest.ToDate = (selectedToDate + selectedToTime)?.ToUniversalTime();
+            }
+        }
+        _createMeetingRequest.RemindMe = Convert.ToInt32(RemindMe);
+        _createMeetingRequest.Allday = allDayCheck;
+        _createMeetingRequest.Participants = ParticipantsOptions.ToArray();
+        //_createMeetingRequest.FromDate = (selectedFromDate + selectedFromTime)?.ToUniversalTime();
+
+        //_createMeetingRequest.ToDate = (selectedToDate + selectedToTime)?.ToUniversalTime();
+        if (_mettingstatus == "Completed")
+        {
+            _createMeetingRequest.CheckedInStatus = true;
+        }
+        else
+        {
+            _createMeetingRequest.CheckedInStatus = false;
+        }
+        if (ParticipantsOptions.Count() != 0)
+        {
+            try
+            {
+                var response1 = await _meetingDetailsClient.CreateAsync(_meetingDetailsClient.Adapt<CreateMeetingRequest>());
+                if (response1 != Guid.Empty)
+                {
+                    Snackbar.Add("Meeting Added Successfully", Severity.Info);
+                    MudDialog.Close();
+                }
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+            //}
+        }
+        else
+        {
+            Snackbar.Add("Add Participants for Meeting", Severity.Error);
+        }
+    }
+
+    [Parameter] public UpdateMeetingRequest _updateMeetingRequest { get; set; } = new();
+    async Task UpdateAsync()
+    {
+        if (ParticipantsOptions.Count() != 0)
+        {
+            try
+            {
+                var response1 = await _meetingDetailsClient.UpdateAsync(_updateMeetingRequest.Id, _updateMeetingRequest);
+                if (response1 != Guid.Empty)
+                {
+                    Snackbar.Add("Meeting Updated Successfully", Severity.Info);
+                    MudDialog.Close();
+                }
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+            //}
+        }
+        else
+        {
+            Snackbar.Add("Add Participants for Meeting", Severity.Error);
+        }
+    }
+
+    async Task AllDayCheck()
+    {
+        if (allDayCheck)
+        {
+            allDayCheck = false;
+        }
+        else
+        {
+            allDayCheck = true;
+        }
+    }
+
+    List<TimeSpan> _timeList = new List<TimeSpan>();
+    List<string> timeList = new List<string>();
+    bool initialTimeActiove = true;
+    string initialFromTime;
+    async Task SelectedFromTime(string time)
+    {
+        if (initialTimeActiove)
+        {
+            initialTimeActiove = false;
+            initialFromTime = time;
+        }
+
+        if (time != null)
+        {
+            _timeList = new();
+            timeList = new();
+            // Convert the selected time string to a TimeSpan
+            TimeSpan fromTime = TimeSpan.Parse(time);
+
+            // Add the initial selected time
+            _timeList.Add(fromTime);
+            int duration = 0;
+            string timeduration = "";
+            // Add subsequent times at 30 minute intervals
+            for (int i = 1; i <= 6; i++) // Change 3 to the number of times you want to add
+            {
+
+                //if(i == 1)
+                //{
+                //    duration = 30;
+                //}
+                //else
+                //{
+                int data = 30;
+                duration = data * i;
+                //}
+                if (duration == 30)
+                {
+                    timeduration = "30 Minutes";
+                }
+                else if (duration == 60)
+                {
+                    timeduration = "1 Hr";
+                }
+                else if (duration == 90)
+                {
+                    timeduration = "1.5 Hrs";
+                }
+                else if (duration == 120)
+                {
+                    timeduration = "2 Hrs";
+                }
+                else if (duration == 150)
+                {
+                    timeduration = "2.5 Hrs";
+                }
+                else if (duration == 180)
+                {
+                    timeduration = "3 Hrs";
+                }
+                TimeSpan newTime = fromTime.Add(TimeSpan.FromMinutes(i * 30));
+                DateTime dateTime = DateTime.MinValue + newTime;
+                string amPmString = dateTime.ToString("hh:mm tt") + " " + "(" + timeduration + ")";
+                timeList.Add(amPmString);
+                _timeList.Add(newTime);
+            }
+            if (initialFromTime == time)
+            {
+                foreach (var item in timeList)
+                {
+                    if (item.Substring(0, 5) == _saveToTime.Substring(0, 5))
+                    {
+                        _saveToTime = item;
+                    }
+                }
+            }
+            else
+            {
+                _saveToTime = "";
+            }
+
+        }
+    }
+
+    [Inject] ICallDetailsClient _callDetailsClient { get; set; }
+    List<CallDto> _validationCallDtos = new();
+    async Task CallValidation()
+    {
+        try
+        {
+            _validationCallDtos = (await _callDetailsClient.GetListAsync()).Where(x => x.OutgoingCallStatus != "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+    void Cancel()
+    {
+        MudDialog.Close();
+    }
+}

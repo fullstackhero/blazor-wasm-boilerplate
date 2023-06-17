@@ -1,12 +1,12 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+﻿using FL_CRMS_ERP_WASM.Client.Components.EntityTable;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Identity.Roles;
 
 public partial class Roles
 {

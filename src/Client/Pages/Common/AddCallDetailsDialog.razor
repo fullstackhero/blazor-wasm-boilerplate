@@ -1,0 +1,486 @@
+﻿@if (_updateCallRequest.Id == Guid.Empty)
+{
+    <EditForm Model="@_createCallRequest" OnValidSubmit="SaveAsync">
+        <MudDialog>
+            <TitleContent>
+
+
+                <MudItem>
+                    <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Schdeule a Call</MudText>
+                </MudItem>
+
+            </TitleContent>
+            <DialogContent>
+                <MudContainer Style="max-height: 350px; overflow-y: scroll">
+                    <MudGrid>
+                        <MudItem>
+                            <MudText Style="font-family:Verdana;font-size:16px">Call Information</MudText>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            @*  <MudSelect T="string" Label="Call To" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem T="string" Value="@("Lead")"/>
+                        @*<MudSelectItem T="string" Value="@("Contact")" />
+                        </MudSelect>
+                        </MudItem>*@
+                            <MudTextField Label="Related To" Margin="Margin.Dense" @bind-Value="@_createCallRequest.RelatedTo" ReadOnly="true"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="6">
+                            @*<MudSelect T="string" Label="Search" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem T="string" Value="@("Aji")" />
+                        <MudSelectItem T="string" Value="@("Prabu")" />
+                        </MudSelect>*@
+                            @if (_createCallRequest.RelatedTo == "Account")
+                            {
+                                @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Account Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _getAllAccountDetails.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />*@
+                            }
+                            else if (_createCallRequest.RelatedTo == "Contact")
+                            {
+                                @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Contact Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                            }
+                            else if (_createCallRequest.RelatedTo == "Quote")
+                            {
+                                @*<MudTextField T="string" ReadOnly=true @bind-Value="_quoteSubject" Margin="Margin.Dense"></MudTextField>*@
+                            }
+                            else
+                            {
+                                <MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Lead Search" For="@(() => _createCallRequest.WhoId)" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchUserLead" Margin="Margin.Dense" ToStringFunc="@(i => _leadDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                        </MudItem>
+                    </MudGrid>
+                    @* <MudGrid>
+                <MudItem xs="6">
+                <MudSelect T="string" Label="Related To" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("Account")" />
+                <MudSelectItem T="string" Value="@("Deal")" />
+                <MudSelectItem T="string" Value="@("Campaign")" />
+                </MudSelect>
+                </MudItem>
+                <MudItem xs="6">
+                <MudSelect T="string" Label="Search" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("Aji")" />
+                <MudSelectItem T="string" Value="@("Prabu")" />
+                </MudSelect>
+                </MudItem>
+                </MudGrid>*@
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudSelect T="string" Label="Call Type" For="@(() => _createCallRequest.CallType)" @bind-Value="_createCallRequest.CallType" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Inbound")" />
+                                <MudSelectItem T="string" Value="@("Outbound")" />
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="6">
+                            @*<MudTextField Label="Outgoing Call Status" Margin="Margin.Dense" Variant="@_varientName" @bind-Value="@_addEditCall.OutgoingCallStatus" ReadOnly="true"></MudTextField>*@
+                            <MudSelect T="string" Label="Outgoing Call Status" For="@(() => _createCallRequest.OutgoingCallStatus)" @bind-Value="_createCallRequest.OutgoingCallStatus" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Scheduled")" />
+                                <MudSelectItem T="string" Value="@("Some Purpose")" />
+                                <MudSelectItem T="string" Value="@("Completed")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            @*<MudDatePicker Label="Call Date" @bind-Date="_addEditCall.CallStartTime" />*@
+
+                            <MudDatePicker Margin="Margin.Dense" AnchorOrigin="Origin.TopCenter" PickerVariant="PickerVariant.Dialog" Label="Call Date" DateFormat="dd/MM/yyyy" @bind-Date="_date" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTimePicker Margin="Margin.Dense" AnchorOrigin="Origin.TopCenter" PickerVariant="PickerVariant.Dialog" Label="Call time" AmPm="true" @bind-Time="_time" />
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            @* <MudSelect T="string" Label="Call Owner" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem T="string" Value="@("Aji")" />
+                        <MudSelectItem T="string" Value="@("Prabu")" />
+                        </MudSelect>*@
+
+                            <MudAutocomplete T="Guid" Label="Call Owner" For="@(() => _createCallRequest.CallOwnerId)" @bind-Value="_createCallRequest.CallOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField T="string" Label="Subject" For="@(() => _createCallRequest.Subject)" Margin="Margin.Dense" @bind-Value="_createCallRequest.Subject"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudSelect T="string" Label="Remainder" @bind-Value="_createCallRequest.RemainderTime" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("None")" />
+                                <MudSelectItem T="string" Value="@("5 minutes before")" />
+                                <MudSelectItem T="string" Value="@("10 minutes before")" />
+                                <MudSelectItem T="string" Value="@("15 minutes before")" />
+                                <MudSelectItem T="string" Value="@("30 minutes before")" />
+                                <MudSelectItem T="string" Value="@("1 hour before")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem>
+                            <MudText Style="font-family:Verdana;font-size:16px">Purpose of Outgoing Call</MudText>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudSelect T="string" Label="Call Purpose" @bind-Value="_createCallRequest.CallPurpose" For="@(() => _createCallRequest.CallPurpose)" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Prospecting")" />
+                                <MudSelectItem T="string" Value="@("Administrative")" />
+                                <MudSelectItem T="string" Value="@("Negotation")" />
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField T="string" @bind-Value="_createCallRequest.CallAgenda" Label="Call Aganda" Margin="Margin.Dense"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                </MudContainer>
+            </DialogContent>
+            <DialogActions>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Style="float:right;">Schedule</MudButton>
+
+                <MudButton Variant="Variant.Filled" OnClick="Cancel" Color="Color.Secondary" Style="float:right;">Cancel</MudButton>
+            </DialogActions>
+
+        </MudDialog>
+
+    </EditForm>
+}
+else
+{
+    <EditForm Model="@_updateCallRequest" OnValidSubmit="UpdateAsync">
+        <MudDialog>
+            <TitleContent>
+
+
+                <MudItem>
+                    <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Schdeule a Call</MudText>
+                </MudItem>
+
+            </TitleContent>
+            <DialogContent>
+
+                <MudGrid>
+                    <MudItem>
+                        <MudText Style="font-family:Verdana;font-size:16px">Call Information</MudText>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="6">
+                        @*  <MudSelect T="string" Label="Call To" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("Lead")"/>
+                    @*<MudSelectItem T="string" Value="@("Contact")" />
+                    </MudSelect>
+                    </MudItem>*@
+                        <MudTextField Label="Related To" Margin="Margin.Dense" @bind-Value="@_updateCallRequest.RelatedTo" ReadOnly="true"></MudTextField>
+                    </MudItem>
+                    <MudItem xs="6">
+                        @*<MudSelect T="string" Label="Search" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("Aji")" />
+                    <MudSelectItem T="string" Value="@("Prabu")" />
+                    </MudSelect>*@
+                        @if (_updateCallRequest.RelatedTo == "Account")
+                        {
+                            @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Account Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _getAllAccountDetails.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />*@
+                        }
+                        else if (_updateCallRequest.RelatedTo == "Contact")
+                        {
+                            @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Contact Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                        }
+                        else if (_updateCallRequest.RelatedTo == "Quote")
+                        {
+                            @*<MudTextField T="string" ReadOnly=true @bind-Value="_quoteSubject" Margin="Margin.Dense"></MudTextField>*@
+                        }
+                        else
+                        {
+                            <MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Lead Search" For="@(() => _updateCallRequest.WhoId)" @bind-Value="_updateCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchUserLead" Margin="Margin.Dense" ToStringFunc="@(i => _leadDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                        }
+                    </MudItem>
+                </MudGrid>
+
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudSelect T="string" Label="Call Type" For="@(() => _updateCallRequest.CallType)" @bind-Value="_updateCallRequest.CallType" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("Inbound")" />
+                            <MudSelectItem T="string" Value="@("Outbound")" />
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="6">
+                        @*<MudTextField Label="Outgoing Call Status" Margin="Margin.Dense" Variant="@_varientName" @bind-Value="@_addEditCall.OutgoingCallStatus" ReadOnly="true"></MudTextField>*@
+                        <MudSelect T="string" Label="Outgoing Call Status" For="@(() => _updateCallRequest.OutgoingCallStatus)" @bind-Value="_updateCallRequest.OutgoingCallStatus" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("Scheduled")" />
+                            <MudSelectItem T="string" Value="@("Some Purpose")" />
+                            <MudSelectItem T="string" Value="@("Completed")" />
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="6">
+                        @*<MudDatePicker Label="Call Date" @bind-Date="_addEditCall.CallStartTime" />*@
+
+                        <MudDatePicker Margin="Margin.Dense" AnchorOrigin="Origin.TopCenter" PickerVariant="PickerVariant.Dialog" Label="Call Date" DateFormat="dd/MM/yyyy" @bind-Date="_date" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTimePicker Margin="Margin.Dense" AnchorOrigin="Origin.TopCenter" PickerVariant="PickerVariant.Dialog" Label="Call time" AmPm="true" @bind-Time="_time" />
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="6">
+                        @* <MudSelect T="string" Label="Call Owner" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("Aji")" />
+                    <MudSelectItem T="string" Value="@("Prabu")" />
+                    </MudSelect>*@
+
+                        <MudAutocomplete T="Guid" Label="Call Owner" For="@(() => _updateCallRequest.CallOwnerId)" @bind-Value="_updateCallRequest.CallOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField T="string" Label="Subject" For="@(() => _updateCallRequest.Subject)" Margin="Margin.Dense" @bind-Value="_updateCallRequest.Subject"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudSelect T="string" Label="Remainder" @bind-Value="_updateCallRequest.RemainderTime" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("None")" />
+                            <MudSelectItem T="string" Value="@("5 minutes before")" />
+                            <MudSelectItem T="string" Value="@("10 minutes before")" />
+                            <MudSelectItem T="string" Value="@("15 minutes before")" />
+                            <MudSelectItem T="string" Value="@("30 minutes before")" />
+                            <MudSelectItem T="string" Value="@("1 hour before")" />
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem>
+                        <MudText Style="font-family:Verdana;font-size:16px">Purpose of Outgoing Call</MudText>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudSelect T="string" Label="Call Purpose" @bind-Value="_updateCallRequest.CallPurpose" For="@(() => _updateCallRequest.CallPurpose)" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("Prospecting")" />
+                            <MudSelectItem T="string" Value="@("Administrative")" />
+                            <MudSelectItem T="string" Value="@("Negotation")" />
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField T="string" @bind-Value="_updateCallRequest.CallAgenda" Label="Call Aganda" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+
+            </DialogContent>
+            <DialogActions>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Style="float:right;">Update</MudButton>
+
+                <MudButton Variant="Variant.Filled" OnClick="Cancel" Color="Color.Secondary" Style="float:right;">Cancel</MudButton>
+            </DialogActions>
+
+        </MudDialog>
+
+    </EditForm>
+}
+
+@code {
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+    async Task LoadDataAsync()
+    {
+        if (_updateCallRequest.Id != Guid.Empty)
+        {
+            DateTime? dateTimeValue = _updateCallRequest.CallStartTime;
+            if (dateTimeValue.HasValue)
+            {
+                DateTime nonNullableDateTime = dateTimeValue.Value;
+                _date = nonNullableDateTime.Date;
+                _time = nonNullableDateTime.TimeOfDay;
+                // Use non-nullable DateTime value here
+            }
+        }
+        await GetAllUserData();
+        await GetAllLeadData();
+        if (_updateCallRequest.Id == Guid.Empty)
+        {
+            await UpdateSubject();
+        }
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUser(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userDetailsDtos.Select(x => x.Id);
+
+        return _userDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] ILeadDetailsClient _leadDetails { get; set; }
+    List<LeadDetailsDto> _leadDetailsDtos = new();
+
+    async Task GetAllLeadData()
+    {
+        try
+        {
+            _leadDetailsDtos = (await _leadDetails.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUserLead(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _leadDetailsDtos.Select(x => x.Id);
+
+        return _leadDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    TimeSpan? _time;
+    DateTime? _date;
+    [Inject] ICallDetailsClient _callDetailsClient { get; set; }
+    //CreateCallRequest _createCallRequest = new();
+    [Parameter] public CreateCallRequest _createCallRequest { get; set; } = new();
+
+    async Task SaveAsync()
+    {
+        DateTime? selectedDateTime = _date + _time;
+        DateTime? utcDateTime = selectedDateTime;
+        _createCallRequest.CallStartTime = utcDateTime?.ToUniversalTime();
+        if (_createCallRequest.CallStartTime != null)
+        {
+            if (selectedDateTime >= DateTime.Now)
+            {
+                try
+                {
+                    var response1 = await _callDetailsClient.CreateAsync(_createCallRequest.Adapt<CreateCallRequest>());
+                    if (response1 != Guid.Empty)
+                    {
+                        Snackbar.Add("Call Added Successfully", Severity.Info);
+                        MudDialog.Close();
+                    }
+                }
+                catch (ApiException<HttpValidationProblemDetails> ex)
+                {
+                    if (ex.Result.Errors is not null)
+                    {
+                        Snackbar.Add(ex.Result.Title, Severity.Error);
+                    }
+                    else
+                    {
+                        Snackbar.Add("Something went wrong!", Severity.Error);
+                    }
+                }
+                catch (ApiException<ErrorResult> ex)
+                {
+                    Snackbar.Add(ex.Result.Exception, Severity.Error);
+                }
+                catch (Exception ex)
+                {
+                    Snackbar.Add(ex.Message, Severity.Error);
+                }
+
+            }
+            else
+            {
+                Snackbar.Add("Please add Correct date and time", Severity.Error);
+            }
+        }
+        else
+        {
+            Snackbar.Add("Please add Call Time", Severity.Error);
+        }
+    }
+
+    [Parameter] public UpdateCallRequest _updateCallRequest { get; set; } = new();
+    async Task UpdateAsync()
+    {
+        try
+        {
+            var response1 = await _callDetailsClient.UpdateAsync(_updateCallRequest.Id, _updateCallRequest);
+            if (response1 != Guid.Empty)
+            {
+                Snackbar.Add("Call Updated Successfully", Severity.Info);
+                MudDialog.Close();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+
+    async Task UpdateSubject()
+    {
+        if (_createCallRequest.WhoId != Guid.Empty || _updateCallRequest.WhoId != Guid.Empty)
+        {
+            try
+            {
+                var response = await _leadDetails.GetAsync(_createCallRequest.WhoId);
+                if (response.Id != Guid.Empty)
+                {
+                    string? Name = response.FirstName;
+                    _createCallRequest.Subject = "Call scheduled with" + " " + Name;
+                    StateHasChanged();
+                    //await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                    //MudDialog.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+
+        }
+    }
+
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+    void Cancel()
+    {
+        MudDialog.Close();
+    }
+}

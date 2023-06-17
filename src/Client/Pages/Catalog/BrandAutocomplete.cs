@@ -1,10 +1,10 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Catalog;
 
 public class BrandAutocomplete : MudAutocomplete<Guid>
 {

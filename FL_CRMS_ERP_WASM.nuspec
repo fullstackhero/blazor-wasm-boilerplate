@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>FullStackHero.BlazorWebAssembly.Boilerplate</id>
-    <title>Blazor WebAssembly Boilerplate - FullStackHero</title>
+    <title>Secure Hands - FullStackHero</title>
     <version>0.0.1-rc</version>
     <authors>Mukesh Murugan</authors>
     <description>

@@ -2,9 +2,14 @@
 @attribute [AllowAnonymous]
 @inject IStringLocalizer<Login> L
 @inject IStringLocalizer<SharedResource> LS
-
+<style>
+    .hide
+    {
+        display: none;
+    }    
+</style>
 <div class="d-flex justify-center">
-    <img src="full-stack-hero-logo.png" Style="height:120px" />
+    <img src="/images/SecureHandsIcon.png" Style="height:100px; margin-top:10px; " />
 </div>
 <div class="fsh-center-text">
     <MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
@@ -25,7 +30,7 @@
                 For="@(() => _tokenRequest.Password)" InputType="@_passwordInput" Adornment="Adornment.End"
                 AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
         </MudItem>
-        <MudItem xs="12">
+        <MudItem xs="12" class="hide">
             <MudTextField T="string" Label="@L["Tenant"]" Variant="Variant.Outlined" @bind-Value="TenantId"
                 For="@(() => TenantId)" Required />
         </MudItem>
@@ -40,8 +45,8 @@
             <MudButton ButtonType="ButtonType.Submit" Disabled="BusySubmitting" Variant="Variant.Filled"
                 Color="Color.Primary" Size="Size.Large" StartIcon="@Icons.Filled.Login" Style="width: 100%;">@L["Sign In"]</MudButton>
         </MudItem>
-        <MudItem xs="12">
+        @* <MudItem xs="12">
             <MudButton StartIcon="@Icons.Filled.Password" OnClick="FillAdministratorCredentials">@L["Fill Administrator Credentials"]</MudButton>
-        </MudItem>
+        </MudItem> *@
     </MudGrid>
 </EditForm>

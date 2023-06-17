@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Shared;
+namespace FL_CRMS_ERP_WASM.Client.Shared;
 
 public static class DialogServiceExtensions
 {

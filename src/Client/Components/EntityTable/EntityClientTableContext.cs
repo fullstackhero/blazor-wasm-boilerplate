@@ -1,4 +1,4 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
+﻿namespace FL_CRMS_ERP_WASM.Client.Components.EntityTable;
 
 /// <summary>
 /// Initialization Context for the EntityTable Component.

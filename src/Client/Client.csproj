@@ -2,11 +2,15 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>FSH.BlazorWebAssembly.Client</RootNamespace>
-        <AssemblyName>FSH.BlazorWebAssembly.Client</AssemblyName>
+        <RootNamespace>FL_CRMS_ERP_WASM.Client</RootNamespace>
+        <AssemblyName>FL_CRMS_ERP_WASM.Client</AssemblyName>
         <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\css\Style.css" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Mapster" Version="7.3.0" />

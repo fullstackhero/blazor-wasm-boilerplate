@@ -1,17 +1,36 @@
 ﻿@inject IStringLocalizer<MainLayout> L
 
-<MudAppBar Elevation="0">
+<style>
+    .footer {
+        background-color: #f5f5f5;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: sticky;
+        bottom: 0;
+        
+    }
+</style>
+@* <MudThemeProvider Theme="_currentTheme" /> *@
+<MudAppBar  Color="Color.Primary" Elevation="0">
     <MudTooltip Text="Toggle Drawer">
         <MudIconButton Icon="@Icons.Rounded.Notes" Color="Color.Inherit" Edge="Edge.Start"
             OnClick="@((e) => DrawerToggle())" />
     </MudTooltip>
-     <MudButton Variant="Variant.Text" DisableElevation="true" Link="/">
-            @L["fullstackhero"]</MudButton>
+    <MudLink Href="/">
+        <img src="/images/SecureHandsIcon.ico" alt="SecureHands" style="height:40px; width:40px; background-color:transparent;"/> 
+    </MudLink>
+    <a href="/" style="text-decoration: none;">
+        <MudText Typo="Typo.h6" Class="ml-4">Secure Hands</MudText>
+    </a>
+     @* <MudButton Variant="Variant.Text" DisableElevation="true" Link="/">
+            @L["fullstackhero"]</MudButton> *@
     <MudSpacer />
     <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
         <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Secondary"
-            Link="https://opencollective.com/fullstackhero" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">
-            @L["Sponsor"]</MudButton>
+            Link="https://focuslogicitservices.com" Target="_blank" StartIcon="@Icons.Material.Filled.Favorite">
+            @L["Focuslogic"]</MudButton>
         <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="mx-4 my-5" />
         <MudTooltip Text="Support">
             <MudMenu Icon="@Icons.Filled.SupportAgent" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
@@ -30,17 +49,17 @@
                 </MudMenuItem>
             </MudMenu>
         </MudTooltip>
-        <LanguageSelector />
-        <MudTooltip Text="Fork Repository">
+        @* <LanguageSelector /> *@
+        @* <MudTooltip Text="Fork Repository">
             <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
                 Link="https://github.com/fullstackhero/blazor-wasm-boilerplate" Target="_blank" />
-        </MudTooltip>
-        <NotificationConnectionStatus></NotificationConnectionStatus>
+        </MudTooltip> *@
+        @* <NotificationConnectionStatus></NotificationConnectionStatus> *@
     </MudHidden>
     <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
-        <MudTooltip Text="Sponsor">
+        <MudTooltip Text="Focuslogic">
             <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Inherit"
-                Link="https://opencollective.com/fullstackhero" Target="_blank" />
+                Link="https://focuslogicitservices.com" Target="_blank" />
         </MudTooltip>
         <MudMenu Icon="@Icons.Filled.Settings" Color="Color.Inherit" Dense="true" Direction="Direction.Right"
             OffsetY="true">
@@ -93,8 +112,9 @@
     </MudMenu>
 </MudAppBar>
 
-<MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never">
-    <NavMenu />
+@* <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Never"> *@
+<MudDrawer Style="overflow-x: hidden;" @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always" Breakpoint="Breakpoint.Lg" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true" Color="Color.Primary">
+           <NavMenu _drawerOpen="@_drawerOpen" />
 </MudDrawer>
 
 <MudMainContent>
@@ -103,5 +123,8 @@
         <MudScrollToTop TopOffset="400" Style="z-index:2000;">
             <MudFab Icon="@Icons.Material.Filled.KeyboardArrowUp" Color="Color.Primary" />
         </MudScrollToTop>
+        <footer class="footer">
+            <MudText Style="text-align:center;"><span style="color:black;" >Copyright@@</span><MudLink Href="https://www.info@focuslogicitservices.com" target="_blank">FocusLogicItServices</MudLink></MudText>
+        </footer>
     </MudContainer>
 </MudMainContent>

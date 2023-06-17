@@ -1,8 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.Common;
+namespace FL_CRMS_ERP_WASM.Client.Components.Common;
 
 public partial class ErrorHandler
 {

@@ -23,4 +23,4 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-ENTRYPOINT ["dotnet", "FSH.BlazorWebAssembly.Host.dll"]
+ENTRYPOINT ["dotnet", "FL_CRMS_ERP_WASM.Host.dll"]

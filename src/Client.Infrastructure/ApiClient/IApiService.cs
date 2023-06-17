@@ -1,4 +1,4 @@
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 
 public interface IApiService
 {

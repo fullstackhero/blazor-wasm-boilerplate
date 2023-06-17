@@ -1,10 +1,10 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
 using MediatR.Courier;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.Common;
+namespace FL_CRMS_ERP_WASM.Client.Components.Common;
 
 public class FshTable<T> : MudTable<T>
 {

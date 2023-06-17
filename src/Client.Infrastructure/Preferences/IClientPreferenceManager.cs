@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
 
 public interface IClientPreferenceManager : IPreferenceManager
 {

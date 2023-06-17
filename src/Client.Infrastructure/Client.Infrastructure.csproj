@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>FSH.BlazorWebAssembly.Client.Infrastructure</RootNamespace>
-        <AssemblyName>FSH.BlazorWebAssembly.Client.Infrastructure</AssemblyName>
+        <RootNamespace>FL_CRMS_ERP_WASM.Client.Infrastructure</RootNamespace>
+        <AssemblyName>FL_CRMS_ERP_WASM.Client.Infrastructure</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

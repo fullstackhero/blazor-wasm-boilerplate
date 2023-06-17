@@ -1,12 +1,12 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Identity.Users;
 
 public partial class UserRoles
 {
@@ -32,27 +32,45 @@ public partial class UserRoles
 
     protected override async Task OnInitializedAsync()
     {
-        var state = await AuthState;
-        _canEditUsers = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Users);
-        _canSearchRoles = await AuthService.HasPermissionAsync(state.User, FSHAction.View, FSHResource.UserRoles);
-
-        if (await ApiHelper.ExecuteCallGuardedAsync(
-                () => UsersClient.GetByIdAsync(Id), Snackbar)
-            is UserDetailsDto user)
+         if(!(checkedChanged))
         {
-            _title = $"{user.FirstName} {user.LastName}";
-            _description = string.Format(L["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
+            var state = await AuthState;
+            _canEditUsers = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Users);
+            _canSearchRoles = await AuthService.HasPermissionAsync(state.User, FSHAction.View, FSHResource.UserRoles);
 
             if (await ApiHelper.ExecuteCallGuardedAsync(
-                    () => UsersClient.GetRolesAsync(user.Id.ToString()), Snackbar)
-                is ICollection<UserRoleDto> response)
+                    () => UsersClient.GetByIdAsync(Id), Snackbar)
+                is UserDetailsDto user)
             {
-                _userRolesList = response.ToList();
-            }
-        }
+                _title = $"{user.FirstName} {user.LastName}";
+                _description = string.Format(L["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
 
-        _loaded = true;
+                if (await ApiHelper.ExecuteCallGuardedAsync(
+                        () => UsersClient.GetRolesAsync(user.Id.ToString()), Snackbar)
+                    is ICollection<UserRoleDto> response)
+                {
+                    _userRolesList = response.ToList();
+                }
+            }
+
+            _loaded = true;
+        }
     }
+    bool checkedChanged = false;
+    //it is used, chekbox select only one chekbox.
+        async Task CheckedChanged(bool enabled, string roleid)
+        {
+            _userRolesList.Where(x => x.RoleId != roleid).ToList();
+            foreach(var item in _userRolesList)
+            {
+                if(item.RoleId != roleid )
+                {
+                    item.Enabled=false;
+                }
+            }
+            checkedChanged = true;
+            await OnInitializedAsync();
+        }
 
     private async Task SaveAsync()
     {

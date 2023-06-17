@@ -1,16 +1,16 @@
 ﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Components.Common;
-using FSH.BlazorWebAssembly.Client.Components.Dialogs;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
-using FSH.BlazorWebAssembly.Client.Shared;
+using FL_CRMS_ERP_WASM.Client.Components.Common;
+using FL_CRMS_ERP_WASM.Client.Components.Dialogs;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Account;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Identity.Account;
 
 public partial class Profile
 {

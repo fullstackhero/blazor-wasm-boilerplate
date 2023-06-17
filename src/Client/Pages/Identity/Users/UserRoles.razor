@@ -55,10 +55,14 @@ else
             <MudTd DataLabel="@L["Description"]">
                 <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
             </MudTd>
-            <MudTd DataLabel="Role">
+            @* <MudTd DataLabel="Role">
                 <MudCheckBox @bind-Checked="@context.Enabled" Disabled="@(!_canEditUsers)" Color="Color.Secondary">
                 </MudCheckBox>
+            </MudTd> *@
+            <MudTd DataLabel="Role">
+                <MudCheckBox @onclick="(()=>CheckedChanged(context.Enabled,context.RoleId))" @bind-Checked="@context.Enabled"  Disabled="@(!_canEditUsers)" Color="Color.Secondary"></MudCheckBox>
             </MudTd>
+
         </RowTemplate>
         <PagerContent>
             <TablePager />

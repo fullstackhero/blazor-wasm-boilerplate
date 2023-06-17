@@ -1,9 +1,9 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth.Jwt;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Auth.Jwt;
 
 public class JwtAuthenticationService : AuthenticationStateProvider, IAuthenticationService, IAccessTokenProvider
 {

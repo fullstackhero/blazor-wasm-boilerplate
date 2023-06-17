@@ -1,11 +1,11 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.Common;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FL_CRMS_ERP_WASM.Client.Components.Common;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using FSH.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Authentication;
 
 public partial class SelfRegister
 {

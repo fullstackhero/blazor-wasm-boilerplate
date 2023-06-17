@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Theme;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
 
 public class ClientPreferenceManager : IClientPreferenceManager
 {

@@ -1,11 +1,11 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
 using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Shared;
+namespace FL_CRMS_ERP_WASM.Client.Shared;
 
 public partial class NavMenu
 {
@@ -13,7 +13,8 @@ public partial class NavMenu
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
     [Inject]
     protected IAuthorizationService AuthService { get; set; } = default!;
-
+    [Parameter]
+    public bool _drawerOpen { get; set; }
     private string? _hangfireUrl;
     private bool _canViewHangfire;
     private bool _canViewDashboard;

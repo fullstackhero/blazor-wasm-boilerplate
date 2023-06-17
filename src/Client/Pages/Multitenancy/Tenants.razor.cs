@@ -1,7 +1,7 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FL_CRMS_ERP_WASM.Client.Components.EntityTable;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using FSH.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Multitenancy;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Multitenancy;
 
 public partial class Tenants
 {

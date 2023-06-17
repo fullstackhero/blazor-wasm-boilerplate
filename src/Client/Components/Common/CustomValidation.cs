@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace FSH.BlazorWebAssembly.Client.Components.Common;
+namespace FL_CRMS_ERP_WASM.Client.Components.Common;
 
 // See https://docs.microsoft.com/en-us/aspnet/core/blazor/forms-validation?view=aspnetcore-6.0#server-validation-with-a-validator-component
 public class CustomValidation : ComponentBase

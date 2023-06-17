@@ -1,4 +1,4 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Common;
+﻿namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
 
 public record LanguageCode(string Code, string DisplayName, bool IsRTL = false);
 

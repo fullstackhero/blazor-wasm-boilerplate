@@ -1,26 +1,31 @@
 ﻿@inject IStringLocalizer<NavMenu> L
 
-<PersonCard
-    Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text); margin-bottom:0px!important" />
-<MudNavMenu>
-    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Start"]</MudText>
+@* <PersonCard
+    Style="background-color: var(--mud-palette-drawer-background);color: var(--mud-palette-drawer-text); margin-bottom:0px!important" /> *@
+<PersonCard _drawerOpen = "@_drawerOpen"/>
+
+<MudNavMenu Color="Color.Secondary"> 
+    @* <MudText Typo="Typo.subtitle2" style="color:black;"  Class="ml-4 my-3">@L["Start"]</MudText>
     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">@L["Home"]</MudNavLink>
     <MudNavLink Href="https://fullstackhero.net/basics/getting-started/" Match="NavLinkMatch.All" Target="_blank"
         Icon="@Icons.Material.Filled.RocketLaunch">@L["Getting Started"]</MudNavLink>
     @if (_canViewHangfire)
     {
         <MudNavLink Href="@_hangfireUrl" Match="NavLinkMatch.All" Target="_blank" Icon="@Icons.Material.Filled.Work">@L["Hangfire"]</MudNavLink>
+    } *@
+   
+    @if(_drawerOpen)
+    {
+       <MudText Typo="Typo.h6" style="color:black;"  Class="ml-4 my-3">@L["Personal"]</MudText> 
     }
-    <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Personal"]</MudText>
+
     @if (_canViewDashboard)
     {
         <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Filled.Dashboard">@L["Dashboard"]</MudNavLink>
-    }
-    <MudNavLink Href="/account" Icon="@Icons.Filled.ManageAccounts">@L["Account"]</MudNavLink>
-    <MudNavLink Href="/audit-logs" Icon="@Icons.Material.Filled.SecurityUpdateGood">@L["Logs"]</MudNavLink>
-    @if (_canViewProducts || _canViewBrands)
+    }    
+    @* @if (_canViewProducts || _canViewBrands)
     {
-        <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Management"]</MudText>
+        <MudText Typo="Typo.subtitle2" style="color:black;" Class="ml-4 my-3">@L["Management"]</MudText>
         <MudNavGroup Title="@L["Catalog"]" Expanded Icon="@Icons.Filled.AddBox">
             @if (_canViewProducts)
             {
@@ -35,10 +40,46 @@
                 </MudNavLink>
             }
         </MudNavGroup>
+    } *@
+    @if(_drawerOpen)
+    {
+        <MudText Typo="Typo.h6" style="color:black;" Class="ml-4 my-3">@L["Lead"]</MudText>
+    
+        <MudNavGroup Title="@L["Lead Details"]" Expanded Icon="@Icons.Filled.AddBox">
+            @*@if (_canViewProducts)
+            {*@
+            <MudNavLink Href="/leaddata/leadinformation" Icon="@Icons.Material.Filled.SupervisedUserCircle" Class="fsh-nav-child">
+                    @L["Lead"]
+                </MudNavLink>
+
+            <MudNavLink Href="/leaddata/accountinformation" Icon="@Icons.Material.Filled.AccountBox" Class="fsh-nav-child">
+                    @L["Account"]
+                </MudNavLink>    
+            @*}*@
+        @* @if (_canViewBrands)
+            {
+                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.ShoppingBag" Class="fsh-nav-child">
+                    @L["Brands"]
+                </MudNavLink>
+            }*@
+        </MudNavGroup>
+    }
+    else
+    {
+        <MudNavLink Href="/leaddata/leadinformation" Icon="@Icons.Material.Filled.SupervisedUserCircle">
+                    @L["Lead"]
+        </MudNavLink>
+
+        <MudNavLink Href="/leaddata/accountinformation" Icon="@Icons.Material.Filled.AccountBox">
+                    @L["Account"]
+        </MudNavLink>
     }
     @if (CanViewAdministrationGroup)
     {
-        <MudText Typo="Typo.subtitle2" Color="Color.Primary" Class="ml-4 my-3">@L["Administration"]</MudText>
+         @if(_drawerOpen)
+         {
+            <MudText Typo="Typo.h6" style="color:black;" Class="ml-4 my-3">@L["Administration"]</MudText>
+         }        
         @if (_canViewUsers)
         {
             <MudNavLink Match="NavLinkMatch.Prefix" Href="/users" Icon="@Icons.Material.Filled.PeopleAlt">@L["Users"]</MudNavLink>
@@ -51,5 +92,10 @@
         {
             <MudNavLink Href="/tenants" Icon="@Icons.Filled.GroupWork" Disabled="!_canViewTenants">@L["Tenants"]</MudNavLink>
         }
+
+        @* <MudNavLink Href="/account" Icon="@Icons.Filled.ManageAccounts">@L["Account"]</MudNavLink> *@
+        <MudNavLink Href="/audit-logs" Icon="@Icons.Material.Filled.SecurityUpdateGood">@L["Logs"]</MudNavLink>
     }
+
+    
 </MudNavMenu>

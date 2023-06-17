@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
-using FSH.BlazorWebAssembly.Client.Shared;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using FSH.WebApi.Shared.Notifications;
 using MediatR.Courier;
 using Microsoft.AspNetCore.Components;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Personal;
 
 public partial class Dashboard
 {

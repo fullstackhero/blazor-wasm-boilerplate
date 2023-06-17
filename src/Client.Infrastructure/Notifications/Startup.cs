@@ -4,7 +4,7 @@ using MediatR.Courier;
 using MediatR.Courier.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
 
 internal static class Startup
 {

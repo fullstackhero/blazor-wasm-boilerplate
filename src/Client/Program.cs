@@ -1,8 +1,8 @@
 using System.Globalization;
-using FSH.BlazorWebAssembly.Client;
-using FSH.BlazorWebAssembly.Client.Infrastructure;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+using FL_CRMS_ERP_WASM.Client;
+using FL_CRMS_ERP_WASM.Client.Infrastructure;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

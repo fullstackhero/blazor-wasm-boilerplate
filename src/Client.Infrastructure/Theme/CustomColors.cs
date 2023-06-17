@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Theme;
 
 public static class CustomColors
 {

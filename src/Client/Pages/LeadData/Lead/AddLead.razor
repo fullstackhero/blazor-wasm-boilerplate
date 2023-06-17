@@ -1,0 +1,376 @@
+@page "/leaddata/addlead"
+
+<EditForm Model="@_createLeadRequest" style=" overflow-x:hidden;overflow-y:hidden;" OnValidSubmit="SaveAsync">
+    <div class="sticky">
+    <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudInputLabel Style="font-family:Verdana;margin-top:10px;font-size:16px;font-weight:bold;margin-left:10px">Create Lead Information</MudInputLabel>
+        </MudItem>
+        <MudItem xs="12" sm="6" Style="margin-top:8px; margin-bottom:8px">
+            <span style="float:right;">
+                    <MudButton  ButtonType="ButtonType.Submit"  @onclick="@(()=> _createLeadRequest.IsButtonActive = true)" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success" Size="Size.Small">Save</MudButton>
+                    <MudButton Style="margin-left:10px" ButtonType="ButtonType.Submit" @onclick="@(()=> _createLeadRequest.IsButtonActive = false)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Small">Save and New</MudButton>
+                 <MudButton Style="margin-left:10px;" OnClick="Cancel"  StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Secondary" Size="Size.Small">Cancel</MudButton>
+            </span>
+        </MudItem>
+    </MudGrid>
+</MudCard>
+</div>
+
+@*<div id="unique_id_scroll_section" class="ma-0" style="height:600px;overflow: auto;">*@
+
+        <MudGrid>
+            <MudItem>
+                <MudText>Lead Image</MudText>
+            </MudItem>
+        </MudGrid>
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudItem>
+                    <MudAvatar Image="@(_createLeadRequest.LeadImage)" Square="true" Style="height: auto; width: auto; max-height: 30%"> </MudAvatar>
+                </MudItem>
+                @*<MudItem>
+                    <InputFile id="fileInput" hidden OnChange="UploadFiles" />
+                    <div>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Text"
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   StartIcon="@Icons.Filled.CloudUpload"
+                                   for="fileInput">
+                            Upload
+                        </MudButton>
+                        @if (!string.IsNullOrEmpty(_createLeadRequest.LeadImage))
+                        {
+                            <MudButton Variant="Variant.Text"
+                                   Color="Color.Info"
+                                   StartIcon="@Icons.Filled.RemoveRedEye"
+                                   Size="Size.Small"
+                                   Link="@(_createLeadRequest.LeadImage)" Target="_blank">
+                                View
+                            </MudButton>
+                            <MudButton Variant="Variant.Text"
+                                   Color="Color.Error"
+                                   StartIcon="@Icons.Filled.Delete"
+                                   Size="Size.Small"
+                                   OnClick="DeleteAsync">
+                                Delete
+                            </MudButton>
+                        }
+                    </div>
+            </MudItem>*@
+            </MudItem>
+        </MudGrid>
+<MudGrid Style="margin-top:-50px; margin-bottom:15px;">
+    <MudCard Outlined="true" Class="rounded-lg" style="width: 100%;margin-left:1rem;margin-right:1rem">
+        <MudGrid>
+            <MudItem>
+                <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Lead Details</MudText>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                    <MudAutocomplete Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="Guid" Label="LeadOwner" @bind-Value="_createLeadRequest.UserId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                        @*<MudSelect For="@(() => AddEditLeadModel.LeadOwner)" Class="TextMargin" @bind-Value="AddEditLeadModel.LeadOwner" Label="Lead Owner" Variant="Variant.Outlined" Margin="@_margin" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("ajith")" />
+                    <MudSelectItem T="string" Value="@("Prabu")" />
+
+                </MudSelect>*@
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.CompanyName" Label="Company"></MudTextField>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField  Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.FirstName"  Label="First Name"></MudTextField>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.LastName" Label="Last Name"></MudTextField>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        @*<MudTextField Class="TextMargin" T="string" @bind-Value="AddEditLeadModel.Title" Variant="@_varientName" Margin="@_margin" Label="Title"></MudTextField>*@
+                        <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" Label="Title" @bind-Value="@_createLeadRequest.Title" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Mr")" />
+                                <MudSelectItem T="string" Value="@("Mrs")" />
+                                <MudSelectItem T="string" Value="@("Miss")" />
+                                <MudSelectItem T="string" Value="@("Ms")" />
+                            </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField InputType="@InputType.Email" Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.Email"  Label="Email"></MudTextField>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                    <MudDatePicker Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" PickerVariant="PickerVariant.Dialog" AnchorOrigin="Origin.TopCenter" @bind-Date="_createLeadRequest.DateOfBirth" Label="Date of Birth" FirstDayOfWeek="DayOfWeek.Monday"></MudDatePicker>
+                        
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" InputType="@InputType.Number" @bind-Value="_createLeadRequest.Phone" Label="Phone"></MudTextField>
+                        
+            </MudItem>
+        </MudGrid>
+         <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+           <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+           <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.Fax"  Label="Fax"></MudTextField>
+                        
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                    <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string"   @bind-Value="_createLeadRequest.Mobile" InputType="@InputType.Number" Label="Mobile"></MudTextField>
+                        
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                    <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.LeadSource" Label="Lead Source" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("FaceBook")" />
+                    <MudSelectItem T="string" Value="@("Instagram")" />
+                    <MudSelectItem T="string" Value="@("Google")" />
+                    <MudSelectItem T="string" Value="@("BNI")" />
+                    <MudSelectItem T="string" Value="@("Tele Sales")" />
+                    <MudSelectItem T="string" Value="@("Direct")" />
+                    <MudSelectItem T="string" Value="@("Customer Reference")" />
+                            <MudSelectItem T="string" Value="@("ISP")" />
+                            <MudSelectItem T="string" Value="@("Cross Sell")" />
+                            <MudSelectItem T="string" Value="@("Up Sell")" />
+                            @*@foreach (var state in _getAllLeadSourceResponses.Select(x => x.SourceName))
+    {
+        <MudSelectItem T="string" Value="@state" />
+    }*@
+
+
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                    <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.LeadStatus" Label="Lead Status" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("Lead")" />
+                            <MudSelectItem T="string" Value="@("Interested")" />
+                            <MudSelectItem T="string" Value="@("Call Back")" />
+                            <MudSelectItem T="string" Value="@("Followup")" />
+                    <MudSelectItem T="string" Value="@("Quote")" />
+                            <MudSelectItem T="string" Value="@("Closing")" />
+                            <MudSelectItem T="string" Value="@("Lost")" />
+                            <MudSelectItem T="string" Value="@("Customer")" />
+                           @* @foreach (var state in _getAllLeadStatusResponses.Select(x => x.StatusName))
+                               {
+        <MudSelectItem T="string" Value="@state" />
+                                }*@
+
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+            <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" Label="Industry" @bind-Value="_createLeadRequest.Industry" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("Textile")" />
+                    <MudSelectItem T="string" Value="@("IT")" />
+
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" @bind-Value="_createLeadRequest.NoEmployess" Label="No. of Employees"></MudTextField>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" @bind-Value="_createLeadRequest.AnnualRevenue" Label="Annual Revenue"></MudTextField>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" Label="Rating" @bind-Value="_createLeadRequest.Rating" AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="string" Value="@("1")" />
+                    <MudSelectItem T="string" Value="@("2")" />
+
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                <MudCheckBox Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" Label="Email Opt out" @bind-Checked="_checkedEmail"></MudCheckBox>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.SkypeId"  Label="Skype ID"></MudTextField>
+            </MudItem>
+        </MudGrid>
+         <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.SecondEmail" Label="Secondary Email"></MudTextField>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string"  @bind-Value="_createLeadRequest.Twitter" Label="Twitter"></MudTextField>
+            </MudItem>
+        </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                    <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.Website" Label="Website"></MudTextField>
+                    </MudItem>
+                    </MudGrid>
+                   
+        <MudGrid>
+            <MudItem>
+                <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Address Details</MudText>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string"  @bind-Value="_createLeadRequest.Street" Label="Street"></MudTextField>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.City" Label="City"></MudTextField>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string"  @bind-Value="_createLeadRequest.State" Label="State"></MudTextField>
+            </MudItem>
+
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string"   @bind-Value="_createLeadRequest.ZipCode" Label="Zip Code"></MudTextField>
+            </MudItem>
+        </MudGrid>
+
+         <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.Country" Label="Country"></MudTextField>
+            </MudItem>
+            <MudItem xs="12" md="4" Class="px-md-6 mr-md-6"></MudItem>
+        </MudGrid>
+
+        <MudGrid>
+            <MudItem>
+                <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Description Details</MudText>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Style="margin-bottom:20px;" Class="d-flex justify-center mt-2 px-sm-4">
+            <MudItem xs="12" md="10" Class="px-md-6 pl-md-0">
+                        <MudTextField Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" @bind-Value="_createLeadRequest.Description" Label="Description"  Lines="3" />
+            </MudItem>
+        </MudGrid>
+    </MudCard>
+  
+</MudGrid>
+@*</div>*@
+</EditForm>
+
+
+@code{
+    bool _checkedEmail;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetAllUserData();
+    }
+
+ 
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject]ILeadDetailsClient _leadDetailsClient {get;set;}
+    CreateLeadRequest _createLeadRequest = new();
+    async Task SaveAsync()
+    {
+        try
+        {
+            var response1 = await _leadDetailsClient.CreateAsync(_createLeadRequest.Adapt<CreateLeadRequest>());
+            if (response1 != Guid.Empty)
+            {
+                Snackbar.Add("Lead Added Successfully", Severity.Info);
+                //Navigation.NavigateTo("/view/stock");
+                //await Reset();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task Cancel()
+    {
+        
+    }
+
+    private IBrowserFile _file;
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        _file = e.File;
+        if (_file != null)
+        {
+            var extension = Path.GetExtension(_file.Name);
+            var format = "image/png";
+            var imageFile = await e.File.RequestImageFileAsync(format, 400, 400);
+            var buffer = new byte[imageFile.Size];
+            await imageFile.OpenReadStream().ReadAsync(buffer);
+            _createLeadRequest.LeadImage = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            //_createLeadRequest.UploadRequest = new UploadRequest { Data = buffer, UploadType = Application.Enums.UploadType.Product, Extension = extension };
+        }
+    }
+
+    private void DeleteAsync()
+    {
+        _createLeadRequest.LeadImage = null;
+        //_createLeadRequest.UploadRequest = new UploadRequest();
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUser(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userDetailsDtos.Select(x => x.Id);
+
+        return _userDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+}

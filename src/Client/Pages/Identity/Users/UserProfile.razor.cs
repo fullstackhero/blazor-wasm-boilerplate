@@ -1,13 +1,13 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
-using FSH.BlazorWebAssembly.Client.Shared;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using FSH.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Users;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Identity.Users;
 
 public partial class UserProfile
 {

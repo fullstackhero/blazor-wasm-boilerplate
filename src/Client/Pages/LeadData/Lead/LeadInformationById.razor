@@ -1,0 +1,2267 @@
+﻿@page "/leaddata/leadinformationbyid/{_leadId:guid}"
+@using FL_CRMS_ERP_WASM.Client.Components.Dialogs;
+@using FL_CRMS_ERP_WASM.Client.Pages.Common;
+@using FL_CRMS_ERP_WASM.BlazorWebAssembly.Client.Components.Dialogs;
+@using FL_CRMS_ERP_WASM.BlazorWebAssembly.Client.Pages.Common;
+
+<div class="sticky">
+    <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudInputLabel Style="font-family:Verdana;margin-top:10px;font-size:16px;font-weight:bold;margin-left:10px">Create Lead Information</MudInputLabel>
+            </MudItem>
+            <MudItem xs="12" sm="6" Style="margin-top:8px; margin-bottom:8px">
+                <span style="float:right;">
+                    <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.ChangeHistory" Color="Color.Secondary" Size="Size.Small">Convert</MudButton>
+                    <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.Update" OnClick="EditLead" Color="Color.Secondary" Size="Size.Small">Edit</MudButton>
+                    <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Secondary" Size="Size.Small">Cancel</MudButton>
+                </span>
+            </MudItem>
+        </MudGrid>
+    </MudCard>
+</div>
+
+<MudGrid>
+    <MudItem xs="3">
+        <MudCard Elevation="25" id="cardposition" Class="rounded-lg" Outlined='true' Style="height:100vh; position: fixed;box-shadow: 0px 4px 12px #888888;">
+
+            @* <MudNavMenu Color="Color.Error">*@
+            <MudNavMenu Color="Color.Error">
+                @*<MudListItem  OnClick="@HideLeftMenu"  Icon="@Icons.Material.Filled.ArrowCircleLeft" />*@
+                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ArrowCircleLeft" />
+
+                <MudNavLink Class="btn" Match="NavLinkMatch.All" id="NoteNav" Icon="@Icons.Material.Filled.Note"><MudText>Notes <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                <MudNavLink Class="btn" Match="NavLinkMatch.All" id="AttachmentNav" Icon="@Icons.Material.Filled.Attachment"><MudText>Attachments</MudText></MudNavLink>
+                <MudNavLink Class="btn" Match="NavLinkMatch.All" id="ProductNav" Icon="@Icons.Material.Filled.ProductionQuantityLimits"><MudText>Products</MudText></MudNavLink>
+                <MudNavLink Class="btn" Match="NavLinkMatch.All" id="OpenActivityNav" Icon="@Icons.Material.Filled.LocalActivity"><MudText>Open Activities <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                <MudNavLink Class="btn" Match="NavLinkMatch.All" id="ClosedActivityNav" Icon="@Icons.Material.Filled.ClosedCaption"><MudText>Closed Activities <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                <MudNavLink Style="visibility:hidden" Class="btn" Match="NavLinkMatch.All" id="InvitedMeetingNav" Icon="@Icons.Material.Filled.InsertInvitation"><MudText>Invited Meetings</MudText></MudNavLink>
+
+            </MudNavMenu>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="9">
+
+        <MudCard Class="rounded-lg" Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+            <MudCardContent>
+                <MudGrid>
+                    <MudItem xs="3">
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Lead Owner</MudText>
+                    </MudItem>
+                    <MudItem xs="3">
+                        @foreach (var item in _userDetailsDtos.Where(x => x.Id == _leadDetailsDtos.UserId))
+                        {
+                            <MudText>@item.FirstName</MudText>
+                        }
+
+                    </MudItem>
+                    <MudItem xs="3"></MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3"></MudItem>
+                    <MudItem xs="3">
+                        <MudText>Email</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Email</MudText>
+                    </MudItem>
+                    <MudItem xs="3"></MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3"></MudItem>
+                    <MudItem xs="3">
+                        <MudText>Phone</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Phone</MudText>
+                    </MudItem>
+                    <MudItem xs="3"></MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3"></MudItem>
+                    <MudItem xs="3">
+                        <MudText>Mobile</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Mobile</MudText>
+                    </MudItem>
+                    <MudItem xs="3"></MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3"></MudItem>
+                    <MudItem xs="3">
+                        <MudText>Lead Status</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.LeadStatus</MudText>
+                    </MudItem>
+                    <MudItem xs="3"></MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3"></MudItem>
+                    <MudItem xs="3">
+                        <MudText>DOB</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.DateOfBirth?.ToString("MMM dd, yyyy")</MudText>
+                    </MudItem>
+                    <MudItem xs="3"></MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+
+        <MudExpansionPanels Class="rounded-lg" @onclick="ExpandChange" Style="margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+            <MudExpansionPanel Text="@_expandText">
+                <MudGrid Style="margin-top:10px">
+                    <MudText Style="color:brown;font-weight:bolder">Lead Information</MudText>
+                </MudGrid>
+                <MudGrid Style="margin-top:10px">
+
+                    <MudItem xs="3">
+                        <MudText>Lead Owner</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        @foreach (var item in _userDetailsDtos.Where(x => x.Id == _leadDetailsDtos.UserId))
+                        {
+                            <MudText>@item.FirstName</MudText>
+                        }
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        Company
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.CompanyName</MudText>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Title</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Title</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Lead Name</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.FirstName</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Phone</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Phone</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Email</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.Email</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Mobile</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Mobile</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Fax</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.Fax</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Lead Source</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.LeadSource</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Website</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.Website</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Industry</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Industry</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Lead Status</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.LeadStatus</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Annual Revenue</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.AnnualRevenue</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>No of Employees</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.NoEmployess</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Email OptOut</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.EmailOptOut</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Rating</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.Rating</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">ModifiedBy</MudItem>
+                    <MudItem xs="3">
+                        @foreach (var item in _userDetailsDtos.Where(x => x.Id == _leadDetailsDtos.LastModifiedBy))
+                        {
+                            <MudText>@item.FirstName</MudText>
+                        }
+
+
+                    </MudItem>
+                    @*<MudItem xs="2">@_getLeadById.LastModifiedOn</MudItem>*@
+                    <MudItem xs="3">
+                        <MudText>CreatedBy</MudText>
+                    </MudItem>
+                    @foreach (var item in _userDetailsDtos.Where(x => x.Id == _leadDetailsDtos.CreatedBy))
+                    {
+                        <MudText>@item.FirstName</MudText>
+                    }
+                    @*<MudItem xs="2">@_getLeadById.CreatedOn</MudItem>*@
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">
+                        ModifiedBy Date
+                    </MudItem>
+                    <MudItem xs="3">
+                        @_leadDetailsDtos.LastModifiedOn
+                    </MudItem>
+                    <MudItem xs="3">
+                        CreatedBy Date
+                    </MudItem>
+                    <MudItem xs="3">
+                        @_leadDetailsDtos.CreatedOn
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Skype Id</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.SkypeId</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Secondary Email</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.SecondEmail</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="6"></MudItem>
+
+
+                    <MudItem xs="3">
+                        <MudText>Twitter</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.Twitter</MudItem>
+                </MudGrid>
+
+                <MudGrid Style="margin-top:10px;margin-bottom:10px">
+                    <MudText Style="color:brown;font-weight:bolder">Address Information</MudText>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Street</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.Street</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>City</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.City</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">State</MudItem>
+                    <MudItem xs="3">
+                        <MudText>@_leadDetailsDtos.State</MudText>
+
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Zip code</MudText>
+                    </MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.ZipCode</MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Country</MudItem>
+                    <MudItem xs="3">@_leadDetailsDtos.Country</MudItem>
+                </MudGrid>
+                <MudGrid Style="margin-top:10px;margin-bottom:10px">
+                    <MudText Style="color:brown;font-weight:bolder">Description Information</MudText>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="3">Description</MudItem>
+                    <MudItem xs="9">@_leadDetailsDtos.Description</MudItem>
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+
+        <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+            <div id="NoteContainer">
+                <MudCardHeader>
+                    <MudGrid>
+                        <MudItem id="Notes">
+
+                            <MudText Style="margin-top:10px;">Notes</MudText>
+                            @*<h4 style="margin-top:10px;">Notes</h4>*@
+                        </MudItem>
+                        <MudSpacer />
+
+                        <MudItem>
+                            <MudContainer>
+                                <MudMenu Label="Actions" Variant="Variant.Filled">
+                                    <MudMenuItem OnClick=RecentFirst>Recent First</MudMenuItem>
+                                    <MudMenuItem OnClick="RecentLast">Recent Last</MudMenuItem>
+                                </MudMenu>
+                            </MudContainer>
+                        </MudItem>
+                    </MudGrid>
+                </MudCardHeader>
+            </div>
+            <MudCardContent>
+                @*<MudCard Class="rounded-lg" Outlined='true'>*@
+
+                @if (_notesDtos.Count != 0)
+                {
+                    <MudContainer Style="max-height: 300px; overflow-y: scroll">
+                        @foreach (var item in _notesDtos)
+                        {
+
+                            <MudCard Style="margin-bottom:0.8rem; margin-top:0.8rem" Class="rounded-lg">
+
+                                <MudCardHeader>
+
+                                    <CardHeaderAvatar>
+                                        @foreach (var user in _userDetailsDtos.Where(x => x.Id == item.NoteOwnerId))
+                                        {
+                                            @if (string.IsNullOrEmpty(user.ImageUrl))
+                                            {
+                                                <MudAvatar Color="Color.Secondary">L</MudAvatar>
+                                            }
+                                            else
+                                            {
+                                                <MudAvatar Image="@user.ImageUrl" Style="height:50px; width:50px;"> </MudAvatar>
+                                            }
+                                        }
+                                    </CardHeaderAvatar>
+                                    <CardHeaderContent>
+
+                                        <MudItem xs="12">
+                                            <MudText Typo="Typo.body2">@item.NoteTitle</MudText>
+                                        </MudItem>
+                                        <MudItem xs="12">
+                                            <MudText Typo="Typo.body1">@item.NoteContent</MudText>
+                                        </MudItem>
+                                        <MudGrid>
+                                            @*  <MudItem xs="1">
+                                    <MudText>Lead</MudText>
+                                    </MudItem>*@
+                                            <MudItem xs="12">
+
+                                                <MudTooltip Color="Color.Info" Placement="Placement.Right" Arrow="true">
+                                                    <ChildContent>
+                                                        @foreach (var userName in _userDetailsDtos.Where(x => x.Id == item.NoteOwnerId))
+                                                        {
+                                                            <MudText Typo="Typo.caption">Lead  <MudLink>@_leadDetailsDtos.FirstName</MudLink>  Added on @item.CreatedOn by @userName.FirstName</MudText>
+                                                        }
+                                                    </ChildContent>
+                                                    <TooltipContent>
+                                                        <MudGrid>
+
+
+                                                            <MudItem xs="3">
+                                                                <MudText>Lead Owner</MudText>
+                                                            </MudItem>
+                                                            <MudItem xs="9">
+                                                                @foreach (var item in _userDetailsDtos.Where(x => x.Id == _leadDetailsDtos.UserId))
+                                                                {
+                                                                    <MudText>@item.FirstName</MudText>
+                                                                }
+
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                        <MudGrid>
+                                                            <MudItem xs="3">
+                                                                <MudText>Email</MudText>
+                                                            </MudItem>
+                                                            <MudItem xs="9">
+                                                                <MudText>@_leadDetailsDtos.Email</MudText>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                        <MudGrid>
+                                                            <MudItem xs="3">
+                                                                <MudText>Phone</MudText>
+                                                            </MudItem>
+                                                            <MudItem xs="9">
+                                                                <MudText>@_leadDetailsDtos.Phone</MudText>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                        <MudGrid>
+                                                            <MudItem xs="3">
+                                                                <MudText>Mobile</MudText>
+                                                            </MudItem>
+                                                            <MudItem xs="9">
+                                                                <MudText>@_leadDetailsDtos.Mobile</MudText>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                        <MudGrid>
+                                                            <MudItem xs="3">
+                                                                <MudText>Lead Status</MudText>
+                                                            </MudItem>
+                                                            <MudItem xs="9">
+                                                                <MudText>@_leadDetailsDtos.LeadStatus</MudText>
+                                                            </MudItem>
+                                                        </MudGrid>
+
+                                                    </TooltipContent>
+                                                </MudTooltip>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </CardHeaderContent>
+
+                                    <CardHeaderActions>
+                                        <MudButton Variant="Variant.Outlined" Color="Color.Surface" OnClick="@(() => NotesCheckById(@item.Id))">View</MudButton>
+                                    </CardHeaderActions>
+
+                                </MudCardHeader>
+
+                            </MudCard>
+                        }
+                    </MudContainer>
+                }
+                <EditForm Model="@_createNoteRequest" OnValidSubmit="SaveNotes">
+                    <MudGrid Style="margin-top:10px; margin-bottom:10px;">
+                        <MudItem xs="1"></MudItem>
+                        <MudItem xs="10">
+                            @if (_updateNoteRequest.Id == Guid.Empty)
+                            {
+                                <MudTextField @bind-Value="_createNoteRequest.NoteContent" T="string" Label="Notes" Lines="3" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Api" />
+                            }
+                            else
+                            {
+                                <MudTextField @bind-Value="_updateNoteRequest.NoteContent" T="string" Label="Notes" Lines="3" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Api" />
+                            }
+                        </MudItem>
+                        <MudItem xs="1"></MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        @if (_updateNoteRequest.Id == Guid.Empty)
+                        {
+                            <MudItem xs="11"></MudItem>
+                            <MudItem xs="1">
+                                @* <MudGrid>
+                            <MudSpacer/>
+                            <MudItem>*@
+                                <MudContainer>
+                                    <MudButton Style="float:right" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary">
+                                        Save
+                                    </MudButton>
+                                </MudContainer>
+                                @*</MudItem>
+                            </MudGrid>    *@
+                            </MudItem>
+                        }
+                        else
+                        {
+                            <MudItem xs="7"></MudItem>
+
+                            <MudItem xs="1">
+                                <MudContainer>
+                                    <MudButton Style="float:left" OnClick="UpdateNotes" Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary">Update</MudButton>
+                                </MudContainer>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudContainer>
+                                    <MudButton OnClick="DeleteNotes" Style="margin-left:3px;float:right" Variant="Variant.Filled" Size="Size.Small" Color="Color.Error">Delete</MudButton>
+                                </MudContainer>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudContainer>
+                                    <MudButton OnClick="CancelNotes" Style="margin-right:3px;float:right" Variant="Variant.Filled" Size="Size.Small" Color="Color.Surface">Cancel</MudButton>
+                                </MudContainer>
+                            </MudItem>
+                        }
+
+                    </MudGrid>
+                </EditForm>
+            </MudCardContent>
+        </MudCard>
+
+        <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;box-shadow: 0px 4px 12px #888888;">
+            <MudCardHeader>
+                <MudGrid>
+                    <MudItem id="OpenActivities">
+
+                        <MudText Style="margin-top:10px;">Open Activities</MudText>
+                    </MudItem>
+                    <MudSpacer />
+
+                    <MudItem>
+                        <MudContainer>
+                            <MudMenu Label="Add New" Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+                                <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" OnClick="AddTask">Task</MudButton>
+                                <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" OnClick="AddMeeting">Meeting</MudButton>
+                                <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Add" OnClick="AddCall">Call</MudButton>
+                            </MudMenu>
+                            @*<MudMenu Label="Add New" Dense="true">
+                            <MudMenuItem OnClick=AddTask>Task</MudMenuItem>
+                            </MudMenu>*@
+                        </MudContainer>
+                        @* </ChildContent>*@
+                        @*</MudMenu> *@
+                        @*<MudButton OnClick="@(() => AddCall(addEditLead.LeadId))">Calls</MudButton>*@
+                        @*<MudButton @onclick="@(() => AddMeeting(addEditLead.LeadId))">Meeting</MudButton>*@
+                    </MudItem>
+                </MudGrid>
+            </MudCardHeader>
+
+            <MudCardContent>
+                <div class="parentcard">
+
+                    <div class="child1">
+                        @*<MudContainer Style="max-height: 11rem; overflow-y: scroll">*@
+                        @* <div class="parent-container">*@
+                        <div class="sticky-headers" style="margin-bottom:0.5rem">
+                            <MudItem Class="d-flex align-center justify-center">
+                                @* <MudBadge Origin="Origin.TopRight" Content="@_getAllTaskResponses.Count()" Bordered="true" Color="Color.Primary">*@
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">Open Task</MudText>
+                                <MudAvatar Style="margin-left:1rem" Size="Size.Small" Color="Color.Primary">@_unCompletedTaskDtos.Count()</MudAvatar>
+                                @*</MudBadge>*@
+                            </MudItem>
+                        </div>
+
+                        @if (_unCompletedTaskDtos.Count() != 0)
+                        {
+                            <MudContainer Style="max-height: 20rem;overflow-y: scroll;">
+                                <MudGrid>
+
+                                    @foreach (var item in _unCompletedTaskDtos.OrderBy(x => x.DueDate))
+                                    {
+                                        <MudItem xs="12">
+                                            <MudCard Class="rounded-lg" Outlined='true'>
+                                                <MudCardHeader>
+                                                    <CardHeaderContent>
+                                                        @*<MudText Typo="Typo.subtitle1">@item.Subject</MudText>*@
+                                                        <MudText><MudHighlighter Class="mud-secondary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Subject" HighlightedText="@item.Subject" /></MudText>
+                                                        <MudText Typo="Typo.subtitle2">@item.DueDate?.ToString("MMM dd, yyyy")</MudText>
+                                                        <MudGrid>
+                                                            <MudItem xs="2">
+                                                                <MudIconButton Icon="@Icons.Outlined.SupervisorAccount" />
+                                                            </MudItem>
+                                                            <MudItem xs="10">
+                                                                <div class="iconMarginLeft">
+                                                                    @foreach (var data in _userDetailsDtos.Where(x => x.Id == item.TaskOwnerId))
+                                                                    {
+                                                                        <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                                                            <ChildContent>
+                                                                                <MudText Style="margin-top:1rem" Typo="Typo.subtitle2">@data.FirstName</MudText>
+                                                                            </ChildContent>
+                                                                            <TooltipContent>
+                                                                                <MudGrid>
+                                                                                    <MudItem xs="3">
+                                                                                        <MudText>Email</MudText>
+                                                                                    </MudItem>
+                                                                                    <MudItem xs="9">
+                                                                                        @if (data.Email != null)
+                                                                                        {
+                                                                                            <MudText>@data.Email</MudText>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                                        }
+                                                                                    </MudItem>
+                                                                                </MudGrid>
+                                                                                @*<MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>Mobile Number</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.MobileNumber != null)
+                                                                    {
+                                                                    <MudText>@data.MobileNumber</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>Date Of Birth</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.DateOfBirth != null)
+                                                                    {
+                                                                    <MudText>@data.DateOfBirth</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>Street</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.Street != null)
+                                                                    {
+                                                                    <MudText>@data.Street</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>City</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.City != null)
+                                                                    {
+                                                                    <MudText>@data.City</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>*@
+                                                                            </TooltipContent>
+                                                                        </MudTooltip>
+                                                                    }
+                                                                </div>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                    </CardHeaderContent>
+                                                    <CardHeaderActions>
+                                                        <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+                                                            @*<MudButton Size="Size.Small" Color="Color.Success" StartIcon="@Icons.Material.Rounded.Done" OnClick="@(() => MarkTaskCompleted(@item.Id))">Mark as Completed</MudButton>*@
+                                                            <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditTask(@item.Id))">Edit</MudButton>
+                                                            <MudButton Size="Size.Small" Color="Color.Error" StartIcon="@Icons.Material.Outlined.Delete" OnClick="@(() => DeleteTask(@item.Id))">Delete</MudButton>
+                                                        </MudMenu>
+                                                    </CardHeaderActions>
+                                                </MudCardHeader>
+
+                                                <MudCardContent>
+
+
+
+                                                    <MudGrid>
+                                                        <MudItem xs="5">
+                                                            <MudText Typo="Typo.body2">Status</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="7">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.Status</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                    <MudGrid>
+                                                        <MudItem xs="5">
+                                                            <MudText Typo="Typo.body2">Priority</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="7">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.Priority</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                </MudCardContent>
+                                            </MudCard>
+                                        </MudItem>
+
+                                    }
+                                </MudGrid>
+                            </MudContainer>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body1" Align="Align.Center">No Task Added</MudText>
+                        }
+                    </div>
+                    <div class="child2">
+                        <div class="sticky-headers" style="margin-bottom:0.5rem">
+                            <MudItem Class="d-flex align-center justify-center">
+                                @*<MudBadge Origin="Origin.TopRight" Content="@_meetingList.Count()" Bordered="true" Color="Color.Primary">*@
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">Open Meeting</MudText>
+                                <MudAvatar Style="margin-left:1rem" Size="Size.Small" Color="Color.Primary">@_unCompletedMeetingDto.Count()</MudAvatar>
+                                @* </MudBadge>*@
+                            </MudItem>
+                        </div>
+                        @if (_unCompletedMeetingDto.Count() != 0)
+                        {
+                            <MudContainer Style="max-height: 20rem;overflow-y: scroll;">
+                                <MudGrid>
+                                    @foreach (var item in _unCompletedMeetingDto.OrderBy(x => x.FromDate))
+                                    {
+                                        <MudItem xs="12">
+                                            <MudCard Class="rounded-lg" Outlined='true'>
+                                                <MudCardHeader>
+                                                    <CardHeaderContent>
+                                                        @*<MudText Typo="Typo.subtitle1">@item.MeetingTitle</MudText>*@
+                                                        <MudText><MudHighlighter Class="mud-secondary-text" Style="background-color:transparent;font-weight:bold" Text="@item.MeetingTitle" HighlightedText="@item.MeetingTitle" /></MudText>
+                                                        @if (!@item.Allday)
+                                                        {
+                                                            <MudText Typo="Typo.subtitle2">@item.FromDate?.ToString("MMM dd, yyyy") @item.FromDate?.ToString("h:mm tt")-@item.ToDate?.ToString("h:mm tt")</MudText>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudText Typo="Typo.subtitle2">@item.FromDate?.ToString("MMM dd, yyyy") @_allDay</MudText>
+                                                        }
+                                                        <MudGrid>
+                                                            <MudItem xs="2">
+                                                                <MudIconButton Icon="@Icons.Outlined.SupervisorAccount" />
+                                                            </MudItem>
+                                                            <MudItem xs="10">
+                                                                <div class="iconMarginLeft">
+                                                                    @foreach (var data in _userDetailsDtos.Where(x => x.Id == item?.MeetingOwnerId))
+                                                                    {
+                                                                        <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                                                            <ChildContent>
+                                                                                <MudText Style="margin-top:1rem" Typo="Typo.subtitle2">@data.FirstName</MudText>
+                                                                            </ChildContent>
+                                                                            <TooltipContent>
+
+                                                                                <MudGrid>
+                                                                                    <MudItem xs="6">
+                                                                                        <MudText>Email</MudText>
+                                                                                    </MudItem>
+                                                                                    <MudItem xs="6">
+                                                                                        @if (data.Email != null)
+                                                                                        {
+                                                                                            <MudText>@data.Email</MudText>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                                        }
+                                                                                    </MudItem>
+                                                                                </MudGrid>
+                                                                                @*<MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Mobile Number</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.MobileNumber != null)
+                                                                    {
+                                                                    <MudText>@data.MobileNumber</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Date Of Birth</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.DateOfBirth != null)
+                                                                    {
+                                                                    <MudText>@data.DateOfBirth</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Street</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.Street != null)
+                                                                    {
+                                                                    <MudText>@data.Street</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>City</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.City != null)
+                                                                    {
+                                                                    <MudText>@data.City</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>*@
+                                                                            </TooltipContent>
+                                                                        </MudTooltip>
+                                                                    }
+                                                                </div>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                    </CardHeaderContent>
+                                                    <CardHeaderActions>
+                                                        @*<MudButton OnClick="@(() => DeleteMeeting(@item.Id))" Color="Color.Error">Delete</MudButton>*@
+                                                        <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+                                                            <MudButton OnClick="@(() => EditMeeting(@item.Id))" Color="Color.Primary">Edit</MudButton>
+                                                            @*<MudButton OnClick="@(() => MettingCompleted(@item.Id))" Color="Color.Success">Mark As Completed</MudButton>*@
+                                                            <MudButton OnClick="@(() => DeleteMeeting(@item.Id))" Color="Color.Error">Delete</MudButton>
+                                                        </MudMenu>
+                                                    </CardHeaderActions>
+                                                </MudCardHeader>
+
+
+                                            </MudCard>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </MudContainer>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body1" Align="Align.Center">No Meeting Added</MudText>
+                        }
+                    </div>
+
+                    <div class="child3">
+                        <div class="sticky-headers" style="margin-bottom:0.5rem">
+                            <MudItem Outlined Class="d-flex align-center justify-center">
+                                @*<MudBadge Origin="Origin.TopRight" Content="@_getAllCallDetailsResponses.Count()" Bordered="true" Color="Color.Primary">*@
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">Open Calls</MudText>
+                                <MudAvatar Style="margin-left:1rem" Size="Size.Small" Color="Color.Primary">@_unCompletedCallDtos.Count()</MudAvatar>
+                                @*</MudBadge>*@
+                            </MudItem>
+                        </div>
+                        @if (_unCompletedCallDtos.Count() != 0)
+                        {
+                            <MudContainer Style="max-height: 20rem;overflow-y: scroll;">
+                                <MudGrid>
+                                    @foreach (var item in _unCompletedCallDtos.OrderBy(x => x.CallStartTime))
+                                    {
+                                        <MudItem xs="12">
+                                            <MudCard Class="rounded-lg" Outlined='true'>
+                                                <MudCardHeader>
+                                                    <CardHeaderContent>
+                                                        @*<MudText Typo="Typo.subtitle1">@item.Subject</MudText>*@
+                                                        <MudText><MudHighlighter Class="mud-secondary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Subject" HighlightedText="@item.Subject" /></MudText>
+                                                        <MudText Typo="Typo.subtitle2">@item.CallStartTime?.ToString("MMM dd, yyyy") @item.CallStartTime?.ToString("h:mm tt")</MudText>
+                                                        <MudGrid>
+                                                            <MudItem xs="2">
+                                                                <MudIconButton Icon="@Icons.Outlined.SupervisorAccount" />
+                                                            </MudItem>
+                                                            <MudItem xs="10">
+                                                                <div class="iconMarginLeft">
+                                                                    @foreach (var data in _userDetailsDtos.Where(x => x.Id == item.CallOwnerId))
+                                                                    {
+                                                                        <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                                                            <ChildContent>
+                                                                                <MudText Style="margin-top:1rem" Typo="Typo.subtitle2">@data.FirstName</MudText>
+                                                                            </ChildContent>
+                                                                            <TooltipContent>
+
+                                                                                <MudGrid>
+                                                                                    <MudItem xs="6">
+                                                                                        <MudText>Email</MudText>
+                                                                                    </MudItem>
+                                                                                    <MudItem xs="6">
+                                                                                        @if (data.Email != null)
+                                                                                        {
+                                                                                            <MudText>@data.Email</MudText>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                                        }
+                                                                                    </MudItem>
+                                                                                </MudGrid>
+                                                                                @*<MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Mobile Number</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.MobileNumber != null)
+                                                                    {
+                                                                    <MudText>@data.MobileNumber</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Date Of Birth</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.DateOfBirth != null)
+                                                                    {
+                                                                    <MudText>@data.DateOfBirth</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Street</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.Street != null)
+                                                                    {
+                                                                    <MudText>@data.Street</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>City</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.City != null)
+                                                                    {
+                                                                    <MudText>@data.City</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>*@
+                                                                            </TooltipContent>
+                                                                        </MudTooltip>
+                                                                    }
+                                                                </div>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                    </CardHeaderContent>
+                                                    <CardHeaderActions>
+                                                        <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+                                                            @*<MudButton Size="Size.Small" Color="Color.Success" StartIcon="@Icons.Material.Rounded.Done" OnClick="@(() => MarkCompleted(@item.Id))">Mark as Completed</MudButton>*@
+                                                            <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditCall(@item.Id))">Edit</MudButton>
+                                                            <MudButton Size="Size.Small" Color="Color.Error" StartIcon="@Icons.Material.Outlined.Delete" OnClick="@(() => DeleteCall(@item.Id))">Delete</MudButton>
+                                                        </MudMenu>
+                                                    </CardHeaderActions>
+                                                </MudCardHeader>
+                                                <MudCardContent>
+
+
+
+                                                    <MudGrid>
+                                                        <MudItem xs="3">
+                                                            <MudText Typo="Typo.body2">Call</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="9">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.Subject</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                    <MudGrid>
+                                                        <MudItem xs="3">
+                                                            <MudText Typo="Typo.body2">Purpose</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="9">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.CallPurpose</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                </MudCardContent>
+                                            </MudCard>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </MudContainer>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body1" Align="Align.Center">No Calls Added</MudText>
+                        }
+                    </div>
+                </div>
+            </MudCardContent>
+        </MudCard>
+
+        <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;box-shadow: 0px 4px 12px #888888;">
+            <MudCardHeader>
+                <MudGrid>
+                    <MudItem id="ClosedActivities">
+
+                        <MudText Style="margin-top:10px;">Closed Activities</MudText>
+                    </MudItem>
+                    <MudSpacer />
+
+                    <MudItem>
+                    </MudItem>
+                </MudGrid>
+            </MudCardHeader>
+
+            <MudCardContent>
+                <div class="parentcard">
+
+                    <div class="child1">
+                        @*<MudContainer Style="max-height: 11rem; overflow-y: scroll">*@
+                        <div class="sticky-headers" style="margin-bottom:0.5rem">
+                            <MudItem Class="d-flex align-center justify-center">
+                                @* <MudBadge Origin="Origin.TopRight" Content="@_getAllTaskResponses.Count()" Bordered="true" Color="Color.Primary">*@
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">Closed Task</MudText>
+                                <MudAvatar Style="margin-left:1rem" Size="Size.Small" Color="Color.Primary">@_completedTaskDtos.Count()</MudAvatar>
+                                @*</MudBadge>*@
+                            </MudItem>
+                        </div>
+                        @if (_completedTaskDtos.Count() != 0)
+                        {
+                            <MudContainer Style="max-height: 20rem;overflow-y: scroll;">
+                                <MudGrid>
+
+                                    @foreach (var item in _completedTaskDtos)
+                                    {
+                                        <MudItem xs="12">
+                                            <MudCard Class="rounded-lg" Outlined='true'>
+                                                <MudCardHeader>
+                                                    <CardHeaderContent>
+                                                        @*<MudText Typo="Typo.subtitle1">@item.Subject</MudText>*@
+                                                        <MudText><MudHighlighter Class="mud-secondary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Subject" HighlightedText="@item.Subject" /></MudText>
+                                                        <MudText Typo="Typo.subtitle2">@item.DueDate?.ToString("MMM dd, yyyy")</MudText>
+                                                        <MudGrid>
+                                                            <MudItem xs="2">
+                                                                <MudIconButton Icon="@Icons.Outlined.SupervisorAccount" />
+                                                            </MudItem>
+                                                            <MudItem xs="10">
+                                                                <div class="iconMarginLeft">
+                                                                    @foreach (var data in _userDetailsDtos.Where(x => x.Id == item.TaskOwnerId))
+                                                                    {
+                                                                        <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                                                            <ChildContent>
+                                                                                <MudText Style="margin-top:1rem" Typo="Typo.subtitle2">@data.FirstName</MudText>
+                                                                            </ChildContent>
+                                                                            <TooltipContent>
+                                                                                <MudGrid>
+                                                                                    <MudItem xs="3">
+                                                                                        <MudText>Email</MudText>
+                                                                                    </MudItem>
+                                                                                    <MudItem xs="9">
+                                                                                        @if (data.Email != null)
+                                                                                        {
+                                                                                            <MudText>@data.Email</MudText>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                                        }
+                                                                                    </MudItem>
+                                                                                </MudGrid>
+                                                                                @*<MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>Mobile Number</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.MobileNumber != null)
+                                                                    {
+                                                                    <MudText>@data.MobileNumber</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>Date Of Birth</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.DateOfBirth != null)
+                                                                    {
+                                                                    <MudText>@data.DateOfBirth</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>Street</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.Street != null)
+                                                                    {
+                                                                    <MudText>@data.Street</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="3">
+                                                                    <MudText>City</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="9">
+                                                                    @if (data.City != null)
+                                                                    {
+                                                                    <MudText>@data.City</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>*@
+                                                                            </TooltipContent>
+                                                                        </MudTooltip>
+                                                                    }
+                                                                </div>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                    </CardHeaderContent>
+                                                    <CardHeaderActions>
+                                                        <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+                                                            @*<MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditCompletedTask(@item.Id))">Edit</MudButton>*@
+
+                                                        </MudMenu>
+                                                    </CardHeaderActions>
+                                                </MudCardHeader>
+
+                                                <MudCardContent>
+
+
+
+                                                    <MudGrid>
+                                                        <MudItem xs="5">
+                                                            <MudText Typo="Typo.body2">Status</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="7">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.Status</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                    <MudGrid>
+                                                        <MudItem xs="5">
+                                                            <MudText Typo="Typo.body2">Priority</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="7">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.Priority</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                </MudCardContent>
+                                            </MudCard>
+                                        </MudItem>
+
+                                    }
+                                </MudGrid>
+                            </MudContainer>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body1" Align="Align.Center">No Task Completed</MudText>
+                        }
+                    </div>
+
+                    <div class="child2">
+                        <div class="sticky-headers" style="margin-bottom:0.5rem">
+                            <MudItem Class="d-flex align-center justify-center">
+                                @*<MudBadge Origin="Origin.TopRight" Content="@_meetingList.Count()" Bordered="true" Color="Color.Primary">*@
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">Closed Meeting</MudText>
+                                <MudAvatar Style="margin-left:1rem" Size="Size.Small" Color="Color.Primary">@_completedMeetingDto.Count()</MudAvatar>
+                                @* </MudBadge>*@
+                            </MudItem>
+                        </div>
+                        @if (_completedMeetingDto.Count() != 0)
+                        {
+                            <MudContainer Style="max-height: 20rem;overflow-y: scroll;">
+                                <MudGrid>
+                                    @foreach (var item in _completedMeetingDto)
+                                    {
+                                        <MudItem xs="12">
+                                            <MudCard Class="rounded-lg" Outlined='true'>
+                                                <MudCardHeader>
+                                                    <CardHeaderContent>
+                                                        @*<MudText Typo="Typo.subtitle1">@item.MeetingTitle</MudText>*@
+                                                        <MudText><MudHighlighter Class="mud-secondary-text" Style="background-color:transparent;font-weight:bold" Text="@item.MeetingTitle" HighlightedText="@item.MeetingTitle" /></MudText>
+                                                        @if (!@item.Allday)
+                                                        {
+                                                            <MudText Typo="Typo.subtitle2">@item.FromDate?.ToString("MMM dd, yyyy") @item.FromDate?.ToString("h:mm tt")-@item.ToDate?.ToString("h:mm tt")</MudText>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudText Typo="Typo.subtitle2">@item?.FromDate?.ToString("MMM dd, yyyy") @_allDay</MudText>
+                                                        }
+                                                        @*<MudText Typo="Typo.subtitle2">@item.FromDate.ToString("MMM dd, yyyy")</MudText>*@
+                                                        <MudGrid>
+                                                            <MudItem xs="2">
+                                                                <MudIconButton Icon="@Icons.Outlined.SupervisorAccount" />
+                                                            </MudItem>
+                                                            <MudItem xs="10">
+                                                                <div class="iconMarginLeft">
+                                                                    @foreach (var data in _userDetailsDtos.Where(x => x.Id == item.MeetingOwnerId))
+                                                                    {
+                                                                        <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                                                            <ChildContent>
+                                                                                <MudText Style="margin-top:1rem" Typo="Typo.subtitle2">@data.FirstName</MudText>
+                                                                            </ChildContent>
+                                                                            <TooltipContent>
+
+                                                                                <MudGrid>
+                                                                                    <MudItem xs="6">
+                                                                                        <MudText>Email</MudText>
+                                                                                    </MudItem>
+                                                                                    <MudItem xs="6">
+                                                                                        @if (data.Email != null)
+                                                                                        {
+                                                                                            <MudText>@data.Email</MudText>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                                        }
+                                                                                    </MudItem>
+                                                                                </MudGrid>
+                                                                                @*<MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Mobile Number</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.MobileNumber != null)
+                                                                    {
+                                                                    <MudText>@data.MobileNumber</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Date Of Birth</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.DateOfBirth != null)
+                                                                    {
+                                                                    <MudText>@data.DateOfBirth</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Street</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.Street != null)
+                                                                    {
+                                                                    <MudText>@data.Street</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>City</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.City != null)
+                                                                    {
+                                                                    <MudText>@data.City</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>*@
+                                                                            </TooltipContent>
+                                                                        </MudTooltip>
+                                                                    }
+                                                                </div>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                    </CardHeaderContent>
+                                                    <CardHeaderActions>
+                                                        <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+                                                            @*<MudMenuItem @onclick="@(() => EditMeetingCompleted(@item.Id))">Edit</MudMenuItem>*@
+                                                        </MudMenu>
+                                                    </CardHeaderActions>
+                                                </MudCardHeader>
+
+
+                                            </MudCard>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </MudContainer>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body1" Align="Align.Center">No Meeting Added</MudText>
+                        }
+                    </div>
+                    <div class="child3">
+                        <div class="sticky-headers" style="margin-bottom:0.5rem">
+                            <MudItem Class="d-flex align-center justify-center">
+                                @*<MudBadge Origin="Origin.TopRight" Content="@_getAllCallDetailsResponses.Count()" Bordered="true" Color="Color.Primary">*@
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">Closed Calls</MudText>
+                                <MudAvatar Style="margin-left:1rem" Size="Size.Small" Color="Color.Primary">@_completedCallDtos.Count()</MudAvatar>
+                                @*</MudBadge>*@
+                            </MudItem>
+                        </div>
+                        @if (_completedCallDtos.Count() != 0)
+                        {
+                            <MudContainer Style="max-height: 20rem;overflow-y: scroll;">
+                                <MudGrid>
+                                    @foreach (var item in _completedCallDtos)
+                                    {
+                                        <MudItem xs="12">
+                                            <MudCard Class="rounded-lg" Outlined='true'>
+                                                <MudCardHeader>
+                                                    <CardHeaderContent>
+                                                        @*<MudText Typo="Typo.subtitle1">@item.Subject</MudText>*@
+                                                        <MudText><MudHighlighter Class="mud-secondary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Subject" HighlightedText="@item.Subject" /></MudText>
+                                                        <MudText Typo="Typo.subtitle2">@item.CallStartTime?.ToString("MMM dd, yyyy") @item.CallStartTime?.ToString("h:mm tt")</MudText>
+                                                        <MudGrid>
+                                                            <MudItem xs="2">
+                                                                <MudIconButton Icon="@Icons.Outlined.SupervisorAccount" />
+                                                            </MudItem>
+                                                            <MudItem xs="10">
+                                                                <div class="iconMarginLeft">
+                                                                    @foreach (var data in _userDetailsDtos.Where(x => x.Id == item.CallOwnerId))
+                                                                    {
+                                                                        <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                                                            <ChildContent>
+                                                                                <MudText Style="margin-top:1rem" Typo="Typo.subtitle2">@data.FirstName</MudText>
+                                                                            </ChildContent>
+                                                                            <TooltipContent>
+
+                                                                                <MudGrid>
+                                                                                    <MudItem xs="6">
+                                                                                        <MudText>Email</MudText>
+                                                                                    </MudItem>
+                                                                                    <MudItem xs="6">
+                                                                                        @if (data.Email != null)
+                                                                                        {
+                                                                                            <MudText>@data.Email</MudText>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                                        }
+                                                                                    </MudItem>
+                                                                                </MudGrid>
+                                                                                @*<MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Mobile Number</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.MobileNumber != null)
+                                                                    {
+                                                                    <MudText>@data.MobileNumber</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Date Of Birth</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.DateOfBirth != null)
+                                                                    {
+                                                                    <MudText>@data.DateOfBirth</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>Street</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.Street != null)
+                                                                    {
+                                                                    <MudText>@data.Street</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>
+                                                                    <MudGrid>
+                                                                    <MudItem xs="6">
+                                                                    <MudText>City</MudText>
+                                                                    </MudItem>
+                                                                    <MudItem xs="6">
+                                                                    @if (data.City != null)
+                                                                    {
+                                                                    <MudText>@data.City</MudText>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                    <MudText Style="font-size:xx-large;font-weight:bold">-</MudText>
+                                                                    }
+                                                                    </MudItem>
+                                                                    </MudGrid>*@
+                                                                            </TooltipContent>
+                                                                        </MudTooltip>
+                                                                    }
+                                                                </div>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                    </CardHeaderContent>
+                                                    <CardHeaderActions>
+                                                        <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+
+                                                            @*<MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditCompletedCall(@item.Id))">Edit</MudButton>*@
+
+                                                        </MudMenu>
+                                                    </CardHeaderActions>
+                                                </MudCardHeader>
+                                                <MudCardContent>
+
+
+
+                                                    <MudGrid>
+                                                        <MudItem xs="3">
+                                                            <MudText Typo="Typo.body2">Call</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="9">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.Subject</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                    <MudGrid>
+                                                        <MudItem xs="3">
+                                                            <MudText Typo="Typo.body2">Purpose</MudText>
+                                                        </MudItem>
+                                                        <MudItem xs="9">
+                                                            <MudText Typo="Typo.body2">:&nbsp;@item.CallPurpose</MudText>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                </MudCardContent>
+                                            </MudCard>
+                                        </MudItem>
+                                    }
+                                </MudGrid>
+                            </MudContainer>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body1" Align="Align.Center">No Calls Completed</MudText>
+                        }
+                    </div>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    public Guid _leadId { get; set; }
+
+    string _allDay;
+    protected override async Task OnInitializedAsync()
+    {
+        _expandText = "Show Details";
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetCurrentUserId();
+        await GetAllUserData();
+        await LoadLeadDataById();
+        await GetAllNotesData();
+        await RecentFirst();
+        await GetAllTask();
+        await GetAllUnCompletedTask();
+        await GetAllCompletedTask();
+        await GetAllMeeting();
+        await GetAllCompletedMeeting();
+        await GetAllUnCompletedMeeting();
+        await GetAllCalls();
+        await GetAllCompletedCalls();
+        await GetAllUnCompletedCalls();
+    }
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+    string? _userId;
+    async Task GetCurrentUserId()
+    {
+        var user = (await AuthState).User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            _userId = user.GetUserId();
+        }
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] ILeadDetailsClient _leadDetailsClient { get; set; }
+    LeadDetailsDto _leadDetailsDtos = new();
+
+    async Task LoadLeadDataById()
+    {
+        try
+        {
+            var response = await _leadDetailsClient.GetAsync(_leadId);
+            if (response.Id != Guid.Empty)
+            {
+                _leadDetailsDtos.City = response.City;
+                _leadDetailsDtos.CompanyName = response.CompanyName;
+                _leadDetailsDtos.DateOfBirth = response.DateOfBirth;
+                _leadDetailsDtos.Country = response.Country;
+                _leadDetailsDtos.Description = response.Description;
+                _leadDetailsDtos.Email = response.Email;
+                _leadDetailsDtos.EmailOptOut = response.EmailOptOut;
+                _leadDetailsDtos.Fax = response.Fax;
+                _leadDetailsDtos.Id = response.Id;
+                _leadDetailsDtos.FirstName = response.FirstName;
+                _leadDetailsDtos.LastName = response.LastName;
+                _leadDetailsDtos.Industry = response.Industry;
+                _leadDetailsDtos.LeadImage = response.LeadImage;
+                _leadDetailsDtos.LeadSource = response.LeadSource;
+                _leadDetailsDtos.LeadStatus = response.LeadStatus;
+                _leadDetailsDtos.Mobile = response.Mobile;
+                _leadDetailsDtos.NoEmployess = response.NoEmployess;
+                _leadDetailsDtos.Phone = response.Phone;
+                _leadDetailsDtos.Rating = response.Rating;
+                _leadDetailsDtos.SecondEmail = response.SecondEmail;
+                _leadDetailsDtos.SkypeId = response.SkypeId;
+                _leadDetailsDtos.State = response.State;
+                _leadDetailsDtos.Street = response.Street;
+                _leadDetailsDtos.Title = response.Title;
+                _leadDetailsDtos.ZipCode = response.ZipCode;
+                _leadDetailsDtos.Website = response.Website;
+                _leadDetailsDtos.UserId = response.UserId;
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task EditLead()
+    {
+        Navigation.NavigateTo($"leaddata/editlead/{_leadId}");
+    }
+
+    public bool _expand;
+    public string _expandText;
+
+    public void ExpandChange()
+    {
+        if (_expand == false)
+        {
+            _expand = true;
+            _expandText = "Hide Details";
+        }
+        else
+        {
+            _expand = false;
+            _expandText = "Show Details";
+        }
+    }
+
+    [Inject] INoteDetailsClient _noteDetailsClient { get; set; }
+    List<NotesDto> _notesDtos = new();
+    async Task GetAllNotesData()
+    {
+        try
+        {
+            _notesDtos = (await _noteDetailsClient.GetListAsync()).Where(x => x.ParentId == _leadId).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    CreateNoteRequest _createNoteRequest = new();
+    async Task SaveNotes()
+    {
+        try
+        {
+            var response1 = await _noteDetailsClient.CreateAsync(_createNoteRequest.Adapt<CreateNoteRequest>());
+            if (response1 != Guid.Empty)
+            {
+                Snackbar.Add("Notes Added Successfully", Severity.Info);
+                await RecentLast();
+                //Navigation.NavigateTo("/view/stock");
+                //await Reset();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    async Task NotesCheckById(Guid id)
+    {
+        try
+        {
+            var response = await _noteDetailsClient.GetAsync(id);
+            if (response.Id != Guid.Empty)
+            {
+                _updateNoteRequest.Id = response.Id;
+                _updateNoteRequest.NoteContent = response.NoteContent;
+                _updateNoteRequest.NoteTitle = response.NoteTitle;
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+
+    UpdateNoteRequest _updateNoteRequest = new();
+    async Task UpdateNotes()
+    {
+        try
+        {
+            var response = await _noteDetailsClient.UpdateAsync(_updateNoteRequest.Id, _updateNoteRequest);
+            if (response != Guid.Empty)
+            {
+                Snackbar.Add("Notes Updated Successfully", Severity.Info);
+                await RecentLast();
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task CancelNotes()
+    {
+        _updateNoteRequest.Id = Guid.Empty;
+        _updateNoteRequest.NoteContent = string.Empty;
+    }
+
+    async Task RecentFirst()
+    {
+        try
+        {
+            _notesDtos = (await _noteDetailsClient.GetListAsync()).Where(x => x.ParentId == _leadId).ToList();
+            _notesDtos.Reverse();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task RecentLast()
+    {
+        try
+        {
+            _notesDtos = (await _noteDetailsClient.GetListAsync()).Where(x => x.ParentId == _leadId).ToList();
+            _notesDtos.Reverse();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task DeleteNotes()
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response1 = await _noteDetailsClient.DeleteAsync(_updateNoteRequest.Id);
+                if (response1 != Guid.Empty)
+                {
+                    Snackbar.Add("Notes Deleted Successfully", Severity.Info);
+                    _updateNoteRequest.Id = Guid.Empty;
+                    await RecentLast();
+                    //Navigation.NavigateTo($"leaddata/leadinformationbyid/{_leadId}");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+
+    [Inject] ITaskDetailsClient _taskDetailsClient { get; set; }
+
+    List<TaskDto> _taskDtos = new();
+    async Task GetAllTask()
+    {
+        try
+        {
+            _taskDtos = (await _taskDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+
+    List<TaskDto> _unCompletedTaskDtos = new();
+    async Task GetAllUnCompletedTask()
+    {
+        try
+        {
+            _unCompletedTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.WhoId == _leadId && x.Status != "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _completedTaskDtos = new();
+    async Task GetAllCompletedTask()
+    {
+        try
+        {
+            _completedTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.WhoId == _leadId && x.Status == "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task AddTask()
+    {
+        var parameters = new DialogParameters();
+        if (_leadId != Guid.Empty)
+        {
+            parameters.Add(nameof(AddTaskDetailsDialog._createTaskRequest), new CreateTaskRequest
+                {
+                    WhoId = _leadId,
+                    RelatedTo = "Lead",
+                    TaskOwnerId = Guid.Parse(_userId),
+                    Status = "Not Started"
+                });
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddTaskDetailsDialog>("Create", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedTask();
+            await GetAllUnCompletedTask();
+            await GetAllTask();
+            //await Reset();
+        }
+    }
+
+    async Task DeleteTask(Guid id)
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response = await _taskDetailsClient.DeleteAsync(id);
+                if (response != Guid.Empty)
+                {
+                    Snackbar.Add("Task Deleted Successfully", Severity.Info);
+                    await GetAllCompletedTask();
+                    await GetAllUnCompletedTask();
+                    await GetAllTask();
+                    //Navigation.NavigateTo("/leaddata/leadinformation");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+
+    async Task EditTask(Guid id)
+    {
+        var parameters = new DialogParameters();
+        if (id != Guid.Empty)
+        {
+            TaskDto taskDto = new();
+            taskDto = _taskDtos.FirstOrDefault(c => c.Id == id);
+            if (taskDto != null)
+            {
+                parameters.Add(nameof(AddTaskDetailsDialog._updateTaskRequest), new UpdateTaskRequest
+                    {
+                        Id = taskDto.Id,
+                        Status = taskDto.Status,
+                        Description = taskDto.Description,
+                        DueDate = taskDto.DueDate,
+                        Remainder = taskDto.Remainder,
+                        TaskOwnerId = taskDto.TaskOwnerId,
+                        Priority = taskDto.Priority,
+                        RelatedTo = taskDto.RelatedTo,
+                        Subject = taskDto.Subject,
+                        WhatId = taskDto.WhatId,
+                        WhoId = taskDto.WhoId
+                    });
+            }
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddTaskDetailsDialog>(id == Guid.Empty ? "Create" : "Edit", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedTask();
+            await GetAllUnCompletedTask();
+            await GetAllTask();
+            //await TimeLine();
+            //await OpenActivitiesCount();
+            //await ClosedActivitiesCount();
+            StateHasChanged();
+        }
+    }
+
+
+    [Inject] IMeetingDetailsClient _meetingDetailsClient { get; set; }
+
+    List<MeetingDto> _meetingDtos = new();
+    async Task GetAllMeeting()
+    {
+        try
+        {
+            _meetingDtos = (await _meetingDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<MeetingDto> _completedMeetingDto = new();
+
+    async Task GetAllCompletedMeeting()
+    {
+        try
+        {
+            _completedMeetingDto = (await _meetingDetailsClient.GetListAsync()).Where(x => x.CheckedInStatus == true && x.Participants.Contains(_leadId.ToString())).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<MeetingDto> _unCompletedMeetingDto = new();
+    async Task GetAllUnCompletedMeeting()
+    {
+        try
+        {
+            _unCompletedMeetingDto = (await _meetingDetailsClient.GetListAsync()).Where(x => x.CheckedInStatus == true && x.Participants.Contains(_leadId.ToString())).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task AddMeeting()
+    {
+        var parameters = new DialogParameters();
+        if (_leadId != Guid.Empty)
+        {
+            parameters.Add(nameof(AddMeetingDetailsDialog._createMeetingRequest), new CreateMeetingRequest
+                {
+                    WhoId = _leadId,
+                    RelatedTo = "Lead",
+                    MeetingOwnerId = Guid.Parse(_userId)
+                });
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddMeetingDetailsDialog>("Create", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedMeeting();
+            await GetAllUnCompletedMeeting();
+            await GetAllMeeting();
+            //await Reset();
+        }
+    }
+
+    async Task DeleteMeeting(Guid id)
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response = await _meetingDetailsClient.DeleteAsync(id);
+                if (response != Guid.Empty)
+                {
+                    Snackbar.Add("Meeting Deleted Successfully", Severity.Info);
+                    await GetAllCompletedMeeting();
+                    await GetAllUnCompletedMeeting();
+                    await GetAllMeeting();
+                    //Navigation.NavigateTo("/leaddata/leadinformation");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+
+    async Task EditMeeting(Guid id)
+    {
+        var parameters = new DialogParameters();
+        if (id != Guid.Empty)
+        {
+            MeetingDto meetingDto = new();
+            meetingDto = _meetingDtos.FirstOrDefault(c => c.Id == id);
+            if (meetingDto != null)
+            {
+                parameters.Add(nameof(AddMeetingDetailsDialog._updateMeetingRequest), new UpdateMeetingRequest
+                    {
+                        Id = meetingDto.Id,
+                        MeetingTitle = meetingDto.MeetingTitle,
+                        Location = meetingDto.Location,
+                        Allday = meetingDto.Allday,
+                        FromDate = meetingDto.FromDate,
+                        ToDate = meetingDto.ToDate,
+                        Host = meetingDto.Host,
+                        MeetingOwnerId = meetingDto.MeetingOwnerId,
+                        WhoId = meetingDto.WhoId,
+                        RelatedTo = meetingDto.RelatedTo,
+                        WhatId = meetingDto.WhatId,
+                        Repeat = meetingDto.Repeat,
+                        Description = meetingDto.Description,
+                        Participants = meetingDto.Participants,
+                        RemindMe = meetingDto.RemindMe,
+                        CheckedInStatus = meetingDto.CheckedInStatus
+                    });
+            }
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddMeetingDetailsDialog>(id == Guid.Empty ? "Create" : "Edit", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedMeeting();
+            await GetAllUnCompletedMeeting();
+            await GetAllMeeting();
+            //await TimeLine();
+            //await OpenActivitiesCount();
+            //await ClosedActivitiesCount();
+        }
+    }
+
+    [Inject] ICallDetailsClient _callDetailsClient { get; set; }
+    List<CallDto> _callDtos = new();
+    async Task GetAllCalls()
+    {
+        try
+        {
+            _callDtos = (await _callDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<CallDto> _completedCallDtos = new();
+
+    async Task GetAllCompletedCalls()
+    {
+        try
+        {
+            _completedCallDtos = (await _callDetailsClient.GetListAsync()).Where(x => x.WhoId == _leadId && x.OutgoingCallStatus == "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<CallDto> _unCompletedCallDtos = new();
+    async Task GetAllUnCompletedCalls()
+    {
+        try
+        {
+            _unCompletedCallDtos = (await _callDetailsClient.GetListAsync()).Where(x => x.WhoId == _leadId && x.OutgoingCallStatus != "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task AddCall()
+    {
+        var parameters = new DialogParameters();
+        if (_leadId != Guid.Empty)
+        {
+
+
+            parameters.Add(nameof(AddCallDetailsDialog._createCallRequest), new CreateCallRequest
+                {
+                    WhoId = _leadId,
+                    RelatedTo = "Lead",
+                    CallOwnerId = Guid.Parse(_userId),
+                    OutgoingCallStatus = "Scheduled",
+                    CallType = "Outbound",
+                    CallPurpose = "Administrative"
+                });
+
+        }
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddCallDetailsDialog>("Create", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedCalls();
+            await GetAllUnCompletedCalls();
+            await GetAllCalls();
+            //await ResetCalls();
+        }
+    }
+
+    async Task DeleteCall(Guid id)
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response = await _callDetailsClient.DeleteAsync(id);
+                if (response != Guid.Empty)
+                {
+                    Snackbar.Add("Call Deleted Successfully", Severity.Info);
+                    await GetAllCompletedCalls();
+                    await GetAllUnCompletedCalls();
+                    await GetAllCalls();
+                    //Navigation.NavigateTo("/leaddata/leadinformation");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+
+    async Task EditCall(Guid id)
+    {
+        var parameters = new DialogParameters();
+        if (id != Guid.Empty)
+        {
+            CallDto callDto = new();
+            callDto = _callDtos.FirstOrDefault(c => c.Id == id);
+            if (callDto != null)
+            {
+                parameters.Add(nameof(AddCallDetailsDialog._updateCallRequest), new UpdateCallRequest
+                    {
+                        Id = callDto.Id,
+                        CallAgenda = callDto.CallAgenda,
+                        Description = callDto.Description,
+                        CallStartTime = callDto.CallStartTime,
+                        CallPurpose = callDto.CallPurpose,
+                        CallOwnerId = callDto.CallOwnerId,
+                        CallType = callDto.CallType,
+                        OutgoingCallStatus = callDto.OutgoingCallStatus,
+                        Subject = callDto.Subject,
+                        WhatId = callDto.WhatId,
+                        WhoId = callDto.WhoId,
+                        RemainderTime = callDto.RemainderTime,
+                        RelatedTo = callDto.RelatedTo
+                    });
+            }
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddCallDetailsDialog>(id == Guid.Empty ? "Create" : "Edit", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedCalls();
+            await GetAllUnCompletedCalls();
+            await GetAllCalls();
+            //await TimeLine();
+            //await OpenActivitiesCount();
+            //await ClosedActivitiesCount();
+            //StateHasChanged();
+        }
+    }
+
+}

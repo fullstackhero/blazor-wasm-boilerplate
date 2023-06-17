@@ -1,10 +1,10 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Auth.AzureAd;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth.Jwt;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth.AzureAd;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth.Jwt;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 
 internal static class Startup
 {

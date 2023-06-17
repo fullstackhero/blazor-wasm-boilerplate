@@ -1,0 +1,43 @@
+@page "/leaddata/accountinformation"
+<MudContainer style="height: 100vh;">
+    <div class="sticky">
+        <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 100px;margin-bottom:10rem">
+            <MudCardContent>
+                <MudGrid>
+                    <MudItem xs="6" sm="3">
+                        <MudText Typo="Typo.h6">Account Information</MudText>
+                    </MudItem>
+                    <MudSpacer />
+
+                    <MudItem>
+                        <MudButton Variant="Variant.Filled" Style="margin-right:10px; margin-top:8px;" Disabled StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Small">Create Account</MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    </div>
+
+    <MudGrid Style="margin-top:12rem">
+        <MudItem xs="12">
+            @* <FshTable Items="_accountDetailDto"> *@
+            <FshTable @ref="mudTable" T="AccountDto" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" Items="_accountDetailDto" Hover="true">
+                <HeaderContent>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x => x.AccountName)">Account Name</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x => x.Website)">Website</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x => x.Phone)">Phone</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x => x.UserId)">Account Owner</MudTableSortLabel></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Lead Name"><MudHighlighter Text="@context.AccountName" /></MudTd>
+                    <MudTd DataLabel="Email"><MudHighlighter Text="@context.Website" /></MudTd>
+                    <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Phone" /></MudTd>
+
+                    @foreach (var item in _userDetailsDtos.Where(i => i.Id == context.UserId))
+                    {
+                        <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.UserName" /></MudTd>
+                    }
+                </RowTemplate>
+            </FshTable>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

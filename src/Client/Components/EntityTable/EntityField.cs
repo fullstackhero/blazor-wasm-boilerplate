@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
+namespace FL_CRMS_ERP_WASM.Client.Components.EntityTable;
 
 public record EntityField<TEntity>(Func<TEntity, object?> ValueFunc, string DisplayName, string SortLabel = "", Type? Type = null, RenderFragment<TEntity>? Template = null)
 {
