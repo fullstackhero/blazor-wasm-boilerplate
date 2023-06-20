@@ -66,6 +66,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
         _canExport = await CanDoActionAsync(Context.ExportAction, state);
 
         await LocalLoadDataAsync();
+        await GetAllRole();
     }
 
     public Task ReloadDataAsync() =>
@@ -88,11 +89,17 @@ public partial class EntityTable<TEntity, TId, TRequest>
             ? searchFunc(SearchString, entity)
             : string.IsNullOrWhiteSpace(SearchString);
 
+    bool _roleEditDelete = false;
     private async Task LocalLoadDataAsync()
     {
         if (Loading || Context.ClientContext is null)
         {
             return;
+        }
+
+        if(Context.EntityName == "Role" && Context.EntityResource == "Roles")//the if help to update Admin and Basic Role ReportTo id valuse.
+        {
+            _roleEditDelete=true;
         }
 
         Loading = true;
@@ -318,4 +325,20 @@ public partial class EntityTable<TEntity, TId, TRequest>
             await ReloadDataAsync();
         }
     }
+
+    [Inject] IRolesClient _rolesClient { get; set; }
+    List<RoleDto> _roleDtoList = new();
+
+    async Task GetAllRole()
+    {
+        try
+        {
+            _roleDtoList = (await _rolesClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    
 }

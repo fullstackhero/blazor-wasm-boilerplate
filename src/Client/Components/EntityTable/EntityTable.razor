@@ -104,6 +104,21 @@
                         {
                             <MudCheckBox Checked="@field.ValueFunc(context)" ReadOnly Color="Color.Secondary"></MudCheckBox>
                         }
+                        else if(_roleEditDelete)
+                        {                              
+                            if(_roleDtoList.Where(x => x.Id == field.ValueFunc(context)?.ToString()).Count() > 0)
+                            {
+                                 @foreach(var roleReportTo in _roleDtoList.Where(x => x.Id == field.ValueFunc(context)?.ToString()))
+                                {
+                                    <MudHighlighter Text="@roleReportTo.Name?.ToString()" HighlightedText="@SearchString" />
+                                } 
+                            }
+                            else
+                            {
+                                <MudHighlighter Text="@field.ValueFunc(context)?.ToString()" HighlightedText="@SearchString" />
+                            }
+                                                    
+                        }
                         else
                         {
                             <MudHighlighter Text="@field.ValueFunc(context)?.ToString()" HighlightedText="@SearchString" />
@@ -124,7 +139,15 @@
                             {
                                 <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>
                             }
+                            else if (_roleEditDelete)//the else if only use for role
+                            {                               
+                                <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>                                                                
+                            }
                             @if (CanDeleteEntity(context))
+                            {
+                                <MudMenuItem Style="color:red!important" @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
+                            }
+                            else if (_roleEditDelete)//the else if only use for role
                             {
                                 <MudMenuItem Style="color:red!important" @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
                             }

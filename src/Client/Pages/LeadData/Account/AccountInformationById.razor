@@ -1,0 +1,584 @@
+@page "/leaddata/accountinformationbyid/{_accountId:guid}"
+@* <MudContainer style="height: 100vh;"> *@
+    <div class="sticky">
+        <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 100px;margin-bottom:10rem">
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudInputLabel Style="font-family:Verdana;margin-top:10px;font-size:16px;font-weight:bold;margin-left:10px">Create Account Information</MudInputLabel>
+                </MudItem>
+                <MudItem xs="12" sm="6" Style="margin-top:8px; margin-bottom:8px">
+                    <span style="float:right;">
+                        <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.Update" OnClick="EditAccount" Color="Color.Secondary" Size="Size.Small">Edit</MudButton>
+                        <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.Cancel" OnClick="Cancel" Color="Color.Secondary" Size="Size.Small">Cancel</MudButton>
+                    </span>
+                </MudItem>
+            </MudGrid>
+        </MudCard>
+    </div>
+
+    <MudGrid>
+        <MudItem xs="3">
+            <MudCard Elevation="25" id="cardposition" Class="rounded-lg" Outlined='true' Style="height:100vh; position: fixed;box-shadow: 0px 4px 12px #888888;">
+
+                <MudNavMenu Color="Color.Error">
+                    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ArrowCircleLeft" />
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="NoteNav" Icon="@Icons.Material.Filled.Note"><MudText>Notes <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="AttachmentNav" Icon="@Icons.Material.Filled.Attachment"><MudText>Attachments</MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="ProductNav" Icon="@Icons.Material.Filled.ProductionQuantityLimits"><MudText>Products</MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="OpenActivityNav" Icon="@Icons.Material.Filled.LocalActivity"><MudText>Open Activities <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="ClosedActivityNav" Icon="@Icons.Material.Filled.ClosedCaption"><MudText>Closed Activities <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                    <MudNavLink Style="visibility:hidden" Class="btn" Match="NavLinkMatch.All" id="InvitedMeetingNav" Icon="@Icons.Material.Filled.InsertInvitation"><MudText>Invited Meetings</MudText></MudNavLink>
+                </MudNavMenu>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="9">
+            <MudCard Class="rounded-lg" Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="3">
+
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudText>Account Owner</MudText>
+                        </MudItem>
+                        <MudItem xs="3">                            
+                            @*<MudText>@_userDetailsList.FirstName</MudText>*@
+                        </MudItem>
+                        <MudItem xs="3"></MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="3"></MudItem>
+                        <MudItem xs="3">
+                            <MudText>Industry</MudText>
+
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudText>@_accountDetailDto.Industry</MudText>
+                        </MudItem>
+                        <MudItem xs="3"></MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="3"></MudItem>
+                        <MudItem xs="3">
+                            <MudText>Employees</MudText>
+
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudText>@_accountDetailDto.Employees</MudText>
+                        </MudItem>
+                        <MudItem xs="3"></MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="3"></MudItem>
+                        <MudItem xs="3">
+                            <MudText>
+                                Annual Revenue
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudText>@_accountDetailDto.Revenue</MudText>
+                        </MudItem>
+                        <MudItem xs="3"></MudItem>
+                    </MudGrid>                   
+                    <MudGrid>
+                        <MudItem xs="3"></MudItem>
+                        <MudItem xs="3">
+                            <MudText>Phone</MudText>
+
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudText>@_accountDetailDto.Phone</MudText>
+                        </MudItem>
+                        <MudItem xs="3"></MudItem>
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+
+               <MudExpansionPanels Class="rounded-lg" @onclick="ExpandChange" Style="margin-top:10px">
+                    <MudExpansionPanel Text="@_expandText">
+                        <MudGrid Style="margin-top:10px">
+                            <MudText Style="color:brown;font-weight:bolder">Account Information</MudText>
+                        </MudGrid>
+                        <MudGrid Style="margin-top:10px">
+
+                            <MudItem xs="3">
+                                <MudText>Account Owner</MudText>
+                            </MudItem>
+                            <MudItem xs="3">                               
+                                @*<MudText>@_userDetailsList.userName</MudText>*@
+                            </MudItem>
+                            <MudItem xs="3">
+                                Rating
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.Rating</MudText>
+                            </MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Account Name</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.AccountName</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Phone</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.Phone</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Account Site</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.AccountSite</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Fax</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.Fax</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Parent Account</MudItem>
+                            <MudItem xs="3">
+                                @if (_accountDetailDto.ParentAccountId != Guid.Empty)
+                                {
+                                    @foreach (var data in _accountDetailList.Where(x => x.Id == _accountDetailDto.ParentAccountId))
+                                    {
+                                        <MudText>@data.AccountName</MudText>
+                                    }
+                                }
+                                else
+                                {
+                                    <MudText Align="Align.Center" Style="font-weight:bold;">-</MudText>
+                                }
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Website</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.Website</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Account Number</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.AccountNumber</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Ticker Symbol</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.TickerSymbol</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Account Type</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.AccountType</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>OwnerShip</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.OwnerShip</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Annual Revenue</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.Revenue</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>No of Employees</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.Employees</MudItem>
+                        </MudGrid>
+                       
+                        <MudGrid>
+                            <MudItem xs="3">
+                                <MudText>CreatedBy</MudText>
+                            </MudItem>
+                            @foreach (var data in _userDetailsList.Where(x => x.Id == _accountDetailDto.CreatedBy))
+                            {
+                                <MudItem xs="3">@data.FirstName On @_accountDetailDto.CreatedOn</MudItem>
+                            }                            
+                            <MudItem xs="3">ModifiedBy</MudItem>
+                            <MudItem xs="3">
+                                @if(_accountDetailDto.LastModifiedBy != null)
+                                {
+                                    <MudText>@_accountDetailDto.LastModifiedBy On @_accountDetailDto.LastModifiedOn</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Align="Align.Center" Style="font-weight:bold;">-</MudText>
+                                }
+
+                            </MudItem>                            
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="6"></MudItem>
+
+                            <MudItem xs="3">
+                                <MudText>SicCode</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.SICCode</MudItem>
+                        </MudGrid>
+
+                        <MudGrid Style="margin-top:10px;margin-bottom:10px">
+                            <MudText Style="color:brown;font-weight:bolder">Address Information</MudText>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Billing Street</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.BillingStreet</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Shipping Street</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.ShippingStreet</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Billing City</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.BillingCity</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Shipping City</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.ShippingCity</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Billing State</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.BillingState</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Shipping State</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.ShippingState</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Billing Code</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.BillingCode</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Shipping Code</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.ShippingCode</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Billing Country</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_accountDetailDto.BillingCountry</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Shipping Country</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_accountDetailDto.ShippingCountry</MudItem>
+                        </MudGrid>
+                        <MudGrid Style="margin-top:10px;margin-bottom:10px">
+                            <MudText Style="color:brown;font-weight:bolder">Description Information</MudText>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Description</MudItem>
+                            <MudItem xs="9">@_accountDetailDto.Description</MudItem>
+                        </MudGrid>
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+
+                <MudCard Class="rounded-lg" Outlined='true' Style="margin-top:10px;margin-bottom:10px">
+                    <MudCardContent>
+                        <div class="card-content">
+                            <div>
+                                <MudText Typo="Typo.subtitle1" Style="font-weight:bolder">Next Action</MudText>
+                                 @* @if(upcomings.Count != 0)
+                            {
+                    
+                        <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                            @foreach(var item in upcomings.OrderBy(x => x.Date))
+                            {
+                             @if(item.Date > DateTime.UtcNow)
+                                        {
+                                            <MudGrid>
+                                            <MudItem>
+                                            <MudChip Color="Color.Success">@item.Date.ToString("MMM dd, yyyy")</MudChip>
+                                            </MudItem>
+                                            <MudItem>
+                                                @if(item.Type == "Task")
+                                                {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditTask(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data"/></a></MudText>
+                                                    }
+                                                    else if(item.Type == "Call")
+                                                    {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditMeeting(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>                                                
+                                                    }
+                                                </MudItem>
+                                            </MudGrid>
+                                        }
+                                        else
+                                        {
+                                            <MudGrid>
+                                             <MudItem>
+                                        <MudChip Color="Color.Error">@item.Date.ToString("MMM dd, yyyy")</MudChip>
+                                        <MudAvatar Size="Size.Small" Color="Color.Primary">@item.DateDiff.Days</MudAvatar>
+                                        </MudItem>
+                                        <MudItem>
+                                                    @if(item.Type == "Task")
+                                                    {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditTask(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data"/></a></MudText>
+                                                    }
+                                                    else if(item.Type == "Call")
+                                                    {
+                                                    <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data"/></a></MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                                <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditMeeting(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                                            }
+                                        </MudItem>
+                                            </MudGrid>
+                                        }
+                                    }
+
+                                        </MudContainer>
+                                }
+                               
+                                else
+                                {
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">No upcoming actions</MudText>
+                                } *@
+                            </div>
+                            <div>
+                                @* <MudText Typo="Typo.subtitle1" Style="font-weight:bolder">Contacts</MudText> *@
+                                @* <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                                @foreach(var item in _getAllContactDetailsResponses)
+                                {
+                                    <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px">
+                                      
+                         @if (!string.IsNullOrEmpty(item.ContactImage))
+                        {
+                            <MudCardHeader>
+                            <CardHeaderAvatar>
+                            <MudAvatar Style="margin-top:6px;" Image="@(item.ContactImage)"> </MudAvatar>
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                            <MudText><a @onclick="(() => NavContact(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.FirstName" HighlightedText="@item.FirstName"/></a></MudText>
+                            </CardHeaderContent>
+                            </MudCardHeader>
+                        }
+                        else
+                        {
+                             <MudCardHeader>
+                            <CardHeaderAvatar>
+                            <MudAvatar Color="Color.Secondary" Style="margin-top:6px;">@item.FirstName[0]</MudAvatar>
+                            </CardHeaderAvatar>
+                             <CardHeaderContent>
+                            <MudText><a @onclick="(() => NavContact(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.FirstName" HighlightedText="@item.FirstName"/></a></MudText>
+                            </CardHeaderContent>
+                            </MudCardHeader>
+                        }
+                      
+                         </MudCard>
+                           }
+                           </MudContainer> *@
+                              </div>
+                            </div>
+                    </MudCardContent>
+                </MudCard>
+
+            <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                <div id="NoteContainer">
+                    <MudCardHeader>
+                        <MudGrid>
+                            <MudItem id="Notes">
+                                <MudText Style="margin-top:10px;">Notes</MudText>
+                            </MudItem>
+                            <MudSpacer />
+
+                            <MudItem>
+                                <MudContainer>
+                                    <MudMenu Label="Actions" Variant="Variant.Filled">
+                                        <MudMenuItem OnClick=RecentFirst>Recent First</MudMenuItem>
+                                        <MudMenuItem OnClick="RecentLast">Recent Last</MudMenuItem>
+                                    </MudMenu>
+                                </MudContainer>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardHeader>
+                </div>
+                <MudCardContent>
+                    @if (_notesDtos.Count != 0)
+                    {
+                        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+                            @foreach (var item in _notesDtos)
+                            {
+
+                                <MudCard Style="margin-bottom:0.8rem; margin-top:0.8rem" Class="rounded-lg">
+
+                                    <MudCardHeader>
+
+                                        <CardHeaderAvatar>
+                                        @foreach (var user in _userDetailsList.Where(x => x.Id == item.NoteOwnerId))
+                                            {
+                                                @if (string.IsNullOrEmpty(user.ImageUrl))
+                                                {
+                                                    <MudAvatar Color="Color.Secondary">L</MudAvatar>
+                                                }
+                                                else
+                                                {
+                                                    <MudAvatar Image="@user.ImageUrl" Style="height:50px; width:50px;"> </MudAvatar>
+                                                }
+                                            }
+                                        </CardHeaderAvatar>
+                                        <CardHeaderContent>
+
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.body2">@item.NoteTitle</MudText>
+                                            </MudItem>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.body1">@item.NoteContent</MudText>
+                                            </MudItem>
+                                            <MudGrid>
+                                                @*  <MudItem xs="1">
+                                        <MudText>Lead</MudText>
+                                        </MudItem>*@
+                                                <MudItem xs="12">
+
+                                                    <MudTooltip Color="Color.Info" Placement="Placement.Right" Arrow="true">
+                                                        <ChildContent>
+                                                            @foreach (var userName in _userDetailsList.Where(x => x.Id == item.NoteOwnerId))
+                                                            {
+                                                                <MudText Typo="Typo.caption">Lead  <MudLink>@_accountDetailDto.AccountName</MudLink>  Added on @item.CreatedOn by @userName.FirstName</MudText>
+                                                            }
+                                                        </ChildContent>
+                                                        <TooltipContent>
+                                                            <MudGrid>
+
+
+                                                                <MudItem xs="3">
+                                                                    <MudText>Lead Owner</MudText>
+                                                                </MudItem>
+                                                                <MudItem xs="9">
+                                                                    @foreach (var item in _userDetailsList.Where(x => x.Id == _accountDetailDto.UserId))
+                                                                    {
+                                                                        <MudText>@item.FirstName</MudText>
+                                                                    }
+
+                                                                </MudItem>
+                                                            </MudGrid>
+                                                           @* <MudGrid>
+                                                                <MudItem xs="3">
+                                                                    <MudText>Email</MudText>
+                                                                </MudItem>
+                                                                <MudItem xs="9">
+                                                                    <MudText>@_accountDetailDto.Email</MudText>
+                                                                </MudItem>
+                                                            </MudGrid>*@
+                                                            <MudGrid>
+                                                                <MudItem xs="3">
+                                                                    <MudText>Phone</MudText>
+                                                                </MudItem>
+                                                                <MudItem xs="9">
+                                                                    <MudText>@_accountDetailDto.Phone</MudText>
+                                                                </MudItem>
+                                                            </MudGrid>
+                                                            <MudGrid>
+                                                                <MudItem xs="3">
+                                                                    <MudText>Mobile</MudText>
+                                                                </MudItem>
+                                                                <MudItem xs="9">
+                                                                    @*<MudText>@_accountDetailDto.Mobile</MudText>*@
+                                                                </MudItem>
+                                                            </MudGrid>
+                                                            @*<MudGrid>
+                                                                <MudItem xs="3">
+                                                                    <MudText>Lead Status</MudText>
+                                                                </MudItem>
+                                                                <MudItem xs="9">
+                                                                    <MudText>@_accountDetailDto</MudText>
+                                                                </MudItem>
+                                                            </MudGrid>*@
+
+                                                        </TooltipContent>
+                                                    </MudTooltip>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </CardHeaderContent>
+
+                                        <CardHeaderActions>
+                                            <MudButton Variant="Variant.Outlined" Color="Color.Surface" OnClick="@(() => NotesCheckById(@item.Id))">View</MudButton>
+                                        </CardHeaderActions>
+
+                                    </MudCardHeader>
+
+                                </MudCard>
+                            }
+                        </MudContainer>
+                    }
+                    <EditForm Model="@_createNoteRequest" OnValidSubmit="SaveNotes">
+                        <MudGrid Style="margin-top:10px; margin-bottom:10px;">
+                            <MudItem xs="1"></MudItem>
+                            <MudItem xs="10">
+                                @if (_updateNoteRequest.Id == Guid.Empty)
+                                {
+                                    <MudTextField @bind-Value="_createNoteRequest.NoteContent" T="string" Label="Notes" Lines="3" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Api" />
+                                }
+                                else
+                                {
+                                    <MudTextField @bind-Value="_updateNoteRequest.NoteContent" T="string" Label="Notes" Lines="3" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Api" />
+                                }
+                            </MudItem>
+                            <MudItem xs="1"></MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            @if (_updateNoteRequest.Id == Guid.Empty)
+                            {
+                                <MudItem xs="11"></MudItem>
+                                <MudItem xs="1">
+                                    @* <MudGrid>
+                                <MudSpacer/>
+                                <MudItem>*@
+                                    <MudContainer>
+                                        <MudButton Style="float:right" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary">
+                                            Save
+                                        </MudButton>
+                                    </MudContainer>
+                                    @*</MudItem>
+                                </MudGrid>    *@
+                                </MudItem>
+                            }
+                            else
+                            {
+                                <MudItem xs="7"></MudItem>
+
+                                <MudItem xs="1">
+                                    <MudContainer>
+                                        <MudButton Style="float:left" OnClick="UpdateNotes" Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary">Update</MudButton>
+                                    </MudContainer>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudContainer>
+                                        <MudButton OnClick="DeleteNotes" Style="margin-left:3px;float:right" Variant="Variant.Filled" Size="Size.Small" Color="Color.Error">Delete</MudButton>
+                                    </MudContainer>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudContainer>
+                                        <MudButton OnClick="CancelNotes" Style="margin-right:3px;float:right" Variant="Variant.Filled" Size="Size.Small" Color="Color.Surface">Cancel</MudButton>
+                                    </MudContainer>
+                                </MudItem>
+                            }
+
+                        </MudGrid>
+                    </EditForm>
+                </MudCardContent>
+            </MudCard>
+
+        </MudItem>
+    </MudGrid>
+@* </MudContainer> *@

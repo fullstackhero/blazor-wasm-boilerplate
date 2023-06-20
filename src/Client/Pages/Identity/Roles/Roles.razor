@@ -28,6 +28,9 @@
             <MudTextField For="@(() => context.Description)" @bind-Value="context.Description"
                 Label="@L["Description"]" />
         </MudItem>
+        <MudItem xs="12" md="6">
+            <MudAutocomplete Margin="Margin.Dense" Color="Color.Secondary" T="string" Label="ReportTo" @bind-Value="context.ReportTo" ResetValueOnEmptyText="true" SearchFunc="@SearchRole" ToStringFunc="@(i => _roleDtoList.FirstOrDefault(b => b.Id == i)?.Name ?? string.Empty)" OffsetY="true" />
+         </MudItem>
     </EditFormContent>
 
 </EntityTable>

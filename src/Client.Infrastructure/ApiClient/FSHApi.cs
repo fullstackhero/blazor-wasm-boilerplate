@@ -6160,6 +6160,9 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         [Newtonsoft.Json.JsonProperty("permissions", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string>? Permissions { get; set; } = default!;
 
+        [Newtonsoft.Json.JsonProperty("ReportTo", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? ReportTo { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6187,6 +6190,9 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? Description { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("ReportTo", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string? ReportTo { get; set; }
 
     }
 
@@ -10743,6 +10749,11 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Description { get; set; }
         public string? BillingState { get; set; }
         public string? ShippingState { get; set; }
+
+        public Guid CreatedBy { get; set; }
+        public DateTime CreatedOn { get; private set; }
+        public Guid LastModifiedBy { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
     }
 
 
