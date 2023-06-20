@@ -581,7 +581,7 @@ else
         {
             try
             {
-                var response1 = await _meetingDetailsClient.CreateAsync(_meetingDetailsClient.Adapt<CreateMeetingRequest>());
+                var response1 = await _meetingDetailsClient.CreateAsync(_createMeetingRequest.Adapt<CreateMeetingRequest>());
                 if (response1 != Guid.Empty)
                 {
                     Snackbar.Add("Meeting Added Successfully", Severity.Info);

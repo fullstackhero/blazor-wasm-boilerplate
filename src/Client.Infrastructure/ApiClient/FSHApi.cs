@@ -6458,6 +6458,11 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         [Newtonsoft.Json.JsonProperty("primaryKey", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string? PrimaryKey { get; set; } = default!;
 
+        public Guid LeadId { get; set; }
+        public string? Subject { get; set; }
+        public string[]? MeetingLeadId { get; set; }
+        public string? RelatedTo { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6882,7 +6887,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Description { get; set; }
         public string? LeadImage { get; set; }
         //public int? IsDeleted { get; set; }
-        public string? CompanyId { get; set; }
+       // public string? CompanyId { get; set; }
         public bool EmailOptOut { get; set; }
 
         public Guid? ConvertedAccountId { get; set; }
@@ -6897,38 +6902,38 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public Guid Id { get; set; }
        // public Guid LeadOwner { get; set; }
         public Guid UserId { get; set; }
-        public string CompanyName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Title { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string Fax { get; set; }
-        public string Mobile { get; set; }
-        public string Website { get; set; }
-        public string LeadSource { get; set; }
-        public string LeadStatus { get; set; }
-        public string Industry { get; set; }
+        public string? CompanyName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Title { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Fax { get; set; }
+        public string? Mobile { get; set; }
+        public string? Website { get; set; }
+        public string? LeadSource { get; set; }
+        public string? LeadStatus { get; set; }
+        public string? Industry { get; set; }
         public int? NoEmployess { get; set; }
         public decimal? AnnualRevenue { get; set; }
-        public string Rating { get; set; }
-        public string SkypeId { get; set; }
-        public string SecondEmail { get; set; }
-        public string Twitter { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string ZipCode { get; set; }
-        public string Country { get; set; }
-        public string Description { get; set; }
+        public string? Rating { get; set; }
+        public string? SkypeId { get; set; }
+        public string? SecondEmail { get; set; }
+        public string? Twitter { get; set; }
+        public string? Street { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? ZipCode { get; set; }
+        public string? Country { get; set; }
+        public string? Description { get; set; }
         public string LeadImage { get; set; }
         //public int? IsDeleted { get; set; }
-        public string CompanyId { get; set; }
+        //public string CompanyId { get; set; }
         public bool EmailOptOut { get; set; }
 
-        public Guid ConvertedAccountId { get; set; }
+        public Guid? ConvertedAccountId { get; set; }
 
-        public Guid ConvertedContactId { get; set; }
+        public Guid? ConvertedContactId { get; set; }
         public DateTime? DateOfBirth { get; set; }
     }
 
@@ -8420,6 +8425,11 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Tag { get; set; }
         public string? Description { get; set; }
         public DateTime? Remainder { get; set; }
+        public Guid CreatedBy { get; set; }
+        public DateTime CreatedOn { get; private set; }
+        public Guid LastModifiedBy { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
+
     }
 
 
@@ -10659,7 +10669,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public Guid UserId { get; set; }
         public string? AccountName { get; set; }
         public string? AccountSite { get; set; }
-        public Guid ParentAccountId { get; set; }
+        public Guid? ParentAccountId { get; set; }
         public string? AccountNumber { get; set; }
         public string? AccountType { get; set; }
         public string? Industry { get; set; }
@@ -10670,7 +10680,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Website { get; set; }
         public string? TickerSymbol { get; set; }
         public string? OwnerShip { get; set; }
-        public int Employees { get; set; }
+        public int? Employees { get; set; }
         public string? SICCode { get; set; }
         public string? BillingStreet { get; set; }
         public string? ShippingStreet { get; set; }
@@ -10683,6 +10693,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Description { get; set; }
         public string? BillingState { get; set; }
         public string? ShippingState { get; set; }
+        public Guid ConvertedLeadId { get; set; }
     }
 
     public partial class UpdateAccountRequest
@@ -10692,7 +10703,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public Guid UserId { get; set; }
         public string? AccountName { get; set; }
         public string? AccountSite { get; set; }
-        public Guid ParentAccountId { get; set; }
+        public Guid? ParentAccountId { get; set; }
         public string? AccountNumber { get; set; }
         public string? AccountType { get; set; }
         public string? Industry { get; set; }
@@ -10703,7 +10714,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Website { get; set; }
         public string? TickerSymbol { get; set; }
         public string? OwnerShip { get; set; }
-        public int Employees { get; set; }
+        public int? Employees { get; set; }
         public string? SICCode { get; set; }
         public string? BillingStreet { get; set; }
         public string? ShippingStreet { get; set; }
@@ -10725,7 +10736,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public Guid UserId { get; set; }
         public string? AccountName { get; set; }
         public string? AccountSite { get; set; }
-        public Guid ParentAccountId { get; set; }
+        public Guid? ParentAccountId { get; set; }
         public string? AccountNumber { get; set; }
         public string? AccountType { get; set; }
         public string? Industry { get; set; }
@@ -10736,7 +10747,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Website { get; set; }
         public string? TickerSymbol { get; set; }
         public string? OwnerShip { get; set; }
-        public int Employees { get; set; }
+        public int? Employees { get; set; }
         public string? SICCode { get; set; }
         public string? BillingStreet { get; set; }
         public string? ShippingStreet { get; set; }
@@ -11449,7 +11460,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? HomePhone { get; set; }
         public string? Fax { get; set; }
         public string? Mobile { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string? SkypeId { get; set; }
         public string? SecondEmail { get; set; }
         public string? Twitter { get; set; }
