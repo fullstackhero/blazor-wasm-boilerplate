@@ -1,9 +1,24 @@
 ﻿@page "/leaddata/leadinformationbyid/{_leadId:guid}"
 @using FL_CRMS_ERP_WASM.Client.Components.Dialogs;
 @using FL_CRMS_ERP_WASM.Client.Pages.Common;
-@using FL_CRMS_ERP_WASM.BlazorWebAssembly.Client.Components.Dialogs;
-@using FL_CRMS_ERP_WASM.BlazorWebAssembly.Client.Pages.Common;
 
+<style>
+    a:link {
+        text-decoration: none;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    .card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
+
+<MudContainer style="min-height: 100vh;">
 <div class="sticky">
     <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
         <MudGrid>
@@ -12,7 +27,7 @@
             </MudItem>
             <MudItem xs="12" sm="6" Style="margin-top:8px; margin-bottom:8px">
                 <span style="float:right;">
-                    <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.ChangeHistory" Color="Color.Secondary" Size="Size.Small">Convert</MudButton>
+                    <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.ChangeHistory" OnClick="ConvertLead" Color="Color.Secondary" Size="Size.Small">Convert</MudButton>
                     <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.Update" OnClick="EditLead" Color="Color.Secondary" Size="Size.Small">Edit</MudButton>
                     <MudButton Style="margin-left:10px;" StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Secondary" Size="Size.Small">Cancel</MudButton>
                 </span>
@@ -41,7 +56,8 @@
         </MudCard>
     </MudItem>
     <MudItem xs="9">
-
+        <MudTabs  Class="rounded-lg" Elevation="0" Outlined="true">
+            <MudTabPanel Text="Overview">
         <MudCard Class="rounded-lg" Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
             <MudCardContent>
                 <MudGrid>
@@ -313,6 +329,73 @@
                 </MudGrid>
             </MudExpansionPanel>
         </MudExpansionPanels>
+
+         <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+              <MudCardHeader>
+                            <h4 style="margin-top:10px;">Upcoming Actions</h4>
+                        </MudCardHeader>
+             
+                 <MudCardContent>
+                            @if(upcomings.Count != 0)
+                            {
+                    
+                        
+                            @foreach(var item in upcomings)
+                            {
+                             @if(item.Date > DateTime.UtcNow)
+                                        {
+                                            <MudGrid>
+                                            <MudItem>
+                                            <MudChip Color="Color.Success">@item.Date?.ToString("MMM dd, yyyy")</MudChip>
+                                            </MudItem>
+                                            <MudItem>
+                                                @if(item.Type == "Task")
+                                                {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditTask(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data"/></a></MudText>
+                                                    }
+                                                    else if(item.Type == "Call")
+                                                    {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>                                                
+                                                    }
+                                                </MudItem>
+                                            </MudGrid>
+                                        }
+                                        else
+                                        {
+                                            <MudGrid>
+                                             <MudItem>
+                                        <MudChip Color="Color.Error">@item.Date?.ToString("MMM dd, yyyy")</MudChip>
+                                        </MudItem>
+                                        <MudItem>
+                                                    @if(item.Type == "Task")
+                                                    {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditTask(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data"/></a></MudText>
+                                                    }
+                                                    else if(item.Type == "Call")
+                                                    {
+                                                    <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data"/></a></MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>                                                
+                                                    }
+                                        </MudItem>
+                                            </MudGrid>
+                                        }
+                                    }
+                       
+                                
+                                }
+                                else
+                                {
+                                <MudText Typo="Typo.subtitle1" Align="Align.Center">No upcoming actions</MudText>
+                                }
+             </MudCardContent>
+         </MudCard>
 
         <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
             <div id="NoteContainer">
@@ -1493,8 +1576,83 @@
                 </div>
             </MudCardContent>
         </MudCard>
+            </MudTabPanel>
+             <MudTabPanel Text="Timeline">
+                 <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                      <MudCardHeader>
+                            <MudText Typo="Typo.h6" Align="Align.Center">History</MudText>
+                        </MudCardHeader>
+                        <MudContainer Style="max-height: 70vh; overflow-y: scroll">
+                            <MudCardContent>
+                                 @if (_getAuditResponses.Count() != 0)
+                                 {
+                                  @foreach (var group in _getAuditResponses)
+                                  { 
+                                    <div class="card-container">
+                                    <MudCard Outlined Style="height:fit-content; width:fit-content">
+                                         <MudCardContent>
+                                             <MudText Typo="Typo.button" Color="Color.Secondary">@group.GroupDate.ToString("MMM dd, yyyy")</MudText>
+                                         </MudCardContent>
+                                     </MudCard>
+                                     </div>
+
+                                     @foreach (var item in group.GroupItems.OrderByDescending(x => x.DateTime))
+                                    {
+                                        @if(item.RelatedTo == "Lead" || item.TableName == "TaskModel")
+                                        {
+                                            <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Alternate">
+                                                <MudTimelineItem Color="Color.Success" Variant="Variant.Filled">
+                                                     <ItemContent>
+                                                        @if (item.TableName == "TaskModel" && item.RelatedTo == "Lead")
+                                                        {
+                                                            @if(item.Type == "Create")
+                                                            {
+                                                            <MudAlert Severity="Severity.Success">
+                                                                            <span style="color:#007e33ff;">
+                                                                                <MudText Typo="Typo.body1">Task Added - @item.Subject</MudText>
+                                                                                @foreach (var items in _userDetailsDtos.Where(x => x.Id == item.UserId))
+                                                                                {
+                                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                                }
+                                                                            </span>
+                                                                </MudAlert>
+                                                            }
+                                                            else if(item.Type == "Update")
+                                                            {
+                                                            <MudAlert Severity="Severity.Info">
+                                                                            <MudText Typo="Typo.body1">Task Updated - @item.Subject</MudText>
+                                                                            @foreach (var items in _userDetailsDtos.Where(x => x.Id == item.UserId))
+                                                                            {
+                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                            }
+                                                                        </MudAlert>
+                                                            }
+                                                             else if (item.Type == "Delete")
+                                                             {
+                                                                        <MudAlert Severity="Severity.Warning">
+                                                                            <MudText Typo="Typo.body1">Task Deleted - @item.Subject</MudText>
+                                                                            @foreach (var items in _userDetailsDtos.Where(x => x.Id == item.UserId))
+                                                                            {
+                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                            }
+                                                                        </MudAlert>
+                                                             }    
+                                                        }
+                                                     </ItemContent>
+                                                    </MudTimelineItem>
+                                                </MudTimeline>
+                                        }
+                                    }
+                                }
+                            }
+                            </MudCardContent>
+                        </MudContainer>
+                     </MudCard>
+             </MudTabPanel>
+        </MudTabs>
     </MudItem>
 </MudGrid>
+</MudContainer>
 
 @code {
     [Parameter]
@@ -1523,6 +1681,10 @@
         await GetAllCalls();
         await GetAllCompletedCalls();
         await GetAllUnCompletedCalls();
+        await UpcomingActionTask();
+        await UpcomingAuctionCall();
+        await UpcomingAuctionMetting();
+        await TimeLine();
     }
     [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
@@ -1642,6 +1804,7 @@
             {
                 Snackbar.Add("Notes Added Successfully", Severity.Info);
                 await RecentLast();
+                await TimeLine();
                 //Navigation.NavigateTo("/view/stock");
                 //await Reset();
             }
@@ -1698,6 +1861,7 @@
             {
                 Snackbar.Add("Notes Updated Successfully", Severity.Info);
                 await RecentLast();
+                await TimeLine();
             }
         }
         catch (Exception ex)
@@ -1759,6 +1923,7 @@
                     Snackbar.Add("Notes Deleted Successfully", Severity.Info);
                     _updateNoteRequest.Id = Guid.Empty;
                     await RecentLast();
+                    await TimeLine();
                     //Navigation.NavigateTo($"leaddata/leadinformationbyid/{_leadId}");
                 }
 
@@ -1848,6 +2013,7 @@
             await GetAllCompletedTask();
             await GetAllUnCompletedTask();
             await GetAllTask();
+            await TimeLine();
             //await Reset();
         }
     }
@@ -1874,6 +2040,7 @@
                     await GetAllCompletedTask();
                     await GetAllUnCompletedTask();
                     await GetAllTask();
+                    await TimeLine();
                     //Navigation.NavigateTo("/leaddata/leadinformation");
                 }
 
@@ -1934,7 +2101,7 @@
             await GetAllCompletedTask();
             await GetAllUnCompletedTask();
             await GetAllTask();
-            //await TimeLine();
+            await TimeLine();
             //await OpenActivitiesCount();
             //await ClosedActivitiesCount();
             StateHasChanged();
@@ -1976,7 +2143,7 @@
     {
         try
         {
-            _unCompletedMeetingDto = (await _meetingDetailsClient.GetListAsync()).Where(x => x.CheckedInStatus == true && x.Participants.Contains(_leadId.ToString())).ToList();
+            _unCompletedMeetingDto = (await _meetingDetailsClient.GetListAsync()).Where(x => x.CheckedInStatus == false && x.Participants.Contains(_leadId.ToString())).ToList();
         }
         catch (Exception ex)
         {
@@ -2004,6 +2171,10 @@
             await GetAllCompletedMeeting();
             await GetAllUnCompletedMeeting();
             await GetAllMeeting();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await Reset();
         }
     }
@@ -2030,6 +2201,10 @@
                     await GetAllCompletedMeeting();
                     await GetAllUnCompletedMeeting();
                     await GetAllMeeting();
+                    await UpcomingActionTask();
+                    await UpcomingAuctionCall();
+                    await UpcomingAuctionMetting();
+                    await TimeLine();
                     //Navigation.NavigateTo("/leaddata/leadinformation");
                 }
 
@@ -2095,7 +2270,10 @@
             await GetAllCompletedMeeting();
             await GetAllUnCompletedMeeting();
             await GetAllMeeting();
-            //await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await OpenActivitiesCount();
             //await ClosedActivitiesCount();
         }
@@ -2170,6 +2348,10 @@
             await GetAllCompletedCalls();
             await GetAllUnCompletedCalls();
             await GetAllCalls();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await ResetCalls();
         }
     }
@@ -2196,6 +2378,10 @@
                     await GetAllCompletedCalls();
                     await GetAllUnCompletedCalls();
                     await GetAllCalls();
+                    await UpcomingActionTask();
+                    await UpcomingAuctionCall();
+                    await UpcomingAuctionMetting();
+                    await TimeLine();
                     //Navigation.NavigateTo("/leaddata/leadinformation");
                 }
 
@@ -2257,11 +2443,135 @@
             await GetAllCompletedCalls();
             await GetAllUnCompletedCalls();
             await GetAllCalls();
-            //await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await OpenActivitiesCount();
             //await ClosedActivitiesCount();
             //StateHasChanged();
         }
     }
+
+    public class Upcoming
+    {
+        public Guid Id { get; set; }
+        public DateTime? Date { get; set; }
+        public string? Data { get; set; }
+        public string? Type { get; set; }
+    }
+
+    List<Upcoming> upcomings = new();
+
+    async Task UpcomingActionTask()
+    {
+        List<TaskDto> taskDtos = new();
+        try
+        {
+            taskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.Status != "Completed" && x.TaskOwnerId == Guid.Parse(_userId) && x.WhoId == _leadId).ToList();
+            foreach (var item in taskDtos)
+            {
+                Upcoming data = new();
+                data.Id = item.Id;
+                data.Date = item?.DueDate;
+                data.Data = item?.Subject;
+                data.Type = "Task";
+                upcomings.Add(data);
+
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    async Task UpcomingAuctionCall()
+    {
+        List<CallDto> callDtos = new();
+        try{
+            callDtos = (await _callDetailsClient.GetListAsync()).Where(x => x.OutgoingCallStatus != "Completed" && x.CallOwnerId == Guid.Parse(_userId) && x.WhoId == _leadId).ToList();
+            foreach (var item in callDtos)
+            {
+                Upcoming data = new();
+                data.Id = item.Id;
+                data.Date = item.CallStartTime;
+                data.Data = item.Subject;
+                data.Type = "Call";
+                upcomings.Add(data);
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    async Task UpcomingAuctionMetting()
+    {
+        List<MeetingDto> meetingDtos = new();
+        try
+        {
+            meetingDtos = (await _meetingDetailsClient.GetListAsync()).Where(x => x.MeetingOwnerId == Guid.Parse(_userId) && x.Participants.Contains(_leadDetailsDtos.Id.ToString())).ToList();
+            foreach (var item in meetingDtos)
+            {
+                Upcoming data = new();
+
+                data.Id = item.Id;
+                data.Date = item.FromDate;
+                data.Data = item.MeetingTitle;
+                data.Type = "Meeting";
+                upcomings.Add(data);
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    public class MyGroupedDataModel
+    {
+        public DateTime GroupDate { get; set; }
+        public List<AuditDto> GroupItems { get; set; }
+    }
+
+
+    [Inject]IPersonalClient _personalClient { get; set; }
+
+    List<AuditDto> _auditDtos =new();
+    List<MyGroupedDataModel> _getAuditResponses = new();
+
+    async Task TimeLine()
+    {
+        try{
+            //List<AuditDto> dtos= (await _personalClient.GetLogsAsync()).ToList();
+            _auditDtos = (await _personalClient.GetLogsAsync()).Where(x => (x.LeadId == _leadId || x.MeetingLeadId.Contains(_leadId.ToString())) && x.RelatedTo == "Lead").ToList();
+            _getAuditResponses = _auditDtos.GroupBy(o => o.DateTime.Date)
+                                   .Select(g => new MyGroupedDataModel
+                                       {
+                                           GroupDate = g.Key,
+                                           GroupItems = g.ToList()
+                                       })
+                                   .OrderByDescending(x => x.GroupDate.Date).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task ConvertLead()
+    {
+        Navigation.NavigateTo($"leaddata/lead/convertleadtoaccount/{_leadId}");
+    }
+
+}
+
+
 
 }
