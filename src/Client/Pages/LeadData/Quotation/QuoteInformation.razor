@@ -21,7 +21,7 @@
 
 <MudGrid Style="margin-top:12rem">
     <MudItem xs="12">
-      <FshTable Items="_quotationDtos">
+      <FLTable Items="_quotationDtos">
             <HeaderContent>
               <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.QuoteOwnerId)">Owner</MudTableSortLabel></MudTh>
@@ -65,7 +65,7 @@
                             <MudText Align="Align.Center">No Data Available</MudText>
                         }
                         </RowTemplate>
-      </FshTable>
+      </FLTable>
     </MudItem>
 </MudGrid>
 

@@ -1230,7 +1230,7 @@
                                                     </CardHeaderContent>
                                                     <CardHeaderActions>
                                                         <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
-                                                            @*<MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditCompletedTask(@item.Id))">Edit</MudButton>*@
+                                                            <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditTask(@item.Id))">Edit</MudButton>
 
                                                         </MudMenu>
                                                     </CardHeaderActions>
@@ -1398,7 +1398,7 @@
                                                     </CardHeaderContent>
                                                     <CardHeaderActions>
                                                         <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
-                                                            @*<MudMenuItem @onclick="@(() => EditMeetingCompleted(@item.Id))">Edit</MudMenuItem>*@
+                                                            <MudMenuItem @onclick="@(() => EditMeeting(@item.Id))">Edit</MudMenuItem>
                                                         </MudMenu>
                                                     </CardHeaderActions>
                                                 </MudCardHeader>
@@ -1536,7 +1536,7 @@
                                                     <CardHeaderActions>
                                                         <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
 
-                                                            @*<MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditCompletedCall(@item.Id))">Edit</MudButton>*@
+                                                            <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Material.Rounded.Edit" OnClick="@(() => EditCall(@item.Id))">Edit</MudButton>
 
                                                         </MudMenu>
                                                     </CardHeaderActions>
@@ -1799,6 +1799,9 @@
     {
         try
         {
+            _createNoteRequest.NoteOwnerId = Guid.Parse(_userId);
+            _createNoteRequest.ParentId = _leadId;
+            _createNoteRequest.RelatedTo = "Lead";
             var response1 = await _noteDetailsClient.CreateAsync(_createNoteRequest.Adapt<CreateNoteRequest>());
             if (response1 != Guid.Empty)
             {
