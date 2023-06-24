@@ -1,7 +1,7 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Components.EntityTable;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -25,13 +25,13 @@ public partial class Roles
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canViewRoleClaims = await AuthService.HasPermissionAsync(state.User, FSHAction.View, FSHResource.RoleClaims);
+        _canViewRoleClaims = await AuthService.HasPermissionAsync(state.User, FLAction.View, FLResource.RoleClaims);
 
         Context = new(
             entityName: L["Role"],
             entityNamePlural: L["Roles"],
-            entityResource: FSHResource.Roles,
-            searchAction: FSHAction.View,
+            entityResource: FLResource.Roles,
+            searchAction: FLAction.View,
             fields: new()
             {
                 //new(role => role.Id, L["Id"]),
@@ -49,8 +49,8 @@ public partial class Roles
             updateFunc: async (_, role) => await RolesClient.RegisterRoleAsync(role),
             deleteFunc: async id => await RolesClient.DeleteAsync(id),
             hasExtraActionsFunc: () => _canViewRoleClaims,
-            canUpdateEntityFunc: e => !FSHRoles.IsDefault(e.Name),
-            canDeleteEntityFunc: e => !FSHRoles.IsDefault(e.Name),
+            canUpdateEntityFunc: e => !FLRoles.IsDefault(e.Name),
+            canDeleteEntityFunc: e => !FLRoles.IsDefault(e.Name),
             exportAction: string.Empty);
 
         await GetAllRole();

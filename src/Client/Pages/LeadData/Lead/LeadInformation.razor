@@ -43,7 +43,7 @@
          </div>
 <MudGrid Style="margin-top:12rem">
     <MudItem xs="12">
-        <FshTable Items="_leadDetailsDtos">
+        <FLTable Items="_leadDetailsDtos">
            <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.FirstName)">Lead Name</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.CompanyName)">Company</MudTableSortLabel></MudTh>
@@ -66,7 +66,7 @@
         <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Lead Status"><MudHighlighter Text="@context.LeadStatus" /></MudTd>
            
            </RowTemplate>
-        </FshTable>
+        </FLTable>
         </MudItem>
 </MudGrid>
 

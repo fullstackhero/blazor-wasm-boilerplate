@@ -1,9 +1,9 @@
 ﻿@page "/users/{Id}/roles"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.UserRoles)]
+@attribute [MustHavePermission(FLAction.View, FLResource.UserRoles)]
 
 @inject IStringLocalizer<UserRoles> L
 
-<FshTitle Title="@_title" Description="@_description" />
+<FLTitle Title="@_title" Description="@_description" />
 
 @if (!_loaded)
 {

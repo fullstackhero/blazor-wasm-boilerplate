@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
-using FSH.WebApi.Shared.Notifications;
+using FL.WebApi.Shared.Notifications;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;

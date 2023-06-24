@@ -29,13 +29,13 @@
         <MudNavGroup Title="@L["Catalog"]" Expanded Icon="@Icons.Filled.AddBox">
             @if (_canViewProducts)
             {
-                <MudNavLink Href="/catalog/products" Icon="@Icons.Filled.ShoppingBag" Class="fsh-nav-child">
+                <MudNavLink Href="/catalog/products" Icon="@Icons.Filled.ShoppingBag" Class="FL-nav-child">
                     @L["Products"]
                 </MudNavLink>
             }
             @if (_canViewBrands)
             {
-                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.ShoppingBag" Class="fsh-nav-child">
+                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.ShoppingBag" Class="FL-nav-child">
                     @L["Brands"]
                 </MudNavLink>
             }
@@ -48,20 +48,20 @@
         <MudNavGroup Title="@L["Lead Details"]" Expanded Icon="@Icons.Filled.AddBox">
             @*@if (_canViewProducts)
             {*@
-            <MudNavLink Href="/leaddata/leadinformation" Icon="@Icons.Material.Filled.SupervisedUserCircle" Class="fsh-nav-child">
+            <MudNavLink Href="/leaddata/leadinformation" Icon="@Icons.Material.Filled.SupervisedUserCircle" Class="FL-nav-child">
                     @L["Lead"]
                 </MudNavLink>
 
-            <MudNavLink Href="/leaddata/accountinformation" Icon="@Icons.Material.Filled.AccountBox" Class="fsh-nav-child">
+            <MudNavLink Href="/leaddata/accountinformation" Icon="@Icons.Material.Filled.AccountBox" Class="FL-nav-child">
                     @L["Account"]
                 </MudNavLink>    
-                    <MudNavLink Href="/leaddata/quotation/addquotation" Icon="@Icons.Material.Filled.AccountBox" Class="fsh-nav-child">
+                    <MudNavLink Href="/leaddata/quotation/addquotation" Icon="@Icons.Material.Filled.AccountBox" Class="FL-nav-child">
                     @L["Quotation"]
                 </MudNavLink>  
             @*}*@
         @* @if (_canViewBrands)
             {
-                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.ShoppingBag" Class="fsh-nav-child">
+                <MudNavLink Href="/catalog/brands" Icon="@Icons.Filled.ShoppingBag" Class="FL-nav-child">
                     @L["Brands"]
                 </MudNavLink>
             }*@

@@ -1,6 +1,6 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -29,12 +29,12 @@ public partial class NavMenu
     {
         _hangfireUrl = Config[ConfigNames.ApiBaseUrl] + "jobs";
         var user = (await AuthState).User;
-        _canViewHangfire = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.Hangfire);
-        _canViewDashboard = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.Dashboard);
-        _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.Roles);
-        _canViewUsers = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.Users);
-        _canViewProducts = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.Products);
-        _canViewBrands = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.Brands);
-        _canViewTenants = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.Tenants);
+        _canViewHangfire = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.Hangfire);
+        _canViewDashboard = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.Dashboard);
+        _canViewRoles = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.Roles);
+        _canViewUsers = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.Users);
+        _canViewProducts = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.Products);
+        _canViewBrands = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.Brands);
+        _canViewTenants = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.Tenants);
     }
 }

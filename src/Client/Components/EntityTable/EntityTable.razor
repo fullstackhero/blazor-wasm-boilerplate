@@ -40,7 +40,7 @@
             </MudExpansionPanel>
         }
 
-        <FshTable @ref="_table" Elevation="25" ServerData="@ServerReloadFunc" Items="@_entityList" Filter="LocalSearch"
+        <FLTable @ref="_table" Elevation="25" ServerData="@ServerReloadFunc" Items="@_entityList" Filter="LocalSearch"
             Loading="@Loading" LoadingProgressColor="@Color.Secondary" ChildRowContent="@ChildRowContent">
 
             <ToolBarContent>
@@ -179,10 +179,10 @@
                 <TablePager />
             </PagerContent>
 
-        </FshTable>
+        </FLTable>
 
     </ChildContent>
     <ErrorContent>
-        <FshCustomError />
+        <FLCustomError />
     </ErrorContent>
 </ErrorBoundary>

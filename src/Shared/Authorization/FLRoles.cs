@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 
-namespace FSH.WebApi.Shared.Authorization;
+namespace FL.WebApi.Shared.Authorization;
 
-public static class FSHRoles
+public static class FLRoles
 {
     public static string Admin = nameof(Admin);
     public static string Basic = nameof(Basic);

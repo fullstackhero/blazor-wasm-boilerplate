@@ -19,8 +19,8 @@
 
     <MudGrid Style="margin-top:12rem">
         <MudItem xs="12">
-            @* <FshTable Items="_accountDetailDto"> *@
-            <FshTable @ref="mudTable" T="AccountDto" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" Items="_accountDetailDto" Hover="true">
+            @* <FLTable Items="_accountDetailDto"> *@
+            <FLTable @ref="mudTable" T="AccountDto" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" Items="_accountDetailDto" Hover="true">
                 <HeaderContent>
                     <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x => x.AccountName)">Account Name</MudTableSortLabel></MudTh>
                     <MudTh><MudTableSortLabel SortBy="new Func<AccountDto, object>(x => x.Website)">Website</MudTableSortLabel></MudTh>
@@ -37,7 +37,7 @@
                         <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.UserName" /></MudTd>
                     }
                 </RowTemplate>
-            </FshTable>
+            </FLTable>
         </MudItem>
     </MudGrid>
 </MudContainer>

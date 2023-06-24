@@ -6,7 +6,7 @@ using MudBlazor;
 
 namespace FL_CRMS_ERP_WASM.Client.Components.Common;
 
-public class FshTable<T> : MudTable<T>
+public class FLTable<T> : MudTable<T>
 {
     [Inject]
     private IClientPreferenceManager ClientPreferences { get; set; } = default!;
@@ -20,7 +20,7 @@ public class FshTable<T> : MudTable<T>
             SetTablePreference(clientPreference.TablePreference);
         }
 
-        Courier.SubscribeWeak<NotificationWrapper<FshTablePreference>>(wrapper =>
+        Courier.SubscribeWeak<NotificationWrapper<FLTablePreference>>(wrapper =>
         {
             SetTablePreference(wrapper.Notification);
             StateHasChanged();
@@ -29,7 +29,7 @@ public class FshTable<T> : MudTable<T>
         await base.OnInitializedAsync();
     }
 
-    private void SetTablePreference(FshTablePreference tablePreference)
+    private void SetTablePreference(FLTablePreference tablePreference)
     {
         Dense = tablePreference.IsDense;
         Striped = tablePreference.IsStriped;

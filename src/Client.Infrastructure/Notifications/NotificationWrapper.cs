@@ -1,4 +1,4 @@
-using FSH.WebApi.Shared.Notifications;
+using FL.WebApi.Shared.Notifications;
 using MediatR;
 
 namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;

@@ -62,7 +62,7 @@ else
                         <MudContainer>
                             @if (_taskType == "My Task")
                             {
-                                <FshTable Items="_allTaskDtos">
+                                <FLTable Items="_allTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -92,11 +92,11 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                             else if (_taskType == "My Open Task")
                             {
-                                <FshTable Items="_allTaskDtos">
+                                <FLTable Items="_allTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -119,11 +119,11 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                             else if (_taskType == "My Closed Task")
                             {
-                                <FshTable Items="_closedTaskDtos">
+                                <FLTable Items="_closedTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -146,11 +146,11 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                             else if (_taskType == "My Today's Task")
                             {
-                                <FshTable Items="_todayTaskDtos">
+                                <FLTable Items="_todayTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -173,11 +173,11 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                             else if(_taskType == "My Tomorrow's Task")
                             {
-                                <FshTable Items="_tomorrowTaskDtos">
+                                <FLTable Items="_tomorrowTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -200,11 +200,11 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                             else if (_taskType == "My Overdue Task")
                             {
-                                <FshTable Items="_overDueTaskDtos">
+                                <FLTable Items="_overDueTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -227,11 +227,11 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                             else if (_taskType == "My Today + Overdue Task")
                             {
-                             <FshTable Items="_todayOverDueTaskDtos">
+                             <FLTable Items="_todayOverDueTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -254,11 +254,11 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                             else
                             {
-                                <FshTable Items="_next7DaysOverDueTaskDtos">
+                                <FLTable Items="_next7DaysOverDueTaskDtos">
                                     <HeaderContent>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
                                         <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
@@ -281,7 +281,7 @@ else
                                     <PagerContent>
                                         <TablePager />
                                     </PagerContent>
-                                </FshTable>
+                                </FLTable>
                             }
                         </MudContainer>
                     </MudItem>

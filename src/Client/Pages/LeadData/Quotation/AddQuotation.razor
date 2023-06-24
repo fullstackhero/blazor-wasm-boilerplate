@@ -163,7 +163,7 @@
         </MudGrid>
         <MudGrid>
             <MudItem xs="12">
-                <FshTable Items="_quoteItems">
+                <FLTable Items="_quoteItems">
                     <HeaderContent>
                         <MudTh>S.No</MudTh>
                         <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.ProductId)">Product Name</MudTableSortLabel></MudTh>
@@ -186,7 +186,7 @@
                     <MudTd DataLabel="Amount"><MudTextField Margin="Margin.Dense" ReadOnly=true Variant="Variant.Outlined" T="decimal?" @bind-Value="context.Amount"/></MudTd>
                     <MudTd><MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="() => RemoveQuoteItem(context)">Delete</MudButton></MudTd>
                     </RowTemplate>
-                </FshTable>
+                </FLTable>
                 <tr>
                     <td><MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="AddQuoteItem">Add item</MudButton></td>
                 </tr>

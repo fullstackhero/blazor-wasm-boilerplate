@@ -1,7 +1,7 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Components.Common;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Shared;
-using FSH.WebApi.Shared.Multitenancy;
+using FL.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Components;
 
 namespace FL_CRMS_ERP_WASM.Client.Pages.Authentication;

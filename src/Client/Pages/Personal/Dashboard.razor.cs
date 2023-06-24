@@ -2,7 +2,7 @@
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
 using FL_CRMS_ERP_WASM.Client.Shared;
-using FSH.WebApi.Shared.Notifications;
+using FL.WebApi.Shared.Notifications;
 using MediatR.Courier;
 using Microsoft.AspNetCore.Components;
 

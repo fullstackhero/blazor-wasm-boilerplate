@@ -2,7 +2,7 @@
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
 using FL_CRMS_ERP_WASM.Client.Shared;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -68,7 +68,7 @@ public partial class UserProfile
         }
 
         var state = await AuthState;
-        _canToggleUserStatus = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Users);
+        _canToggleUserStatus = await AuthService.HasPermissionAsync(state.User, FLAction.Update, FLResource.Users);
         _loaded = true;
     }
 }

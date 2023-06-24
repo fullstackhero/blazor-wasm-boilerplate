@@ -2,7 +2,7 @@
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FL_CRMS_ERP_WASM.Client.Shared;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -32,8 +32,8 @@ public partial class Tenants
         Context = new(
             entityName: L["Tenant"],
             entityNamePlural: L["Tenants"],
-            entityResource: FSHResource.Tenants,
-            searchAction: FSHAction.View,
+            entityResource: FLResource.Tenants,
+            searchAction: FLAction.View,
             deleteAction: string.Empty,
             updateAction: string.Empty,
             fields: new()
@@ -53,8 +53,8 @@ public partial class Tenants
             exportAction: string.Empty);
 
         var state = await AuthState;
-        _canUpgrade = await AuthService.HasPermissionAsync(state.User, FSHAction.UpgradeSubscription, FSHResource.Tenants);
-        _canModify = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Tenants);
+        _canUpgrade = await AuthService.HasPermissionAsync(state.User, FLAction.UpgradeSubscription, FLResource.Tenants);
+        _canModify = await AuthService.HasPermissionAsync(state.User, FLAction.Update, FLResource.Tenants);
     }
 
     private void ViewTenantDetails(string id)

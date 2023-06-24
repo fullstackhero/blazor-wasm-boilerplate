@@ -1,9 +1,9 @@
 ﻿@page "/users/{Id}/profile"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.Users)]
+@attribute [MustHavePermission(FLAction.View, FLResource.Users)]
 
 @inject IStringLocalizer<UserProfile> _localizer
 
-<FshTitle Title="@Title" Description="@Description" />
+<FLTitle Title="@Title" Description="@Description" />
 @if (!_loaded)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />

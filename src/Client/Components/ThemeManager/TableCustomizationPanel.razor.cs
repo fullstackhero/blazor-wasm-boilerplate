@@ -17,7 +17,7 @@ public partial class TableCustomizationPanel
     [Inject]
     protected INotificationPublisher Notifications { get; set; } = default!;
 
-    private FshTablePreference _tablePreference = new();
+    private FLTablePreference _tablePreference = new();
 
     protected override async Task OnInitializedAsync()
     {

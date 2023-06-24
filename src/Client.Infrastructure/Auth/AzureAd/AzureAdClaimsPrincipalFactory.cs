@@ -1,5 +1,5 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,9 +48,9 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                 userIdentity.AddClaim(new Claim(ClaimTypes.Surname, userDetails.LastName));
             }
 
-            if (!userIdentity.HasClaim(c => c.Type == FSHClaims.Fullname))
+            if (!userIdentity.HasClaim(c => c.Type == FLClaims.Fullname))
             {
-                userIdentity.AddClaim(new Claim(FSHClaims.Fullname, $"{userDetails.FirstName} {userDetails.LastName}"));
+                userIdentity.AddClaim(new Claim(FLClaims.Fullname, $"{userDetails.FirstName} {userDetails.LastName}"));
             }
 
             if (!userIdentity.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
@@ -58,14 +58,14 @@ internal class AzureAdClaimsPrincipalFactory : AccountClaimsPrincipalFactory<Rem
                 userIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()));
             }
 
-            if (!string.IsNullOrWhiteSpace(userDetails.ImageUrl) && !userIdentity.HasClaim(c => c.Type == FSHClaims.ImageUrl) && userDetails.ImageUrl is not null)
+            if (!string.IsNullOrWhiteSpace(userDetails.ImageUrl) && !userIdentity.HasClaim(c => c.Type == FLClaims.ImageUrl) && userDetails.ImageUrl is not null)
             {
-                userIdentity.AddClaim(new Claim(FSHClaims.ImageUrl, userDetails.ImageUrl));
+                userIdentity.AddClaim(new Claim(FLClaims.ImageUrl, userDetails.ImageUrl));
             }
 
             var permissions = await _services.GetRequiredService<IPersonalClient>().GetPermissionsAsync();
 
-            userIdentity.AddClaims(permissions.Select(permission => new Claim(FSHClaims.Permission, permission)));
+            userIdentity.AddClaims(permissions.Select(permission => new Claim(FLClaims.Permission, permission)));
         }
 
         return principal;

@@ -5,7 +5,7 @@
         </MudItem>
     </TitleContent>
     <DialogContent>
-        <FshTable Items="_productDataDtos">
+        <FLTable Items="_productDataDtos">
             <HeaderContent>
                 <MudTh><MudTableSortLabel SortBy="new Func<ProductDataDto, object>(x => x.ProductName)">Product Name</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<ProductDataDto, object>(x => x.ProductCode)">Code</MudTableSortLabel></MudTh>
@@ -21,7 +21,7 @@
                 <MudTd @onclick="@(() => SelectProduct(context))" DataLabel="Price"><MudHighlighter Text="@context.UnitPrice.ToString()" /></MudTd>
                 <MudTd @onclick="@(() => SelectProduct(context))" DataLabel="Tax"><MudHighlighter Text="@context.Tax" /></MudTd>
                 </RowTemplate>
-            </FshTable>
+            </FLTable>
             <MudCardActions>
                 <MudItem style="float: right;">
                 <MudButton Color="Color.Primary" OnClick="(() => ConfirmProduct(_confirmProduct = true))"  Variant="Variant.Outlined">Add</MudButton>

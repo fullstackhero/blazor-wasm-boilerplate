@@ -1,10 +1,10 @@
 ﻿@page "/"
 @page "/dashboard"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.Dashboard)]
+@attribute [MustHavePermission(FLAction.View, FLResource.Dashboard)]
 
 @inject IStringLocalizer<Dashboard> L
 
-<FshTitle Title="@L["Dashboard"]" Description="@L["Realtime Updates & Insights with SignalR."]" />
+<FLTitle Title="@L["Dashboard"]" Description="@L["Realtime Updates & Insights with SignalR."]" />
 
 @if (!_loaded)
 {

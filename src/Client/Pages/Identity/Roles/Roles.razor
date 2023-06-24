@@ -1,9 +1,9 @@
 ﻿@page "/roles"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.Roles)]
+@attribute [MustHavePermission(FLAction.View, FLResource.Roles)]
 
 @inject IStringLocalizer<Roles> L
 
-<FshTitle Title="@L["Roles"]" Description="@L["Manage Roles."]" />
+<FLTitle Title="@L["Roles"]" Description="@L["Manage Roles."]" />
 
 <EntityTable TEntity="RoleDto" TId="string" TRequest="CreateOrUpdateRoleRequest" Context="@Context">
 

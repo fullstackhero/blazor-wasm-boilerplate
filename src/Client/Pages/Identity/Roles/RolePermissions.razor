@@ -1,9 +1,9 @@
 ﻿@page "/roles/{Id}/permissions"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.RoleClaims)]
+@attribute [MustHavePermission(FLAction.View, FLResource.RoleClaims)]
 
 @inject IStringLocalizer<RolePermissions> L
 
-<FshTitle Title="@_title" Description="@_description" />
+<FLTitle Title="@_title" Description="@_description" />
 
 @if (!_loaded)
 {

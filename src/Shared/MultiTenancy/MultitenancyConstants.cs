@@ -1,4 +1,4 @@
-namespace FSH.WebApi.Shared.Multitenancy;
+namespace FL.WebApi.Shared.Multitenancy;
 
 public class MultitenancyConstants
 {

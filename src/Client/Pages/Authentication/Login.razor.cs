@@ -2,7 +2,7 @@
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FL_CRMS_ERP_WASM.Client.Shared;
-using FSH.WebApi.Shared.Multitenancy;
+using FL.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;

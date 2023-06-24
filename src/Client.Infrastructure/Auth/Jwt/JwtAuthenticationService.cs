@@ -1,5 +1,5 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
@@ -38,7 +38,7 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
         // Add cached permissions as claims
         if (await GetCachedPermissionsAsync() is List<string> cachedPermissions)
         {
-            claimsIdentity.AddClaims(cachedPermissions.Select(p => new Claim(FSHClaims.Permission, p)));
+            claimsIdentity.AddClaims(cachedPermissions.Select(p => new Claim(FLClaims.Permission, p)));
         }
 
         return new AuthenticationState(new ClaimsPrincipal(claimsIdentity));

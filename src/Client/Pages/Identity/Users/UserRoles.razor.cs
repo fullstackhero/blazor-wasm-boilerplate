@@ -1,7 +1,7 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FL_CRMS_ERP_WASM.Client.Shared;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -35,8 +35,8 @@ public partial class UserRoles
          if(!(checkedChanged))
         {
             var state = await AuthState;
-            _canEditUsers = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.Users);
-            _canSearchRoles = await AuthService.HasPermissionAsync(state.User, FSHAction.View, FSHResource.UserRoles);
+            _canEditUsers = await AuthService.HasPermissionAsync(state.User, FLAction.Update, FLResource.Users);
+            _canSearchRoles = await AuthService.HasPermissionAsync(state.User, FLAction.View, FLResource.UserRoles);
 
             if (await ApiHelper.ExecuteCallGuardedAsync(
                     () => UsersClient.GetByIdAsync(Id), Snackbar)

@@ -93,7 +93,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "FSHApi.cs",
+      "output": "FLApi.cs",
       "newLineBehavior": "Auto"
     }
   }

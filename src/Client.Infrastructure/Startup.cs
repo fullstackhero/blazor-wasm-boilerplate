@@ -3,7 +3,7 @@ using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
@@ -47,9 +47,9 @@ public static class Startup
 
     private static void RegisterPermissionClaims(AuthorizationOptions options)
     {
-        foreach (var permission in FSHPermissions.All)
+        foreach (var permission in FLPermissions.All)
         {
-            options.AddPolicy(permission.Name, policy => policy.RequireClaim(FSHClaims.Permission, permission.Name));
+            options.AddPolicy(permission.Name, policy => policy.RequireClaim(FLClaims.Permission, permission.Name));
         }
     }
 

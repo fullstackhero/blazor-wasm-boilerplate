@@ -1,7 +1,7 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Components.EntityTable;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -24,7 +24,7 @@ public partial class Products
         Context = new(
             entityName: L["Product"],
             entityNamePlural: L["Products"],
-            entityResource: FSHResource.Products,
+            entityResource: FLResource.Products,
             fields: new()
             {
                 new(prod => prod.Id, L["Id"], "Id"),

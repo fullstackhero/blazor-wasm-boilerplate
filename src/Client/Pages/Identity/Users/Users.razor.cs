@@ -1,7 +1,7 @@
 ﻿using FL_CRMS_ERP_WASM.Client.Components.EntityTable;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
-using FSH.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -35,14 +35,14 @@ public partial class Users
     protected override async Task OnInitializedAsync()
     {
         var user = (await AuthState).User;
-        _canExportUsers = await AuthService.HasPermissionAsync(user, FSHAction.Export, FSHResource.Users);
-        _canViewRoles = await AuthService.HasPermissionAsync(user, FSHAction.View, FSHResource.UserRoles);
+        _canExportUsers = await AuthService.HasPermissionAsync(user, FLAction.Export, FLResource.Users);
+        _canViewRoles = await AuthService.HasPermissionAsync(user, FLAction.View, FLResource.UserRoles);
 
         Context = new(
             entityName: L["User"],
             entityNamePlural: L["Users"],
-            entityResource: FSHResource.Users,
-            searchAction: FSHAction.View,
+            entityResource: FLResource.Users,
+            searchAction: FLAction.View,
             updateAction: string.Empty,
             deleteAction: string.Empty,
             fields: new()

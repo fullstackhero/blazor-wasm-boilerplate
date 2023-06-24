@@ -2,7 +2,7 @@
 
 @inject IStringLocalizer<AuditLogs> L
 
-<FshTitle Title="@L["Audit Logs"]" Description="@L["Your Recent Activities."]" />
+<FLTitle Title="@L["Audit Logs"]" Description="@L["Your Recent Activities."]" />
 
 <EntityTable TEntity="RelatedAuditTrail" TId="Guid" TRequest="object" Context="@Context" @bind-SearchString="_searchString">
 

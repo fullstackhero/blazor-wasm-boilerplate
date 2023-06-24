@@ -1,8 +1,8 @@
-using FSH.WebApi.Shared.Notifications;
+using FL.WebApi.Shared.Notifications;
 
 namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
 
-public class FshTablePreference : INotificationMessage
+public class FLTablePreference : INotificationMessage
 {
     public bool IsDense { get; set; }
     public bool IsStriped { get; set; }

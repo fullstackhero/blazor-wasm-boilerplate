@@ -4,7 +4,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Theme;
 
 public static class CustomTypography
 {
-    public static Typography FSHTypography => new Typography()
+    public static Typography FLTypography => new Typography()
     {
         Default = new Default()
         {
