@@ -140,19 +140,26 @@
                                 <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>
                             }
                             else if (_roleEditDelete)//the else if only use for role
-                            {                               
-                                <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>                                                                
+                            {       
+                                @if (CanUpdateEntityRole(context))
+                                {
+                                    <MudMenuItem @onclick="@(() => InvokeModal(context))">@L["Edit"]</MudMenuItem>
+                                }                                                              
                             }
                             @if (CanDeleteEntity(context))
                             {
                                 <MudMenuItem Style="color:red!important" @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
                             }
-                            else if (_roleEditDelete)//the else if only use for role
+                            else if ((_roleEditDelete) &&  (CanDeleteEntity(context)) )//the else if only use for role
                             {
                                 <MudMenuItem Style="color:red!important" @onclick="@(() => Delete(context))">@L["Delete"]</MudMenuItem>
                             }
                             @if (ExtraActions is not null)
                             {
+                                if(_userEditDelete)
+                                {
+                                    <MudMenuItem @onclick="@(() => UpdateUser(context))">@L["Edit"]</MudMenuItem>
+                                }
                                 @ExtraActions(context)
                             }
                         </MudMenu>

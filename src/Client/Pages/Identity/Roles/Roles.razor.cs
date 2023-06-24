@@ -34,7 +34,7 @@ public partial class Roles
             searchAction: FSHAction.View,
             fields: new()
             {
-                new(role => role.Id, L["Id"]),
+                //new(role => role.Id, L["Id"]),
                 new(role => role.Name, L["Name"]),
                 new(role => role.Description, L["Description"]),
                 new(role => role.ReportTo, L["ReportTo"])

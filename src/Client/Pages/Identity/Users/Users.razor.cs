@@ -67,6 +67,34 @@ public partial class Users
             createFunc: user => UsersClient.CreateAsync(user),
             hasExtraActionsFunc: () => true,
             exportAction: string.Empty);
+
+            await GetAllUsers();
+    }
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtoList = new();
+
+    async Task GetAllUsers()
+    {
+        try
+        {
+            _userDetailsDtoList = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    private async Task<IEnumerable<string>> SearchUsers(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userDetailsDtoList.Select(x => x.Id.ToString());
+
+        return _userDetailsDtoList.Where(x => x.UserName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id.ToString());
     }
 
     private void ViewProfile(in Guid userId) =>

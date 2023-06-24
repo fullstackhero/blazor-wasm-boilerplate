@@ -1,6 +1,9 @@
+using System.Reflection;
 using FL_CRMS_ERP_WASM.Client.Components.Dialogs;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Pages.Common;
+using FL_CRMS_ERP_WASM.Client.Pages.Identity.Users;
 using FL_CRMS_ERP_WASM.Client.Shared;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -83,6 +86,27 @@ public partial class EntityTable<TEntity, TId, TRequest>
     private bool CanUpdateEntity(TEntity entity) => _canUpdate && (Context.CanUpdateEntityFunc is null || Context.CanUpdateEntityFunc(entity));
     private bool CanDeleteEntity(TEntity entity) => _canDelete && (Context.CanDeleteEntityFunc is null || Context.CanDeleteEntityFunc(entity));
 
+    private bool CanUpdateEntityRole(TEntity entity)
+    {
+        // Get the 'Name' property using reflection
+        PropertyInfo nameProperty = typeof(TEntity).GetProperty("Name");
+
+        if (nameProperty != null && nameProperty.PropertyType == typeof(string))
+        {
+            // Retrieve the value of the 'Name' property
+            string nameValue = nameProperty.GetValue(entity) as string;
+
+            if (nameValue != "Admin")
+            {
+                // Valid name
+                return true;
+            }
+        }
+
+        // Invalid name or property doesn't exist
+        return false;
+    }
+
     // Client side paging/filtering
     private bool LocalSearch(TEntity entity) =>
         Context.ClientContext?.SearchFunc is { } searchFunc
@@ -90,6 +114,7 @@ public partial class EntityTable<TEntity, TId, TRequest>
             : string.IsNullOrWhiteSpace(SearchString);
 
     bool _roleEditDelete = false;
+    bool _userEditDelete = false;
     private async Task LocalLoadDataAsync()
     {
         if (Loading || Context.ClientContext is null)
@@ -97,9 +122,18 @@ public partial class EntityTable<TEntity, TId, TRequest>
             return;
         }
 
-        if(Context.EntityName == "Role" && Context.EntityResource == "Roles")//the if help to update Admin and Basic Role ReportTo id valuse.
+        // if(Context.EntityName == "Role" && Context.EntityResource == "Roles")//the if help to update Admin and Basic Role ReportTo id valuse.
+        // {
+        //     _roleEditDelete=true;
+        // }
+        switch(Context.EntityName)
         {
-            _roleEditDelete=true;
+            case "Role":
+                _roleEditDelete=true;
+            break;
+            case "User":
+                _userEditDelete = true;
+            break;
         }
 
         Loading = true;
@@ -340,5 +374,26 @@ public partial class EntityTable<TEntity, TId, TRequest>
             Snackbar.Add(ex.Message, Severity.Error);
         }
     }
-    
+
+    async Task UpdateUser(TEntity entity)
+    {
+        _ = Context.IdFunc ?? throw new InvalidOperationException("IdFunc can't be null!");
+        TId id = Context.IdFunc(entity);
+
+        var parameters = new DialogParameters();
+        
+            parameters.Add(nameof(EditUsersDialog._updateUserRequest), new UpdateUserRequest
+            {
+                Id = id.ToString()
+            });
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<EditUsersDialog>("update", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await ReloadDataAsync();
+        }
+    }
+
 }

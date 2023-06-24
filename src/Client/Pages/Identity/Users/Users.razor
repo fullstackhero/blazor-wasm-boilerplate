@@ -28,10 +28,13 @@
             <MudTextField For="@(() => context.Email)" InputType="InputType.Email" @bind-Value="context.Email"
                 Label="@L["Email"]" />
         </MudItem>
-        <MudItem xs="12" md="12">
+        <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.PhoneNumber)" @bind-Value="context.PhoneNumber"
                 Label="@L["Phone Number"]" />
         </MudItem>
+         <MudItem xs="12" md="6">
+            <MudAutocomplete Margin="Margin.Dense" Color="Color.Secondary" T="string" Label="ReportTo" @bind-Value="context.ReportTo" ResetValueOnEmptyText="true" SearchFunc="@SearchUsers" ToStringFunc="@(i => _userDetailsDtoList.FirstOrDefault(b => b.Id.ToString() == i)?.UserName ?? string.Empty)" OffsetY="true" />
+         </MudItem>
         <MudItem xs="12" md="6">
             <MudTextField For="@(() => context.Password)" @bind-Value="context.Password" Label="@L["Password"]"
                 InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon"
