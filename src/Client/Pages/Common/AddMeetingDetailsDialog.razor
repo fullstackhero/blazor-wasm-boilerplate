@@ -443,6 +443,41 @@ else
         {
             _mettingstatus = "Meeting not Started";
         }
+        else
+        {
+                DateTime? dateTimeValue = _updateMeetingRequest.FromDate;
+                if (dateTimeValue.HasValue)
+                {
+                    DateTime nonNullableDateTime = dateTimeValue.Value;
+                    selectedFromDate = nonNullableDateTime.Date;
+                    _saveFromTime = (nonNullableDateTime.TimeOfDay).ToString();
+                }
+                DateTime? dateTimeValue1 = _updateMeetingRequest.ToDate;
+                if (dateTimeValue1.HasValue)
+                {
+                    DateTime nonNullableDateTime1 = dateTimeValue1.Value;
+                    selectedToDate = nonNullableDateTime1.Date;
+                    _saveToTime = nonNullableDateTime1.ToString("hh:mm tt");
+                   // _saveToTime = (nonNullableDateTime1.TimeOfDay).ToString();
+                    await SelectedFromTime(_saveFromTime);
+                    _saveToTime = timeList.Where(x => x.Contains(_saveToTime)).FirstOrDefault();
+                }
+                allDayCheck = _updateMeetingRequest.Allday;
+            if(_updateMeetingRequest.Participants != null)            
+            {
+                
+                ParticipantsOptions = (_updateMeetingRequest.Participants).ToArray();
+            } 
+             if(_updateMeetingRequest.CheckedInStatus == false)
+            {
+                _mettingstatus = "Meeting not Started";
+            }
+            else
+            {
+                _mettingstatus = "Completed";
+
+            }
+        }
         await LoadDataAsync();
     }
 

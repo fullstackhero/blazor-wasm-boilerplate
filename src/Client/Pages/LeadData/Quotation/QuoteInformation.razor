@@ -1,32 +1,151 @@
 ﻿@page "/leaddata/quotation/quoteinformation"
 
+<div class="sticky">
+<MudCard Outlined="true" Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
+   <MudCardContent>
+    <MudGrid>
+        <MudItem xs="2" sm="1">
+                    <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowLeft"></MudIconButton>
+                </MudItem>
+                <MudItem xs="2" sm="1">
+                    <MudText Typo="Typo.h6">Quote Information</MudText>
+                </MudItem>
+                <MudSpacer />
+                <MudItem>
+                    <MudButton OnClick="AddQuote" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.Add" Size="Size.Small">Add Quote</MudButton>
+                </MudItem>
+    </MudGrid>
+   </MudCardContent>
+</MudCard>
+</div>
 
+<MudGrid Style="margin-top:12rem">
+    <MudItem xs="12">
+      <FshTable Items="_quotationDtos">
+            <HeaderContent>
+              <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.QuoteOwnerId)">Owner</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.ContactId)">Contact</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.AccountId)">Account</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.ValidDate)">ValidDate</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.GrandTotal)">Total</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuotationDto, object>(x => x.QuoteStage)">Status</MudTableSortLabel></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                        @if (_quotationDtos.Count != 0)
+                        {
+                            <MudTd DataLabel="Subject"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" HighlightedText="@context.Subject" Text="@context.Subject" /></MudTd>
+                                                        
+                                <MudTd DataLabel="Owner">
+                                    @foreach (var item in _userDetailsDtos.Where(x => x.Id == context.QuoteOwnerId))
+                                    {
+                                        <MudHighlighter Text="@item.FirstName" />
+                                    } 
+                                </MudTd>                            
+                           
+                                <MudTd DataLabel="Contact">
+                                    @foreach (var item in _contactDtos.Where(i => i.Id == context.ContactId))
+                                    {
+                                        <MudHighlighter Text="@item.FirstName" />
+                                    } 
+                                </MudTd>
+                                                        
+                                <MudTd DataLabel="Account">
+                                    @foreach (var item in _accountDtos.Where(i => i.Id == context.AccountId))
+                                    {
+                                        <MudHighlighter Text="@item.AccountName" />
+                                    }
+                                </MudTd>
+                            <MudTd DataLabel="ValidDate"><MudHighlighter  Text="@context.ValidDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                            <MudTd DataLabel="Total"><MudHighlighter Text="@context.GrandTotal.ToString()" /></MudTd>
+                            <MudTd DataLabel="Status"><MudHighlighter Text="@context.QuoteStage" /></MudTd>
+                        }
+                        else
+                        {
+                            <MudText Align="Align.Center">No Data Available</MudText>
+                        }
+                        </RowTemplate>
+      </FshTable>
+    </MudItem>
+</MudGrid>
 
 @code {
 
-        protected override async Task OnInitializedAsync()
-        {
-            await GetAllQuote();
-        }
-
-     
-
-   [Inject]IQuotationDetailsClient _quotationDetailsClient {get;set;}
-   List<QuotationDto> _quotationDtos = new();
-    async Task GetAllQuote()
+    protected override async Task OnInitializedAsync()
     {
-        try{
-          _quotationDtos = (await _quotationDetailsClient.GetListAsync()).ToList();
-        }
-        catch(Exception ex)
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetAllQuote();
+        await GetAllUserData();
+        await GetAllContact();
+        await GetAllAccount();
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
         {
-          Snackbar.Add(ex.Message, Severity.Error);
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
         }
     }
 
+    [Inject]IQuotationDetailsClient _quotationDetailsClient {get;set;}
+    List<QuotationDto> _quotationDtos = new();
+    async Task GetAllQuote()
+    {
+        try{
+            _quotationDtos = (await _quotationDetailsClient.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject]IContactDetailsClient _contactDetailsClient {get;set;}
+    List<ContactDto> _contactDtos =new();
+
+    async Task GetAllContact()
+    {
+        try{
+            _contactDtos = (await _contactDetailsClient.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject]IAccountDetailsClient _accountDetailsClient {get;set;}
+    List<AccountDto> _accountDtos = new();
+
+    async Task GetAllAccount()
+    {
+        try{
+            _accountDtos = (await _accountDetailsClient.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task AddQuote()
+    {
+        Navigation.NavigateTo("/leaddata/quotation/addquotation");
+    }
+
 }
-#pragma warning restore 1998
-#nullable restore
-#line 5 "e:/FL-CRM(Git)/Wasm/src/Client/Pages/LeadData/Quotation/QuoteInformation.razor"
+
 
 
