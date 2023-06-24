@@ -262,7 +262,7 @@
 
         try
         {
-            var response1 = await _leadDetailsClient.UpdateAsync(updateLeadRequest.Id, updateLeadRequest);
+            var response1 = await _leadDetailsClient.UpdateAsync(_leadId, updateLeadRequest);
             if (response1 != Guid.Empty)
             {
                 Snackbar.Add("Lead Converted Successfully", Severity.Info);

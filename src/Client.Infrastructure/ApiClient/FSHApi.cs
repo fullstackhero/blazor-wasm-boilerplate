@@ -11499,8 +11499,8 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Assistant { get; set; }
         public string? AssistantNumber { get; set; }
         public string? Source { get; set; }
-        public Guid LeadId { get; set; }
-        public Guid ReportTo { get; set; }
+        public Guid? LeadId { get; set; }
+        public Guid? ReportTo { get; set; }
         public string? OtherPhone { get; set; }
 
     }
@@ -11518,7 +11518,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? HomePhone { get; set; }
         public string? Fax { get; set; }
         public string? Mobile { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string? SkypeId { get; set; }
         public string? SecondEmail { get; set; }
         public string? Twitter { get; set; }
@@ -11540,8 +11540,8 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Assistant { get; set; }
         public string? AssistantNumber { get; set; }
         public string? Source { get; set; }
-        public Guid LeadId { get; set; }
-        public Guid ReportTo { get; set; }
+        public Guid? LeadId { get; set; }
+        public Guid? ReportTo { get; set; }
         public string? OtherPhone { get; set; }
 
     }
@@ -11559,7 +11559,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? HomePhone { get; set; }
         public string? Fax { get; set; }
         public string? Mobile { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string? SkypeId { get; set; }
         public string? SecondEmail { get; set; }
         public string? Twitter { get; set; }
@@ -11581,8 +11581,8 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? Assistant { get; set; }
         public string? AssistantNumber { get; set; }
         public string? Source { get; set; }
-        public Guid LeadId { get; set; }
-        public Guid ReportTo { get; set; }
+        public Guid? LeadId { get; set; }
+        public Guid? ReportTo { get; set; }
         public string? OtherPhone { get; set; }
 
     }
@@ -12271,14 +12271,14 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
     public class Quote
     {
         public Guid ProductId { get; set; }
-        public int Quantity { get; set; }
-        public decimal ListPrice { get; set; }
-        public decimal Amount { get; set; }
-        public decimal Discount { get; set; }
-        public decimal TotalAfterDiscount { get; set; }
-        public decimal Tax { get; set; }
-        public decimal Total { get; set; }
-        public string Description { get; set; } = string.Empty;
+        public int? Quantity { get; set; }
+        public decimal? ListPrice { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? Discount { get; set; }
+        public decimal? TotalAfterDiscount { get; set; }
+        public decimal? Tax { get; set; }
+        public decimal? Total { get; set; }
+        public string? Description { get; set; } = string.Empty;
 
     }
     public partial class CreateInvoiceRequest
@@ -13129,7 +13129,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
     public partial class CreateQuotationRequest
     {
         public string? Team { get; set; }
-        public Guid DealId { get; set; }
+        public Guid? DealId { get; set; }
         public string? Subject { get; set; }
         public DateTime? ValidDate { get; set; }
         public Guid ContactId { get; set; }
@@ -13150,7 +13150,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? TermsConditions { get; set; }
         public Guid QuoteOwnerId { get; set; }
 
-        public Guid LeadId { get; set; }
+        public Guid? LeadId { get; set; }
 
         [NotMapped]
         public List<Quote> QuoteItems { get; set; }
@@ -13167,11 +13167,11 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
                 QuoteItems = JsonConvert.DeserializeObject<List<Quote>>(value);
             }
         }
-        public decimal SubTotal { get; set; }
-        public decimal TotalDiscount { get; set; }
-        public decimal TotalTax { get; set; }
-        public decimal TotalAdjustment { get; set; }
-        public decimal GrandTotal { get; set; }
+        public decimal? SubTotal { get; set; }
+        public decimal? TotalDiscount { get; set; }
+        public decimal? TotalTax { get; set; }
+        public decimal? TotalAdjustment { get; set; }
+        public decimal? GrandTotal { get; set; }
 
 
     }
@@ -13180,7 +13180,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
     {
         public Guid Id { get; set; }
         public string? Team { get; set; }
-        public Guid DealId { get; set; }
+        public Guid? DealId { get; set; }
         public string? Subject { get; set; }
         public DateTime? ValidDate { get; set; }
         public Guid ContactId { get; set; }
@@ -13231,7 +13231,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
     {
         public Guid Id { get; set; }
         public string? Team { get; set; }
-        public Guid DealId { get; set; }
+        public Guid? DealId { get; set; }
         public string? Subject { get; set; }
         public DateTime? ValidDate { get; set; }
         public Guid ContactId { get; set; }

@@ -1,0 +1,32 @@
+﻿@page "/leaddata/quotation/quoteinformation"
+
+
+
+@code {
+
+        protected override async Task OnInitializedAsync()
+        {
+            await GetAllQuote();
+        }
+
+     
+
+   [Inject]IQuotationDetailsClient _quotationDetailsClient {get;set;}
+   List<QuotationDto> _quotationDtos = new();
+    async Task GetAllQuote()
+    {
+        try{
+          _quotationDtos = (await _quotationDetailsClient.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+          Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+}
+#pragma warning restore 1998
+#nullable restore
+#line 5 "e:/FSH-CRM(Git)/Wasm/src/Client/Pages/LeadData/Quotation/QuoteInformation.razor"
+
+
