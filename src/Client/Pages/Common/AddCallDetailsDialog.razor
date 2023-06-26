@@ -37,7 +37,7 @@
                             }
                             else if (_createCallRequest.RelatedTo == "Contact")
                             {
-                                @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Contact Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                                <MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Contact Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
                             }
                             else if (_createCallRequest.RelatedTo == "Quote")
                             {
@@ -184,7 +184,7 @@ else
                         }
                         else if (_updateCallRequest.RelatedTo == "Contact")
                         {
-                            @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Contact Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                            <MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Contact Search" @bind-Value="_updateCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
                         }
                         else if (_updateCallRequest.RelatedTo == "Quote")
                         {
@@ -303,6 +303,8 @@ else
         await GetAllUserData();
         await GetAllLeadData();
         await GetAllAccount();
+        await GetAccountId();
+        await GetContactByAccountId();
         if (_updateCallRequest.Id == Guid.Empty)
         {
             await UpdateSubject();
@@ -461,22 +463,41 @@ else
         {
             if(_createCallRequest.RelatedTo == "Account")
             {
-              try
-            {
-                var response = await _accountDetailsClient.GetAsync(_createCallRequest.WhoId);
-                if (response.Id != Guid.Empty)
+                try
                 {
-                    string? Name = response.AccountName;
-                    _createCallRequest.Subject = "Call scheduled with" + " " + Name;
-                    StateHasChanged();
-                    //await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                    //MudDialog.Close();
+                    var response = await _accountDetailsClient.GetAsync(_createCallRequest.WhoId);
+                    if (response.Id != Guid.Empty)
+                    {
+                        string? Name = response.AccountName;
+                        _createCallRequest.Subject = "Call scheduled with" + " " + Name;
+                        StateHasChanged();
+                        //await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                        //MudDialog.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Snackbar.Add(ex.Message, Severity.Error);
                 }
             }
-            catch (Exception ex)
+            else if(_createCallRequest.RelatedTo == "Contact")
             {
-                Snackbar.Add(ex.Message, Severity.Error);
-            }
+                try
+                {
+                    var response = await _contactDetailsClient.GetAsync(_createCallRequest.WhoId);
+                    if (response.Id != Guid.Empty)
+                    {
+                        string? Name = response.FirstName;
+                        _createCallRequest.Subject = "Call scheduled with" + " " + Name;
+                        StateHasChanged();
+                        //await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                        //MudDialog.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Snackbar.Add(ex.Message, Severity.Error);
+                }
             }
             else
             {
@@ -527,6 +548,70 @@ else
             return _accountDtos.Where(x => x.AccountName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
                 .Select(x => x.Id);
         }
+    
+    
+
+    [Inject]IContactDetailsClient _contactDetailsClient{get;set;}
+
+    Guid _contactAccountId;
+    async Task GetAccountId()
+    {
+        if(_createCallRequest.RelatedTo == "Contact" || _updateCallRequest.RelatedTo == "Contact")
+        {
+        try{
+        if(_updateCallRequest.Id == Guid.Empty)
+        {
+           var response = await _contactDetailsClient.GetAsync(_createCallRequest.WhoId);
+           if(response.Id != Guid.Empty)
+           {
+             _contactAccountId = response.AccountId;
+           }
+        }
+        else
+        {
+        var response1 = await _contactDetailsClient.GetAsync(_updateCallRequest.WhoId);
+           if(response1.Id != Guid.Empty)
+           {
+             _contactAccountId = response1.AccountId;
+           }
+        }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        }
+    }
+     List<ContactDto> _contactDtos = new();
+    async Task GetContactByAccountId()
+    {
+        if(_createCallRequest.RelatedTo == "Contact" || _updateCallRequest.RelatedTo == "Contact")
+        {
+        try
+        {
+          _contactDtos = (await _contactDetailsClient.GetListAsync()).Where(x => x.AccountId == _contactAccountId).ToList();
+        }
+        catch(Exception ex)
+        {
+         Snackbar.Add(ex.Message, Severity.Error);
+        }
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchContact(string value)
+        {
+            // In real life use an asynchronous function for fetching data from an api.
+            await Task.Delay(5);
+
+            // if text is null or empty, show complete list
+            if (string.IsNullOrEmpty(value))
+                return _contactDtos.Select(x => x.Id);
+
+            return _contactDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                .Select(x => x.Id);
+        }
+        
+
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     void Cancel()
     {

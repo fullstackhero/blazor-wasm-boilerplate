@@ -161,12 +161,12 @@
                             }
                             else if (_createMeetingRequest.RelatedTo == "Contact")
                             {
-                                @* <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
-                        @foreach (var leadlist in _contactDetailsResponses)
+                                 <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="Variant.Outlined" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDtos)
                         {
                         <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
                         }
-                        </MudSelect>*@
+                        </MudSelect>
                             }
                             else if (_createMeetingRequest.RelatedTo == "Quote")
                             {
@@ -445,30 +445,30 @@ else
         }
         else
         {
-                DateTime? dateTimeValue = _updateMeetingRequest.FromDate;
-                if (dateTimeValue.HasValue)
-                {
-                    DateTime nonNullableDateTime = dateTimeValue.Value;
-                    selectedFromDate = nonNullableDateTime.Date;
-                    _saveFromTime = (nonNullableDateTime.TimeOfDay).ToString();
-                }
-                DateTime? dateTimeValue1 = _updateMeetingRequest.ToDate;
-                if (dateTimeValue1.HasValue)
-                {
-                    DateTime nonNullableDateTime1 = dateTimeValue1.Value;
-                    selectedToDate = nonNullableDateTime1.Date;
-                    _saveToTime = nonNullableDateTime1.ToString("hh:mm tt");
-                   // _saveToTime = (nonNullableDateTime1.TimeOfDay).ToString();
-                    await SelectedFromTime(_saveFromTime);
-                    _saveToTime = timeList.Where(x => x.Contains(_saveToTime)).FirstOrDefault();
-                }
-                allDayCheck = _updateMeetingRequest.Allday;
+            DateTime? dateTimeValue = _updateMeetingRequest.FromDate;
+            if (dateTimeValue.HasValue)
+            {
+                DateTime nonNullableDateTime = dateTimeValue.Value;
+                selectedFromDate = nonNullableDateTime.Date;
+                _saveFromTime = (nonNullableDateTime.TimeOfDay).ToString();
+            }
+            DateTime? dateTimeValue1 = _updateMeetingRequest.ToDate;
+            if (dateTimeValue1.HasValue)
+            {
+                DateTime nonNullableDateTime1 = dateTimeValue1.Value;
+                selectedToDate = nonNullableDateTime1.Date;
+                _saveToTime = nonNullableDateTime1.ToString("hh:mm tt");
+                // _saveToTime = (nonNullableDateTime1.TimeOfDay).ToString();
+                await SelectedFromTime(_saveFromTime);
+                _saveToTime = timeList.Where(x => x.Contains(_saveToTime)).FirstOrDefault();
+            }
+            allDayCheck = _updateMeetingRequest.Allday;
             if(_updateMeetingRequest.Participants != null)            
             {
-                
+
                 ParticipantsOptions = (_updateMeetingRequest.Participants).ToArray();
             } 
-             if(_updateMeetingRequest.CheckedInStatus == false)
+            if(_updateMeetingRequest.CheckedInStatus == false)
             {
                 _mettingstatus = "Meeting not Started";
             }
@@ -490,13 +490,27 @@ else
         {
             if(_updateMeetingRequest.Id == Guid.Empty)
             {
-               await GetAccountId(_createMeetingRequest.WhoId);
-               await GetContactAsync();
+                await GetAccountId(_createMeetingRequest.WhoId);
+                await GetContactAsync();
             }
             else
             {
-               await GetAccountId(_updateMeetingRequest.WhoId);
-               await GetContactAsync();
+                await GetAccountId(_updateMeetingRequest.WhoId);
+                await GetContactAsync();
+            }
+        }
+
+        if(_createMeetingRequest.RelatedTo == "Contact" && _createMeetingRequest.RelatedTo == "Contact")
+        {
+            if(_updateMeetingRequest.Id == Guid.Empty)
+            {
+                await GetContactAccountId(_createMeetingRequest.WhoId);
+                await GetContactAsync();
+            }
+            else
+            {
+                await GetContactAccountId(_updateMeetingRequest.WhoId);
+                await GetContactAsync();
             }
         }
 
@@ -841,6 +855,26 @@ else
         }
       }
     }
+    async Task GetContactAccountId(Guid id)
+    {
+        if (id != Guid.Empty)
+        {
+            try
+            {
+                List<ContactDto> contactDtos = new();
+                contactDtos = (await _contactDetailsClient.GetListAsync()).ToList();
+                var response = contactDtos.FirstOrDefault(x => x.AccountId == id);
+                if (response != null)
+                {
+                    _accountId = response.AccountId;
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
 
     List<ContactDto> _contactDtos = new();
      async Task GetContactAsync()
@@ -853,6 +887,8 @@ else
           Snackbar.Add(ex.Message, Severity.Error);
         }
     }
+
+
 
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     void Cancel()

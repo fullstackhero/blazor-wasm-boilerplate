@@ -42,7 +42,7 @@
                             }
                             else if (_createTaskRequest.RelatedTo == "Contact")
                             {
-                                @*<MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Contact Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                                <MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Contact Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
                             }
                             else if (_createTaskRequest.RelatedTo == "Quote")
                             {
@@ -165,7 +165,7 @@ else
                             }
                             else if (_updateTaskRequest.RelatedTo == "Contact")
                             {
-                                @*<MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Contact Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                                <MudAutocomplete T="Guid" For="@(() => _updateTaskRequest.WhoId)" Label="Contact Search" @bind-Value="_updateTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
                             }
                             else if (_updateTaskRequest.RelatedTo == "Quote")
                             {
@@ -260,6 +260,8 @@ else
         await GetAllUserData();
         await GetAllLeadData();
         await GetAllAccount();
+        await GetAccountId();
+        await GetContactByAccountId();
     }
 
     [Inject] ILeadDetailsClient _leadDetails { get; set; }
@@ -433,7 +435,67 @@ else
             return _accountDtos.Where(x => x.AccountName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
                 .Select(x => x.Id);
         }
+    
+    [Inject]IContactDetailsClient _contactDetailsClient {get;set;}
+    Guid _contactAccountId;
+    async Task GetAccountId()
+    {
+        if(_createTaskRequest.RelatedTo == "Contact" || _updateTaskRequest.RelatedTo == "Contact")
+        {
+        try{
+        if(_updateTaskRequest.Id == Guid.Empty)
+        {
+           var response = await _contactDetailsClient.GetAsync(_createTaskRequest.WhoId);
+           if(response.Id != Guid.Empty)
+           {
+             _contactAccountId = response.AccountId;
+           }
+        }
+        else
+        {
+        var response1 = await _contactDetailsClient.GetAsync(_updateTaskRequest.WhoId);
+           if(response1.Id != Guid.Empty)
+           {
+             _contactAccountId = response1.AccountId;
+           }
+        }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        }
+    }
+    
+    List<ContactDto> _contactDtos = new();
+    async Task GetContactByAccountId()
+    {
+        if(_createTaskRequest.RelatedTo == "Contact" || _updateTaskRequest.RelatedTo == "Contact")
+        {
+        try
+        {
+          _contactDtos = (await _contactDetailsClient.GetListAsync()).Where(x => x.AccountId == _contactAccountId).ToList();
+        }
+        catch(Exception ex)
+        {
+         Snackbar.Add(ex.Message, Severity.Error);
+        }
+        }
+    }
 
+    private async Task<IEnumerable<Guid>> SearchContact(string value)
+        {
+            // In real life use an asynchronous function for fetching data from an api.
+            await Task.Delay(5);
+
+            // if text is null or empty, show complete list
+            if (string.IsNullOrEmpty(value))
+                return _contactDtos.Select(x => x.Id);
+
+            return _contactDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                .Select(x => x.Id);
+        }
+      
     void Cancel()
     {
         MudDialog.Close();
