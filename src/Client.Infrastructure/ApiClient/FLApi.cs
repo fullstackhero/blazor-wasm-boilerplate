@@ -10693,6 +10693,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public decimal? Revenue { get; set; }
         public string? Rating { get; set; }
         public string? Phone { get; set; }
+        public string? BusinessType { get; set; }
         public string? Fax { get; set; }
         public string? Website { get; set; }
         public string? TickerSymbol { get; set; }
@@ -10719,6 +10720,8 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public string? AccountImage { get; set; }
         public Guid UserId { get; set; }
         public string? AccountName { get; set; }
+
+        public string? BusinessType { get; set; }
         public string? AccountSite { get; set; }
         public Guid? ParentAccountId { get; set; }
         public string? AccountNumber { get; set; }
@@ -10756,6 +10759,7 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public Guid? ParentAccountId { get; set; }
         public string? AccountNumber { get; set; }
         public string? AccountType { get; set; }
+        public string? BusinessType { get; set; }
         public string? Industry { get; set; }
         public decimal? Revenue { get; set; }
         public string? Rating { get; set; }
@@ -11585,6 +11589,10 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public Guid? LeadId { get; set; }
         public Guid? ReportTo { get; set; }
         public string? OtherPhone { get; set; }
+        public Guid CreatedBy { get; set; }
+        public DateTime CreatedOn { get; private set; }
+        public Guid LastModifiedBy { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
 
     }
 

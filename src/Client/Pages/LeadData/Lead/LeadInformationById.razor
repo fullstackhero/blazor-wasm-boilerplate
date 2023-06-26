@@ -336,6 +336,7 @@
                         </MudCardHeader>
              
                  <MudCardContent>
+                    <MudContainer Style="max-height: 11rem; overflow-y: scroll">
                             @if(upcomings.Count != 0)
                             {
                     
@@ -394,6 +395,7 @@
                                 {
                                 <MudText Typo="Typo.subtitle1" Align="Align.Center">No upcoming actions</MudText>
                                 }
+                                </MudContainer>
              </MudCardContent>
          </MudCard>
 
@@ -598,7 +600,7 @@
                     <MudSpacer />
 
                     <MudItem>
-                        <MudContainer>
+                       
                             <MudMenu Label="Add New" Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
                                 <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" OnClick="AddTask">Task</MudButton>
                                 <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" OnClick="AddMeeting">Meeting</MudButton>
@@ -607,7 +609,7 @@
                             @*<MudMenu Label="Add New" Dense="true">
                             <MudMenuItem OnClick=AddTask>Task</MudMenuItem>
                             </MudMenu>*@
-                        </MudContainer>
+                      
                         @* </ChildContent>*@
                         @*</MudMenu> *@
                         @*<MudButton OnClick="@(() => AddCall(addEditLead.LeadId))">Calls</MudButton>*@
@@ -1807,6 +1809,7 @@
             {
                 Snackbar.Add("Notes Added Successfully", Severity.Info);
                 await RecentLast();
+                _createNoteRequest = new();
                 await TimeLine();
                 //Navigation.NavigateTo("/view/stock");
                 //await Reset();
@@ -2578,3 +2581,4 @@
 
 
 }
+    

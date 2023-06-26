@@ -57,7 +57,7 @@ public class BrandAutocomplete : MudAutocomplete<Guid>
                 () => BrandsClient.SearchAsync(filter), Snackbar)
             is PaginationResponseOfBrandDto response)
         {
-            _brands = response.Data.ToList();
+            _brands = response.ToList();
         }
 
         return _brands.Select(x => x.Id);

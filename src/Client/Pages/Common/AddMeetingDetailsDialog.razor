@@ -139,25 +139,25 @@
                     <MudItem Class="MarginTopStyle">Host</MudItem>
                     </MudItem>*@
                         <MudItem xs="6">
-                            @if (_createMeetingRequest.RelatedTo == "Account")
+                            @*@if (_createMeetingRequest.RelatedTo == "Account")
                             {
                                 <MudAutocomplete T="Guid" Label="Host" For="@(() => _createMeetingRequest.MeetingOwnerId)" @bind-Value="_createMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
                             }
                             else
-                            {
+                            {*@
                                 <MudAutocomplete T="Guid" Label="Host" For="@(() => _createMeetingRequest.MeetingOwnerId)" @bind-Value="_createMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
-                            }
+                            @*}*@
                         </MudItem>
                         <MudItem xs="6">
                             @*<MudSelect T="string" Label="Add Participants" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options">*@
                             @if (_createMeetingRequest.RelatedTo == "Account")
                             {
-                                @*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
-                        @foreach (var leadlist in _contactDetailsResponses)
+                                <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="Variant.Outlined" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDtos)
                         {
                         <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
                         }
-                        </MudSelect>*@
+                        </MudSelect>
                             }
                             else if (_createMeetingRequest.RelatedTo == "Contact")
                             {
@@ -357,25 +357,25 @@ else
                     <MudItem Class="MarginTopStyle">Host</MudItem>
                     </MudItem>*@
                         <MudItem xs="6">
-                            @if (_updateMeetingRequest.RelatedTo == "Account")
+                           @* @if (_updateMeetingRequest.RelatedTo == "Account")
                             {
                                 <MudAutocomplete T="Guid" Label="Host" For="@(() => _updateMeetingRequest.MeetingOwnerId)" @bind-Value="_updateMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
                             }
                             else
-                            {
+                            {*@
                                 <MudAutocomplete T="Guid" Label="Host" For="@(() => _updateMeetingRequest.MeetingOwnerId)" @bind-Value="_updateMeetingRequest.MeetingOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
-                            }
+                            @*}*@
                         </MudItem>
                         <MudItem xs="6">
                             @*<MudSelect T="string" Label="Add Participants" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="options">*@
                             @if (_updateMeetingRequest.RelatedTo == "Account")
                             {
-                                @*<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="@_varientName" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
-                        @foreach (var leadlist in _contactDetailsResponses)
+                                <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-SelectedValues="ParticipantsOptions" T="string" Variant="Variant.Outlined" Label="Add Contact" AdornmentIcon="@Icons.Material.Filled.Search" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var leadlist in _contactDtos)
                         {
                         <MudSelectItem T="string" Value="@leadlist.Id.ToString()">@leadlist.FirstName</MudSelectItem>
                         }
-                        </MudSelect>*@
+                        </MudSelect>
                             }
                             else if (_updateMeetingRequest.RelatedTo == "Contact")
                             {
@@ -486,6 +486,19 @@ else
         await GetAllUserData();
         await GetAllLeadData();
         await SelectedFromTime(_saveFromTime);
+        if(_createMeetingRequest.RelatedTo == "Account" || _updateMeetingRequest.RelatedTo == "Account")
+        {
+            if(_updateMeetingRequest.Id == Guid.Empty)
+            {
+               await GetAccountId(_createMeetingRequest.WhoId);
+               await GetContactAsync();
+            }
+            else
+            {
+               await GetAccountId(_updateMeetingRequest.WhoId);
+               await GetContactAsync();
+            }
+        }
 
     }
 
@@ -600,6 +613,12 @@ else
         }
         _createMeetingRequest.RemindMe = Convert.ToInt32(RemindMe);
         _createMeetingRequest.Allday = allDayCheck;
+        if(_createMeetingRequest.RelatedTo == "Account")
+        {
+            string accountId = Convert.ToString(_createMeetingRequest.WhoId);
+            //ParticipantsOptions.Append(accountId);
+            ((HashSet<string>)ParticipantsOptions).Add(accountId);
+        }
         _createMeetingRequest.Participants = ParticipantsOptions.ToArray();
         //_createMeetingRequest.FromDate = (selectedFromDate + selectedFromTime)?.ToUniversalTime();
 
@@ -798,6 +817,40 @@ else
         catch (Exception ex)
         {
             Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+   
+    Guid _accountId;
+    [Inject]IContactDetailsClient _contactDetailsClient {get;set;}
+    async Task GetAccountId(Guid id)
+    {
+      if(id != Guid.Empty)
+      {
+        try{
+           List<ContactDto> contactDtos = new();
+            contactDtos = (await _contactDetailsClient.GetListAsync()).ToList();
+            var response = contactDtos.FirstOrDefault(x => x.AccountId == id);
+            if(response != null)
+            {
+                _accountId = response.AccountId;
+            }
+        }
+        catch(Exception ex)
+        {
+          Snackbar.Add(ex.Message, Severity.Error);
+        }
+      }
+    }
+
+    List<ContactDto> _contactDtos = new();
+     async Task GetContactAsync()
+    {
+        try{
+         _contactDtos = (await _contactDetailsClient.GetListAsync()).Where(x => x.AccountId == _accountId).ToList();
+        }
+        catch(Exception ex)
+        {
+          Snackbar.Add(ex.Message, Severity.Error);
         }
     }
 

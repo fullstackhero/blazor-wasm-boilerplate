@@ -1,0 +1,1541 @@
+﻿@page "/leaddata/contact/contactInformationById/{_contactId:guid}"
+@using FL_CRMS_ERP_WASM.Client.Components.Dialogs;
+@using FL_CRMS_ERP_WASM.Client.Pages.Common;
+
+<MudContainer style="height: 100vh;">
+    <div class="sticky">
+        <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 100px;margin-bottom:10rem">
+            <MudCardContent>
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudGrid>
+                            <MudItem xs="3" sm="1">
+                                <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowLeft"></MudIconButton>
+                            </MudItem>
+                            <MudItem xs="3" sm="1" Style="margin-top:10px;">
+                                @* <img src="./images/usericon.png" style="width: 45px;height:45px;">*@
+                                @if (!string.IsNullOrEmpty(_contactDto.ContactImage))
+                                {
+                                    <MudAvatar Style="margin-top:6px;" Image="@(_contactDto.ContactImage)"> </MudAvatar>
+                                }
+                                else
+                                {
+                                    <MudAvatar Color="Color.Secondary" Style="margin-top:6px;">_contactDto.FirstName[0]</MudAvatar>
+                                }
+                            </MudItem>
+                            <MudItem xs="18" sm="10" Style="margin-top:12px;">
+                                <b>
+                                    <MudText>@_contactDto.FirstName</MudText>
+                                </b>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" Style="margin-top:10px;">
+                        <span style="float:right;">
+                            <MudButton Variant="Variant.Filled" Style="margin-right:10px; margin-bottom:10px;">
+                                <MudText>Edit</MudText>
+                            </MudButton>
+                            <MudButton Variant="Variant.Filled" Style="margin-right:10px; margin-bottom:10px;">
+                                <MudText>Delete</MudText>
+                            </MudButton>
+                            <MudButton Variant="Variant.Filled" Style="margin-right:10px; margin-bottom:10px;">
+                                <MudText>Cancel</MudText>
+                            </MudButton>
+                        </span>
+                    </MudItem>
+
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    </div>
+
+    <MudGrid>
+        <MudItem xs="3">
+            <MudCard Elevation="25" id="cardposition" Class="rounded-lg" Outlined='true' Style="height:100vh; position: fixed;box-shadow: 0px 4px 12px #888888;">
+
+                <MudNavMenu Color="Color.Error">
+                    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ArrowCircleLeft" />
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="NoteNav" Icon="@Icons.Material.Filled.Note"><MudText>Notes <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="AttachmentNav" Icon="@Icons.Material.Filled.Attachment"><MudText>Attachments</MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="ProductNav" Icon="@Icons.Material.Filled.ProductionQuantityLimits"><MudText>Products</MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="OpenActivityNav" Icon="@Icons.Material.Filled.LocalActivity"><MudText>Open Activities <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                    <MudNavLink Class="btn" Match="NavLinkMatch.All" id="ClosedActivityNav" Icon="@Icons.Material.Filled.ClosedCaption"><MudText>Closed Activities <MudAvatar Size="Size.Small" Color="Color.Primary"></MudAvatar></MudText></MudNavLink>
+                    <MudNavLink Style="visibility:hidden" Class="btn" Match="NavLinkMatch.All" id="InvitedMeetingNav" Icon="@Icons.Material.Filled.InsertInvitation"><MudText>Invited Meetings</MudText></MudNavLink>
+                </MudNavMenu>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="9">
+           
+            <MudGrid>
+                <MudItem xs="12">
+                <MudCard Class="rounded-lg" Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="3">
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Contact Owner</MudText>
+                            </MudItem>
+                            <MudItem xs="3">
+                                @foreach (var item in _userDetailsDtos.Where(x => x.Id == _contactDto.ContactOwnerId))
+                                {
+                                    <MudText>@item.FirstName</MudText>
+                                }
+                            </MudItem>
+                            <MudItem xs="3"></MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3"></MudItem>
+                            <MudItem xs="3">
+                                <MudText>Email</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.Email</MudText>
+                            </MudItem>
+                            <MudItem xs="3"></MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3"></MudItem>
+                            <MudItem xs="3">
+                                <MudText>Phone</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.Phone</MudText>
+                            </MudItem>
+                            <MudItem xs="3"></MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3"></MudItem>
+                            <MudItem xs="3">
+                                <MudText>Mobile</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.Mobile</MudText>
+                            </MudItem>
+                            <MudItem xs="3"></MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3"></MudItem>
+                            <MudItem xs="3">
+                                <MudText>Department</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.Department</MudText>
+                            </MudItem>
+                            <MudItem xs="3"></MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+                </MudItem>
+            </MudGrid>
+
+            <MudExpansionPanels Class="rounded-lg" @onclick="ExpandChange" Style="margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                    <MudExpansionPanel Text="@_expandText">
+                        <MudGrid Style="margin-top:10px">
+                            <MudText Style="color:brown;font-weight:bolder">Contact Information</MudText>
+                        </MudGrid>
+                        <MudGrid Style="margin-top:10px">
+
+                            <MudItem xs="3">
+                                <MudText>Contact Owner</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                @foreach (var item in _userDetailsDtos.Where(x => x.Id == _contactDto.ContactOwnerId))
+                                {
+                                    <MudText>@item.FirstName</MudText>
+                                }
+                                
+                            </MudItem>
+                            <MudItem xs="3">
+                                Lead Source
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.LeadSource</MudText>
+                            </MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Account Name</MudItem>
+                            <MudItem xs="3">
+                            @foreach (var item in _accountDetailDto.Where(x => x.Id == _contactDto.AccountId))
+                                {
+                                        <MudText>@item.AccountName</MudText>
+                                }
+                                    
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Contact Name</MudText>
+                            </MudItem>
+                                <MudItem xs="3">@_contactDto.FirstName</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Phone</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.Phone</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Department</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.Department</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Other Phone</MudItem>
+                            <MudItem xs="3">
+                                
+                                        <MudText>@_contactDto.OtherPhone</MudText>
+                                  
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Home Phone</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.HomePhone</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Mobile</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.Mobile</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Fax</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.Fax</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Assistant</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.Assistant</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Date of Birth</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.DateOfBirth</MudItem>
+                        </MudGrid>
+                       
+                       
+                        <MudGrid>
+                            <MudItem xs="3">
+                                <MudText>CreatedBy</MudText>
+                            </MudItem>
+                                @foreach (var data in _userDetailsDtos.Where(x => x.Id == _contactDto.CreatedBy))
+                            {
+                                    <MudItem xs="3">@data.FirstName On @_contactDto.CreatedOn</MudItem>
+                            }
+                            
+                            <MudItem xs="3">ModifiedBy</MudItem>
+                            <MudItem xs="3">
+                                @if(_contactDto.LastModifiedBy != null)
+                                {
+                                        <MudText>@_contactDto.LastModifiedBy On @_contactDto.LastModifiedOn</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Align="Align.Center" Style="font-weight:bold;">-</MudText>
+                                }
+
+                            </MudItem>
+                            @*<MudItem xs="2">@_getLeadById.LastModifiedOn</MudItem>*@
+                            
+                            @*<MudItem xs="2">@_getLeadById.CreatedOn</MudItem>*@
+                        </MudGrid>
+
+
+                            <MudGrid>
+                                <MudItem xs="3">Assistant Phone</MudItem>
+                                <MudItem xs="3">
+                                    <MudText>@_contactDto.AssistantNumber</MudText>
+
+                                </MudItem>
+                                <MudItem xs="3">
+                                    <MudText>Email Opt out</MudText>
+                                </MudItem>
+                                <MudItem xs="3">@_contactDto.EmailOptOut</MudItem>
+                            </MudGrid>
+
+                                 <MudGrid>
+                                    <MudItem xs="3">Skype ID</MudItem>
+                                    <MudItem xs="3">
+                                        <MudText>@_contactDto.SkypeId</MudText>
+
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText>Secondary Email</MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">@_contactDto.SecondEmail</MudItem>
+                                </MudGrid>
+                                 <MudGrid>
+                                    <MudItem xs="3">Twitter</MudItem>
+                                    <MudItem xs="3">
+                                        <MudText>@_contactDto.Twitter</MudText>
+
+                                    </MudItem>
+                                    <MudItem xs="3">
+                                        <MudText>Reporting To</MudText>
+                                    </MudItem>
+                                    <MudItem xs="3">@_contactDto.ReportTo</MudItem>
+                                </MudGrid>
+
+                        <MudGrid Style="margin-top:10px;margin-bottom:10px">
+                            <MudText Style="color:brown;font-weight:bolder">Address Information</MudText>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Mailing Street</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.MailingStreet</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Other Street</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.OtherStreet</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Mailing City</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.MailingCity</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Other City</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.OtherCity</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Mailing State</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.MailingState</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Other State</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.OtherState</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Mailing Code</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.MailingZipcode</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Other Code</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.OtherZipCode</MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Mailing Country</MudItem>
+                            <MudItem xs="3">
+                                <MudText>@_contactDto.MailingCountry</MudText>
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudText>Other Country</MudText>
+                            </MudItem>
+                            <MudItem xs="3">@_contactDto.OtherCountry</MudItem>
+                        </MudGrid>
+                        <MudGrid Style="margin-top:10px;margin-bottom:10px">
+                            <MudText Style="color:brown;font-weight:bolder">Description Information</MudText>
+                        </MudGrid>
+                        <MudGrid>
+                            <MudItem xs="3">Description</MudItem>
+                                <MudItem xs="9">@_contactDto.Description</MudItem>
+                        </MudGrid>
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+
+            <MudCard Class="rounded-lg" Outlined='true' Style="margin-top:10px;margin-bottom:10px;box-shadow: 0px 4px 12px #888888;">
+                <MudCardContent>
+                    <MudText Typo="Typo.subtitle1" Style="font-weight:bolder">Next Action</MudText>
+                    @if (upcomings.Count != 0)
+                    {
+
+                        <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                            @foreach (var item in upcomings.OrderBy(x => x.Date))
+                            {
+                                @if (item.Date > DateTime.UtcNow)
+                                {
+                                    <MudGrid>
+                                        <MudItem>
+                                            <MudChip Color="Color.Success">@item.Date?.ToString("MMM dd, yyyy")</MudChip>
+                                        </MudItem>
+                                        <MudItem>
+                                            @if (item.Type == "Task")
+                                            {
+                                                <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditTask(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                            }
+                                            else if (item.Type == "Call")
+                                            {
+                                                <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                            }
+                                            else
+                                            {
+                                                <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditMeeting(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                            }
+                                        </MudItem>
+                                    </MudGrid>
+                                }
+                                else
+                                {
+                                    <MudGrid>
+                                        <MudItem>
+                                            <MudChip Color="Color.Error">@item.Date?.ToString("MMM dd, yyyy")</MudChip>
+                                            <MudAvatar Size="Size.Small" Color="Color.Primary">@item.DateDiff?.Days</MudAvatar>
+                                        </MudItem>
+                                        <MudItem>
+                                            @if (item.Type == "Task")
+                                            {
+                                                <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditTask(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                            }
+                                            else if (item.Type == "Call")
+                                            {
+                                                <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditCall(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                            }
+                                            else
+                                            {
+                                                <MudText Typo="Typo.subtitle1"><a @onclick="(() => EditMeeting(item.Id))"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@item.Data" HighlightedText="@item.Data" /></a></MudText>
+                                            }
+                                        </MudItem>
+                                    </MudGrid>
+                                }
+                            }
+
+                        </MudContainer>
+                    }
+
+                    else
+                    {
+                        <MudText Typo="Typo.subtitle1" Align="Align.Center">No upcoming actions</MudText>
+                    }
+                </MudCardContent>
+            </MudCard>
+
+            <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                <MudCardHeader>
+                                    <MudGrid>
+                                        <MudItem id="Notes">
+
+                                            <MudText Style="margin-top:10px;">Notes</MudText>
+                                            @*<h4 style="margin-top:10px;">Notes</h4>*@
+                                        </MudItem>
+                                        <MudSpacer />
+                        <MudItem>
+                            <MudMenu Label="Actions" Variant="Variant.Filled">
+                                <MudMenuItem OnClick="RecentFirst">Recent First</MudMenuItem>
+                                <MudMenuItem OnClick="RecentLast">Recent Last</MudMenuItem>
+                            </MudMenu>
+                        </MudItem>
+                                        </MudGrid>
+                                        </MudCardHeader>
+                                     <MudCardContent>
+                    @if (_notesDtos.Count != 0)
+                    {
+                        <MudContainer Style="max-height: 300px; overflow-y: scroll">
+                            @foreach (var item in _notesDtos)
+                            {
+
+                                <MudCard Style="margin-bottom:0.8rem; margin-top:0.8rem" Class="rounded-lg">
+
+                                    <MudCardHeader>
+
+                                        <CardHeaderAvatar>
+                                            @foreach (var user in _userDetailsDtos.Where(x => x.Id == item.NoteOwnerId))
+                                            {
+                                                @if (string.IsNullOrEmpty(user.ImageUrl))
+                                                {
+                                                    <MudAvatar Color="Color.Secondary">L</MudAvatar>
+                                                }
+                                                else
+                                                {
+                                                    <MudAvatar Image="@user.ImageUrl" Style="height:50px; width:50px;"> </MudAvatar>
+                                                }
+                                            }
+                                        </CardHeaderAvatar>
+                                        <CardHeaderContent>
+
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.body2">@item.NoteTitle</MudText>
+                                            </MudItem>
+                                            <MudItem xs="12">
+                                                <MudText Typo="Typo.body1">@item.NoteContent</MudText>
+                                            </MudItem>
+                                            <MudGrid>
+                                                @*  <MudItem xs="1">
+                                        <MudText>Lead</MudText>
+                                        </MudItem>*@
+                                                <MudItem xs="12">
+
+                                                    <MudTooltip Color="Color.Info" Placement="Placement.Right" Arrow="true">
+                                                        <ChildContent>
+                                                            @foreach (var userName in _userDetailsDtos.Where(x => x.Id == item.NoteOwnerId))
+                                                            {
+                                                                <MudText Typo="Typo.caption">Lead  <MudLink>@_contactDto.FirstName</MudLink>  Added on @item.CreatedOn by @userName.FirstName</MudText>
+                                                            }
+                                                        </ChildContent>
+                                                        <TooltipContent>
+                                                            <MudGrid>
+
+
+                                                                <MudItem xs="3">
+                                                                                <MudText>Contact Owner</MudText>
+                                                                            </MudItem>
+                                                                            <MudItem xs="9">
+                                                                                @foreach (var item in _userDetailsDtos.Where(x => x.Id == _contactDto.ContactOwnerId))
+                                                                                {
+                                                                                    <MudText>@item.FirstName</MudText>
+                                                                                }
+
+                                                                            </MudItem>
+                                                                        </MudGrid>
+                                                                        <MudGrid>
+                                                                            <MudItem xs="3">
+                                                                                <MudText>Email</MudText>
+                                                                            </MudItem>
+                                                                            <MudItem xs="9">
+                                                                                <MudText>@_contactDto.Email</MudText>
+                                                                            </MudItem>
+                                                                        </MudGrid>
+                                                                        <MudGrid>
+                                                                            <MudItem xs="3">
+                                                                                <MudText>Phone</MudText>
+                                                                            </MudItem>
+                                                                            <MudItem xs="9">
+                                                                                <MudText>@_contactDto.Phone</MudText>
+                                                                            </MudItem>
+                                                                        </MudGrid>
+                                                                        <MudGrid>
+                                                                            <MudItem xs="3">
+                                                                                <MudText>Mobile</MudText>
+                                                                            </MudItem>
+                                                                            <MudItem xs="9">
+                                                                                <MudText>@_contactDto.Mobile</MudText>
+                                                                            </MudItem>
+                                                                        </MudGrid>
+                                                                        <MudGrid>
+                                                                            <MudItem xs="3">
+                                                                                <MudText>Department</MudText>
+                                                                            </MudItem>
+                                                                            <MudItem xs="9">
+                                                                    <MudText>@_contactDto.Department</MudText>
+                                                                            </MudItem>
+                                                                        </MudGrid>
+
+                                                        </TooltipContent>
+                                                    </MudTooltip>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </CardHeaderContent>
+
+                                        <CardHeaderActions>
+                                            <MudButton Variant="Variant.Outlined" Color="Color.Surface" OnClick="@(() => NotesCheckById(@item.Id))">View</MudButton>
+                                        </CardHeaderActions>
+
+                                    </MudCardHeader>
+
+                                </MudCard>
+                            }
+                        </MudContainer>
+                    }
+                    <EditForm Model="@_createNoteRequest" OnValidSubmit="SaveNotes">
+                        <MudGrid Style="margin-top:10px; margin-bottom:10px;">
+                            <MudItem xs="1"></MudItem>
+                            <MudItem xs="10">
+                                @if (_updateNoteRequest.Id == Guid.Empty)
+                                {
+                                    <MudTextField @bind-Value="_createNoteRequest.NoteContent" T="string" Label="Notes" Lines="3" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Api" />
+                                }
+                                else
+                                {
+                                    <MudTextField @bind-Value="_updateNoteRequest.NoteContent" T="string" Label="Notes" Lines="3" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Api" />
+                                }
+                            </MudItem>
+                            <MudItem xs="1"></MudItem>
+                        </MudGrid>
+                        <MudGrid>
+                            @if (_updateNoteRequest.Id == Guid.Empty)
+                            {
+                                <MudItem xs="11"></MudItem>
+                                <MudItem xs="1">
+                                    @* <MudGrid>
+                                <MudSpacer/>
+                                <MudItem>*@
+                                    <MudContainer>
+                                        <MudButton Style="float:right" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary">
+                                            Save
+                                        </MudButton>
+                                    </MudContainer>
+                                    @*</MudItem>
+                                </MudGrid>    *@
+                                </MudItem>
+                            }
+                            else
+                            {
+                                <MudItem xs="7"></MudItem>
+
+                                <MudItem xs="1">
+                                    <MudContainer>
+                                        <MudButton Style="float:left" OnClick="UpdateNotes" Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary">Update</MudButton>
+                                    </MudContainer>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudContainer>
+                                        <MudButton OnClick="DeleteNotes" Style="margin-left:3px;float:right" Variant="Variant.Filled" Size="Size.Small" Color="Color.Error">Delete</MudButton>
+                                    </MudContainer>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudContainer>
+                                        <MudButton OnClick="CancelNotes" Style="margin-right:3px;float:right" Variant="Variant.Filled" Size="Size.Small" Color="Color.Surface">Cancel</MudButton>
+                                    </MudContainer>
+                                </MudItem>
+                            }
+
+                        </MudGrid>
+                    </EditForm>
+                    
+                                         </MudCardContent>
+            </MudCard>
+
+            <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;">
+                        <MudCardHeader>
+                            <MudGrid>
+                                <MudItem id="OpenActivities">
+
+                                    <MudText Style="margin-top:10px;">Open Activities</MudText>
+                                </MudItem>
+                                <MudSpacer />
+
+                                <MudItem>
+
+                                    <MudMenu Label="Add New" Dense="true">
+                                        <MudMenuItem OnClick=AddTask>Task</MudMenuItem>
+                                       <MudMenuItem OnClick=AddMeeting>Meeting</MudMenuItem>
+                                        <MudMenuItem OnClick="AddCall">Calls</MudMenuItem>
+                                    </MudMenu>
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            </MudCardContent>
+                            </MudCard>
+            </MudItem>
+    </MudGrid>
+    </MudContainer>
+
+@code
+{
+    [Parameter]
+    public Guid _contactId { get; set; }
+
+    bool _loaded;
+    string _expandText;
+    string _allDay;
+    protected override async Task OnInitializedAsync()
+    {
+        _expandText = "Show Details";
+        _allDay = "AllDay";
+
+        await LoadDataAsync();
+        _loaded = true;
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetCurrentUserId();
+        await GetAllUserData();
+        await GetContactById();
+        await GetAllAccount();
+        await GetContactLeadId();
+        await RecentFirst();
+        await UpcomingActionTask();
+        await UpcomingAuctionCall();
+        await UpcomingAuctionMetting();
+    }
+
+    [Inject] IContactDetailsClient _contactDetailsClient { get; set; }
+    ContactDto _contactDto = new();
+    async Task GetContactById()
+    {
+        try
+        {
+            var response = await _contactDetailsClient.GetAsync(_contactId);
+            if(response.Id != Guid.Empty)
+            {
+                _contactDto.AccountId = response.AccountId;
+                _contactDto.Assistant = response.Assistant;
+                _contactDto.Email = response.Email;
+                _contactDto.EmailOptOut = response.EmailOptOut;
+                _contactDto.AssistantNumber = response.AssistantNumber;
+                _contactDto.LastName = response.LastName;
+                _contactDto.FirstName = response.FirstName;
+                _contactDto.Fax = response.Fax;
+                _contactDto.LeadId = response.LeadId;
+                _contactDto.ContactImage = response.ContactImage;
+                _contactDto.ContactOwnerId = response.ContactOwnerId;
+                _contactDto.DateOfBirth = response.DateOfBirth;
+                _contactDto.Department = response.Department;
+                _contactDto.Description = response.Description;
+                _contactDto.Twitter = response.Twitter;
+                _contactDto.Title = response.Title;
+                _contactDto.HomePhone = response.HomePhone;
+                _contactDto.LeadSource = response.LeadSource;
+                _contactDto.MailingCity = response.MailingCity;
+                _contactDto.MailingCountry = response.MailingCountry;
+                _contactDto.MailingState = response.MailingState;
+                _contactDto.MailingZipcode = response.MailingZipcode;
+                _contactDto.MailingStreet = response.MailingStreet;
+                _contactDto.OtherCity = response.OtherCity;
+                _contactDto.OtherCountry = response.OtherCountry;
+                _contactDto.OtherState = response.OtherState;
+                _contactDto.OtherZipCode = response.OtherZipCode;
+                _contactDto.OtherStreet = response.OtherStreet;
+                _contactDto.SecondEmail = response.SecondEmail;
+                _contactDto.Mobile = response.Mobile;
+                _contactDto.SkypeId = response.SkypeId;
+                _contactDto.Source = response.Source;
+                _contactDto.HomePhone = response.HomePhone;
+                _contactDto.Id = response.Id;
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] IAccountDetailsClient _accountDetailClient { get; set; }
+    List<AccountDto> _accountDetailDto = new();
+    async Task GetAllAccount()
+    {
+        try
+        {
+            _accountDetailDto = (await _accountDetailClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    public bool _expand;
+    public void ExpandChange()
+    {
+        if (_expand == false)
+        {
+            _expand = true;
+            _expandText = "Hide Details";
+        }
+        else
+        {
+            _expand = false;
+            _expandText = "Show Details";
+        }
+    }
+
+    Guid _leadConvertedAccount;
+    Guid? _leadConvertedContact;
+    [Inject]ILeadDetailsClient _leadDetailsClient { get; set; }
+    async Task GetContactLeadId()
+    {
+        try{
+            List<LeadDetailsDto> leadDetailsDtos = new();
+            leadDetailsDtos = (await _leadDetailsClient.GetListAsync()).ToList();
+            var response = leadDetailsDtos.FirstOrDefault(x => x.ConvertedContactId == _contactId);
+            if(response.Id != Guid.Empty)
+            {
+                _leadConvertedAccount = response.Id;
+                _leadConvertedContact = response.ConvertedContactId;
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    public class Upcoming
+    {
+        public Guid Id { get; set; }
+        public DateTime? Date { get; set; }
+        public string Data { get; set; }
+
+        public string Type { get; set; }
+
+        public TimeSpan? DateDiff { get; set; }
+    }
+
+
+
+    List<Upcoming> upcomings = new();
+    [Inject] ITaskDetailsClient _taskDetailsClient { get; set; }
+
+    async Task UpcomingActionTask()
+    {
+
+        try{
+            List<TaskDto> taskDtos = new();
+            taskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.Status != "Completed" && x.WhoId == _contactId).ToList();
+            foreach (var item in taskDtos)
+            {
+                if (!upcomings.Any(x => x.Id == item.Id))
+                {
+                    Upcoming data = new();
+
+                    data.Id = item.Id;
+                    data.Date = item.DueDate;
+                    data.Data = item.Subject;
+                    data.Type = "Task";
+                    data.DateDiff = DateTime.UtcNow - data.Date;
+                    upcomings.Add(data);
+                }
+
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    [Inject] ICallDetailsClient _callDetailsClient { get;set;}
+
+    async Task UpcomingAuctionCall()
+    {
+        try{
+            List<CallDto> callDtos = new();
+            callDtos = (await _callDetailsClient.GetListAsync()).Where(x => x.OutgoingCallStatus != "Completed" && x.WhoId == _contactId).ToList();
+            foreach (var item in callDtos)
+            {
+                if (!upcomings.Any(x => x.Id == item.Id))
+                {
+                    Upcoming data = new();
+
+                    data.Id = item.Id;
+                    data.Date = item.CallStartTime;
+                    data.Data = item.Subject;
+                    data.Type = "Call";
+                    data.DateDiff = DateTime.UtcNow - data.Date;
+                    upcomings.Add(data);
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject]IMeetingDetailsClient _meetingDetailsClient {get;set;}
+
+    async Task UpcomingAuctionMetting()
+    {
+        try{
+            List<MeetingDto> meetingDtos = new();
+            meetingDtos = (await _meetingDetailsClient.GetListAsync()).Where(x => x.CheckedInStatus == false && (x.Participants.Contains(_leadConvertedAccount.ToString()) || x.Participants.Contains(_contactId.ToString()) || x.Participants.Contains(_leadConvertedContact.ToString()))).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+    string? _userId;
+    async Task GetCurrentUserId()
+    {
+        var user = (await AuthState).User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            _userId = user.GetUserId();
+        }
+    }
+
+    [Inject] INoteDetailsClient _noteDetailsClient { get; set; }
+    List<NotesDto> _notesDtos = new();
+    async Task GetAllNotesData()
+    {
+        try
+        {
+            _notesDtos = (await _noteDetailsClient.GetListAsync()).Where(x => x.ParentId == _contactId || x.ParentId == _leadConvertedAccount).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    CreateNoteRequest _createNoteRequest = new();
+    async Task SaveNotes()
+    {
+        try
+        {
+            _createNoteRequest.NoteOwnerId = Guid.Parse(_userId);
+            _createNoteRequest.ParentId = _contactId;
+            _createNoteRequest.RelatedTo = "Contact";
+            var response1 = await _noteDetailsClient.CreateAsync(_createNoteRequest.Adapt<CreateNoteRequest>());
+            if (response1 != Guid.Empty)
+            {
+                Snackbar.Add("Notes Added Successfully", Severity.Info);
+                await RecentLast();
+                _createNoteRequest = new();
+                //await TimeLine();
+                //Navigation.NavigateTo("/view/stock");
+                //await Reset();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+     async Task RecentLast()
+    {
+        try
+        {
+            _notesDtos = (await _noteDetailsClient.GetListAsync()).Where(x => x.ParentId == _contactId || x.ParentId == _leadConvertedAccount).ToList();
+            _notesDtos.Reverse();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task NotesCheckById(Guid id)
+    {
+        try
+        {
+            var response = await _noteDetailsClient.GetAsync(id);
+            if (response.Id != Guid.Empty)
+            {
+                _updateNoteRequest.Id = response.Id;
+                _updateNoteRequest.NoteContent = response.NoteContent;
+                _updateNoteRequest.NoteTitle = response.NoteTitle;
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+
+    UpdateNoteRequest _updateNoteRequest = new();
+    async Task UpdateNotes()
+    {
+        try
+        {
+            var response = await _noteDetailsClient.UpdateAsync(_updateNoteRequest.Id, _updateNoteRequest);
+            if (response != Guid.Empty)
+            {
+                Snackbar.Add("Notes Updated Successfully", Severity.Info);
+                await RecentLast();
+                //await TimeLine();
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task DeleteNotes()
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response1 = await _noteDetailsClient.DeleteAsync(_updateNoteRequest.Id);
+                if (response1 != Guid.Empty)
+                {
+                    Snackbar.Add("Notes Deleted Successfully", Severity.Info);
+                    _updateNoteRequest.Id = Guid.Empty;
+                    await RecentLast();
+                    //await TimeLine();
+                    //Navigation.NavigateTo($"leaddata/leadinformationbyid/{_leadId}");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+
+    async Task CancelNotes()
+    {
+        _updateNoteRequest.Id = Guid.Empty;
+        _updateNoteRequest.NoteContent = string.Empty;
+    }
+
+    async Task RecentFirst()
+    {
+        try
+        {
+            _notesDtos = (await _noteDetailsClient.GetListAsync()).Where(x => x.ParentId == _contactId || x.ParentId == _leadConvertedAccount).ToList();
+            _notesDtos.Reverse();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _taskDtos = new();
+    async Task GetAllTask()
+    {
+        try
+        {
+            _taskDtos = (await _taskDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+
+    List<TaskDto> _unCompletedTaskDtos = new();
+    async Task GetAllUnCompletedTask()
+    {
+        try
+        {
+            _unCompletedTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => (x.WhoId == _contactId || x.WhoId == _leadConvertedAccount) && x.Status != "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _completedTaskDtos = new();
+    async Task GetAllCompletedTask()
+    {
+        try
+        {
+            _completedTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => (x.WhoId == _contactId || x.WhoId == _leadConvertedAccount) && x.Status == "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task AddTask()
+    {
+        var parameters = new DialogParameters();
+        if (_contactId != Guid.Empty)
+        {
+            parameters.Add(nameof(AddTaskDetailsDialog._createTaskRequest), new CreateTaskRequest
+                {
+                    WhoId = _contactId,
+                    RelatedTo = "Contact",
+                    TaskOwnerId = Guid.Parse(_userId),
+                    Status = "Not Started"
+                });
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddTaskDetailsDialog>("Create", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedTask();
+            await GetAllUnCompletedTask();
+            await GetAllTask();
+            //await TimeLine();
+            //await Reset();
+        }
+    }
+
+    async Task DeleteTask(Guid id)
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response = await _taskDetailsClient.DeleteAsync(id);
+                if (response != Guid.Empty)
+                {
+                    Snackbar.Add("Task Deleted Successfully", Severity.Info);
+                    await GetAllCompletedTask();
+                    await GetAllUnCompletedTask();
+                    await GetAllTask();
+                    //await TimeLine();
+                    //Navigation.NavigateTo("/leaddata/leadinformation");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+    async Task EditTask(Guid id)
+    {
+        var parameters = new DialogParameters();
+        if (id != Guid.Empty)
+        {
+            TaskDto taskDto = new();
+            taskDto = _taskDtos.FirstOrDefault(c => c.Id == id);
+            if (taskDto != null)
+            {
+                parameters.Add(nameof(AddTaskDetailsDialog._updateTaskRequest), new UpdateTaskRequest
+                    {
+                        Id = taskDto.Id,
+                        Status = taskDto.Status,
+                        Description = taskDto.Description,
+                        DueDate = taskDto.DueDate,
+                        Remainder = taskDto.Remainder,
+                        TaskOwnerId = taskDto.TaskOwnerId,
+                        Priority = taskDto.Priority,
+                        RelatedTo = taskDto.RelatedTo,
+                        Subject = taskDto.Subject,
+                        WhatId = taskDto.WhatId,
+                        WhoId = taskDto.WhoId
+                    });
+            }
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddTaskDetailsDialog>(id == Guid.Empty ? "Create" : "Edit", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedTask();
+            await GetAllUnCompletedTask();
+            await GetAllTask();
+            //await TimeLine();
+            //await OpenActivitiesCount();
+            //await ClosedActivitiesCount();
+            StateHasChanged();
+        }
+    }
+
+    List<CallDto> _callDtos = new();
+    async Task GetAllCalls()
+    {
+        try
+        {
+            _callDtos = (await _callDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<CallDto> _completedCallDtos = new();
+
+    async Task GetAllCompletedCalls()
+    {
+        try
+        {
+            _completedCallDtos = (await _callDetailsClient.GetListAsync()).Where(x => (x.WhoId == _contactId || x.WhoId == _leadConvertedAccount) && x.OutgoingCallStatus == "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<CallDto> _unCompletedCallDtos = new();
+    async Task GetAllUnCompletedCalls()
+    {
+        try
+        {
+            _unCompletedCallDtos = (await _callDetailsClient.GetListAsync()).Where(x => (x.WhoId == _contactId || x.WhoId == _leadConvertedAccount) && x.OutgoingCallStatus != "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task AddCall()
+    {
+        var parameters = new DialogParameters();
+        if (_contactId != Guid.Empty)
+        {
+
+
+            parameters.Add(nameof(AddCallDetailsDialog._createCallRequest), new CreateCallRequest
+                {
+                    WhoId = _contactId,
+                    RelatedTo = "Contact",
+                    CallOwnerId = Guid.Parse(_userId),
+                    OutgoingCallStatus = "Scheduled",
+                    CallType = "Outbound",
+                    CallPurpose = "Administrative"
+                });
+
+        }
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddCallDetailsDialog>("Create", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedCalls();
+            await GetAllUnCompletedCalls();
+            await GetAllCalls();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+           // await TimeLine();
+            //await ResetCalls();
+        }
+    }
+
+    async Task DeleteCall(Guid id)
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response = await _callDetailsClient.DeleteAsync(id);
+                if (response != Guid.Empty)
+                {
+                    Snackbar.Add("Call Deleted Successfully", Severity.Info);
+                    await GetAllCompletedCalls();
+                    await GetAllUnCompletedCalls();
+                    await GetAllCalls();
+                    await UpcomingActionTask();
+                    await UpcomingAuctionCall();
+                    await UpcomingAuctionMetting();
+                    //await TimeLine();
+                    //Navigation.NavigateTo("/leaddata/leadinformation");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+    async Task EditCall(Guid id)
+    {
+        var parameters = new DialogParameters();
+        if (id != Guid.Empty)
+        {
+            CallDto callDto = new();
+            callDto = _callDtos.FirstOrDefault(c => c.Id == id);
+            if (callDto != null)
+            {
+                parameters.Add(nameof(AddCallDetailsDialog._updateCallRequest), new UpdateCallRequest
+                    {
+                        Id = callDto.Id,
+                        CallAgenda = callDto.CallAgenda,
+                        Description = callDto.Description,
+                        CallStartTime = callDto.CallStartTime,
+                        CallPurpose = callDto.CallPurpose,
+                        CallOwnerId = callDto.CallOwnerId,
+                        CallType = callDto.CallType,
+                        OutgoingCallStatus = callDto.OutgoingCallStatus,
+                        Subject = callDto.Subject,
+                        WhatId = callDto.WhatId,
+                        WhoId = callDto.WhoId,
+                        RemainderTime = callDto.RemainderTime,
+                        RelatedTo = callDto.RelatedTo
+                    });
+            }
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddCallDetailsDialog>(id == Guid.Empty ? "Create" : "Edit", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedCalls();
+            await GetAllUnCompletedCalls();
+            await GetAllCalls();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            //await TimeLine();
+            //await OpenActivitiesCount();
+            //await ClosedActivitiesCount();
+            //StateHasChanged();
+        }
+    }
+
+    List<MeetingDto> _meetingDtos = new();
+    async Task GetAllMeeting()
+    {
+        try
+        {
+            _meetingDtos = (await _meetingDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<MeetingDto> _completedMeetingDto = new();
+
+    async Task GetAllCompletedMeeting()
+    {
+        try
+        {
+            _completedMeetingDto = (await _meetingDetailsClient.GetListAsync()).Where(x => x.CheckedInStatus == true && (x.Participants.Contains(_contactId.ToString()) || x.Participants.Contains(_leadConvertedAccount.ToString()))).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<MeetingDto> _unCompletedMeetingDto = new();
+    async Task GetAllUnCompletedMeeting()
+    {
+        try
+        {
+            _unCompletedMeetingDto = (await _meetingDetailsClient.GetListAsync()).Where(x => x.CheckedInStatus == false && (x.Participants.Contains(_contactId.ToString()) || x.Participants.Contains(_leadConvertedAccount.ToString()))).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task AddMeeting()
+    {
+        var parameters = new DialogParameters();
+        if (_contactId != Guid.Empty)
+        {
+            parameters.Add(nameof(AddMeetingDetailsDialog._createMeetingRequest), new CreateMeetingRequest
+                {
+                    WhoId = _contactId,
+                    RelatedTo = "Contact",
+                    MeetingOwnerId = Guid.Parse(_userId)
+                });
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddMeetingDetailsDialog>("Create", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedMeeting();
+            await GetAllUnCompletedMeeting();
+            await GetAllMeeting();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            //await TimeLine();
+            //await Reset();
+        }
+    }
+
+    async Task DeleteMeeting(Guid id)
+    {
+        string deleteContent = "You're sure you want to Delete?";
+        var parameters = new DialogParameters
+                {
+                { nameof(DeleteConfirmation.ContentText), string.Format(deleteContent, "Remove") }
+                };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<DeleteConfirmation>("Remove", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            try
+            {
+
+                var response = await _meetingDetailsClient.DeleteAsync(id);
+                if (response != Guid.Empty)
+                {
+                    Snackbar.Add("Meeting Deleted Successfully", Severity.Info);
+                    await GetAllCompletedMeeting();
+                    await GetAllUnCompletedMeeting();
+                    await GetAllMeeting();
+                    await UpcomingActionTask();
+                    await UpcomingAuctionCall();
+                    await UpcomingAuctionMetting();
+                   // await TimeLine();
+                    //Navigation.NavigateTo("/leaddata/leadinformation");
+                }
+
+            }
+            catch (ApiException<HttpValidationProblemDetails> ex)
+            {
+                if (ex.Result.Errors is not null)
+                {
+                    Snackbar.Add(ex.Result.Title, Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add("Something went wrong!", Severity.Error);
+                }
+            }
+            catch (ApiException<ErrorResult> ex)
+            {
+                Snackbar.Add(ex.Result.Exception, Severity.Error);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+    async Task EditMeeting(Guid id)
+    {
+        var parameters = new DialogParameters();
+        if (id != Guid.Empty)
+        {
+            MeetingDto meetingDto = new();
+            meetingDto = _meetingDtos.FirstOrDefault(c => c.Id == id);
+            if (meetingDto != null)
+            {
+                parameters.Add(nameof(AddMeetingDetailsDialog._updateMeetingRequest), new UpdateMeetingRequest
+                    {
+                        Id = meetingDto.Id,
+                        MeetingTitle = meetingDto.MeetingTitle,
+                        Location = meetingDto.Location,
+                        Allday = meetingDto.Allday,
+                        FromDate = meetingDto.FromDate,
+                        ToDate = meetingDto.ToDate,
+                        Host = meetingDto.Host,
+                        MeetingOwnerId = meetingDto.MeetingOwnerId,
+                        WhoId = meetingDto.WhoId,
+                        RelatedTo = meetingDto.RelatedTo,
+                        WhatId = meetingDto.WhatId,
+                        Repeat = meetingDto.Repeat,
+                        Description = meetingDto.Description,
+                        Participants = meetingDto.Participants,
+                        RemindMe = meetingDto.RemindMe,
+                        CheckedInStatus = meetingDto.CheckedInStatus
+                    });
+            }
+        }
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<AddMeetingDetailsDialog>(id == Guid.Empty ? "Create" : "Edit", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            await GetAllCompletedMeeting();
+            await GetAllUnCompletedMeeting();
+            await GetAllMeeting();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            //await TimeLine();
+            //await OpenActivitiesCount();
+            //await ClosedActivitiesCount();
+        }
+    }
+}

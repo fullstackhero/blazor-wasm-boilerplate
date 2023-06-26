@@ -38,7 +38,7 @@
                         <MudItem xs="6">
                             @if (_createTaskRequest.RelatedTo == "Account")
                             {
-                                @*<MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Account Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _getAllAccountDetails.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />*@
+                                <MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Account Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _accountDtos.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
                             }
                             else if (_createTaskRequest.RelatedTo == "Contact")
                             {
@@ -161,7 +161,7 @@ else
                         <MudItem xs="6">
                             @if (_updateTaskRequest.RelatedTo == "Account")
                             {
-                                @*<MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Account Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _getAllAccountDetails.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />*@
+                                <MudAutocomplete T="Guid" For="@(() => _updateTaskRequest.WhoId)" Label="Account Search" @bind-Value="_updateTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _accountDtos.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
                             }
                             else if (_updateTaskRequest.RelatedTo == "Contact")
                             {
@@ -259,7 +259,7 @@ else
     {
         await GetAllUserData();
         await GetAllLeadData();
-
+        await GetAllAccount();
     }
 
     [Inject] ILeadDetailsClient _leadDetails { get; set; }
@@ -408,6 +408,31 @@ else
             _remainder = true;
         }
     }
+    [Inject]IAccountDetailsClient _accountDetailsClient {get;set;}
+    List<AccountDto> _accountDtos = new();
+    async Task GetAllAccount()
+    {
+          try{
+          _accountDtos = (await _accountDetailsClient.GetListAsync()).ToList();
+          }
+          catch(Exception ex)
+          {
+             Snackbar.Add(ex.Message, Severity.Error);
+          }
+    }
+
+     private async Task<IEnumerable<Guid>> SearchAccount(string value)
+        {
+            // In real life use an asynchronous function for fetching data from an api.
+            await Task.Delay(5);
+
+            // if text is null or empty, show complete list
+            if (string.IsNullOrEmpty(value))
+                return _accountDtos.Select(x => x.Id);
+
+            return _accountDtos.Where(x => x.AccountName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                .Select(x => x.Id);
+        }
 
     void Cancel()
     {

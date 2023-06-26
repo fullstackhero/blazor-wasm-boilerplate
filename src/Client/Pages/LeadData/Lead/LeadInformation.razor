@@ -118,8 +118,8 @@
 
     async Task NavLeadDetails(Guid id)
     {
-        Guid leadId = id;
-        Navigation.NavigateTo($"leaddata/leadinformationbyid/{leadId}");
+       
+        Navigation.NavigateTo($"leaddata/leadinformationbyid/{id}");
         //_navigationManager.NavigateTo($"leadsdetails/{_leadId}");
     }
     async Task AddLead()

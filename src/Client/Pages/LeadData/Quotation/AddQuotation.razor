@@ -241,11 +241,11 @@
         </MudItem>
     </MudGrid>
     </MudGrid>
-@code{
- 
+    @code{
+
     protected override async Task OnInitializedAsync()
     {
-        
+
         AddProductasGlobal._quoteList = new();
         await LoadDataAsync();
         _createQuotationRequest.TermsConditions = "Kindly check and certify the Quantity & Rate while acknowleding our Incoice. Please do not make any correction on our Invoice. We are not responsible for any correction made on our Invoice.";
@@ -374,7 +374,13 @@
 
     async Task CreateQuotation()
     {
-           
+        foreach(var item in _quoteItems)
+        {
+            if(item.ProductId == Guid.Empty)
+            {
+                _quoteItems.Remove(item);
+            }
+        }
         try
         {
             

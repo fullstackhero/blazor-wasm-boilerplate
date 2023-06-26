@@ -33,7 +33,11 @@ public partial class AccountInformationById
         await GetAllCalls();
         await GetAllCompletedCalls();
         await GetAllUnCompletedCalls();
-
+        await TimeLine();
+        await UpcomingActionTask();
+        await UpcomingAuctionCall();
+        await UpcomingAuctionMetting();
+        await GetContactAsync();
     }
      [CascadingParameter]
     protected Task<AuthenticationState> AuthState { get; set; } = default!;
@@ -187,6 +191,7 @@ public partial class AccountInformationById
             {
                 Snackbar.Add("Notes Updated Successfully", Severity.Info);
                 await RecentLast();
+                await TimeLine();
             }
         }
         catch (Exception ex)
@@ -207,7 +212,9 @@ public partial class AccountInformationById
             if (response1 != Guid.Empty)
             {
                 Snackbar.Add("Notes Added Successfully", Severity.Info);
+                _createNoteRequest = new();
                 await RecentLast();
+                await TimeLine();
                 //Navigation.NavigateTo("/view/stock");
                 //await Reset();
             }
@@ -255,6 +262,7 @@ public partial class AccountInformationById
                     Snackbar.Add("Notes Deleted Successfully", Severity.Info);
                     _updateNoteRequest.Id = Guid.Empty;
                     await RecentLast();
+                    await TimeLine();
                 }
 
             }
@@ -346,7 +354,10 @@ public partial class AccountInformationById
             await GetAllCompletedTask();
             await GetAllUnCompletedTask();
             await GetAllTask();
-            //await TimeLine();
+            await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
             //await Reset();
         }
     }
@@ -373,7 +384,10 @@ public partial class AccountInformationById
                     await GetAllCompletedTask();
                     await GetAllUnCompletedTask();
                     await GetAllTask();
-                    //await TimeLine();
+                    await UpcomingActionTask();
+                    await UpcomingAuctionCall();
+                    await UpcomingAuctionMetting();
+                    await TimeLine();
                     //Navigation.NavigateTo("/leaddata/leadinformation");
                 }
 
@@ -434,7 +448,10 @@ public partial class AccountInformationById
             await GetAllCompletedTask();
             await GetAllUnCompletedTask();
             await GetAllTask();
-           // await TimeLine();
+            await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
             //await OpenActivitiesCount();
             //await ClosedActivitiesCount();
             StateHasChanged();
@@ -503,10 +520,10 @@ public partial class AccountInformationById
             await GetAllCompletedMeeting();
             await GetAllUnCompletedMeeting();
             await GetAllMeeting();
-           // await UpcomingActionTask();
-           // await UpcomingAuctionCall();
-          //  await UpcomingAuctionMetting();
-           // await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await Reset();
         }
     }
@@ -533,10 +550,10 @@ public partial class AccountInformationById
                     await GetAllCompletedMeeting();
                     await GetAllUnCompletedMeeting();
                     await GetAllMeeting();
-                   // await UpcomingActionTask();
-                   // await UpcomingAuctionCall();
-                   // await UpcomingAuctionMetting();
-                   // await TimeLine();
+                    await UpcomingActionTask();
+                    await UpcomingAuctionCall();
+                    await UpcomingAuctionMetting();
+                    await TimeLine();
                     //Navigation.NavigateTo("/leaddata/leadinformation");
                 }
 
@@ -602,10 +619,10 @@ public partial class AccountInformationById
             await GetAllCompletedMeeting();
             await GetAllUnCompletedMeeting();
             await GetAllMeeting();
-          //  await UpcomingActionTask();
-           // await UpcomingAuctionCall();
-           // await UpcomingAuctionMetting();
-           // await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await OpenActivitiesCount();
             //await ClosedActivitiesCount();
         }
@@ -681,10 +698,10 @@ public partial class AccountInformationById
             await GetAllCompletedCalls();
             await GetAllUnCompletedCalls();
             await GetAllCalls();
-           // await UpcomingActionTask();
-           // await UpcomingAuctionCall();
-            //await UpcomingAuctionMetting();
-           // await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await ResetCalls();
         }
     }
@@ -711,10 +728,10 @@ public partial class AccountInformationById
                     await GetAllCompletedCalls();
                     await GetAllUnCompletedCalls();
                     await GetAllCalls();
-                   // await UpcomingActionTask();
-                   // await UpcomingAuctionCall();
-                    //await UpcomingAuctionMetting();
-                   // await TimeLine();
+                    await UpcomingActionTask();
+                    await UpcomingAuctionCall();
+                    await UpcomingAuctionMetting();
+                    await TimeLine();
                     //Navigation.NavigateTo("/leaddata/leadinformation");
                 }
 
@@ -776,15 +793,165 @@ public partial class AccountInformationById
             await GetAllCompletedCalls();
             await GetAllUnCompletedCalls();
             await GetAllCalls();
-            //await UpcomingActionTask();
-            //await UpcomingAuctionCall();
-            //await UpcomingAuctionMetting();
-           // await TimeLine();
+            await UpcomingActionTask();
+            await UpcomingAuctionCall();
+            await UpcomingAuctionMetting();
+            await TimeLine();
             //await OpenActivitiesCount();
             //await ClosedActivitiesCount();
             //StateHasChanged();
         }
     }
+    public class MyGroupedDataModel
+    {
+        public DateTime GroupDate { get; set; }
+        public List<AuditDto> GroupItems { get; set; }
+    }
 
-    //......................
-}
+
+    [Inject] IPersonalClient _personalClient { get; set; }
+
+    List<AuditDto> _auditDtos = new();
+    List<MyGroupedDataModel> _getAuditResponses = new();
+
+    async Task TimeLine()
+    {
+        try
+        {
+            //List<AuditDto> dtos= (await _personalClient.GetLogsAsync()).ToList();
+            _auditDtos = (await _personalClient.GetLogsAsync()).Where(x => (x.LeadId == _accountId || x.MeetingLeadId.Contains(_accountId.ToString()))).ToList();
+            _getAuditResponses = _auditDtos.GroupBy(o => o.DateTime.Date)
+                                   .Select(g => new MyGroupedDataModel
+                                   {
+                                       GroupDate = g.Key,
+                                       GroupItems = g.ToList()
+                                   })
+                                   .OrderByDescending(x => x.GroupDate.Date).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    public class Upcoming
+    {
+        public Guid Id { get; set; }
+        public DateTime? Date { get; set; }
+        public string Data { get; set; }
+
+        public string Type { get; set; }
+
+        public TimeSpan? DateDiff { get; set; }
+    }
+
+    List<Upcoming> upcomings = new();
+
+    async Task UpcomingActionTask()
+    {
+        try
+        {
+            List<TaskDto> taskDtos = new();
+            taskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.WhoId == _accountId).ToList();
+            foreach (var item in taskDtos)
+            {
+                if (!upcomings.Any(x => x.Id == item.Id))
+                {
+                    Upcoming data = new();
+                    data.Id = item.Id;
+                    data.Date = item.DueDate;
+                    data.Data = item.Subject;
+                    data.Type = "Task";
+                    data.DateDiff = DateTime.UtcNow - data.Date;
+                    upcomings.Add(data);
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task UpcomingAuctionCall()
+    {
+        try
+        {
+            List<CallDto> callDtos = new();
+            callDtos = (await _callDetailsClient.GetListAsync()).Where(x => x.WhoId == _accountId).ToList();
+            foreach (var item in callDtos)
+            {
+                if (!upcomings.Any(x => x.Id == item.Id))
+                {
+                    Upcoming data = new();
+                    data.Id = item.Id;
+                    data.Date = item.CallStartTime;
+                    data.Data = item.Subject;
+                    data.Type = "Call";
+                    data.DateDiff = DateTime.UtcNow - data.Date;
+                    upcomings.Add(data);
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task UpcomingAuctionMetting()
+    {
+        try
+        {
+            List<MeetingDto> meetingDtos = new();
+            meetingDtos = (await _meetingDetailsClient.GetListAsync()).Where(x => x.WhoId == _accountId).ToList();
+            foreach (var item in meetingDtos)
+            {
+                if (!upcomings.Any(x => x.Id == item.Id))
+                {
+                    Upcoming data = new();
+                    data.Id = item.Id;
+                    data.Date = item.FromDate;
+                    data.Data = item.MeetingTitle;
+                    data.Type = "Meeting";
+                    data.DateDiff = DateTime.UtcNow - data.Date;
+                    upcomings.Add(data);
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    
+    [Inject]IContactDetailsClient _contactDetailsClient {get;set;}
+    List<ContactDto> _contactDtos = new();
+
+    async Task GetContactAsync()
+    {
+        try{
+          _contactDtos = (await _contactDetailsClient.GetListAsync()).Where(x => x.AccountId == _accountId).ToList();
+        }
+        catch(Exception ex){
+           Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+        async Task NavContact(Guid id)
+        {
+           // _navigationManager.NavigateTo($"/contact/check/{id}");
+        }
+
+         async Task ViewHierarchy()
+        {
+           
+        }
+        async Task AddContacts()
+        {
+            
+        }
+        //......................
+    }
+
+   

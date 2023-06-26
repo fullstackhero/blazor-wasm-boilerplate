@@ -1,5 +1,29 @@
 @page "/leaddata/accountinformationbyid/{_accountId:guid}"
-@* <MudContainer style="height: 100vh;"> *@
+
+
+<style>
+    .card-content{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+        gap: 1rem;
+        padding: 1rem;
+            }
+             .card-content > div {
+            position: relative;
+        }
+
+          .card-content > div::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: -0.5rem;
+                bottom: 0;
+                width: 1px;
+            }
+    </style>
+
+ <MudContainer style="height: 100vh;">
     <div class="sticky">
         <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 100px;margin-bottom:10rem">
             <MudGrid>
@@ -32,6 +56,8 @@
             </MudCard>
         </MudItem>
         <MudItem xs="9">
+             <MudTabs  Class="rounded-lg" Elevation="0" Outlined="true">
+            <MudTabPanel Text="Overview">
             <MudCard Class="rounded-lg" Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
                 <MudCardContent>
                     <MudGrid>
@@ -293,7 +319,7 @@
                         <div class="card-content">
                             <div>
                                 <MudText Typo="Typo.subtitle1" Style="font-weight:bolder">Next Action</MudText>
-                                 @* @if(upcomings.Count != 0)
+                                  @if(upcomings.Count != 0)
                             {
                     
                         <MudContainer Style="max-height: 500px; overflow-y: scroll">
@@ -303,7 +329,7 @@
                                         {
                                             <MudGrid>
                                             <MudItem>
-                                            <MudChip Color="Color.Success">@item.Date.ToString("MMM dd, yyyy")</MudChip>
+                                            <MudChip Color="Color.Success">@item.Date?.ToString("MMM dd, yyyy")</MudChip>
                                             </MudItem>
                                             <MudItem>
                                                 @if(item.Type == "Task")
@@ -325,8 +351,8 @@
                                         {
                                             <MudGrid>
                                              <MudItem>
-                                        <MudChip Color="Color.Error">@item.Date.ToString("MMM dd, yyyy")</MudChip>
-                                        <MudAvatar Size="Size.Small" Color="Color.Primary">@item.DateDiff.Days</MudAvatar>
+                                        <MudChip Color="Color.Error">@item.Date?.ToString("MMM dd, yyyy")</MudChip>
+                                        <MudAvatar Size="Size.Small" Color="Color.Primary">@item.DateDiff?.Days</MudAvatar>
                                         </MudItem>
                                         <MudItem>
                                                     @if(item.Type == "Task")
@@ -352,12 +378,12 @@
                                 else
                                 {
                                 <MudText Typo="Typo.subtitle1" Align="Align.Center">No upcoming actions</MudText>
-                                } *@
+                                } 
                             </div>
                             <div>
-                                @* <MudText Typo="Typo.subtitle1" Style="font-weight:bolder">Contacts</MudText> *@
-                                @* <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                                @foreach(var item in _getAllContactDetailsResponses)
+                              <MudText Typo="Typo.subtitle1" Style="font-weight:bolder">Contacts</MudText>
+                                <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                                @foreach(var item in _contactDtos)
                                 {
                                     <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px">
                                       
@@ -386,10 +412,54 @@
                       
                          </MudCard>
                            }
-                           </MudContainer> *@
+                           </MudContainer>
                               </div>
                             </div>
                     </MudCardContent>
+                </MudCard>
+
+                <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                        <MudCardHeader>
+                            <MudGrid>
+                                <MudItem id="Attachments">
+                                    <MudText Style="margin-top:10px;">Contacts    <a @onclick="ViewHierarchy"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="Hierarchy View" HighlightedText="Hierarchy View"/></a></MudText>
+                                </MudItem>
+                                <MudSpacer />
+                                <MudItem>
+                                    <MudButton Variant="Variant.Filled" OnClick="AddContacts" Size="Size.Small" Color="Color.Primary">New</MudButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <FLTable Items="_contactDtos">
+                                <HeaderContent>
+
+
+                                    <MudTh><MudTableSortLabel T="ContactDto">Contact Name</MudTableSortLabel></MudTh>
+                                    <MudTh><MudTableSortLabel T="ContactDto">Email</MudTableSortLabel></MudTh>
+                                    <MudTh><MudTableSortLabel T="ContactDto">Phone</MudTableSortLabel></MudTh>
+                                    <MudTh><MudTableSortLabel T="ContactDto">Mobile</MudTableSortLabel></MudTh>
+                                    <MudTh><MudTableSortLabel T="ContactDto">Fax</MudTableSortLabel></MudTh>
+                                    
+                                </HeaderContent>
+                                <RowTemplate>
+
+                                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Contact Name">
+                                        <MudHighlighter Text="@context.FirstName" />
+                                    </MudTd>
+                                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Email">
+                                        <MudHighlighter Text="@context.Email"/>
+                                    </MudTd>
+                                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Phone">
+                                        <MudHighlighter Text="@context.Phone"/>
+                                    </MudTd>
+                                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Mobile">@context.Mobile</MudTd>
+
+                                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Fax">@context.Fax</MudTd>
+
+                                </RowTemplate>
+                            </FLTable>
+                        </MudCardContent>
                 </MudCard>
 
             <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
@@ -588,10 +658,10 @@
                     <MudSpacer />
 
                     <MudItem>
-                        <MudMenu Label="Add New" Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
-                               @* <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" OnClick="AddTask">Task</MudButton>
+                         <MudMenu Label="Add New" Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column" PopoverClass="mud-elevation-25">
+                                <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" OnClick="AddTask">Task</MudButton>
                                 <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" OnClick="AddMeeting">Meeting</MudButton>
-                                <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Add" OnClick="AddCall">Call</MudButton>*@
+                                <MudButton Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Add" OnClick="AddCall">Call</MudButton>
                             </MudMenu>
                     </MudItem>
                 </MudGrid>
@@ -1551,7 +1621,442 @@
                     </div>
                 </div>
             </MudCardContent>
+
             </MudCard>
+            </MudTabPanel>
+            <MudTabPanel Text="Timeline">
+                 <MudCard Class="rounded-lg" Outlined='true' Style="margin-bottom:10px;margin-top:10px;box-shadow: 0px 4px 12px #888888;">
+                      <MudCardHeader>
+                            <MudText Typo="Typo.h6" Align="Align.Center">History</MudText>
+                        </MudCardHeader>
+                        <MudContainer Style="max-height: 70vh; overflow-y: scroll">
+                            <MudCardContent>
+                            @if (_getAuditResponses.Count() != 0)
+                            {
+                                @foreach (var group in _getAuditResponses)
+                                {
+                                        <div class="card-container">
+                                        <MudCard Outlined Style="height:fit-content; width:fit-content">
+                                             <MudCardContent>
+                                                     <MudText Typo="Typo.button" Color="Color.Secondary">@group.GroupDate.ToString("MMM dd, yyyy")</MudText>
+                                             </MudCardContent>
+                                             </MudCard>
+                                             </div>
+
+                                    @foreach (var item in group.GroupItems.OrderByDescending(x => x.DateTime))
+                                    {
+                                        @if (item.TableName != "ContactDetailsModel")
+                                        {
+                                                    <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Alternate">
+
+                                                                <MudTimelineItem Color="Color.Success" Variant="Variant.Filled">
+                                                                     <ItemContent>
+                                                        @if (item.TableName == "TaskModel")
+                                                        {
+
+                                                            @if (item.Type == "Create")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Success">
+                                                                                                    <span style="color:#007e33ff;">
+                                                                                                        <MudText Typo="Typo.body1">Task Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                                    </span>
+                                                                                                </MudAlert>
+
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+
+
+                                                                                                <MudAlert Severity="Severity.Info">
+                                                                                                    <MudText Typo="Typo.body1">Task Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Warning">
+                                                                                                    <MudText Typo="Typo.body1">Task Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+                                                            }
+
+                                                        }
+                                                        else if (item.TableName == "LeadDetailsModel")
+                                                        {
+                                                            @if (item.Type == "Create")
+                                                            {
+
+                                                                                            <MudAlert Severity="Severity.Success">
+                                                                                                <span style="color:#007e33ff;">
+                                                                                                    <MudText Typo="Typo.body1">Lead Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                                </span>
+                                                                                            </MudAlert>
+
+                                                            }
+
+                                                        }
+                                                        else if (item.TableName == "CallsModel")
+                                                        {
+
+                                                            @if (item.Type == "Create")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Success">
+                                                                                                    <span style="color:#007e33ff;">
+                                                                                                        <MudText Typo="Typo.body1">Call Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                                    </span>
+                                                                                                </MudAlert>
+
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+
+
+                                                                                                <MudAlert Severity="Severity.Info">
+                                                                                                    <MudText Typo="Typo.body1">Call Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Warning">
+                                                                                                    <MudText Typo="Typo.body1">Call Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+                                                            }
+
+                                                        }
+                                                        else if (item.TableName == "NotesModel")
+                                                        {
+
+                                                            @if (item.Type == "Create")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Success">
+                                                                                                    <span style="color:#007e33ff;">
+                                                                                                        <MudText Typo="Typo.body1">Notes Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                                    </span>
+                                                                                                </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Info">
+                                                                                                    <MudText Typo="Typo.body1">Notes Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Warning">
+                                                                                                    <MudText Typo="Typo.body1">Notes Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+
+                                                            }
+
+                                                        }
+                                                        else if (item.TableName == "Document")
+                                                        {
+
+                                                            @if (item.Type == "Create")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Success">
+                                                                                                    <span style="color:#007e33ff;">
+                                                                                                        <MudText Typo="Typo.body1">Document Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                                    </span>
+                                                                                                </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Info">
+                                                                                                    <MudText Typo="Typo.body1">Notes Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+                                                                                                <MudAlert Severity="Severity.Warning">
+                                                                                                    <MudText Typo="Typo.body1">Call Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+                                                            }
+
+                                                        }
+                                                        else if (item.TableName == "MeetingModel")
+                                                        {
+
+                                                            @if (item.Type == "Create")
+                                                            {
+
+                                                                                                <MudAlert Severity="Severity.Success">
+                                                                                                    <span style="color:#007e33ff;">
+                                                                                                        <MudText Typo="Typo.body1">Meeting Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                                    </span>
+                                                                                                </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+
+                                                                                                <MudAlert Severity="Severity.Info">
+                                                                                                    <MudText Typo="Typo.body1">Meeting Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+
+                                                                                                <MudAlert Severity="Severity.Warning">
+                                                                                                    <MudText Typo="Typo.body1">Meeting Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                            <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                                </MudAlert>
+
+                                                            }
+
+                                                        }
+                                                        else if (item.TableName == "AccountDetailsModel")
+                                                        {
+                                                            @if (item.Type == "Create")
+                                                            {
+
+                                                                                        <MudAlert Severity="Severity.Success">
+                                                                                            <span style="color:#007e33ff;">
+                                                                                                <MudText Typo="Typo.body1">Account Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                        <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                            </span>
+                                                                                        </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+
+                                                                                        <MudAlert Severity="Severity.Info">
+                                                                                            <MudText Typo="Typo.body1">Account Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                        </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+
+                                                                                        <MudAlert Severity="Severity.Warning">
+                                                                                            <MudText Typo="Typo.body1">Account Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                        </MudAlert>
+
+                                                            }
+                                                        }
+                                                        @*else if (item.TableName == "ContactDetailsModel")
+                                                    {
+                                                        @if (item.Type == "Create")
+                                                        {
+                                                            <MudAlert Severity="Severity.Success">
+                                                                <span style="color:#007e33ff;">
+                                                                    <MudText Typo="Typo.body1">Contact Added - @item.Subject</MudText>
+                                                                    @foreach (var items in _userList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                        <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                </span>
+                                                            </MudAlert>
+
+                                                        }
+                                                        else if (item.Type == "Update")
+                                                        {
+
+                                                            <MudAlert Severity="Severity.Info">
+                                                                <MudText Typo="Typo.body1">Contact Updated - @item.Subject</MudText>
+                                                                @foreach (var items in _userList.Where(x => x.Id == item.UserId))
+                                                                {
+                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                }
+                                                            </MudAlert>
+
+                                                        }
+                                                        else if (item.Type == "Delete")
+                                                        {
+
+                                                            <MudAlert Severity="Severity.Warning">
+                                                                <MudText Typo="Typo.body1">Contact Deleted - @item.Subject</MudText>
+                                                                @foreach (var items in _userList.Where(x => x.Id == item.UserId))
+                                                                {
+                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                }
+                                                            </MudAlert>
+                                                        }
+                                                    }*@
+
+                                                        else if (item.TableName == "QuotationDetailsModel")
+                                                        {
+                                                            @if (item.Type == "Create")
+                                                            {
+
+                                                                                    <MudAlert Severity="Severity.Success">
+                                                                                        <span style="color:#007e33ff;">
+                                                                                            <MudText Typo="Typo.body1">Quotation Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                        </span>
+                                                                                    </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+
+                                                                                    <MudAlert Severity="Severity.Info">
+                                                                                        <MudText Typo="Typo.body1">Quotation Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                    </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+
+                                                                                    <MudAlert Severity="Severity.Warning">
+                                                                                        <MudText Typo="Typo.body1">Quotation Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                    </MudAlert>
+
+                                                            }
+                                                        }
+                                                        else if (item.TableName == "CustomerDetailsModel")
+                                                        {
+                                                            @if (item.Type == "Create")
+                                                            {
+
+                                                                                        <MudAlert Severity="Severity.Success">
+                                                                                            <span style="color:#007e33ff;">
+                                                                                                <MudText Typo="Typo.body1">Customer Added - @item.Subject</MudText>
+                                                                        @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                        {
+                                                                                                        <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                        }
+                                                                                            </span>
+                                                                                        </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Update")
+                                                            {
+
+                                                                                        <MudAlert Severity="Severity.Info">
+                                                                                            <MudText Typo="Typo.body1">Customer Updated - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                        </MudAlert>
+
+                                                            }
+                                                            else if (item.Type == "Delete")
+                                                            {
+
+                                                                                        <MudAlert Severity="Severity.Warning">
+                                                                                            <MudText Typo="Typo.body1">Customer Deleted - @item.Subject</MudText>
+                                                                    @foreach (var items in _userDetailsList.Where(x => x.Id == item.UserId))
+                                                                    {
+                                                                                                    <MudText Typo="Typo.caption">by @items.FirstName @item.DateTime.ToString("MMM dd, yyyy")</MudText>
+                                                                    }
+                                                                                        </MudAlert>
+
+                                                            }
+                                                        }
+                                                                    </ItemContent>
+                                                                        <ItemOpposite>
+                                                                                <MudText Color="Color.Success">@item.DateTime.ToString("hh:mm:ss tt")</MudText>
+                                                                            </ItemOpposite>
+                                                            </MudTimelineItem>
+                                                    </MudTimeline>
+                                        }
+                                    }
+                                }
+                            }
+                                </MudCardContent>
+                                </MudContainer>
+                                </MudCard>
+                </MudTabPanel>
+            </MudTabs>
         </MudItem>
+
     </MudGrid>
-@* </MudContainer> *@
+</MudContainer>

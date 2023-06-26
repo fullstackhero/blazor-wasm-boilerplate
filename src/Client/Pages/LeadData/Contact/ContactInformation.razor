@@ -1,0 +1,96 @@
+﻿@page "/leaddata/contact/contactinformation"
+
+<MudContainer style="height: 100vh;">
+<div class="sticky">
+    <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 100px;margin-bottom:10rem">
+        <MudCardContent>
+            <MudGrid>
+                <MudItem xs="6" sm="3">
+                    <MudText Typo="Typo.h6">Contact Information</MudText>
+                </MudItem>
+                <MudSpacer />
+
+                <MudItem>
+                    <MudButton Variant="Variant.Filled" Style="margin-right:10px; margin-top:8px;" Disabled StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Small">Create Contact</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+    </MudCard>
+</div>
+
+<MudGrid Style="margin-top:12rem">
+        <MudItem xs="12">
+            <FLTable Items="_contactDtos" >
+                <HeaderContent>
+                    <MudTh><MudTableSortLabel SortBy="new Func<ContactDto, object>(x => x.FirstName)">First Name</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<ContactDto, object>(x => x.Title)">Title</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<ContactDto, object>(x => x.Email)">Email</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<ContactDto, object>(x => x.Phone)">Phone</MudTableSortLabel></MudTh>
+
+                    <MudTh><MudTableSortLabel SortBy="new Func<ContactDto, object>(x => x.ContactOwnerId)">Contact Owner</MudTableSortLabel></MudTh>
+
+                </HeaderContent>
+                <RowTemplate>
+
+                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="First Name"><MudHighlighter Text="@context.FirstName" /></MudTd>
+                    @*<MudTd DataLabel="First Name"><MudLink @onclick="@(() =>NavLeadDetails(@context.Id))"><MudHighlighter Text="@context.FirstName"/></MudLink></MudTd>*@
+                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Title"><MudHighlighter Text="@context.Title" /></MudTd>
+                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Email"><MudHighlighter Text="@context.Email" /></MudTd>
+                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Phone"><MudHighlighter Text="@context.Phone" /></MudTd>
+
+                    <MudTd @onclick="@(() => NavContact(context.Id))" DataLabel="Contact Owner">
+                        @foreach (var item in _userDetailsDtos.Where(x => x.Id == context.ContactOwnerId))
+                        {
+                            <MudHighlighter Text="@item.FirstName" />
+                        }
+                    </MudTd>
+
+                </RowTemplate>
+               
+            </FLTable>
+            </MudItem>
+            </MudGrid>
+</MudContainer>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllUserData();
+        await GetAllContact();
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] IContactDetailsClient _contactDetailsClient { get; set; }
+    List<ContactDto> _contactDtos = new();
+    async Task GetAllContact()
+    {
+        try
+        {
+            _contactDtos = (await _contactDetailsClient.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task NavContact(Guid id)
+    {
+        Navigation.NavigateTo($"leaddata/contact/contactinformationbyid/{id}");
+    }
+}

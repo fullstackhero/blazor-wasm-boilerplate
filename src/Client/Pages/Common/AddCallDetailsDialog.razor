@@ -33,7 +33,7 @@
                         </MudSelect>*@
                             @if (_createCallRequest.RelatedTo == "Account")
                             {
-                                @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Account Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _getAllAccountDetails.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />*@
+                                <MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Account Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _accountDtos.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
                             }
                             else if (_createCallRequest.RelatedTo == "Contact")
                             {
@@ -180,7 +180,7 @@ else
                     </MudSelect>*@
                         @if (_updateCallRequest.RelatedTo == "Account")
                         {
-                            @*<MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Account Search" @bind-Value="_createCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _getAllAccountDetails.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />*@
+                            <MudAutocomplete T="Guid" @onclick="@(async () => await UpdateSubject())" Label="Account Search" @bind-Value="_updateCallRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _accountDtos.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
                         }
                         else if (_updateCallRequest.RelatedTo == "Contact")
                         {
@@ -302,6 +302,7 @@ else
         }
         await GetAllUserData();
         await GetAllLeadData();
+        await GetAllAccount();
         if (_updateCallRequest.Id == Guid.Empty)
         {
             await UpdateSubject();
@@ -458,6 +459,27 @@ else
     {
         if (_createCallRequest.WhoId != Guid.Empty || _updateCallRequest.WhoId != Guid.Empty)
         {
+            if(_createCallRequest.RelatedTo == "Account")
+            {
+              try
+            {
+                var response = await _accountDetailsClient.GetAsync(_createCallRequest.WhoId);
+                if (response.Id != Guid.Empty)
+                {
+                    string? Name = response.AccountName;
+                    _createCallRequest.Subject = "Call scheduled with" + " " + Name;
+                    StateHasChanged();
+                    //await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                    //MudDialog.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+            }
+            else
+            {
             try
             {
                 var response = await _leadDetails.GetAsync(_createCallRequest.WhoId);
@@ -474,10 +496,37 @@ else
             {
                 Snackbar.Add(ex.Message, Severity.Error);
             }
+            }
 
         }
     }
+     
 
+     [Inject]IAccountDetailsClient _accountDetailsClient {get;set;}
+    List<AccountDto> _accountDtos = new();
+    async Task GetAllAccount()
+    {
+          try{
+          _accountDtos = (await _accountDetailsClient.GetListAsync()).ToList();
+          }
+          catch(Exception ex)
+          {
+             Snackbar.Add(ex.Message, Severity.Error);
+          }
+    }
+
+     private async Task<IEnumerable<Guid>> SearchAccount(string value)
+        {
+            // In real life use an asynchronous function for fetching data from an api.
+            await Task.Delay(5);
+
+            // if text is null or empty, show complete list
+            if (string.IsNullOrEmpty(value))
+                return _accountDtos.Select(x => x.Id);
+
+            return _accountDtos.Where(x => x.AccountName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                .Select(x => x.Id);
+        }
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     void Cancel()
     {
