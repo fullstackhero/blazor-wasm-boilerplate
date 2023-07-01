@@ -1,10 +1,16 @@
-﻿<MudCard Elevation="0" Square="true" Class="@Class" Style="@Style">
+﻿@* <MudCard Elevation="0" Square="true" Class="@Class" Style=$"background-color: {@myColor.ToHex()}" > *@
     <MudCardHeader style="padding:10px!important">
         <CardHeaderAvatar>
             @if (string.IsNullOrEmpty(this.ImageUri))
             {
-                <MudAvatar Size="Size.Medium" Color="Color.Primary" Class="ma-2">@FullName?.ToUpper().FirstOrDefault()
-                </MudAvatar>
+                if(_drawerOpen)
+                {
+                    <MudAvatar Size="Size.Medium" Color="Color.Secondary" Class="ma-2">@FullName?.ToUpper().FirstOrDefault()</MudAvatar>
+                }
+                else
+                {
+                    <MudAvatar style="width:95%;" Color="Color.Secondary" Class="ma-2">@FullName?.ToUpper().FirstOrDefault()</MudAvatar>
+                }
             }
             else
             {
@@ -12,8 +18,10 @@
             }
         </CardHeaderAvatar>
         <CardHeaderContent>
-            <MudText Typo="Typo.body1">@FullName</MudText>
-            <MudText Typo="Typo.caption">@Email</MudText>
+           <div style="margin-left:6px;">
+                <MudText Typo="Typo.body1">@FullName</MudText>
+                <MudText Typo="Typo.caption">@Email</MudText>
+            </div>
         </CardHeaderContent>
     </MudCardHeader>
-</MudCard>
+@* </MudCard> *@

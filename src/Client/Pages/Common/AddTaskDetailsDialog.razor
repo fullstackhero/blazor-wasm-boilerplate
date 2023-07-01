@@ -1,0 +1,504 @@
+﻿@if (_updateTaskRequest.Id == Guid.Empty)
+{
+    <EditForm Model="@_createTaskRequest" OnValidSubmit="SaveAsync">
+        <MudDialog>
+            <TitleContent>
+
+
+                <MudItem>
+                    <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Task Details</MudText>
+                </MudItem>
+
+            </TitleContent>
+            <DialogContent>
+                <MudContainer Style="max-height: 350px; overflow-y: scroll">
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudAutocomplete T="Guid" Label="Task Owner" @bind-Value="_createTaskRequest.TaskOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSelect T="string" @bind-Value="_createTaskRequest.Subject" Label="Subject" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Email")" />
+                                <MudSelectItem T="string" Value="@("Call")" />
+                                <MudSelectItem T="string" Value="@("Meeting")" />
+                                <MudSelectItem T="string" Value="@("Send Letter")" />
+                                <MudSelectItem T="string" Value="@("Product Demo")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudDatePicker @bind-Date="_createTaskRequest.DueDate" Label="Due Date" Margin="Margin.Dense" FirstDayOfWeek="DayOfWeek.Monday"></MudDatePicker>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField Label="Related To" Margin="Margin.Dense" @bind-Value="_createTaskRequest.RelatedTo" ReadOnly="true"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            @if (_createTaskRequest.RelatedTo == "Account")
+                            {
+                                <MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Account Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _accountDtos.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
+                            }
+                            else if (_createTaskRequest.RelatedTo == "Contact")
+                            {
+                                <MudAutocomplete T="Guid" For="@(() => _createTaskRequest.WhoId)" Label="Contact Search" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                            else if (_createTaskRequest.RelatedTo == "Quote")
+                            {
+                                @*<MudTextField Margin="Margin.Dense" Variant="@_varientName" T="string" ReadOnly=true @bind-Value="_getByIdQuote.Subject"></MudTextField>*@
+                                @*<MudAutocomplete T="Guid" Label="Contact Search" @bind-Value="_getWhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" Variant="@_varientName" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                            }
+                            else
+                            {
+                                <MudAutocomplete T="Guid" Label="Lead Search" For="@(() => _createTaskRequest.WhoId)" @bind-Value="_createTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchUserLead" Margin="Margin.Dense" ToStringFunc="@(i => _leadDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSelect T="string" For="@(() => _createTaskRequest.Status)" Label="Status" @bind-Value="_createTaskRequest.Status" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Not Started")" />
+                                <MudSelectItem T="string" Value="@("Deferred")" />
+                                <MudSelectItem T="string" Value="@("InProgress")" />
+                                <MudSelectItem T="string" Value="@("Completed")" />
+                                <MudSelectItem T="string" Value="@("Waiting for Someone else")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudSelect T="string" For="@(() => _createTaskRequest.Priority)" Label="Priority" @bind-Value="_createTaskRequest.Priority" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("High")" />
+                                <MudSelectItem T="string" Value="@("Highest")" />
+                                <MudSelectItem T="string" Value="@("Low")" />
+                                <MudSelectItem T="string" Value="@("Lowest")" />
+                                <MudSelectItem T="string" Value="@("Normal")" />
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudItem>
+                                <MudText Typo="Typo.subtitle1">Remainder</MudText>
+                                <MudCheckBox T="bool" @onclick="RemainderCheck" Checked="_remainder"></MudCheckBox>
+                            </MudItem>
+                            @* <MudSelect T="string" Label="Remainder" @bind-Value="_taskDetailsCommand.Remainder" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem T="string" Value="@("None")" />
+                        <MudSelectItem T="string" Value="@("5 minutes before")" />
+                        <MudSelectItem T="string" Value="@("10 minutes before")" />
+                        <MudSelectItem T="string" Value="@("15 minutes before")" />
+                        <MudSelectItem T="string" Value="@("30 minutes before")" />
+                        <MudSelectItem T="string" Value="@("1 hour before")" />
+                        </MudSelect>*@
+                        </MudItem>
+                    </MudGrid>
+                    @if (_remainder)
+                    {
+                        <MudGrid>
+                            <MudItem xs="12">
+
+                                <MudItem>
+
+                                    <MudDatePicker AnchorOrigin="Origin.CenterCenter" Label="Select a date" @bind-Date="selectedDate" />
+
+
+                                    <MudTimePicker AnchorOrigin="Origin.CenterCenter" Label="Select a time" AmPm="true" @bind-Time="selectedTime" />
+
+                                </MudItem>
+
+                            </MudItem>
+                        </MudGrid>
+                    }
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField T="string" @bind-Value="_createTaskRequest.Description" Label="Description" Lines="3" />
+                        </MudItem>
+                    </MudGrid>
+                </MudContainer>
+            </DialogContent>
+            <DialogActions>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Style="float:right;">Save</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel" Style="float:right;">Cancel</MudButton>
+            </DialogActions>
+        </MudDialog>
+    </EditForm>
+}
+else
+{
+    <EditForm Model="@_updateTaskRequest" OnValidSubmit="UpdateAsync">
+        <MudDialog>
+            <TitleContent>
+
+
+                <MudItem>
+                    <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Task Details</MudText>
+                </MudItem>
+
+            </TitleContent>
+            <DialogContent>
+                <MudContainer Style="max-height: 350px; overflow-y: scroll">
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudAutocomplete T="Guid" Label="Task Owner" @bind-Value="_updateTaskRequest.TaskOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSelect T="string" @bind-Value="_updateTaskRequest.Subject" Label="Subject" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Email")" />
+                                <MudSelectItem T="string" Value="@("Call")" />
+                                <MudSelectItem T="string" Value="@("Meeting")" />
+                                <MudSelectItem T="string" Value="@("Send Letter")" />
+                                <MudSelectItem T="string" Value="@("Product Demo")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudDatePicker @bind-Date="_updateTaskRequest.DueDate" Label="Due Date" Margin="Margin.Dense" FirstDayOfWeek="DayOfWeek.Monday"></MudDatePicker>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField Label="Related To" Margin="Margin.Dense" @bind-Value="_updateTaskRequest.RelatedTo" ReadOnly="true"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            @if (_updateTaskRequest.RelatedTo == "Account")
+                            {
+                                <MudAutocomplete T="Guid" For="@(() => _updateTaskRequest.WhoId)" Label="Account Search" @bind-Value="_updateTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _accountDtos.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
+                            }
+                            else if (_updateTaskRequest.RelatedTo == "Contact")
+                            {
+                                <MudAutocomplete T="Guid" For="@(() => _updateTaskRequest.WhoId)" Label="Contact Search" @bind-Value="_updateTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                            else if (_updateTaskRequest.RelatedTo == "Quote")
+                            {
+                                @*<MudTextField Margin="Margin.Dense" Variant="@_varientName" T="string" ReadOnly=true @bind-Value="_getByIdQuote.Subject"></MudTextField>*@
+                                @*<MudAutocomplete T="Guid" Label="Contact Search" @bind-Value="_getWhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" Variant="@_varientName" ToStringFunc="@(i => _contactDetailsResponses.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                            }
+                            else
+                            {
+                                <MudAutocomplete T="Guid" Label="Lead Search" For="@(() => _updateTaskRequest.WhoId)" @bind-Value="_updateTaskRequest.WhoId" ResetValueOnEmptyText="true" SearchFunc="@SearchUserLead" Margin="Margin.Dense" ToStringFunc="@(i => _leadDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                            }
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSelect T="string" For="@(() => _updateTaskRequest.Status)" Label="Status" @bind-Value="_updateTaskRequest.Status" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("Not Started")" />
+                                <MudSelectItem T="string" Value="@("Deferred")" />
+                                <MudSelectItem T="string" Value="@("InProgress")" />
+                                <MudSelectItem T="string" Value="@("Completed")" />
+                                <MudSelectItem T="string" Value="@("Waiting for Someone else")" />
+                            </MudSelect>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="6">
+                            <MudSelect T="string" For="@(() => _updateTaskRequest.Priority)" Label="Priority" @bind-Value="_updateTaskRequest.Priority" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                                <MudSelectItem T="string" Value="@("High")" />
+                                <MudSelectItem T="string" Value="@("Highest")" />
+                                <MudSelectItem T="string" Value="@("Low")" />
+                                <MudSelectItem T="string" Value="@("Lowest")" />
+                                <MudSelectItem T="string" Value="@("Normal")" />
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudItem>
+                                <MudText Typo="Typo.subtitle1">Remainder</MudText>
+                                <MudCheckBox T="bool" @onclick="RemainderCheck" Checked="_remainder"></MudCheckBox>
+                            </MudItem>
+                            @* <MudSelect T="string" Label="Remainder" @bind-Value="_taskDetailsCommand.Remainder" Variant="@_varientName" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem T="string" Value="@("None")" />
+                        <MudSelectItem T="string" Value="@("5 minutes before")" />
+                        <MudSelectItem T="string" Value="@("10 minutes before")" />
+                        <MudSelectItem T="string" Value="@("15 minutes before")" />
+                        <MudSelectItem T="string" Value="@("30 minutes before")" />
+                        <MudSelectItem T="string" Value="@("1 hour before")" />
+                        </MudSelect>*@
+                        </MudItem>
+                    </MudGrid>
+                    @if (_remainder)
+                    {
+                        <MudGrid>
+                            <MudItem xs="12">
+
+                                <MudItem>
+
+                                    <MudDatePicker AnchorOrigin="Origin.CenterCenter" Label="Select a date" @bind-Date="selectedDate" />
+
+
+                                    <MudTimePicker AnchorOrigin="Origin.CenterCenter" Label="Select a time" AmPm="true" @bind-Time="selectedTime" />
+
+                                </MudItem>
+
+                            </MudItem>
+                        </MudGrid>
+                    }
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudTextField T="string" @bind-Value="_updateTaskRequest.Description" Label="Description" Lines="3" />
+                        </MudItem>
+                    </MudGrid>
+                </MudContainer>
+            </DialogContent>
+            <DialogActions>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Style="float:right;">Update</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel" Style="float:right;">Cancel</MudButton>
+            </DialogActions>
+        </MudDialog>
+    </EditForm>
+}
+
+@code
+{
+    [Parameter] public CreateTaskRequest _createTask { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _remainder = false;
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetAllUserData();
+        await GetAllLeadData();
+        await GetAllAccount();
+        await GetAccountId();
+        await GetContactByAccountId();
+    }
+
+    [Inject] ILeadDetailsClient _leadDetails { get; set; }
+    List<LeadDetailsDto> _leadDetailsDtos = new();
+
+    async Task GetAllLeadData()
+    {
+        try
+        {
+            _leadDetailsDtos = (await _leadDetails.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUserLead(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _leadDetailsDtos.Select(x => x.Id);
+
+        return _leadDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUser(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userDetailsDtos.Select(x => x.Id);
+
+        return _userDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] ITaskDetailsClient _taskDetailsClient { get; set; }
+    //CreateTaskRequest _createTaskRequest = new();
+
+    [Parameter] public CreateTaskRequest _createTaskRequest { get; set; } = new();
+    private DateTime? selectedDate;
+    private TimeSpan? selectedTime;
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+    async Task SaveAsync()
+    {
+        try
+        {
+            DateTime? selectedDateTimes = selectedDate + selectedTime;
+            DateTime? utcDateTime = selectedDateTimes;
+            _createTaskRequest.Remainder = utcDateTime?.ToUniversalTime();
+            var response1 = await _taskDetailsClient.CreateAsync(_createTaskRequest.Adapt<CreateTaskRequest>());
+            if (response1 != Guid.Empty)
+            {
+                Snackbar.Add("Task Added Successfully", Severity.Info);
+                MudDialog.Close();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    [Parameter] public UpdateTaskRequest _updateTaskRequest { get; set; } = new();
+    async Task UpdateAsync()
+    {
+        try
+        {
+            DateTime? selectedDateTimes = selectedDate + selectedTime;
+            DateTime? utcDateTime = selectedDateTimes;
+            _updateTaskRequest.Remainder = utcDateTime?.ToUniversalTime();
+            var response1 = await _taskDetailsClient.UpdateAsync(_updateTaskRequest.Id, _updateTaskRequest);
+            if (response1 != Guid.Empty)
+            {
+                Snackbar.Add("Task Updated Successfully", Severity.Info);
+                MudDialog.Close();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    bool _remainder;
+
+    async Task RemainderCheck()
+    {
+        if (_remainder)
+        {
+            _remainder = false;
+        }
+        else
+        {
+            _remainder = true;
+        }
+    }
+    [Inject]IAccountDetailsClient _accountDetailsClient {get;set;}
+    List<AccountDto> _accountDtos = new();
+    async Task GetAllAccount()
+    {
+          try{
+          _accountDtos = (await _accountDetailsClient.GetListAsync()).ToList();
+          }
+          catch(Exception ex)
+          {
+             Snackbar.Add(ex.Message, Severity.Error);
+          }
+    }
+
+     private async Task<IEnumerable<Guid>> SearchAccount(string value)
+        {
+            // In real life use an asynchronous function for fetching data from an api.
+            await Task.Delay(5);
+
+            // if text is null or empty, show complete list
+            if (string.IsNullOrEmpty(value))
+                return _accountDtos.Select(x => x.Id);
+
+            return _accountDtos.Where(x => x.AccountName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                .Select(x => x.Id);
+        }
+    
+    [Inject]IContactDetailsClient _contactDetailsClient {get;set;}
+    Guid _contactAccountId;
+    async Task GetAccountId()
+    {
+        if(_createTaskRequest.RelatedTo == "Contact" || _updateTaskRequest.RelatedTo == "Contact")
+        {
+        try{
+        if(_updateTaskRequest.Id == Guid.Empty)
+        {
+           var response = await _contactDetailsClient.GetAsync(_createTaskRequest.WhoId);
+           if(response.Id != Guid.Empty)
+           {
+             _contactAccountId = response.AccountId;
+           }
+        }
+        else
+        {
+        var response1 = await _contactDetailsClient.GetAsync(_updateTaskRequest.WhoId);
+           if(response1.Id != Guid.Empty)
+           {
+             _contactAccountId = response1.AccountId;
+           }
+        }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        }
+    }
+    
+    List<ContactDto> _contactDtos = new();
+    async Task GetContactByAccountId()
+    {
+        if(_createTaskRequest.RelatedTo == "Contact" || _updateTaskRequest.RelatedTo == "Contact")
+        {
+        try
+        {
+          _contactDtos = (await _contactDetailsClient.GetListAsync()).Where(x => x.AccountId == _contactAccountId).ToList();
+        }
+        catch(Exception ex)
+        {
+         Snackbar.Add(ex.Message, Severity.Error);
+        }
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchContact(string value)
+        {
+            // In real life use an asynchronous function for fetching data from an api.
+            await Task.Delay(5);
+
+            // if text is null or empty, show complete list
+            if (string.IsNullOrEmpty(value))
+                return _contactDtos.Select(x => x.Id);
+
+            return _contactDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                .Select(x => x.Id);
+        }
+      
+    void Cancel()
+    {
+        MudDialog.Close();
+    }
+}
+

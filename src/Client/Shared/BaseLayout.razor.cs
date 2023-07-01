@@ -1,8 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Theme;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Shared;
+namespace FL_CRMS_ERP_WASM.Client.Shared;
 
 public partial class BaseLayout
 {
@@ -17,18 +17,18 @@ public partial class BaseLayout
         if (_themePreference == null) _themePreference = new ClientPreference();
         SetCurrentTheme(_themePreference);
 
-        Snackbar.Add("Like this boilerplate? ", Severity.Normal, config =>
-        {
-            config.BackgroundBlurred = true;
-            config.Icon = Icons.Custom.Brands.GitHub;
-            config.Action = "Star us on Github!";
-            config.ActionColor = Color.Primary;
-            config.Onclick = snackbar =>
-            {
-                Navigation.NavigateTo("https://github.com/fullstackhero/blazor-wasm-boilerplate");
-                return Task.CompletedTask;
-            };
-        });
+        // Snackbar.Add("Like this boilerplate? ", Severity.Normal, config =>
+        // {
+        //     config.BackgroundBlurred = true;
+        //     config.Icon = Icons.Custom.Brands.GitHub;
+        //     config.Action = "Star us on Github!";
+        //     config.ActionColor = Color.Primary;
+        //     config.Onclick = snackbar =>
+        //     {
+        //         Navigation.NavigateTo("https://github.com/fullstackhero/blazor-wasm-boilerplate");
+        //         return Task.CompletedTask;
+        //     };
+        // });
     }
 
     private async Task ThemePreferenceChanged(ClientPreference themePreference)

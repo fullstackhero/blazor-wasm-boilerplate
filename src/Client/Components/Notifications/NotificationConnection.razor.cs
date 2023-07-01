@@ -2,15 +2,15 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
-using FSH.WebApi.Shared.Notifications;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
+using FL.WebApi.Shared.Notifications;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.SignalR.Client;
 
-namespace FSH.BlazorWebAssembly.Client.Components.Notifications;
+namespace FL_CRMS_ERP_WASM.Client.Components.Notifications;
 
 public partial class NotificationConnection : IDisposable, IAsyncDisposable
 {

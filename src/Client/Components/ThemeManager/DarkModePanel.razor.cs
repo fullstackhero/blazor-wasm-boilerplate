@@ -1,7 +1,7 @@
-using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
 using Microsoft.AspNetCore.Components;
 
-namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager;
+namespace FL_CRMS_ERP_WASM.Client.Components.ThemeManager;
 
 public partial class DarkModePanel
 {

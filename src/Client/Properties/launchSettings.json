@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "FSH.BlazorWebAssembly": {
+    "FL_CRMS_ERP_WASM": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

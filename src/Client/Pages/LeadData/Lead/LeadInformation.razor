@@ -1,0 +1,159 @@
+﻿@page "/leaddata/leadinformation"
+
+<div class="sticky">
+<MudCard Outlined="true" Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
+   <MudCardContent>
+    <MudGrid>
+                <MudItem xs="2" sm="1">
+                    <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowLeft"></MudIconButton>
+                </MudItem>
+                <MudItem xs="2" sm="1">
+                    <MudText Typo="Typo.h6">Lead Information</MudText>
+                </MudItem>
+            
+       
+        <MudSpacer />
+                    @if (stringValue == "List View")
+                    {
+                        @*<MudItem>
+                    <MudButton Style="margin-top:8px; margin-bottom:8px;" Size="Size.Small" Variant="Variant.Filled" OnClick="GetLeadsAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Inherit" Color="Color.Secondary">Reload</MudButton>
+                    </MudItem>*@
+                        @*@if (_leadList.Count() > 0)
+                        {
+                           
+                                <MudButton Size="Size.Small" Variant="Variant.Filled" OnClick="ExportToExcel" StartIcon="@Icons.Custom.FileFormats.FileExcel" IconColor="Color.Inherit" Color="Color.Surface">Export</MudButton>
+                           
+                        }*@
+                    }
+        <MudItem>
+            <MudSelect @bind-Value="stringValue" Style="margin-top:-8px;" Placeholder="Select List" AdornmentIcon="@Icons.Material.Filled.ArrowDropDown"  AdornmentColor="Color.Primary">
+                <MudSelectItem Value="@("List View")" >List View </MudSelectItem>
+                <MudSelectItem Value="@("Kanbon View")">Kanbon View</MudSelectItem>   
+            </MudSelect>
+        </MudItem>
+        <MudItem>
+               @* @if (_canCreateUsers)
+                        {*@
+                            <MudButton Variant="Variant.Filled" Style="margin-right:10px; margin-top:8px;" OnClick="AddLead" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Small">Create Lead</MudButton>
+                        @*}*@
+        </MudItem>
+    </MudGrid>
+            </MudCardContent>
+        </MudCard>
+         </div>
+<MudGrid Style="margin-top:12rem">
+    <MudItem xs="12">
+        <FLTable Items="_leadDetailsDtos">
+           <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.FirstName)">Lead Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.CompanyName)">Company</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.Email)">Email</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.Phone)">Phone</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.LeadSource)">Lead Source</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.UserId)">Lead Owner</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<LeadDetailsDto, object>(x => x.LeadStatus)">Lead Status</MudTableSortLabel></MudTh>
+           </HeaderContent>
+           <RowTemplate>
+        <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Lead Name"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" HighlightedText="@context.FirstName" Text="@context.FirstName" /></MudTd>
+        <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Company"><MudHighlighter Text="@context.CompanyName" /></MudTd>
+        <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Email"><MudHighlighter Text="@context.Email" /></MudTd>
+        <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Phone"><MudHighlighter Text="@context.Phone" /></MudTd>
+        <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Lead Source"><MudHighlighter Text="@context.LeadSource" /></MudTd>
+        @foreach (var item in _userDetailsDtos.Where(i => i.Id == context.UserId))
+        {
+            <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Lead Owner"><MudHighlighter Text="@item.UserName" /></MudTd>
+        }
+        <MudTd @onclick="@(() =>NavLeadDetails(@context.Id))" DataLabel="Lead Status"><MudHighlighter Text="@context.LeadStatus" /></MudTd>
+           
+           </RowTemplate>
+        </FLTable>
+        </MudItem>
+</MudGrid>
+
+
+
+@code {
+    private string stringValue { get; set; } = "List View";
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+
+    async Task LoadDataAsync()
+    {
+        await GetAllUserData();
+        await GetAllLeadData();
+    }
+    [Inject] ILeadDetailsClient _leadDetails {get;set;}
+    List<LeadDetailsDto> _leadDetailsDtos = new();
+
+    async Task GetAllLeadData()
+    {
+        try
+        {
+            _leadDetailsDtos = (await _leadDetails.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task NavLeadDetails(Guid id)
+    {
+       
+        Navigation.NavigateTo($"leaddata/leadinformationbyid/{id}");
+        //_navigationManager.NavigateTo($"leadsdetails/{_leadId}");
+    }
+    async Task AddLead()
+    {
+        Navigation.NavigateTo("/leaddata/addlead");
+    }
+
+    private MudTable<LeadDetailsDto> mudTable;
+    private int selectedRowNumber = -1;
+    string SelectedRowClassFunc(LeadDetailsDto element, int rowNumber)
+    {
+
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            clickedEvents.Add("Selected Row: None");
+            NavLeadDetails(element.Id);
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    private List<string> clickedEvents = new();
+    private void RowClickEvent(TableRowClickEventArgs<LeadDetailsDto> tableRowClickEventArgs)
+    {
+        clickedEvents.Add("Row has been clicked");
+    }
+}

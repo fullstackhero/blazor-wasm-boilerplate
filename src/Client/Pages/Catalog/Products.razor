@@ -1,9 +1,9 @@
 ﻿@page "/catalog/products"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.Products)]
+@attribute [MustHavePermission(FLAction.View, FLResource.Products)]
 
 @inject IStringLocalizer<Products> L
 
-<FshTitle Title="@L["Products"]" Description="@L["Manage Products."]" />
+<FLTitle Title="@L["Products"]" Description="@L["Manage Products."]" />
 
 <EntityTable @ref="_table" TEntity="ProductDto" TId="Guid" TRequest="ProductViewModel" Context="@Context">
 

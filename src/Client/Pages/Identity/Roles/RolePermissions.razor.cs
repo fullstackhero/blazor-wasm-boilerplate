@@ -1,16 +1,16 @@
 ﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.WebApi.Shared.Authorization;
-using FSH.WebApi.Shared.Multitenancy;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Shared;
+using FL.WebApi.Shared.Authorization;
+using FL.WebApi.Shared.Multitenancy;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Identity.Roles;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Identity.Roles;
 
 public partial class RolePermissions
 {
@@ -34,13 +34,13 @@ public partial class RolePermissions
     private bool _canSearchRoleClaims;
     private bool _loaded;
 
-    static RolePermissions() => TypeAdapterConfig<FSHPermission, PermissionViewModel>.NewConfig().MapToConstructor(true);
+    static RolePermissions() => TypeAdapterConfig<FLPermission, PermissionViewModel>.NewConfig().MapToConstructor(true);
 
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthState;
-        _canEditRoleClaims = await AuthService.HasPermissionAsync(state.User, FSHAction.Update, FSHResource.RoleClaims);
-        _canSearchRoleClaims = await AuthService.HasPermissionAsync(state.User, FSHAction.View, FSHResource.RoleClaims);
+        _canEditRoleClaims = await AuthService.HasPermissionAsync(state.User, FLAction.Update, FLResource.RoleClaims);
+        _canSearchRoleClaims = await AuthService.HasPermissionAsync(state.User, FLAction.View, FLResource.RoleClaims);
 
         if (await ApiHelper.ExecuteCallGuardedAsync(
                 () => RolesClient.GetByIdWithPermissionsAsync(Id), Snackbar)
@@ -50,8 +50,8 @@ public partial class RolePermissions
             _description = string.Format(L["Manage {0} Role Permissions"], role.Name);
 
             var permissions = state.User.GetTenant() == MultitenancyConstants.Root.Id
-                ? FSHPermissions.All
-                : FSHPermissions.Admin;
+                ? FLPermissions.All
+                : FLPermissions.Admin;
 
             _groupedRoleClaims = permissions
                 .GroupBy(p => p.Resource)
@@ -103,7 +103,7 @@ public partial class RolePermissions
             || permission.Description.Contains(_searchString, StringComparison.OrdinalIgnoreCase) is true;
 }
 
-public record PermissionViewModel : FSHPermission
+public record PermissionViewModel : FLPermission
 {
     public bool Enabled { get; set; }
 

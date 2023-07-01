@@ -1,0 +1,35 @@
+﻿.sticky {
+    /*position: fixed;*/
+    /*background-color: ivory;*/
+    z-index: 1;
+    width: 100%;
+    box-shadow: 0px 4px 12px #888888;
+}
+
+
+.parentcard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.parentcard > div {
+        position: relative;
+}
+
+.parentcard > div::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -0.5rem;
+            bottom: 0;
+            width: 1px;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

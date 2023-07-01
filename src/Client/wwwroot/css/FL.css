@@ -1,4 +1,4 @@
-﻿.fsh-center-text {
+﻿.FL-center-text {
     text-align: center !important;
 }
 
@@ -67,6 +67,6 @@
     width: 2px!important;
     height: 6px!important;
 }
-.fsh-nav-child {
+.FL-nav-child {
     padding-left: 10px !important;
 }

@@ -1,4 +1,4 @@
-﻿namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
+﻿namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
 
 public enum AuthProvider
 {

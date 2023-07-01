@@ -1,13 +1,13 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.Common;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Auth;
-using FSH.BlazorWebAssembly.Client.Shared;
-using FSH.WebApi.Shared.Multitenancy;
+﻿using FL_CRMS_ERP_WASM.Client.Components.Common;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Auth;
+using FL_CRMS_ERP_WASM.Client.Shared;
+using FL.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Authentication;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Authentication;
 
 public partial class Login
 {
@@ -39,6 +39,8 @@ public partial class Login
         {
             Navigation.NavigateTo("/");
         }
+
+        TenantId = MultitenancyConstants.Root.Id;
     }
 
     private void TogglePasswordVisibility()
@@ -57,12 +59,12 @@ public partial class Login
         }
     }
 
-    private void FillAdministratorCredentials()
-    {
-        _tokenRequest.Email = MultitenancyConstants.Root.EmailAddress;
-        _tokenRequest.Password = MultitenancyConstants.DefaultPassword;
-        TenantId = MultitenancyConstants.Root.Id;
-    }
+    // private void FillAdministratorCredentials()
+    // {
+    //     _tokenRequest.Email = MultitenancyConstants.Root.EmailAddress;
+    //     _tokenRequest.Password = MultitenancyConstants.DefaultPassword;
+    //     TenantId = MultitenancyConstants.Root.Id;
+    // }
 
     private async Task SubmitAsync()
     {

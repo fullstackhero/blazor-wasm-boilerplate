@@ -1,8 +1,8 @@
-using FSH.WebApi.Shared.Notifications;
+using FL.WebApi.Shared.Notifications;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
 
 public class NotificationPublisher : INotificationPublisher
 {

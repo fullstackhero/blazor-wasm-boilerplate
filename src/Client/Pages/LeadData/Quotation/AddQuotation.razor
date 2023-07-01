@@ -1,0 +1,618 @@
+﻿@page "/leaddata/quotation/addquotation"
+@using FL_CRMS_ERP_WASM.Client.Pages.LeadData.Product;
+
+<div class="sticky">
+         
+        <MudCard Class="rounded-lg" Style="height:120px;" Outlined>
+        <MudCardContent>
+    <MudGrid Style="margin-top:2px;margin-bottom:2px;">
+  
+        <MudItem xs="12" sm="6">
+            <MudInputLabel Style="float:left;font-family:Verdana;font-size:16px;font-weight:bold;margin-left:50px;"><HeroTitle Title="Quotation" /></MudInputLabel>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <span style="float:right;">
+
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Success" OnClick="CreateQuotation" Size="Size.Small">Save</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small">Save & New</MudButton>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Dark" Size="Size.Small">Cancel</MudButton>
+            </span>
+        </MudItem>
+    </MudGrid>
+    </MudCardContent>
+</MudCard>
+</div>
+
+<MudGrid Style="margin-top:-50px; margin-bottom:15px;">
+<MudCard Outlined="true" Class="rounded-lg" style="width: 100%;margin-left:1rem;margin-right:1rem">
+        <MudGrid>
+            <MudItem>
+                <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Quotation Details</MudText>
+            </MudItem>
+        </MudGrid>
+    </MudCard>
+
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudAutocomplete T="Guid" For="@(() => _createQuotationRequest.QuoteOwnerId)" Label="Quote Owner" @bind-Value="_createQuotationRequest.QuoteOwnerId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudSelect T="string" Label="Deal Name" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("Advertisment")" />
+                <MudSelectItem T="string" Value="@("Cold Call")" />
+
+            </MudSelect>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField For="@(() => _createQuotationRequest.Subject)" T="string" @bind-Value="_createQuotationRequest.Subject" Label="Subject" Margin="Margin.Dense"></MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudDatePicker PickerVariant="PickerVariant.Dialog" AnchorOrigin="Origin.TopCenter" For="@(() => _createQuotationRequest.ValidDate)" @bind-Date="_createQuotationRequest.ValidDate" Label="Valid Until" Margin="Margin.Dense" FirstDayOfWeek="DayOfWeek.Monday"></MudDatePicker>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudSelect For="@(() => _createQuotationRequest.QuoteStage)" T="string" @bind-Value="_createQuotationRequest.QuoteStage" Label="Quote Stage"  Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("Draft")" />
+                <MudSelectItem T="string" Value="@("Negotation")" />
+                <MudSelectItem T="string" Value="@("Delivered")" />
+                <MudSelectItem T="string" Value="@("On Hold")" />
+                <MudSelectItem T="string" Value="@("Confirmed")" />
+                <MudSelectItem T="string" Value="@("Closed Won")" />
+                <MudSelectItem T="string" Value="@("Closed Lost")" />
+            </MudSelect>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudAutocomplete For="@(() => _createQuotationRequest.ContactId)" TextChanged="@(() => SelectAccount(_createQuotationRequest.ContactId))" T="Guid" Label="Contact Name" @bind-Value="_createQuotationRequest.ContactId" ResetValueOnEmptyText="true" SearchFunc="@SearchContact" Margin="Margin.Dense" ToStringFunc="@(i => _contactDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField T="string" @bind-Value="_createQuotationRequest.Team" Label="Team" Margin="Margin.Dense"></MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudAutocomplete For="@(() => _createQuotationRequest.AccountId)" T="Guid" Label="Account Name" @bind-Value="_createQuotationRequest.AccountId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" ToStringFunc="@(i => _accountDtos.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudSelect T="string" @bind-Value="_createQuotationRequest.Carrier" Label="Carrier" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("FedEx")" />
+                <MudSelectItem T="string" Value="@("UPS")" />
+                <MudSelectItem T="string" Value="@("USPS")" />
+                <MudSelectItem T="string" Value="@("DHL")" />
+                <MudSelectItem T="string" Value="@("BlueDart")" />
+
+            </MudSelect>
+        </MudItem>
+    </MudGrid>
+
+    <MudGrid>
+        <MudItem>
+            <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Address Information</MudText>
+        </MudItem>
+        <MudSpacer />
+        <MudItem>
+            <MudMenu Style="margin-left:10px;" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.CopyAll" Color="Color.Default" Size="Size.Small" Label="Copy Address" Dense="true">
+                <MudMenuItem OnClick="CopyAddressBilling">Billing to Shipping</MudMenuItem>
+                <MudMenuItem OnClick="CopyAddressShipping">Shipping to Billing</MudMenuItem>
+            </MudMenu>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField For="@(() => _createQuotationRequest.BillingStreet)" T="string" @bind-Value="_createQuotationRequest.BillingStreet" Margin="Margin.Dense" Label="Billing Street"></MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField For="@(() => _createQuotationRequest.ShippingStreet)" T="string" Margin="Margin.Dense" @bind-Value="_createQuotationRequest.ShippingStreet" Label="Shipping Street"></MudTextField>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField For="@(() => _createQuotationRequest.BillingCity)" T="string" @bind-Value="_createQuotationRequest.BillingCity" Margin="Margin.Dense" Label="Billing City"></MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField For="@(() => _createQuotationRequest.ShippingCity)" T="string" @bind-Value="_createQuotationRequest.ShippingCity" Margin="Margin.Dense" Label="Shipping City"></MudTextField>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField T="string" For="@(() => _createQuotationRequest.BillingState)" @bind-Value="_createQuotationRequest.BillingState" Margin="Margin.Dense" Label="Billing State"></MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField T="string" For="@(() => _createQuotationRequest.ShippingState)" Margin="Margin.Dense" @bind-Value="_createQuotationRequest.ShippingState" Label="Shipping State"></MudTextField>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField T="string" Margin="Margin.Dense" For="@(() => _createQuotationRequest.BillingCode)" @bind-Value="_createQuotationRequest.BillingCode" Label="Billing Code"></MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField T="string" Margin="Margin.Dense" For="@(() => _createQuotationRequest.ShippingCode)" @bind-Value="_createQuotationRequest.ShippingCode" Label="Shipping Code"></MudTextField>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField T="string" Margin="Margin.Dense" For="@(() => _createQuotationRequest.BillingCountry)" @bind-Value="_createQuotationRequest.BillingCountry" Label="Billing Country"></MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+            <MudTextField T="string" Margin="Margin.Dense" For="@(() => _createQuotationRequest.ShippingCountry)" @bind-Value="_createQuotationRequest.ShippingCountry" Label="Shipping Country"></MudTextField>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+
+        <MudItem xs="12" md="8" Class="px-md-6 pl-md-0">
+            <MudTextField Style="margin-left:-25px;" T="string" Label="Description" @bind-Value="_createQuotationRequest.Description" Lines="3" />
+        </MudItem>
+    </MudGrid>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Quoted Items</MudText>
+        </MudItem>
+        </MudGrid>
+        <MudGrid>
+            <MudItem xs="12">
+                <FLTable Items="_quoteItems">
+                    <HeaderContent>
+                        <MudTh>S.No</MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.ProductId)">Product Name</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.Description)">Description</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.Quantity)">Quantity</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.ListPrice)">Price</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.Tax)">Tax</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.Discount)">Discount</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<QuoteItems, object>(x => x.Amount)">Amount</MudTableSortLabel></MudTh>
+                        <MudTh>Action</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                    <MudTd DataLabel="S.No">@((_quoteItems.IndexOf(context))+1)</MudTd>
+                    <MudTd DataLabel="Product Name"><MudAutocomplete Margin="Margin.Dense" @onclick="AddProduct" ReadOnly=true Variant="Variant.Outlined" T="Guid" @bind-Value="context.ProductId" SearchFunc="@SearchProduct" ToStringFunc="@(i => _productDataDtos.FirstOrDefault(b => b.Id == i)?.ProductName ?? string.Empty)" OffsetY="true" /></MudTd>
+                    <MudTd DataLabel="Description"><MudTextField Margin="Margin.Dense" ReadOnly=true Variant="Variant.Outlined" T="string" @bind-Value="context.Description"></MudTextField></MudTd>
+                    <MudTd DataLabel="Quantity"><MudTextField Margin="Margin.Dense" TextChanged="(() => QuantityChanged(context))" Variant="Variant.Outlined" T="int?" @bind-Value="context.Quantity"></MudTextField></MudTd>
+                    <MudTd DataLabel="Price"><MudTextField Margin="Margin.Dense" ReadOnly=true Variant="Variant.Outlined" T="decimal?" @bind-Value="context.ListPrice"/></MudTd>
+                    <MudTd DataLabel="Tax"><MudTextField Margin="Margin.Dense" ReadOnly=true Variant="Variant.Outlined" T="decimal?" @bind-Value="context.Tax"/></MudTd>
+                    <MudTd DataLabel="Discount"><MudTextField Margin="Margin.Dense" ReadOnly=true Variant="Variant.Outlined" T="decimal?" @bind-Value="context.Discount"/></MudTd>
+                    <MudTd DataLabel="Amount"><MudTextField Margin="Margin.Dense" ReadOnly=true Variant="Variant.Outlined" T="decimal?" @bind-Value="context.Amount"/></MudTd>
+                    <MudTd><MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="() => RemoveQuoteItem(context)">Delete</MudButton></MudTd>
+                    </RowTemplate>
+                </FLTable>
+                <tr>
+                    <td><MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="AddQuoteItem">Add item</MudButton></td>
+                </tr>
+            </MudItem>
+        </MudGrid>
+
+       <MudGrid>
+            <MudSpacer />
+            <MudItem xs="4">
+                <MudCard Outlined Style="margin-top:2rem;margin-right:2rem">
+                    <MudGrid Style="margin-top:2rem">
+                        <MudItem xs="12">
+                    <MudTextField ReadOnly="true" Style="margin-left:1rem;margin-right:1rem" T="decimal?" @bind-Value="_createQuotationRequest.SubTotal" Variant="Variant.Outlined" Label="SubTotal (Rs.)" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                    
+                </MudGrid>
+               
+                 <MudGrid Style="margin-top:1rem">
+                        <MudItem xs="12">
+                            <MudTextField TextChanged="(() => DiscountAdd(_createQuotationRequest.TotalDiscount))" Style="margin-left:1rem;margin-right:1rem" T="decimal?" @bind-Value="_createQuotationRequest.TotalDiscount" Variant="Variant.Outlined" Label="Discount (Rs.)" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Style="margin-top:1rem">
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="_createQuotationRequest.TotalTax" Style="margin-left:1rem;margin-right:1rem" T="decimal?" Variant="Variant.Outlined" Label="Tax (Rs.)" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Style="margin-top:1rem">
+                    <MudItem xs="12">
+                        <MudTextField Style="margin-left:1rem;margin-right:1rem" T="decimal?" @bind-Value="_createQuotationRequest.TotalAdjustment" Variant="Variant.Outlined" Label="Adjustment (Rs.)" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Style="margin-bottom:2rem;margin-top:1rem">
+                    <MudItem xs="12">
+                            <MudTextField Style="margin-left:1rem;margin-right:1rem" @bind-Value="_createQuotationRequest.GrandTotal" T="decimal?" Variant="Variant.Outlined" Label="Grand Total (Rs.)" Margin="Margin.Dense"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+       <MudGrid>
+        <MudItem xs="12">
+            <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Terms and Conditions</MudText>
+        </MudItem>
+      
+    </MudGrid>
+
+    <MudGrid>
+        <MudItem xs="12">
+                <MudTextField ReadOnly="true" T="string" For="@(() => _createQuotationRequest.TermsConditions)" @bind-Value="_createQuotationRequest.TermsConditions" Label="Terms & Conditions" Variant="Variant.Outlined" Lines="3" />
+        </MudItem>
+    </MudGrid>
+    </MudGrid>
+@code{
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        AddProductasGlobal._quoteList = new();
+        await LoadDataAsync();
+        _createQuotationRequest.TermsConditions = "Kindly check and certify the Quantity & Rate while acknowleding our Incoice. Please do not make any correction on our Invoice. We are not responsible for any correction made on our Invoice.";
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetAllUserData();
+        await GetAllContact();
+        await GetAllProduct();
+        await GetAllAccount();
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUser(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userDetailsDtos.Select(x => x.Id);
+
+        return _userDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] IContactDetailsClient _contactDetailsClient { get; set; }
+    List<ContactDto> _contactDtos = new();
+    async Task GetAllContact()
+    {
+        try
+        {
+            _contactDtos = (await _contactDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchContact(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _contactDtos.Select(x => x.Id);
+
+        return _contactDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] IAccountDetailsClient _accountDetailsClient { get; set; }
+    List<AccountDto> _accountDtos = new();
+
+    async Task GetAllAccount()
+    {
+        try
+        {
+            _accountDtos = (await _accountDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchAccount(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _accountDtos.Select(x => x.Id);
+
+        return _accountDtos.Where(x => x.AccountName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject]IProductDataClient _productDataClient { get; set; }
+    List<ProductDataDto> _productDataDtos = new();
+
+    async Task GetAllProduct()
+    {
+        try{
+            _productDataDtos = (await _productDataClient.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchProduct(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _productDataDtos.Select(x => x.Id);
+
+        return _productDataDtos.Where(x => x.ProductName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] IQuotationDetailsClient _quotationDetailsClient { get; set; }
+    CreateQuotationRequest _createQuotationRequest = new();
+
+    async Task CreateQuotation()
+    {
+        foreach(var item in _quoteItems)
+        {
+            if(item.ProductId == Guid.Empty)
+            {
+                _quoteItems.Remove(item);
+            }
+        }
+        try
+        {
+            //if(_createQuotationRequest.TotalAdjustment == null)
+            //{
+            //    _createQuotationRequest.TotalAdjustment = 0;
+            //}
+            //if (_createQuotationRequest.TotalDiscount == null)
+            //{
+            //    _createQuotationRequest.TotalDiscount = 0;
+            //}
+            
+            _createQuotationRequest.QuoteItems = _quoteItems;
+            var response = await _quotationDetailsClient.CreateAsync(_createQuotationRequest.Adapt<CreateQuotationRequest>());
+            if (response != Guid.Empty)
+            {
+                Snackbar.Add("Quotation Added Successfully", Severity.Info);
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    void CopyAddressBilling()
+    {
+        _createQuotationRequest.ShippingCity = _createQuotationRequest.BillingCity;
+        _createQuotationRequest.ShippingStreet = _createQuotationRequest.BillingStreet;
+        _createQuotationRequest.ShippingCode = _createQuotationRequest.BillingCode;
+        _createQuotationRequest.ShippingCountry = _createQuotationRequest.BillingCountry;
+        _createQuotationRequest.ShippingState = _createQuotationRequest.BillingState;
+    }
+    void CopyAddressShipping()
+    {
+        _createQuotationRequest.BillingCity = _createQuotationRequest.ShippingCity;
+        _createQuotationRequest.BillingStreet = _createQuotationRequest.ShippingStreet;
+        _createQuotationRequest.BillingCode = _createQuotationRequest.ShippingCode;
+        _createQuotationRequest.BillingCountry = _createQuotationRequest.ShippingCountry;
+        _createQuotationRequest.BillingState = _createQuotationRequest.ShippingState;
+    }
+
+
+
+    public class QuoteItems{
+        public Guid ProductId { get; set; }
+        public int? Quantity { get; set; }
+        public decimal? ListPrice { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? Discount { get; set; }
+        public decimal? TotalAfterDiscount { get; set; }
+        public decimal? Tax { get; set; }
+        public decimal? Total { get; set; }
+        public string? Description { get; set; } = string.Empty;
+
+
+    }
+    private List<Quote> _quoteItems = new List<Quote>
+        {
+           new Quote()
+        };
+
+
+
+
+    private void AddQuoteItem()
+    {
+        _quoteItems.Add(new Quote());
+    }
+
+    private void RemoveQuoteItem(Quote item)
+    {
+        _quoteItems.Remove(item);
+        var response = AddProductasGlobal._quoteList.FirstOrDefault(x => x.ProductId == item.ProductId);
+        if(response != null)
+        {
+            AddProductasGlobal._quoteList.Remove(response);
+        }
+    }
+
+    private decimal? CalculateQuoteTotal()
+    {
+        decimal? total = 0;
+        foreach (var item in _quoteItems)
+        {
+            total += item.Quantity * item.ListPrice;
+        }
+        return total;
+    }
+
+    async Task AddProduct()
+    {
+        var parameters = new DialogParameters();
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
+        var dialog = DialogService.Show<ProductDetails>("Create", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            var response1 = _quoteItems.FirstOrDefault(x => x.ProductId == Guid.Empty);
+            if(response1 != null)
+            {
+                _quoteItems.Remove(response1);
+            }
+
+            foreach (var item in AddProductasGlobal._quoteList)
+            {
+                Quote quote = new();
+                quote.ProductId = item.ProductId;
+                quote.ListPrice = item.ListPrice;
+                quote.Amount = item.Quantity * item.ListPrice;
+                quote.Description = item.Description;
+
+                //if(item.Tax != null)
+                //{
+                //    quote.Tax = item.Tax;
+                //}
+                //else
+                //{
+                //    quote.Tax = 0;
+                //}
+
+                //if (item.Discount != null)
+                //{
+                //    quote.Discount = item.Discount;
+                //}
+                //else
+                //{
+                //    quote.Discount = 0;
+                //}
+
+                //if (item.TotalAfterDiscount != null)
+                //{
+                //    quote.TotalAfterDiscount = item.TotalAfterDiscount;
+                //}
+                //else
+                //{
+                //    quote.TotalAfterDiscount = 0;
+                //}
+
+                //if (item.Total != null)
+                //{
+                //    quote.Total = item.Total;
+                //}
+                //else
+                //{
+                //    quote.Total = 0;
+                //}
+                
+                quote.Quantity = item.Quantity;
+
+                var response = _quoteItems.FirstOrDefault(x => x.ProductId == quote.ProductId);
+                 if(response == null)
+                 {
+                   _quoteItems.Add(quote);
+                 }
+            }
+            await Calculate();
+        }
+    }
+
+    async Task DiscountAdd(decimal? value)
+    {
+        if (value <= 100)
+            {
+                decimal? discount = (value / 100) * _createQuotationRequest.GrandTotal;
+                discount = System.Math.Round(discount ?? 0, 2);
+                _createQuotationRequest.GrandTotal -= discount;
+                foreach (var item in _quoteItems) // adding percentage anount to all product whoch was present in list
+                {
+                    item.Discount = value;
+                }
+                _createQuotationRequest.TotalAdjustment = discount;
+            }
+            else
+            {
+                Snackbar.Add("Entered More than 100%", Severity.Error);
+            }
+    }
+
+    async Task QuantityChanged(Quote items)
+    {
+        var response = _quoteItems.FirstOrDefault(x => x.ProductId == items.ProductId);
+        if(response != null)
+        {
+            response.Amount = response.Quantity * response.ListPrice;
+             await Calculate();
+        }
+    }
+
+     async Task Calculate()
+        {
+            _createQuotationRequest.SubTotal = 0;
+            _createQuotationRequest.GrandTotal = 0;
+            foreach(var item in _quoteItems)
+            {
+                _createQuotationRequest.SubTotal = _createQuotationRequest.SubTotal + (item.ListPrice * item.Quantity);
+                _createQuotationRequest.GrandTotal = _createQuotationRequest.GrandTotal + item.Amount;
+                _createQuotationRequest.TotalTax = _createQuotationRequest.GrandTotal - _createQuotationRequest.SubTotal;
+            }
+        }
+        
+       
+        async Task SelectAccount(Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                try{
+                      var response = await _contactDetailsClient.GetAsync(id);
+                      if(response.Id != Guid.Empty)
+                      {
+                        _createQuotationRequest.AccountId = response.AccountId;
+                        _createQuotationRequest.LeadId = response.LeadId;
+                      }
+                }
+                catch(Exception ex)
+                {
+                  Snackbar.Add(ex.Message, Severity.Error);
+                }
+            }
+        }
+}

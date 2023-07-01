@@ -1,8 +1,9 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Theme;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Shared;
+namespace FL_CRMS_ERP_WASM.Client.Shared;
 
 public partial class MainLayout
 {
@@ -15,7 +16,7 @@ public partial class MainLayout
 
     private bool _drawerOpen;
     private bool _rightToLeft;
-
+    private MudTheme _currentTheme = new LightTheme();
     protected override async Task OnInitializedAsync()
     {
         if (await ClientPreferences.GetPreference() is ClientPreference preference)
@@ -23,8 +24,9 @@ public partial class MainLayout
             _rightToLeft = preference.IsRTL;
             _drawerOpen = preference.IsDrawerOpen;
         }
+         _currentTheme = new LightTheme();
+        _currentTheme = await ClientPreferences.GetCurrentThemeAsync();
     }
-
     private async Task RightToLeftToggle()
     {
         bool isRtl = await ClientPreferences.ToggleLayoutDirectionAsync();

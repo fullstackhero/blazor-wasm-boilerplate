@@ -1,8 +1,8 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.Common;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using FL_CRMS_ERP_WASM.Client.Components.Common;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Shared;
+namespace FL_CRMS_ERP_WASM.Client.Shared;
 
 public static class ApiHelper
 {

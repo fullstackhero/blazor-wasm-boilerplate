@@ -1,0 +1,298 @@
+﻿@page "/leaddata/lead/convertleadtoaccount/{_leadId:guid}"
+@using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+@inject ISnackbar Snackbar
+@using MudBlazor;
+<div class="sticky">
+<MudCard Outlined Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
+    <MudGrid Style="margin-top:1rem;margin-bottom:1rem;margin-left:1rem">
+        <MudItem xs="12">
+            <MudText Style="font-weight:bold" Typo="Typo.body1">Convert Lead (@_leadDetailsDto.FirstName @_leadDetailsDto.LastName - @_leadDetailsDto.CompanyName)</MudText>
+        </MudItem>
+    </MudGrid>
+</MudCard>
+</div>
+
+<MudCard Outlined Style="margin-top:2rem;">
+    <MudGrid Style="margin-top:1rem;margin-bottom:1rem;margin-left:1rem">
+        <MudItem>
+            <MudText Typo="Typo.body1">Create New Account</MudText>
+        </MudItem>
+        <MudItem>
+            <MudChip Variant="Variant.Outlined" Color="Color.Primary">@_leadDetailsDto.CompanyName</MudChip>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Style="margin-top:1rem;margin-bottom:1rem;margin-left:1rem">
+        <MudItem>
+            <MudText Typo="Typo.body1">Create New Contact</MudText>
+        </MudItem>
+        <MudItem>
+            <MudChip Variant="Variant.Outlined" Color="Color.Secondary">@_leadDetailsDto.FirstName @_leadDetailsDto.LastName</MudChip>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Style="margin-top:1rem;margin-bottom:1rem;margin-left:1rem">
+        <MudItem xs="12">
+            <MudText Typo="Typo.subtitle1">Owner of the New Records</MudText>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Style="margin-top:1rem;margin-bottom:1rem;margin-left:1rem">
+        <MudItem xs="4">
+            <MudAutocomplete T="Guid" Label="LeadOwner" @bind-Value="_leadDetailsDto.UserId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" Variant="Variant.Outlined" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+        </MudItem>
+    </MudGrid>
+    <MudGrid Style="margin-top:1rem;margin-bottom:1rem;margin-left:1rem">
+        <MudItem>
+            <MudCheckBox T="bool"></MudCheckBox>
+        </MudItem>
+        <MudItem>
+            <MudText Typo="Typo.body1">Notify record owner (Account and Contact)</MudText>
+        </MudItem>
+    </MudGrid>
+
+    <MudGrid Style="margin-top:1rem;margin-bottom:1rem;margin-left:1rem">
+        <MudItem>
+            <MudButton Color="@Color.Primary" OnClick="ConvertLeadToAccountId" Variant="Variant.Outlined">Convert</MudButton>
+        </MudItem>
+        <MudItem>
+            <MudButton Color="@Color.Default" OnClick="Cancel" Variant="Variant.Outlined">Cancel</MudButton>
+        </MudItem>
+    </MudGrid>
+</MudCard>
+
+
+
+
+
+@code {
+    [Parameter]
+    public Guid _leadId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetAllUserData();
+        await GetLeadDataById();
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    List<UserDetailsDto> _userDetailsDtos = new();
+
+    async Task GetAllUserData()
+    {
+        try
+        {
+            _userDetailsDtos = (await _usersClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task<IEnumerable<Guid>> SearchUser(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userDetailsDtos.Select(x => x.Id);
+
+        return _userDetailsDtos.Where(x => x.FirstName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id);
+    }
+
+    [Inject] ILeadDetailsClient _leadDetailsClient { get; set; }
+    LeadDetailsDto _leadDetailsDto = new();
+
+    async Task GetLeadDataById()
+    {
+        if (_leadId != Guid.Empty)
+        {
+            try
+            {
+                var response = await _leadDetailsClient.GetAsync(_leadId);
+                if (response.Id != Guid.Empty)
+                {
+                    _leadDetailsDto.CompanyName = response.CompanyName;
+                    _leadDetailsDto.Id = response.Id;
+                    _leadDetailsDto.UserId = response.UserId;
+                    _leadDetailsDto.FirstName = response.FirstName;
+                    _leadDetailsDto.LeadSource = response.LeadSource;
+                    _leadDetailsDto.Phone = response.Phone;
+                    _leadDetailsDto.Mobile = response.Mobile;
+                    _leadDetailsDto.LastName = response.LastName;
+                    _leadDetailsDto.Fax = response.Fax;
+                    _leadDetailsDto.Website = response.Website;
+                    _userId = response.UserId;
+                    _leadDetailsDto.LeadStatus = response.LeadStatus;
+                    _leadDetailsDto.LeadSource = response.LeadSource;
+                    _leadDetailsDto.Email = response.Email;
+                    _leadDetailsDto.LeadImage = response.LeadImage;
+                }
+                else
+                {
+                    Snackbar.Add("LeadId not found", Severity.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+
+    Guid _userId;
+
+    [Inject] IAccountDetailsClient _accountDetailsClient { get; set; }
+    CreateAccountRequest _createAccountRequest = new();
+    Guid _latestAccountId;
+    async Task ConvertLeadToAccountId()
+    {
+        _createAccountRequest.ConvertedLeadId = _leadId;
+        _createAccountRequest.UserId = _leadDetailsDto.UserId;
+        _createAccountRequest.AccountName = _leadDetailsDto.CompanyName;
+        _createAccountRequest.Phone = _leadDetailsDto.Phone;
+        _createAccountRequest.Fax = _leadDetailsDto.Fax;
+        _createAccountRequest.Website = _leadDetailsDto.Website;
+        //_createAccountRequest.BusinessType = "Individual";
+
+        try
+        {
+            var response = await _accountDetailsClient.CreateAsync(_createAccountRequest);
+            if (response != Guid.Empty)
+            {
+                _latestAccountId = response;
+                await LeadToContact();
+                // Snackabar.Add("Lead Added Successfully", Severity.Info);
+                //Navigation.NavigateTo("/view/stock");
+                //await Reset();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] IContactDetailsClient _contactDetailsClient { get; set; }
+    CreateContactRequest _createContactRequest = new();
+    Guid _latestContactId;
+    async Task LeadToContact()
+    {
+        _createContactRequest.AccountId = _latestAccountId;
+        _createContactRequest.FirstName = _leadDetailsDto.FirstName;
+        _createContactRequest.LastName = _leadDetailsDto.LastName;
+        _createContactRequest.LeadSource = _leadDetailsDto.LeadSource;
+        _createContactRequest.Phone = _leadDetailsDto.Phone;
+        _createContactRequest.Mobile = _leadDetailsDto.Mobile;
+        _createContactRequest.DateOfBirth = _leadDetailsDto.DateOfBirth;
+        _createContactRequest.ContactOwnerId = _leadDetailsDto.UserId;
+        _createContactRequest.ContactImage = _leadDetailsDto.LeadImage;
+        _createContactRequest.Fax = _leadDetailsDto.Fax;
+        _createContactRequest.Email = _leadDetailsDto.Email;
+        _createContactRequest.LeadId = _leadId;
+        
+        try
+        {
+            var response = await _contactDetailsClient.CreateAsync(_createContactRequest);
+            if (response != Guid.Empty)
+            {
+                _latestContactId = response;
+                await UpdateLeadTable();
+                // Snackbar.Add("Lead Added Successfully", Severity.Info);
+                //Navigation.NavigateTo("/view/stock");
+                //await Reset();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+
+    async Task UpdateLeadTable()
+    {
+        UpdateLeadRequest updateLeadRequest = new();
+        //updateLeadRequest.con = _leadId;
+        updateLeadRequest.UserId = _userId;
+        updateLeadRequest.CompanyName = _leadDetailsDto.CompanyName;
+        updateLeadRequest.LeadSource = _leadDetailsDto.LeadSource;
+        updateLeadRequest.Phone = _leadDetailsDto.Phone;
+        updateLeadRequest.Mobile = _leadDetailsDto.Mobile;
+        updateLeadRequest.FirstName = _leadDetailsDto.FirstName;
+        updateLeadRequest.Email = _leadDetailsDto.Email;
+        updateLeadRequest.LeadStatus = _leadDetailsDto.LeadStatus;
+        updateLeadRequest.ConvertedAccountId = _latestAccountId;
+        updateLeadRequest.ConvertedContactId = _latestContactId;
+        updateLeadRequest.Id = _leadId;
+
+        try
+        {
+            var response1 = await _leadDetailsClient.UpdateAsync(_leadId, updateLeadRequest);
+            if (response1 != Guid.Empty)
+            {
+                Snackbar.Add("Lead Converted Successfully", Severity.Info);
+                //MudDialog.Close();
+            }
+        }
+        catch (ApiException<HttpValidationProblemDetails> ex)
+        {
+            if (ex.Result.Errors is not null)
+            {
+                Snackbar.Add(ex.Result.Title, Severity.Error);
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong!", Severity.Error);
+            }
+        }
+        catch (ApiException<ErrorResult> ex)
+        {
+            Snackbar.Add(ex.Result.Exception, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    async Task Cancel()
+    {
+        Navigation.NavigateTo($"leaddata/leadinformationbyid/{_leadId}");
+    }
+}

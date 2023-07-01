@@ -1,6 +1,6 @@
-﻿using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+﻿using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 
-namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
+namespace FL_CRMS_ERP_WASM.Client.Components.EntityTable;
 
 /// <summary>
 /// Initialization Context for the EntityTable Component.

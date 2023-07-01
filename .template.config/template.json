@@ -17,7 +17,7 @@
     "type": "project"
   },
   "identity": "FullStackHero.BlazorWebAssembly.Boilerplate",
-  "name": "Blazor WebAssembly Boilerplate - FullStackHero",
+  "name": "Secure Hands - FullStackHero",
   "description": "Clean Architecture Boilerplate Template for .NET 6.0 Blazor WebAssembly built for FSH WebAPI with the goodness of MudBlazor Components.",
   "shortName": "fsh-blazor",
   "sourceName": "FSH.BlazorWebAssembly",

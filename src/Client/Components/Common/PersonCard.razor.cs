@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.Common;
+namespace FL_CRMS_ERP_WASM.Client.Components.Common;
 
 public partial class PersonCard
 {
@@ -19,7 +20,8 @@ public partial class PersonCard
     private string? Email { get; set; }
     private string? FullName { get; set; }
     private string? ImageUri { get; set; }
-
+    [Parameter]
+    public bool _drawerOpen { get; set; }   
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

@@ -1,0 +1,284 @@
+<EditForm Model="@_updateUserRequest" OnValidSubmit="UpdateAsync">
+        <MudDialog>
+            <TitleContent>
+                <MudItem>
+                    <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Update Users Details</MudText>
+                </MudItem>
+            </TitleContent>
+             <DialogContent>
+                 <MudContainer>
+                    <MudGrid>
+                        <MudItem xs="12" md="6">
+                            <MudTextField For="@(() => _userDetailsDto.UserName)" @bind-Value="_userDetailsDto.UserName" Label="User Name" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField For="@(() => _userDetailsDto.FirstName)" @bind-Value="_userDetailsDto.FirstName" Label="First Name" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField For="@(() => _userDetailsDto.LastName)" @bind-Value="_userDetailsDto.LastName" Label="Last Name" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField For="@(() => _userDetailsDto.Email)" @bind-Value="_userDetailsDto.Email" Label="Email" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField For="@(() => _userDetailsDto.PhoneNumber)" @bind-Value="_userDetailsDto.PhoneNumber" Label="Phone Number" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                        <MudAutocomplete Margin="Margin.Dense" Color="Color.Secondary" T="string" Label="ReportTo" @bind-Value="_userDetailsDto.ReportTo" ResetValueOnEmptyText="true" SearchFunc="@SearchUsers" ToStringFunc="@(i => _userList.FirstOrDefault(b => b.Id.ToString() == i)?.UserName ?? string.Empty)" OffsetY="true" />
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="8"></MudItem>
+                        <MudItem xs = "4">
+                            <MudGrid>
+                                <MudItem xs="6">                           
+                                    <MudButton Variant="Variant.Filled" Color="Color.Default"
+                                    OnClick="Cancel" StartIcon="@Icons.Material.Filled.Cancel"
+                                    IconColor="Color.Surface">Cancel</MudButton>                                
+                                </MudItem>
+                                 <MudItem xs="6">
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                                    OnClick="UpdateAsync" StartIcon="@Icons.Material.Filled.Update"
+                                    IconColor="Color.Surface">Update</MudButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                    </MudGrid>
+                 </MudContainer>
+             </DialogContent>
+        </MudDialog>
+</EditForm>
+
+@code
+{    
+    [Parameter] public UpdateUserRequest _updateUserRequest { get; set; } = new();
+
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+    @* [Inject]
+    protected IAuthenticationService AuthService { get; set; } = default!; *@
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();    
+    }
+    async Task LoadDataAsync()
+    {
+        //await GetAllUsers();
+
+        @* if ((await AuthState).User is { } user)
+        {
+            //_userId = user.GetUserId();
+        } *@
+        await GetByIdUser(_updateUserRequest.Id);
+
+        await GetUserRole();
+        await GetAllUsersAsync();
+    }
+
+    [Inject] IUsersClient _usersClient { get; set; }
+    UserDetailsDto _userDetailsDto = new();
+    async Task GetByIdUser(string id)
+    {
+        try
+        {
+            _userDetailsDto = await _usersClient.GetByIdAsync(id);                        
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    //List<UserDetailsDto> _userDetailsDtoList = new();
+
+    //async Task GetAllUsers()
+    //{
+    //    try
+    //    {
+    //        _userDetailsDtoList = (await _usersClient.GetListAsync()).ToList();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Snackbar.Add(ex.Message, Severity.Error);
+    //    }
+    //}
+    private async Task<IEnumerable<string>> SearchUsers(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _userList.Select(x => x.Id.ToString());
+
+        return _userList.Where(x => x.UserName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => x.Id.ToString());
+    }
+
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+    void Cancel()
+    {
+        MudDialog.Close();
+    }
+
+    [Inject] IPersonalClient _personalClient { get; set; }
+    async Task UpdateAsync()
+    {
+        _updateUserRequest.Id = _userDetailsDto.Id.ToString();
+        _updateUserRequest.UserName = _userDetailsDto.UserName;
+        _updateUserRequest.FirstName = _userDetailsDto.FirstName;
+        _updateUserRequest.LastName = _userDetailsDto.LastName;
+        _updateUserRequest.Email = _userDetailsDto.Email;
+        _updateUserRequest.PhoneNumber = _userDetailsDto.PhoneNumber;
+        _updateUserRequest.ReportTo = _userDetailsDto.ReportTo;
+
+        try
+        {
+            var response = _personalClient.UpdateProfileAsync(_updateUserRequest);
+            if (response != null)
+            {
+                Snackbar.Add("User Details Updated Successfully", Severity.Info);
+                MudDialog.Close();
+            }
+        }
+        catch( Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] IRolesClient _rolesClient { get; set; }
+    List<RoleDto> _roleDtoList = new();
+
+    async Task GetAllRole()
+    {
+        try
+        {
+            _roleDtoList = (await _rolesClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    public List<UserRoleDto> _getAllUserRole { get; set; } = new();
+    public List<UserRoleDto> _selectedUserRole { get; set; } = new();
+    [Inject] IUsersClient _userClient { get; set; }
+    string _userRolesIdString = "";
+    List<string> _filterUserRole = new();
+    List<string> _userRolesId = new();
+
+    private async Task GetUserRole()
+    {            
+        _selectedUserRole = (await _userClient.GetRolesAsync(_updateUserRequest.Id)).Where(x => x.Enabled == true).ToList();
+        _getAllUserRole = (await _userClient.GetRolesAsync(_updateUserRequest.Id)).ToList();
+        //the do while use to order by the admin to basic user
+        do
+        {
+            if (_userRolesIdString == "")
+            {
+                _userRolesIdString = _getAllUserRole.Where(x => x.RoleName == "Admin").FirstOrDefault().RoleId;
+                _userRolesId.Add(_userRolesIdString);
+            }
+            else
+            {
+                if (_getAllUserRole.Where(x => x.RoleId == _userRolesIdString).FirstOrDefault().RoleName != "Basic" && _getAllUserRole.Where(x => x.ReportTo == _userRolesIdString).Count() > 0)
+                {                    
+                    _userRolesIdString = _getAllUserRole.Where(x => x.ReportTo == _userRolesIdString).FirstOrDefault().RoleId;
+                    _userRolesId.Add(_userRolesIdString);
+                }
+                else
+                {
+                    _userRolesIdString = "";
+                }
+
+            }
+        }
+        while (_userRolesIdString != "");
+
+        _filterUserRole = new();
+        foreach (var item in _userRolesId)
+        {
+            if (item == _selectedUserRole.FirstOrDefault().RoleId.ToString())
+            {
+                break;
+            }
+            else
+            {
+                _filterUserRole.Add(item);
+            }
+        }
+    } 
+
+    private List<UserDetailsDto> _userList = new();
+    private List<UserDetailsDto> _filterUserList = new();
+    List<string> _filterUserId = new();
+    private async Task GetAllUsersAsync12()
+    {
+        if (_updateUserRequest.Id != null)
+        {
+            _userList = (await _usersClient.GetListAsync()).Where(x => x.Id.ToString() != _updateUserRequest.Id).ToList();
+        }
+        else
+        {
+            _userList = (await _usersClient.GetListAsync()).ToList();
+        }
+
+        if (_updateUserRequest.Id != null)
+        {
+            foreach (var item in _userList)
+            {
+                //var response1 = await _usersClient.GetRolesAsync(item.Id);
+                foreach (var roleid in _filterUserRole)
+                {
+                    if (((await _usersClient.GetRolesAsync(item.Id.ToString())).Where(x => x.Enabled == true)).Count() > 0)
+                    {
+                        if (roleid == (await _usersClient.GetRolesAsync(item.Id.ToString())).Where(x => x.Enabled == true).FirstOrDefault().RoleId)
+                        {
+                            _filterUserId.Add(item.Id.ToString());
+                        }
+                    }
+                }
+            }
+            _filterUserList = new();
+            foreach (var value in _filterUserId)
+            {
+                foreach (var item in _userList)
+                {
+                    if (value == item.Id.ToString())
+                    {
+                        _filterUserList.AddRange(_userList.Where(x => x.Id == item.Id).ToList());
+                    }
+                }
+            }
+            _userList = new();
+            _userList.AddRange(_filterUserList);
+        }
+    }
+
+    private async Task GetAllUsersAsync()
+    {        
+        _userList = (await _usersClient.GetListAsync()).ToList();
+
+        foreach (var item in _userList)
+        {
+           foreach (var filteruseractive in _filterUserRole)
+           {
+            var t1 = (await _usersClient.GetRolesAsync(item.Id.ToString())).ToList();
+                var t2 = (t1.Where(x => x.Enabled == true)).ToList();
+                var t3 = t2.FirstOrDefault().RoleId;
+                if (filteruseractive == t3)
+                {
+                    _filterUserList.Add(item);
+                }
+           }            
+        }
+
+        _userList = new();
+        _userList.AddRange(_filterUserList);
+
+    }
+    
+
+}

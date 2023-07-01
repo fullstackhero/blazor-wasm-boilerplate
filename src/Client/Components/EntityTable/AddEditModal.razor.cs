@@ -1,9 +1,9 @@
-using FSH.BlazorWebAssembly.Client.Components.Common;
-using FSH.BlazorWebAssembly.Client.Shared;
+using FL_CRMS_ERP_WASM.Client.Components.Common;
+using FL_CRMS_ERP_WASM.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Components.EntityTable;
+namespace FL_CRMS_ERP_WASM.Client.Components.EntityTable;
 
 public partial class AddEditModal<TRequest> : IAddEditModal<TRequest>
 {

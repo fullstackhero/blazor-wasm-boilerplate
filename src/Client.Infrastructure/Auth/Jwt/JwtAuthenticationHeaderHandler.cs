@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication.Internal;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Auth.Jwt;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Auth.Jwt;
 
 public class JwtAuthenticationHeaderHandler : DelegatingHandler
 {

@@ -1,0 +1,267 @@
+@page "/leaddata/editaccount/{_accountId:guid}"
+
+<MudContainer style="height: 100vh;">
+    @if(!_loaded)
+{
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+    else
+    {
+        <div class="sticky">
+            <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudInputLabel Style="font-family:Verdana;margin-top:10px;font-size:16px;font-weight:bold;margin-left:10px">Update Lead Information</MudInputLabel>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" Style="margin-top:8px; margin-bottom:8px">
+                        <span style="float:right;">
+                            <MudButton Style="margin-left:10px" OnClick="DeleteAsync"  StartIcon="@Icons.Material.Filled.Delete" Color="Color.Primary" Size="Size.Small">Delete</MudButton>
+                            <MudButton Style="margin-left:10px" OnClick="UpdateAsync" StartIcon="@Icons.Material.Filled.Update" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                            <MudButton Style="margin-left:10px;" OnClick="Cancel"  StartIcon="@Icons.Material.Filled.Cancel" Color="Color.Secondary" Size="Size.Small">Cancel</MudButton>
+                        </span>
+                    </MudItem>
+                </MudGrid>
+            </MudCard>
+        </div>
+
+        <MudGrid>
+            <MudItem>
+                <MudText>Account Image</MudText>
+            </MudItem>
+        </MudGrid>
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudItem>
+                    <MudAvatar Image="@(_updateAccountRequest.AccountImage)" Square="true" Style="height: auto; width: auto; max-height: 100%"> </MudAvatar>
+                </MudItem>
+                <MudItem>
+                    @*<InputFile id="fileInput" hidden OnChange="UploadFiles" />*@
+                    <div>
+                        <MudButton HtmlTag="label"
+                               Variant="Variant.Text"
+                               Color="Color.Primary"
+                               Size="Size.Small"
+                               StartIcon="@Icons.Filled.CloudUpload"
+                               for="fileInput">
+                            "Upload"
+                        </MudButton>
+                        @if (!string.IsNullOrEmpty(_updateAccountRequest.AccountImage))
+                        {
+                            <MudButton Variant="Variant.Text"
+                               Color="Color.Info"
+                               StartIcon="@Icons.Filled.RemoveRedEye"
+                               Size="Size.Small"
+                               Link="@(_updateAccountRequest.AccountImage)" Target="_blank">
+                                "View"
+                            </MudButton>
+                           @* <MudButton Variant="Variant.Text"
+                               Color="Color.Error"
+                               StartIcon="@Icons.Filled.Delete"
+                               Size="Size.Small"
+                               OnClick="DeleteAsync">
+                                "Delete"
+                            </MudButton>*@
+                        }
+                    </div>
+                </MudItem>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Style="margin-top:-50px; margin-bottom:15px;">
+    <MudCard Outlined="true" Class="rounded-lg" style="width: 100%;margin-left:1rem;margin-right:1rem">
+                <MudGrid>
+                    <MudItem>
+                        <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Contact Information</MudText>
+                    </MudItem>
+                </MudGrid>
+                    <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                    <MudAutocomplete T="Guid" Label="Account Owner" @bind-Value="_updateAccountRequest.UserId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="Margin.Dense" Variant="Variant.Outlined" ToStringFunc="@(i => _userDetailsDtos.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />
+                        @*<MudAutocomplete T="int" Label="Account Owner" @bind-Value="_addEditAccountDetailsCommand.UserId" ResetValueOnEmptyText="true" SearchFunc="@SearchUser" Margin="@_margin" Variant="@_varientName" ToStringFunc="@(i => _users.FirstOrDefault(b => b.Id == i)?.FirstName ?? string.Empty)" OffsetY="true" />*@
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudSelect T="string" Label="Business Type" @bind-Value="_updateAccountRequest.BusinessType" Variant="Variant.Outlined" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("Individual")" />
+                            <MudSelectItem T="string" Value="@("Corporate")" />                        
+                        </MudSelect>
+                    </MudItem>                 
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.AccountName" Margin="Margin.Dense" Label="Account Name"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.Phone" Margin="Margin.Dense" Label="Phone"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="@Variant.Outlined" @bind-Value="_updateAccountRequest.AccountSite" Margin="Margin.Dense" Label="Account Site"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.Fax" Margin="Margin.Dense" Label="Fax"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+
+                        <MudAutocomplete T="Guid?" Label="Parent Owner" @bind-Value="_updateAccountRequest.ParentAccountId" ResetValueOnEmptyText="true" SearchFunc="@SearchAccount" Margin="Margin.Dense" Variant="Variant.Outlined" ToStringFunc="@(i => _accountDetailDto.FirstOrDefault(b => b.Id == i)?.AccountName ?? string.Empty)" OffsetY="true" />
+                    </MudItem>
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.Website" Margin="Margin.Dense" Label="WebSite"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.AccountNumber" Margin="Margin.Dense" Label="Account Number"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Ticker Symbol"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudSelect T="string" Label="Account Type" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.AccountType" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("-None-")" />
+                            <MudSelectItem T="string" Value="@("Analyst")" />
+                            <MudSelectItem T="string" Value="@("Competitor")" />
+                            <MudSelectItem T="string" Value="@("Customer")" />
+                            <MudSelectItem T="string" Value="@("Distributor")" />
+                            <MudSelectItem T="string" Value="@("Integrator")" />
+                            <MudSelectItem T="string" Value="@("Investor")" />
+                            <MudSelectItem T="string" Value="@("Other")" />
+                            <MudSelectItem T="string" Value="@("Partner")" />
+                            <MudSelectItem T="string" Value="@("Press")" />
+                            <MudSelectItem T="string" Value="@("Prospect")" />
+                            <MudSelectItem T="string" Value="@("Reseller")" />
+                            <MudSelectItem T="string" Value="@("Supplier")" />
+                            <MudSelectItem T="string" Value="@("Vendor")" />
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudSelect T="string" Label="OwnerShip" @bind-Value="_updateAccountRequest.OwnerShip" Variant="Variant.Outlined" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("--None--")" />
+                            <MudSelectItem T="string" Value="@("Other")" />
+                            <MudSelectItem T="string" Value="@("Private")" />
+                            <MudSelectItem T="string" Value="@("Public")" />
+                            <MudSelectItem T="string" Value="@("Subsidary")" />
+                            <MudSelectItem T="string" Value="@("Partnership")" />
+                            <MudSelectItem T="string" Value="@("Government")" />
+                            <MudSelectItem T="string" Value="@("Privately Held")" />
+                            <MudSelectItem T="string" Value="@("Public Company")" />
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudSelect T="string" Label="Industry" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.Industry" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("--None--")" />
+                            <MudSelectItem T="string" Value="@("ASP (Application Service Provider)")" />
+                            <MudSelectItem T="string" Value="@("Data/Telecom OEM")" />
+                            <MudSelectItem T="string" Value="@("ERP (Enterprise Resource Planning)")" />
+                            <MudSelectItem T="string" Value="@("Government/Military")" />
+                            <MudSelectItem T="string" Value="@("Large Enterprise)")" />
+                            <MudSelectItem T="string" Value="@("ManagementISV")" />
+                            <MudSelectItem T="string" Value="@("MSP (Management Service Provider)")" />
+                            <MudSelectItem T="string" Value="@("Network Equipment Enterprise")" />
+                            <MudSelectItem T="string" Value="@("Non-management ISV)")" />
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="int?" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.Employees" Margin="Margin.Dense" Label="Employees"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudNumericField T="decimal?" Label="Annual Revenue" @bind-Value="_updateAccountRequest.Revenue" Variant="Variant.Outlined" Margin="Margin.Dense" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" />
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="_updateAccountRequest.SICCode" Label="SIC Code"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="7" Class="px-md-6 mr-md-6">
+                        <MudSelect T="string" Label="Rating" @bind-Value="_updateAccountRequest.Rating" Variant="Variant.Outlined" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("Acquired")" />
+                            <MudSelectItem T="string" Value="@("Active")" />
+                            <MudSelectItem T="string" Value="@("Market Failed")" />
+                            <MudSelectItem T="string" Value="@("Project Cancelled")" />
+                            <MudSelectItem T="string" Value="@("Shut Down")" />
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+
+                <MudGrid>
+                    <MudItem>
+                        <MudText Style="font-family:Verdana;font-size:16px;font-weight:bold;color:crimson;margin-left:10px">Address Information</MudText>
+                    </MudItem>
+                    <MudSpacer />
+                    <MudItem>
+                        <MudMenu Style="margin-left:10px;" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.CopyAll" Color="Color.Default" Size="Size.Small" Label="Copy Address" Dense="true">
+                            <MudMenuItem OnClick="CopyAddressBilling">Billing to Shipping</MudMenuItem>
+                            <MudMenuItem OnClick="CopyAddressShipping">Shipping to Billing</MudMenuItem>
+                        </MudMenu>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.BillingStreet" Margin="Margin.Dense" Label="Billing Street"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.ShippingStreet" Margin="Margin.Dense" Label="Shipping Street"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.BillingCity" Margin="Margin.Dense" Label="Billing City"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.ShippingCity" Margin="Margin.Dense" Label="Shipping City"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="_updateAccountRequest.BillingState" Label="Billing State"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="_updateAccountRequest.ShippingState" Label="Shipping State"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="_updateAccountRequest.BillingCode" Margin="Margin.Dense" Label="Billing Zip"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="_updateAccountRequest.ShippingCode" Label="Shipping Zip"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="_updateAccountRequest.BillingCountry" Label="Billing Country"></MudTextField>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4" Class="px-md-6 mr-md-6">
+                        <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="_updateAccountRequest.ShippingCountry" Label="Shipping Country"></MudTextField>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Class="d-flex justify-center mt-2 px-sm-4">
+
+                    <MudItem xs="12" md="8" Class="px-md-6 pl-md-0">
+                        <MudTextField T="string" @bind-Value="_updateAccountRequest.Description" Label="Description" Variant="Variant.Outlined" Lines="3" />
+                    </MudItem>
+                </MudGrid>
+        </MudCard>
+        </MudGrid>
+    }
+</MudContainer>

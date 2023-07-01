@@ -1,8 +1,8 @@
-using FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Preferences;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Preferences;
 using Microsoft.AspNetCore.Components;
 
-namespace FSH.BlazorWebAssembly.Client.Components.ThemeManager;
+namespace FL_CRMS_ERP_WASM.Client.Components.ThemeManager;
 
 public partial class TableCustomizationPanel
 {
@@ -17,7 +17,7 @@ public partial class TableCustomizationPanel
     [Inject]
     protected INotificationPublisher Notifications { get; set; } = default!;
 
-    private FshTablePreference _tablePreference = new();
+    private FLTablePreference _tablePreference = new();
 
     protected override async Task OnInitializedAsync()
     {

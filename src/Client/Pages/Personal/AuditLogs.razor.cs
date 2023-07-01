@@ -1,10 +1,10 @@
-using FSH.BlazorWebAssembly.Client.Components.EntityTable;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Components.EntityTable;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
 using Mapster;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Personal;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Personal;
 
 public partial class AuditLogs
 {

@@ -1,7 +1,7 @@
-using FSH.WebApi.Shared.Notifications;
+using FL.WebApi.Shared.Notifications;
 using MediatR;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Notifications;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Notifications;
 
 public class NotificationWrapper<TNotificationMessage> : INotification
     where TNotificationMessage : INotificationMessage

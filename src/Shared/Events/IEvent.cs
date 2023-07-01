@@ -1,4 +1,4 @@
-﻿namespace FSH.WebApi.Shared.Events;
+﻿namespace FL.WebApi.Shared.Events;
 
 public interface IEvent
 {

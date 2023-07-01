@@ -56,7 +56,7 @@
       "wrapResponseMethods": [],
       "generateResponseClasses": true,
       "responseClass": "SwaggerResponse",
-      "namespace": "FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient",
+      "namespace": "FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient",
       "requiredPropertiesMustBeDefined": true,
       "dateType": "System.DateTimeOffset",
       "jsonConverters": null,
@@ -93,7 +93,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "FSHApi.cs",
+      "output": "FLApi.cs",
       "newLineBehavior": "Auto"
     }
   }

@@ -1,10 +1,10 @@
 ﻿@page "/catalog/brands"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.Brands)]
+@attribute [MustHavePermission(FLAction.View, FLResource.Brands)]
 
 @inject IStringLocalizer<Brands> L
 @inject IBrandsClient BrandsClient
 
-<FshTitle Title="@L["Brands"]" Description="@L["Manage Brands."]" />
+<FLTitle Title="@L["Brands"]" Description="@L["Manage Brands."]" />
 
 <EntityTable TEntity="BrandDto" TId="Guid" TRequest="UpdateBrandRequest" Context="@Context">
 
@@ -34,7 +34,7 @@
         Context = new(
             entityName: L["Brand"],
             entityNamePlural: L["Brands"],
-            entityResource: FSHResource.Brands,
+            entityResource: FLResource.Brands,
             fields: new()
             {
                 new(brand => brand.Id, L["Id"], "Id"),

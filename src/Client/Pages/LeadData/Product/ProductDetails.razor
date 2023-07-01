@@ -1,0 +1,94 @@
+﻿<MudDialog>
+    <TitleContent>
+        <MudItem>
+            <MudText Style="text-align:center;font-family:Verdana;font-size:18px">Product Details</MudText>
+        </MudItem>
+    </TitleContent>
+    <DialogContent>
+        <FLTable Items="_productDataDtos">
+            <HeaderContent>
+                <MudTh><MudTableSortLabel SortBy="new Func<ProductDataDto, object>(x => x.ProductName)">Product Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<ProductDataDto, object>(x => x.ProductCode)">Code</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<ProductDataDto, object>(x => x.Description)">Description</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<ProductDataDto, object>(x => x.UnitPrice)">Price</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<ProductDataDto, object>(x => x.Tax)">Tax</MudTableSortLabel></MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd @onclick="@(() => SelectProduct(context))" DataLabel="Product Name"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" HighlightedText="@context.ProductName" Text="@context.ProductName" /></MudTd>
+                <MudTd @onclick="@(() => SelectProduct(context))" DataLabel="Code"><MudHighlighter Text="@context.ProductCode" /></MudTd>
+                <MudTd @onclick="@(() => SelectProduct(context))" DataLabel="Description"><MudHighlighter Text="@context.Description" /></MudTd>
+                <MudTd @onclick="@(() => SelectProduct(context))" DataLabel="Price"><MudHighlighter Text="@context.UnitPrice.ToString()" /></MudTd>
+                <MudTd @onclick="@(() => SelectProduct(context))" DataLabel="Tax"><MudHighlighter Text="@context.Tax" /></MudTd>
+                </RowTemplate>
+            </FLTable>
+            <MudCardActions>
+                <MudItem style="float: right;">
+                <MudButton Color="Color.Primary" OnClick="(() => ConfirmProduct(_confirmProduct = true))"  Variant="Variant.Outlined">Add</MudButton>
+                <MudButton Color="Color.Secondary" style="margin-left: 1rem;" OnClick="Cancel" Variant="Variant.Outlined">Cancel</MudButton>
+                </MudItem>
+            </MudCardActions>
+        </DialogContent>
+</MudDialog>
+
+@code {
+
+    bool _confirmProduct;
+    bool _isRowSelected;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetAllProduct();
+    }
+
+    [Inject] IProductDataClient _productDataClient { get; set; }
+    List<ProductDataDto> _productDataDtos = new();
+
+    async Task GetAllProduct()
+    {
+        try
+        {
+            _productDataDtos = (await _productDataClient.GetListAsync()).ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+    async Task Cancel()
+    {
+        MudDialog.Cancel();
+    }
+    
+   Quote _quote = new Quote();
+    async Task SelectProduct(ProductDataDto items)
+    {
+        _quote.ProductId = items.Id;
+        _quote.ListPrice = items.UnitPrice;
+        _quote.Quantity = 1;
+        _quote.Description = items.Description;
+        
+    }
+
+    async Task ConfirmProduct(bool value)
+    {
+        if(value)
+        {
+        var response = AddProductasGlobal._quoteList.FirstOrDefault(x => x.ProductId == _quote.ProductId);
+        if(response == null)
+        {
+             AddProductasGlobal._quoteList.Add(_quote);
+             MudDialog.Close(DialogResult.Ok(true));
+        }
+        else {
+            Snackbar.Add("Product Already Added", Severity.Warning);
+        }
+          //await SelectProduct(context);
+        }
+    }
+}

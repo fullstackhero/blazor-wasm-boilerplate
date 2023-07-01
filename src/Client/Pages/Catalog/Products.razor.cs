@@ -1,13 +1,13 @@
-﻿using FSH.BlazorWebAssembly.Client.Components.EntityTable;
-using FSH.BlazorWebAssembly.Client.Infrastructure.ApiClient;
-using FSH.BlazorWebAssembly.Client.Infrastructure.Common;
-using FSH.WebApi.Shared.Authorization;
+﻿using FL_CRMS_ERP_WASM.Client.Components.EntityTable;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient;
+using FL_CRMS_ERP_WASM.Client.Infrastructure.Common;
+using FL.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Pages.Catalog;
+namespace FL_CRMS_ERP_WASM.Client.Pages.Catalog;
 
 public partial class Products
 {
@@ -24,7 +24,7 @@ public partial class Products
         Context = new(
             entityName: L["Product"],
             entityNamePlural: L["Products"],
-            entityResource: FSHResource.Products,
+            entityResource: FLResource.Products,
             fields: new()
             {
                 new(prod => prod.Id, L["Id"], "Id"),

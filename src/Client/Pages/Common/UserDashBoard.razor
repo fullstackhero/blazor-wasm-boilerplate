@@ -1,0 +1,478 @@
+@page "/common/userdashboard"
+
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Style="height:70px;width:70px;align-content:center" Indeterminate="true" />
+}
+else
+{
+    <div class="sticky">
+        <MudCard Outlined="true" Class="rounded-lg" Style="min-height: 120px;margin-bottom:10rem">
+            <MudCardContent>
+            <MudGrid>
+                    <MudItem>
+                        @*<MudImage src="./images/Focusicon.png" Class="imgDiv"></MudImage>*@
+                        @if (string.IsNullOrEmpty(ImageUri))
+                        {
+                            <MudAvatar Color="Color.Info" Variant="Variant.Outlined">@FullName[0]</MudAvatar>
+                        }
+                        else
+                        {
+
+                            <MudAvatar Color="Color.Info" Variant="Variant.Outlined" Image="@ImageUri" Style="height:50px; width:50px;"> </MudAvatar>
+                        }
+                    </MudItem>
+
+                    <MudItem>
+                        <MudText Style="margin-top:13px;">Welcome @FullName</MudText>
+                    </MudItem>
+
+                    <MudSpacer />
+                    <MudItem>
+                        <MudSelect @bind-Value="viewSelect" Label="View" Variant="Variant.Outlined" Margin="Margin.Dense">
+                            <MudSelectItem Value="@("Classic View")" />
+                            <MudSelectItem Value="@(@FullName+ " " +"Home")" />
+                        </MudSelect>
+                    </MudItem>
+            </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    </div>
+    @if (viewSelect == "Classic View")
+    {
+        <MudCard Outlined="true" Class="rounded-lg" Style="box-shadow: 0px 4px 12px #888888;">
+            <MudCardContent>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudSpacer />
+                        <MudSelect Margin="Margin.Dense" Variant="Variant.Outlined" Color="Color.Secondary" T="string" Label="Title" @bind-Value="@_taskType" AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("My Task")" />
+                            <MudSelectItem T="string" Value="@("My Open Task")" />
+                            <MudSelectItem T="string" Value="@("My Closed Task")" />
+                            <MudSelectItem T="string" Value="@("My Today's Task")" />
+                            <MudSelectItem T="string" Value="@("My Tomorrow's Task")" />
+                            <MudSelectItem T="string" Value="@("My Overdue Task")" />
+                            <MudSelectItem T="string" Value="@("My Today + Overdue Task")" />
+                            <MudSelectItem T="string" Value="@("My Next 7 Days + Overdue Task")" />
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudContainer>
+                            @if (_taskType == "My Task")
+                            {
+                                <FLTable Items="_allTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        @if (context.Status == "Completed")
+                                        {
+                                            <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold;text-decoration:line-through" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        }
+                                        else
+                                        {
+                                            <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        }
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                            else if (_taskType == "My Open Task")
+                            {
+                                <FLTable Items="_allTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                            else if (_taskType == "My Closed Task")
+                            {
+                                <FLTable Items="_closedTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                            else if (_taskType == "My Today's Task")
+                            {
+                                <FLTable Items="_todayTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                            else if(_taskType == "My Tomorrow's Task")
+                            {
+                                <FLTable Items="_tomorrowTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                            else if (_taskType == "My Overdue Task")
+                            {
+                                <FLTable Items="_overDueTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                            else if (_taskType == "My Today + Overdue Task")
+                            {
+                             <FLTable Items="_todayOverDueTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                            else
+                            {
+                                <FLTable Items="_next7DaysOverDueTaskDtos">
+                                    <HeaderContent>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.DueDate)">Due Date</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Subject)">Subject</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Status)">Status</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.Priority)">Priority</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.RelatedTo)">RelatedTo</MudTableSortLabel></MudTh>
+                                        <MudTh><MudTableSortLabel SortBy="new Func<TaskDto, object>(x => x.WhoId)">Lead Name</MudTableSortLabel></MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="Due Date"><MudHighlighter Class="mud-primary-text" Style="background-color:transparent;font-weight:bold" Text="@context.DueDate?.ToString("MMM dd, yyyy")" HighlightedText="@context.DueDate?.ToString("MMM dd, yyyy")" /></MudTd>
+                                        <MudTd DataLabel="Company"><MudHighlighter Text="@context.Subject" /></MudTd>
+                                        <MudTd DataLabel="Email"><MudHighlighter Text="@context.Status" /></MudTd>
+                                        <MudTd DataLabel="Phone"><MudHighlighter Text="@context.Priority" /></MudTd>
+                                        <MudTd DataLabel="Lead Source"><MudHighlighter Text="@context.RelatedTo" /></MudTd>
+                                        @foreach (var item in _leadDetailsDtos.Where(i => i.Id == context.WhoId))
+                                        {
+                                            <MudTd DataLabel="Lead Owner"><MudHighlighter Text="@item.FirstName" /></MudTd>
+                                        }
+                                    </RowTemplate>
+                                    <PagerContent>
+                                        <TablePager />
+                                    </PagerContent>
+                                </FLTable>
+                            }
+                        </MudContainer>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    }
+    else
+    {
+        
+    }
+}
+
+@code {
+    bool _loaded;
+    public string viewSelect;
+    string _taskType;
+    protected override async Task OnInitializedAsync()
+    {
+        viewSelect = "Classic View";
+        _taskType = "My Open Task";
+        await LoadDataAsync();
+        _loaded = true;
+    }
+
+    async Task LoadDataAsync()
+    {
+        await GetCurrentUserId();
+        await GetAllLead();
+        await GetOverAllTask();
+        await GetOpenTask();
+        await GetClosedTask();
+        await GetTodayTask();
+        await GetTomorrowTask();
+        await GetOverDueTask();
+        await GetTodayOverDueTask();
+        await GetNext7DaysOverDueTask();
+    }
+
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+    private string? UserId { get; set; }
+    private string? Email { get; set; }
+    private string? FullName { get; set; }
+    private string? ImageUri { get; set; }
+
+    async Task GetCurrentUserId()
+    {
+        var user = (await AuthState).User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            if (string.IsNullOrEmpty(UserId))
+            {
+                FullName = user.GetFullName();
+                UserId = user.GetUserId();
+                Email = user.GetEmail();
+                ImageUri = string.IsNullOrEmpty(user?.GetImageUrl()) ? string.Empty : (Config[ConfigNames.ApiBaseUrl] + user?.GetImageUrl());
+                StateHasChanged();
+            }
+        }
+    }
+
+    [Inject]ILeadDetailsClient leadDetailsClient { get; set; }
+    List<LeadDetailsDto> _leadDetailsDtos = new();
+
+    async Task GetAllLead()
+    {
+        try
+        {
+            _leadDetailsDtos = (await leadDetailsClient.GetListAsync()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    [Inject] ITaskDetailsClient _taskDetailsClient { get; set; }
+
+    List<TaskDto> _allTaskDtos = new();
+    async Task GetOverAllTask()
+    {
+        try
+        {
+            _allTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId)).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _openTaskDtos = new();
+
+    async Task GetOpenTask()
+    {
+        try
+        {
+            _openTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status != "Completed").ToList();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    List<TaskDto> _closedTaskDtos = new();
+    async Task GetClosedTask()
+    {
+        try
+        {
+            _closedTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status == "Completed").ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _todayTaskDtos = new();
+    async Task GetTodayTask()
+    {
+        try
+        {
+            _todayTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status == "Completed" && x.DueDate?.ToShortDateString() == DateTime.Now.Date.ToShortDateString()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _tomorrowTaskDtos = new();
+    async Task GetTomorrowTask()
+    {
+        try
+        {
+            _tomorrowTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status == "Completed" && x.DueDate?.ToShortDateString() == DateTime.Now.Date.AddDays(1).ToShortDateString()).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _overDueTaskDtos = new();
+    async Task GetOverDueTask()
+    {
+        try
+        {
+            int thisMonth = DateTime.UtcNow.Month;
+            var selectedYear = DateTime.UtcNow.Year;
+            var date = new DateTime(selectedYear);
+            _overDueTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status == "Completed" && x.CreatedOn >= date && x.DueDate?.Month < thisMonth).ToList();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _todayOverDueTaskDtos = new();
+    async Task GetTodayOverDueTask()
+    {
+        try
+        {
+            List<TaskDto> todayOverDueTaskDtos = new();
+            todayOverDueTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status != "Completed" && x.DueDate?.ToShortDateString() == DateTime.Now.Date.ToShortDateString()).ToList();
+
+            _todayOverDueTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status != "Completed" && x.DueDate?.Date < DateTime.Now.Date).ToList();
+            _todayOverDueTaskDtos.AddRange(todayOverDueTaskDtos);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    List<TaskDto> _next7DaysOverDueTaskDtos = new();
+    async Task GetNext7DaysOverDueTask()
+    {
+        try
+        {
+            List<TaskDto> OverDueTaskDtos = new();
+            OverDueTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status != "Completed" && x.DueDate?.Date < DateTime.Now.Date).ToList();
+
+            _next7DaysOverDueTaskDtos = (await _taskDetailsClient.GetListAsync()).Where(x => x.TaskOwnerId == Guid.Parse(UserId) && x.Status != "Completed" && x.DueDate < DateTime.Now.Date.AddDays(7)).ToList();
+            _next7DaysOverDueTaskDtos.AddRange(OverDueTaskDtos);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+}

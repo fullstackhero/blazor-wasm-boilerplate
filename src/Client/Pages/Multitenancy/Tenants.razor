@@ -1,10 +1,10 @@
 ﻿@page "/tenants"
-@attribute [MustHavePermission(FSHAction.View, FSHResource.Tenants)]
+@attribute [MustHavePermission(FLAction.View, FLResource.Tenants)]
 
 @inject IStringLocalizer<Tenants> L
 @inject IAuthenticationService Authentication
 
-<FshTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
+<FLTitle Title="@L["Tenants"]" Description="@L["Manage Tenants."]" />
 
 <EntityTable @ref="EntityTable" TEntity="TenantDetail" TId="Guid" TRequest="CreateTenantRequest" Context="@Context"
     @bind-SearchString="_searchString">

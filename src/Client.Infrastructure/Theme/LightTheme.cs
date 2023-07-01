@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace FSH.BlazorWebAssembly.Client.Infrastructure.Theme;
+namespace FL_CRMS_ERP_WASM.Client.Infrastructure.Theme;
 
 public class LightTheme : MudTheme
 {
@@ -24,7 +24,7 @@ public class LightTheme : MudTheme
             DefaultBorderRadius = "5px"
         };
 
-        Typography = CustomTypography.FSHTypography;
+        Typography = CustomTypography.FLTypography;
         Shadows = new Shadow();
         ZIndex = new ZIndex() { Drawer = 1300 };
     }
