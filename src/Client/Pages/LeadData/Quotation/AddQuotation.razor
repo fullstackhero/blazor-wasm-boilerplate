@@ -241,7 +241,7 @@
         </MudItem>
     </MudGrid>
     </MudGrid>
-    @code{
+@code{
 
     protected override async Task OnInitializedAsync()
     {
@@ -383,12 +383,20 @@
         }
         try
         {
+            //if(_createQuotationRequest.TotalAdjustment == null)
+            //{
+            //    _createQuotationRequest.TotalAdjustment = 0;
+            //}
+            //if (_createQuotationRequest.TotalDiscount == null)
+            //{
+            //    _createQuotationRequest.TotalDiscount = 0;
+            //}
             
             _createQuotationRequest.QuoteItems = _quoteItems;
             var response = await _quotationDetailsClient.CreateAsync(_createQuotationRequest.Adapt<CreateQuotationRequest>());
             if (response != Guid.Empty)
             {
-               Snackbar.Add("Quotation Added Successfully", Severity.Info);
+                Snackbar.Add("Quotation Added Successfully", Severity.Info);
             }
         }
         catch (ApiException<HttpValidationProblemDetails> ex)
@@ -429,7 +437,7 @@
         _createQuotationRequest.BillingState = _createQuotationRequest.ShippingState;
     }
 
-    
+
 
     public class QuoteItems{
         public Guid ProductId { get; set; }
@@ -448,9 +456,9 @@
         {
            new Quote()
         };
-        
 
-  
+
+
 
     private void AddQuoteItem()
     {
@@ -484,23 +492,60 @@
         var dialog = DialogService.Show<ProductDetails>("Create", parameters, options);
         var result = await dialog.Result;
         if (!result.Cancelled)
-       {
-           var response1 = _quoteItems.FirstOrDefault(x => x.ProductId == Guid.Empty);
-           if(response1 != null)
-           {
-             _quoteItems.Remove(response1);
-           }
-            
+        {
+            var response1 = _quoteItems.FirstOrDefault(x => x.ProductId == Guid.Empty);
+            if(response1 != null)
+            {
+                _quoteItems.Remove(response1);
+            }
+
             foreach (var item in AddProductasGlobal._quoteList)
             {
                 Quote quote = new();
                 quote.ProductId = item.ProductId;
-                 quote.ListPrice = item.ListPrice;
+                quote.ListPrice = item.ListPrice;
                 quote.Amount = item.Quantity * item.ListPrice;
                 quote.Description = item.Description;
-                quote.Tax = item.Tax;
+
+                //if(item.Tax != null)
+                //{
+                //    quote.Tax = item.Tax;
+                //}
+                //else
+                //{
+                //    quote.Tax = 0;
+                //}
+
+                //if (item.Discount != null)
+                //{
+                //    quote.Discount = item.Discount;
+                //}
+                //else
+                //{
+                //    quote.Discount = 0;
+                //}
+
+                //if (item.TotalAfterDiscount != null)
+                //{
+                //    quote.TotalAfterDiscount = item.TotalAfterDiscount;
+                //}
+                //else
+                //{
+                //    quote.TotalAfterDiscount = 0;
+                //}
+
+                //if (item.Total != null)
+                //{
+                //    quote.Total = item.Total;
+                //}
+                //else
+                //{
+                //    quote.Total = 0;
+                //}
+                
                 quote.Quantity = item.Quantity;
-                 var response = _quoteItems.FirstOrDefault(x => x.ProductId == quote.ProductId);
+
+                var response = _quoteItems.FirstOrDefault(x => x.ProductId == quote.ProductId);
                  if(response == null)
                  {
                    _quoteItems.Add(quote);

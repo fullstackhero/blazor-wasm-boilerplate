@@ -12283,10 +12283,10 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
         public int? Quantity { get; set; }
         public decimal? ListPrice { get; set; }
         public decimal? Amount { get; set; }
-        public decimal? Discount { get; set; }
-        public decimal? TotalAfterDiscount { get; set; }
-        public decimal? Tax { get; set; }
-        public decimal? Total { get; set; }
+        public decimal? Discount { get; set; } = 0;
+        public decimal? TotalAfterDiscount { get; set; } = 0;
+        public decimal? Tax { get; set; } = 0;
+        public decimal? Total { get; set; } = 0;
         public string? Description { get; set; } = string.Empty;
 
     }
@@ -13178,12 +13178,10 @@ namespace FL_CRMS_ERP_WASM.Client.Infrastructure.ApiClient
             }
         }
         public decimal? SubTotal { get; set; }
-        public decimal? TotalDiscount { get; set; }
+        public decimal? TotalDiscount { get; set; } = 0;
         public decimal? TotalTax { get; set; }
-        public decimal? TotalAdjustment { get; set; }
+        public decimal? TotalAdjustment { get; set; } = 0;
         public decimal? GrandTotal { get; set; }
-
-
     }
 
     public partial class UpdateQuotationRequest
